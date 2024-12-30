@@ -4,6 +4,9 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 type api struct {
@@ -14,13 +17,28 @@ type config struct {
 	addr string
 }
 
-func (app *api) mount() *http.ServeMux {
-	mux := http.NewServeMux()
-	mux.HandleFunc("GET /v1/health", app.healthCheckHandler)
-	return mux
+func (app *api) mount() http.Handler {
+	r := chi.NewRouter()
+
+	// A good base middleware stack (taken from chi )
+	r.Use(middleware.RequestID)
+	r.Use(middleware.RealIP)
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+
+	// Set a timeout value on the request context (ctx), that will signal
+	// through ctx.Done() that the request has timed out and further
+	// processing should be stopped. (taken from chi)
+	r.Use(middleware.Timeout(60 * time.Second))
+
+	r.Route("/v1", func(r chi.Router) {
+		r.Get("/health", app.healthCheckHandler)
+	})
+
+	return r
 }
 
-func (app *api) run(mux *http.ServeMux) error {
+func (app *api) run(mux http.Handler) error {
 
 	srv := &http.Server{
 		Addr:         app.config.addr,

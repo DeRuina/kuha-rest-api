@@ -1,11 +1,15 @@
 package main
 
-import "log"
+import (
+	"log"
+
+	"github.com/DeRuina/KUHA-REST-API/internal/env"
+)
 
 func main() {
 
 	cfg := config{
-		addr: ":8080",
+		addr: env.GetString("URL", ":8080"),
 	}
 
 	app := &api{

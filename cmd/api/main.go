@@ -33,7 +33,7 @@ func main() {
 
 	app := &api{
 		config: cfg,
-		store:  store,
+		store:  *store,
 	}
 
 	mux := app.mount()

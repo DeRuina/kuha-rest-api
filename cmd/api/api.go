@@ -8,6 +8,8 @@ import (
 	"github.com/DeRuina/KUHA-REST-API/internal/store"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+
+	fisapi "github.com/DeRuina/KUHA-REST-API/cmd/api/fis"
 )
 
 type api struct {
@@ -44,6 +46,13 @@ func (app *api) mount() http.Handler {
 
 	r.Route("/v1", func(r chi.Router) {
 		r.Get("/health", app.healthCheckHandler)
+
+		// FIS routes
+		r.Route("/fis", func(r chi.Router) {
+			competitorsHandler := fisapi.NewCompetitorsHandler(app.store.FIS.Competitors()) // ✅ Corrected
+			r.Get("/competitors", competitorsHandler.GetBySector)
+		})
+
 	})
 
 	return r

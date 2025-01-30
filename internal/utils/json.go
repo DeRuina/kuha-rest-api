@@ -1,18 +1,9 @@
 package utils
 
 import (
-	"database/sql"
 	"encoding/json"
 	"net/http"
 )
-
-// Helper function to convert `sql.NullString` to a regular string
-func NullStringToString(ns sql.NullString) string {
-	if ns.Valid {
-		return ns.String
-	}
-	return ""
-}
 
 func WriteJSON(w http.ResponseWriter, status int, data any) error {
 	w.Header().Set("Content-Type", "application/json")

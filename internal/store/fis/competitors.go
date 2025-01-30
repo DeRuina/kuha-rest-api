@@ -5,7 +5,6 @@ import (
 	"database/sql"
 
 	fissqlc "github.com/DeRuina/KUHA-REST-API/internal/db/fis"
-	"github.com/DeRuina/KUHA-REST-API/internal/utils"
 )
 
 // CompetitorsStore struct
@@ -15,7 +14,13 @@ type CompetitorsStore struct {
 
 // GetBySector
 
-func (s *CompetitorsStore) GetBySector(ctx context.Context, sectorCode string) ([]map[string]interface{}, error) {
+type GetBySectorResponse struct {
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	FisCode   int32  `json:"fis_code"`
+}
+
+func (s *CompetitorsStore) GetBySector(ctx context.Context, sectorCode string) ([]GetBySectorResponse, error) {
 	query := `SELECT Firstname, Lastname, Fiscode FROM A_competitor WHERE SectorCode = $1 ORDER BY Fiscode`
 
 	rows, err := s.db.QueryContext(ctx, query, sectorCode)
@@ -24,7 +29,7 @@ func (s *CompetitorsStore) GetBySector(ctx context.Context, sectorCode string) (
 	}
 	defer rows.Close()
 
-	var competitors []map[string]interface{}
+	var competitors []GetBySectorResponse
 	for rows.Next() {
 		var c fissqlc.ACompetitor
 		err := rows.Scan(&c.Firstname, &c.Lastname, &c.Fiscode)
@@ -32,10 +37,10 @@ func (s *CompetitorsStore) GetBySector(ctx context.Context, sectorCode string) (
 			return nil, err
 		}
 
-		competitors = append(competitors, map[string]interface{}{
-			"first_name": utils.NullStringToString(c.Firstname),
-			"last_name":  utils.NullStringToString(c.Lastname),
-			"fis_code":   c.Fiscode.Int32,
+		competitors = append(competitors, GetBySectorResponse{
+			FirstName: c.Firstname.String,
+			LastName:  c.Lastname.String,
+			FisCode:   c.Fiscode.Int32,
 		})
 	}
 

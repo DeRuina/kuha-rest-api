@@ -6,19 +6,19 @@ import (
 	"github.com/DeRuina/KUHA-REST-API/internal/store/fis"
 )
 
-// ✅ Define FIS interface
+// Define FIS interface
 type FIS interface {
-	Competitors() fis.Competitors // ✅ Ensure this matches the return type
+	Competitors() fis.Competitors
 }
 
-// ✅ Define Storage struct for multiple databases
+// Define Storage struct for multiple databases
 type Storage struct {
 	FIS FIS
 }
 
-// ✅ NewStorage initializes storage for multiple databases
+// NewStorage initializes storage for multiple databases
 func NewStorage(db *sql.DB) *Storage {
 	return &Storage{
-		FIS: fis.NewFISStorage(db), // ✅ Now `NewFISStorage(db)` correctly returns `FIS`
+		FIS: fis.NewFISStorage(db),
 	}
 }

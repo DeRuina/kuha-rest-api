@@ -9,10 +9,10 @@ import (
 )
 
 type CompetitorsHandler struct {
-	store fis.Competitors // ✅ Use the `Competitors` interface
+	store fis.Competitors
 }
 
-// ✅ Modify to accept `fis.Competitors` interface
+// Modify to accept `fis.Competitors` interface
 func NewCompetitorsHandler(store fis.Competitors) *CompetitorsHandler {
 	return &CompetitorsHandler{store: store}
 }

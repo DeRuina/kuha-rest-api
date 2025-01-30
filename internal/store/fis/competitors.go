@@ -7,19 +7,19 @@ import (
 	"log"
 )
 
-// ✅ CompetitorsStore struct
+// CompetitorsStore struct
 type CompetitorsStore struct {
 	db *sql.DB
 }
 
-// ✅ Competitor model with sql.NullString
+// Competitor model with sql.NullString
 type Competitor struct {
 	FirstName sql.NullString `json:"-"`
 	LastName  sql.NullString `json:"-"`
 	FisCode   int32          `json:"fis_code"`
 }
 
-// ✅ Custom JSON Marshaller for handling NULL values
+// Custom JSON Marshaller for handling NULL values
 func (c Competitor) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {
 		FirstName string `json:"first_name"`
@@ -32,7 +32,7 @@ func (c Competitor) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ✅ Helper function to convert `sql.NullString` to a regular string
+// Helper function to convert `sql.NullString` to a regular string
 func nullStringToString(ns sql.NullString) string {
 	if ns.Valid {
 		return ns.String
@@ -40,7 +40,7 @@ func nullStringToString(ns sql.NullString) string {
 	return ""
 }
 
-// ✅ Ensure `CompetitorsStore` implements `Competitors` interface
+// Ensure `CompetitorsStore` implements `Competitors` interface
 func (s *CompetitorsStore) GetBySector(ctx context.Context, sectorCode string) ([]Competitor, error) {
 	query := `SELECT Firstname, Lastname, Fiscode FROM A_competitor WHERE SectorCode = $1 ORDER BY Fiscode`
 
@@ -66,7 +66,7 @@ func (s *CompetitorsStore) GetBySector(ctx context.Context, sectorCode string) (
 	return competitors, nil
 }
 
-// ✅ Implement GetByFiscodeJP
+// Implement GetByFiscodeJP
 func (s *CompetitorsStore) GetByFiscodeJP(ctx context.Context, fiscode int32) (int32, error) {
 	query := `SELECT CompetitorID FROM A_competitor WHERE Fiscode = $1 AND SectorCode = 'JP'`
 	log.Printf("🟡 Executing SQL Query: %s | Fiscode: %d", query, fiscode)
@@ -82,7 +82,7 @@ func (s *CompetitorsStore) GetByFiscodeJP(ctx context.Context, fiscode int32) (i
 	return competitorID, nil
 }
 
-// ✅ Implement GetByFiscodeNK
+// Implement GetByFiscodeNK
 func (s *CompetitorsStore) GetByFiscodeNK(ctx context.Context, fiscode int32) (int32, error) {
 	query := `SELECT CompetitorID FROM A_competitor WHERE Fiscode = $1 AND SectorCode = 'NK'`
 	log.Printf("🟡 Executing SQL Query: %s | Fiscode: %d", query, fiscode)
@@ -98,7 +98,7 @@ func (s *CompetitorsStore) GetByFiscodeNK(ctx context.Context, fiscode int32) (i
 	return competitorID, nil
 }
 
-// ✅ Implement GetByGenderAndNationJP
+// Implement GetByGenderAndNationJP
 func (s *CompetitorsStore) GetByGenderAndNationJP(ctx context.Context, gender, nation string) ([]int32, error) {
 	query := `SELECT CompetitorID FROM A_competitor WHERE Gender = $1 AND NationCode = $2 AND SectorCode = 'JP'`
 	log.Printf("🟡 Executing SQL Query: %s | Gender: %s, Nation: %s", query, gender, nation)

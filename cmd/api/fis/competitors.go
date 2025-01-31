@@ -18,7 +18,7 @@ func NewCompetitorsHandler(store fis.Competitors) *CompetitorsHandler {
 }
 
 // GetBySector Getter
-func (h *CompetitorsHandler) GetBySector(w http.ResponseWriter, r *http.Request) {
+func (h *CompetitorsHandler) GetAthletesBySector(w http.ResponseWriter, r *http.Request) {
 	sectorCode := r.URL.Query().Get("sector")
 
 	if sectorCode == "" {
@@ -32,7 +32,7 @@ func (h *CompetitorsHandler) GetBySector(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	competitors, err := h.store.GetBySector(context.Background(), sectorCode)
+	competitors, err := h.store.GetAthletesBySector(context.Background(), sectorCode)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
 		return

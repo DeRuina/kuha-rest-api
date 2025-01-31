@@ -12,7 +12,7 @@ type CompetitorsStore struct {
 	db *sql.DB
 }
 
-// GetBySector
+// GetAthletesBySector
 
 type GetBySectorResponse struct {
 	FirstName string `json:"first_name"`
@@ -20,7 +20,7 @@ type GetBySectorResponse struct {
 	FisCode   int32  `json:"fis_code"`
 }
 
-func (s *CompetitorsStore) GetBySector(ctx context.Context, sectorCode string) ([]GetBySectorResponse, error) {
+func (s *CompetitorsStore) GetAthletesBySector(ctx context.Context, sectorCode string) ([]GetBySectorResponse, error) {
 	queries := fissqlc.New(s.db) // Create a new instance of sqlc queries
 
 	dbSectorCode := sql.NullString{String: sectorCode, Valid: true}
@@ -41,6 +41,8 @@ func (s *CompetitorsStore) GetBySector(ctx context.Context, sectorCode string) (
 
 	return response, nil
 }
+
+//
 
 // Implement GetByFiscodeJP
 func (s *CompetitorsStore) GetByFiscodeJP(ctx context.Context, fiscode int32) (int32, error) {

@@ -7,7 +7,7 @@ import (
 
 // Define Competitors interface
 type Competitors interface {
-	GetBySector(ctx context.Context, sectorCode string) ([]GetBySectorResponse, error)
+	GetAthletesBySector(ctx context.Context, sectorCode string) ([]GetBySectorResponse, error)
 	GetByFiscodeJP(ctx context.Context, fiscode int32) (int32, error)
 	GetByFiscodeNK(ctx context.Context, fiscode int32) (int32, error)
 	GetByGenderAndNationJP(ctx context.Context, gender, nation string) ([]int32, error)

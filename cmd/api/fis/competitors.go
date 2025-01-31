@@ -26,9 +26,9 @@ func (h *CompetitorsHandler) GetBySector(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	validSectors := map[string]bool{"JP": true, "NK": true}
+	validSectors := map[string]bool{"JP": true, "NK": true, "CC": true}
 	if !validSectors[sectorCode] {
-		utils.BadRequestResponse(w, r, fmt.Errorf("invalid sector code. Allowed values: JP, NK"))
+		utils.BadRequestResponse(w, r, fmt.Errorf("invalid sector code. Allowed values: JP, NK, CC"))
 		return
 	}
 

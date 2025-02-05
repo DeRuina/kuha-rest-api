@@ -21,7 +21,7 @@ type GetBySectorResponse struct {
 }
 
 func (s *CompetitorsStore) GetAthletesBySector(ctx context.Context, sectorCode string) ([]GetBySectorResponse, error) {
-	queries := fissqlc.New(s.db) // Create a new instance of sqlc queries
+	queries := fissqlc.New(s.db)
 
 	dbSectorCode := sql.NullString{String: sectorCode, Valid: true}
 	competitors, err := queries.GetAthletesBySector(ctx, dbSectorCode)
@@ -29,7 +29,6 @@ func (s *CompetitorsStore) GetAthletesBySector(ctx context.Context, sectorCode s
 		return nil, err
 	}
 
-	// Convert `GetAthletesBySectorRow` to `GetBySectorResponse`
 	var response []GetBySectorResponse
 	for _, c := range competitors {
 		response = append(response, GetBySectorResponse{

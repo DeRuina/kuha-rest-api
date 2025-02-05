@@ -1,20 +1,58 @@
 package utv
 
 import (
+	"context"
 	"database/sql"
+	"time"
 )
 
-// Define UTV interface
-type UTV interface {
-	// Define methods here (e.g., GetAthletes, GetResults, etc.)
+// Define OuraData interface
+type OuraData interface {
+	GetDates(ctx context.Context, userID string, startDate string, endDate string) ([]time.Time, error)
+	GetTypes(ctx context.Context, userID string, summaryDate string) ([]string, error)
+	GetDataPoint(ctx context.Context, userID string, summaryDate string, key string) (interface{}, error)
+	GetUniqueTypes(ctx context.Context, userID string, startDate string, endDate string) ([]string, error)
 }
 
-// Implement UTV storage
+// type PolarData interface {
+// 	GetDates(ctx context.Context, userID string, startDate string, endDate string) ([]string, error)
+// 	GetTypes(ctx context.Context, userID string, summaryDate string) ([]string, error)
+// 	GetDataPoint(ctx context.Context, userID string, summaryDate string, key string) (interface{}, error)
+// 	GetUniqueTypes(ctx context.Context, userID string, startDate string, endDate string) ([]string, error)
+// }
+
+// type SuuntoData interface {
+// 	GetDates(ctx context.Context, userID string, startDate string, endDate string) ([]string, error)
+// 	GetTypes(ctx context.Context, userID string, summaryDate string) ([]string, error)
+// 	GetDataPoint(ctx context.Context, userID string, summaryDate string, key string) (interface{}, error)
+// 	GetUniqueTypes(ctx context.Context, userID string, startDate string, endDate string) ([]string, error)
+// }
+
+// UTVStorage struct to hold table-specific storage
 type UTVStorage struct {
-	db *sql.DB
+	oura OuraData
+	// polar  PolarData
+	// suunto SuuntoData
 }
 
-// NewUTVStorage initializes storage for UTV database tables
+// Implement methods to return each table's storage interface
+func (s *UTVStorage) Oura() OuraData {
+	return s.oura
+}
+
+// func (s *UTVStorage) Polar() PolarData {
+// 	return s.polar
+// }
+
+// func (s *UTVStorage) Suunto() SuuntoData {
+// 	return s.suunto
+// }
+
+// `NewUTVStorage` initializes storage for UTV database tables
 func NewUTVStorage(db *sql.DB) *UTVStorage {
-	return &UTVStorage{db: db}
+	return &UTVStorage{
+		oura: &OuraDataStore{db: db},
+		// polar:  &PolarDataStore{db: db},
+		// suunto: &SuuntoDataStore{db: db},
+	}
 }

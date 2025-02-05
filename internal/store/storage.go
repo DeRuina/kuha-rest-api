@@ -12,7 +12,7 @@ type FIS interface {
 }
 
 type UTV interface {
-	// Add UTV methods here
+	Oura() utv.OuraData
 }
 
 // Define Storage struct for multiple databases

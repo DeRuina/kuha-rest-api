@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 
 	fisapi "github.com/DeRuina/KUHA-REST-API/cmd/api/fis"
+	utvapi "github.com/DeRuina/KUHA-REST-API/cmd/api/utv"
 )
 
 type api struct {
@@ -40,9 +41,7 @@ func (app *api) mount() http.Handler {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
-	// Set a timeout value on the request context (ctx), that will signal
-	// through ctx.Done() that the request has timed out and further
-	// processing should be stopped. (taken from chi)
+	// Set a timeout value on the request context (ctx)
 	r.Use(middleware.Timeout(60 * time.Second))
 
 	r.Route("/v1", func(r chi.Router) {
@@ -50,12 +49,26 @@ func (app *api) mount() http.Handler {
 
 		// FIS routes
 		r.Route("/fis", func(r chi.Router) {
+			//register handlers
 			competitorsHandler := fisapi.NewCompetitorsHandler(app.store.FIS.Competitors())
 
 			r.Get("/athlete", competitorsHandler.GetAthletesBySector)
 			r.Get("/nation", competitorsHandler.GetNationsBySector)
 		})
 
+		// UTV routes
+		r.Route("/utv", func(r chi.Router) {
+			//register handlers
+			ouraHandler := utvapi.NewOuraDataHandler(app.store.UTV.Oura())
+
+			// Oura routes
+			r.Route("/oura", func(r chi.Router) {
+				r.Get("/dates", ouraHandler.GetDates)
+				r.Get("/types", ouraHandler.GetTypes)
+				r.Get("/data", ouraHandler.GetDataPoint)
+				r.Get("/unique-types", ouraHandler.GetUniqueTypes)
+			})
+		})
 	})
 
 	return r

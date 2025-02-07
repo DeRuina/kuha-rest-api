@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"database/sql"
 )
 
 const addNotification = `-- name: AddNotification :one
@@ -405,8 +406,8 @@ ORDER BY summary_date DESC
 
 type GetDatesFromOuraDataParams struct {
 	UserID    uuid.UUID
-	StartDate time.Time
-	EndDate   time.Time
+	StartDate sql.NullTime
+	EndDate   sql.NullTime
 }
 
 func (q *Queries) GetDatesFromOuraData(ctx context.Context, arg GetDatesFromOuraDataParams) ([]time.Time, error) {

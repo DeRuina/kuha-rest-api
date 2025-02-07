@@ -3,7 +3,6 @@ package utv
 import (
 	"context"
 	"database/sql"
-	"encoding/json"
 	"time"
 
 	utvsql "github.com/DeRuina/KUHA-REST-API/internal/db/utv"
@@ -24,96 +23,97 @@ func (s *OuraDataStore) GetDates(ctx context.Context, userID string, startDate *
 		return nil, err
 	}
 
-	start, err := utils.ParseDatePtr(startDate)
+	var start, end *time.Time
+	start, err = utils.ParseDatePtr(startDate)
 	if err != nil {
 		return nil, err
 	}
 
-	end, err := utils.ParseDatePtr(endDate)
+	end, err = utils.ParseDatePtr(endDate)
 	if err != nil {
 		return nil, err
 	}
 
 	arg := utvsql.GetDatesFromOuraDataParams{
 		UserID:    uid,
-		StartDate: start,
-		EndDate:   end,
+		StartDate: utils.NullTimeIfEmpty(start),
+		EndDate:   utils.NullTimeIfEmpty(end),
 	}
 
 	return queries.GetDatesFromOuraData(ctx, arg)
 }
 
-// Get all JSON keys (types) from Oura data
-func (s *OuraDataStore) GetTypes(ctx context.Context, userID string, specificDate *string, startDate *string, endDate *string) ([]string, error) {
-	queries := utvsql.New(s.db)
+// // Get all JSON keys (types) from Oura data
+// func (s *OuraDataStore) GetTypes(ctx context.Context, userID string, specificDate *string, startDate *string, endDate *string) ([]string, error) {
+// 	queries := utvsql.New(s.db)
 
-	uid, err := utils.ParseUUID(userID)
-	if err != nil {
-		return nil, err
-	}
+// 	uid, err := utils.ParseUUID(userID)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	date, err := utils.ParseDatePtr(specificDate)
-	if err != nil {
-		return nil, err
-	}
+// 	date, err := utils.ParseDatePtr(specificDate)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	start, err := utils.ParseDatePtr(startDate)
-	if err != nil {
-		return nil, err
-	}
+// 	start, err := utils.ParseDatePtr(startDate)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	end, err := utils.ParseDatePtr(endDate)
-	if err != nil {
-		return nil, err
-	}
+// 	end, err := utils.ParseDatePtr(endDate)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	arg := utvsql.GetTypesFromOuraDataParams{
-		UserID:       uid,
-		SpecificDate: date,
-		StartDate:    start,
-		EndDate:      end,
-	}
+// 	arg := utvsql.GetTypesFromOuraDataParams{
+// 		UserID:       uid,
+// 		SpecificDate: date,
+// 		StartDate:    start,
+// 		EndDate:      end,
+// 	}
 
-	return queries.GetTypesFromOuraData(ctx, arg)
-}
+// 	return queries.GetTypesFromOuraData(ctx, arg)
+// }
 
-// Get all data for a specific date (or filter by type)
-func (s *OuraDataStore) GetData(ctx context.Context, userID string, summaryDate string, key *string) (interface{}, error) {
-	queries := utvsql.New(s.db)
+// // Get all data for a specific date (or filter by type)
+// func (s *OuraDataStore) GetData(ctx context.Context, userID string, summaryDate string, key *string) (interface{}, error) {
+// 	queries := utvsql.New(s.db)
 
-	uid, err := utils.ParseUUID(userID)
-	if err != nil {
-		return nil, err
-	}
+// 	uid, err := utils.ParseUUID(userID)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	date, err := utils.ParseDate(summaryDate)
-	if err != nil {
-		return nil, err
-	}
+// 	date, err := utils.ParseDate(summaryDate)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	if key != nil {
-		arg := utvsql.GetSpecificDataForDateParams{
-			UserID:      uid,
-			SummaryDate: date,
-			Column3:     *key,
-		}
-		return queries.GetSpecificDataForDate(ctx, arg)
-	}
+// 	if key != nil {
+// 		arg := utvsql.GetSpecificDataForDateParams{
+// 			UserID:      uid,
+// 			SummaryDate: date,
+// 			Column3:     *key,
+// 		}
+// 		return queries.GetSpecificDataForDate(ctx, arg)
+// 	}
 
-	arg := utvsql.GetAllDataForDateParams{
-		UserID:      uid,
-		SummaryDate: date,
-	}
+// 	arg := utvsql.GetAllDataForDateParams{
+// 		UserID:      uid,
+// 		SummaryDate: date,
+// 	}
 
-	data, err := queries.GetAllDataForDate(ctx, arg)
-	if err != nil {
-		return nil, err
-	}
+// 	data, err := queries.GetAllDataForDate(ctx, arg)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	var jsonData map[string]interface{}
-	if err := json.Unmarshal(data, &jsonData); err != nil {
-		return nil, err
-	}
+// 	var jsonData map[string]interface{}
+// 	if err := json.Unmarshal(data, &jsonData); err != nil {
+// 		return nil, err
+// 	}
 
-	return jsonData, nil
-}
+// 	return jsonData, nil
+// }

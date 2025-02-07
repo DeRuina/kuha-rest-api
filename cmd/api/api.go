@@ -64,8 +64,8 @@ func (app *api) mount() http.Handler {
 			// Oura routes
 			r.Route("/oura", func(r chi.Router) {
 				r.Get("/dates", ouraHandler.GetDates)
-				r.Get("/types", ouraHandler.GetTypes)
-				r.Get("/data", ouraHandler.GetData)
+				// r.Get("/types", ouraHandler.GetTypes)
+				// r.Get("/data", ouraHandler.GetData)
 			})
 		})
 	})

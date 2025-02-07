@@ -21,15 +21,15 @@ func NewOuraDataHandler(store utv.OuraData) *OuraDataHandler {
 // Get available dates from Oura data (with optional filtering)
 func (h *OuraDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 	userID := r.URL.Query().Get("user_id")
-	startDate := r.URL.Query().Get("start_date")
-	endDate := r.URL.Query().Get("end_date")
+	afterDate := r.URL.Query().Get("after_date")
+	beforeDate := r.URL.Query().Get("before_date")
 
 	if userID == "" {
 		utils.BadRequestResponse(w, r, utils.ErrMissingUserID)
 		return
 	}
 
-	dates, err := h.store.GetDates(context.Background(), userID, &startDate, &endDate)
+	dates, err := h.store.GetDates(context.Background(), userID, &afterDate, &beforeDate)
 	if err != nil {
 		switch {
 		case errors.Is(err, utils.ErrInvalidUUID):

@@ -146,8 +146,8 @@ ORDER BY summary_date DESC;
 SELECT DISTINCT summary_date
 FROM oura_data
 WHERE user_id = @user_id
-AND (@start_date::date IS NULL OR summary_date >= @start_date)
-AND (@end_date::date IS NULL OR summary_date <= @end_date)
+AND (@after_date::date IS NULL OR summary_date >= @after_date)
+AND (@before_date::date IS NULL OR summary_date <= @before_date)
 ORDER BY summary_date DESC;
 
 

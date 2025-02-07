@@ -405,13 +405,13 @@ ORDER BY summary_date DESC
 `
 
 type GetDatesFromOuraDataParams struct {
-	UserID    uuid.UUID
-	StartDate sql.NullTime
-	EndDate   sql.NullTime
+	UserID     uuid.UUID
+	AfterDate  sql.NullTime
+	BeforeDate sql.NullTime
 }
 
 func (q *Queries) GetDatesFromOuraData(ctx context.Context, arg GetDatesFromOuraDataParams) ([]time.Time, error) {
-	rows, err := q.query(ctx, q.getDatesFromOuraDataStmt, getDatesFromOuraData, arg.UserID, arg.StartDate, arg.EndDate)
+	rows, err := q.query(ctx, q.getDatesFromOuraDataStmt, getDatesFromOuraData, arg.UserID, arg.AfterDate, arg.BeforeDate)
 	if err != nil {
 		return nil, err
 	}

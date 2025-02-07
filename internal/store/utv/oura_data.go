@@ -35,9 +35,9 @@ func (s *OuraDataStore) GetDates(ctx context.Context, userID string, startDate *
 	}
 
 	arg := utvsql.GetDatesFromOuraDataParams{
-		UserID:    uid,
-		StartDate: utils.NullTimeIfEmpty(start),
-		EndDate:   utils.NullTimeIfEmpty(end),
+		UserID:     uid,
+		AfterDate:  utils.NullTimeIfEmpty(start),
+		BeforeDate: utils.NullTimeIfEmpty(end),
 	}
 
 	rawDates, err := queries.GetDatesFromOuraData(ctx, arg)

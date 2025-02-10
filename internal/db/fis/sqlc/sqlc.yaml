@@ -5,7 +5,7 @@ sql:
     engine: "postgresql"   
     gen:            
       go:
-        package: "fisstore"               
+        package: "fissqlc"               
         out: "../"                
         emit_prepared_queries: true    # Generate prepared query functions
         emit_exact_table_names: false  # Use exact table names for structs

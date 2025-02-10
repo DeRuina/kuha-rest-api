@@ -3,7 +3,7 @@
 //   sqlc v1.28.0
 // source: queries.sql
 
-package utvsql
+package utvsqlc
 
 import (
 	"context"
@@ -651,25 +651,16 @@ const getTypesFromOuraData = `-- name: GetTypesFromOuraData :many
 SELECT DISTINCT jsonb_object_keys(data)
 FROM oura_data
 WHERE user_id = $1
-AND ($2::date IS NULL OR summary_date = $2)
-AND ($3::date IS NULL OR summary_date >= $3)
-AND ($4::date IS NULL OR summary_date <= $4)
+AND summary_date = $2
 `
 
 type GetTypesFromOuraDataParams struct {
-	UserID       uuid.UUID
-	SpecificDate time.Time
-	StartDate    time.Time
-	EndDate      time.Time
+	UserID uuid.UUID
+	Date   time.Time
 }
 
 func (q *Queries) GetTypesFromOuraData(ctx context.Context, arg GetTypesFromOuraDataParams) ([]string, error) {
-	rows, err := q.query(ctx, q.getTypesFromOuraDataStmt, getTypesFromOuraData,
-		arg.UserID,
-		arg.SpecificDate,
-		arg.StartDate,
-		arg.EndDate,
-	)
+	rows, err := q.query(ctx, q.getTypesFromOuraDataStmt, getTypesFromOuraData, arg.UserID, arg.Date)
 	if err != nil {
 		return nil, err
 	}

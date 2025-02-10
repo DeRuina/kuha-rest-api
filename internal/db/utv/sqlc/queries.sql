@@ -213,9 +213,7 @@ WHERE summary_date = $2
 SELECT DISTINCT jsonb_object_keys(data)
 FROM oura_data
 WHERE user_id = @user_id
-AND (@specific_date::date IS NULL OR summary_date = @specific_date)
-AND (@start_date::date IS NULL OR summary_date >= @start_date)
-AND (@end_date::date IS NULL OR summary_date <= @end_date);
+AND summary_date = @date;
 
 
 -- name: GetTypesFromPolarData :many

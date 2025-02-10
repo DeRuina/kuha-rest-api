@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"time"
 
-	utvsql "github.com/DeRuina/KUHA-REST-API/internal/db/utv"
+	utvsqlc "github.com/DeRuina/KUHA-REST-API/internal/db/utv"
 	"github.com/DeRuina/KUHA-REST-API/internal/utils"
 )
 
@@ -16,7 +16,7 @@ type OuraDataStore struct {
 
 // Get available dates for Oura data
 func (s *OuraDataStore) GetDates(ctx context.Context, userID string, startDate *string, endDate *string) ([]string, error) {
-	queries := utvsql.New(s.db)
+	queries := utvsqlc.New(s.db)
 
 	uid, err := utils.ParseUUID(userID)
 	if err != nil {
@@ -34,7 +34,7 @@ func (s *OuraDataStore) GetDates(ctx context.Context, userID string, startDate *
 		return nil, err
 	}
 
-	arg := utvsql.GetDatesFromOuraDataParams{
+	arg := utvsqlc.GetDatesFromOuraDataParams{
 		UserID:     uid,
 		AfterDate:  utils.NullTimeIfEmpty(start),
 		BeforeDate: utils.NullTimeIfEmpty(end),

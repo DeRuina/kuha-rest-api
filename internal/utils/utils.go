@@ -18,18 +18,18 @@ func ParseUUID(id string) (uuid.UUID, error) {
 	return parsedUUID, nil
 }
 
-// // ParseDate converts a string (YYYY-MM-DD) to time.Time
-// func ParseDate(dateStr string) (time.Time, error) {
-// 	if dateStr == "" {
-// 		return time.Time{}, errors.New("date string is empty")
-// 	}
+// ParseDate converts a string (YYYY-MM-DD) to time.Time
+func ParseDate(dateStr string) (time.Time, error) {
+	if dateStr == "" {
+		return time.Time{}, nil
+	}
 
-// 	parsedTime, err := time.Parse("2006-01-02", dateStr)
-// 	if err != nil {
-// 		return time.Time{}, errors.New("invalid date format, expected YYYY-MM-DD")
-// 	}
-// 	return parsedTime, nil
-// }
+	parsedTime, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		return time.Time{}, ErrInvalidDate
+	}
+	return parsedTime, nil
+}
 
 // ParseDatePtr converts a string (YYYY-MM-DD) to *time.Time
 func ParseDatePtr(dateStr *string) (*time.Time, error) {

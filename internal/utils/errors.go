@@ -8,8 +8,9 @@ import (
 
 var (
 	ErrInvalidUUID      = errors.New("invalid UUID format")
-	ErrInvalidDate      = errors.New("invalid date format, expected YYYY-MM-DD")
+	ErrInvalidDate      = errors.New("invalid date: ensure the format is YYYY-MM-DD and values are realistic")
 	ErrMissingUserID    = errors.New("user_id is required")
+	ErrMissingDate      = errors.New("date is required")
 	ErrInvalidParameter = errors.New("invalid parameter provided")
 	ErrInvalidDateRange = errors.New("invalid date range")
 )

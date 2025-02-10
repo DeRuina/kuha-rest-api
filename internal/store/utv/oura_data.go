@@ -14,7 +14,7 @@ type OuraDataStore struct {
 	db *sql.DB
 }
 
-// Get available dates for Oura data
+// Get available dates from Oura data
 func (s *OuraDataStore) GetDates(ctx context.Context, userID string, startDate *string, endDate *string) ([]string, error) {
 	queries := utvsqlc.New(s.db)
 
@@ -53,39 +53,33 @@ func (s *OuraDataStore) GetDates(ctx context.Context, userID string, startDate *
 	return formattedDates, nil
 }
 
-// // Get all JSON keys (types) from Oura data
-// func (s *OuraDataStore) GetTypes(ctx context.Context, userID string, specificDate *string, startDate *string, endDate *string) ([]string, error) {
-// 	queries := utvsql.New(s.db)
+// Get all JSON keys (types) from Oura data for a specific date
+func (s *OuraDataStore) GetTypes(ctx context.Context, userID string, summaryDate string) ([]string, error) {
+	queries := utvsqlc.New(s.db)
 
-// 	uid, err := utils.ParseUUID(userID)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	// Validate and convert inputs
+	uid, err := utils.ParseUUID(userID)
+	if err != nil {
+		return nil, err
+	}
+	date, err := utils.ParseDate(summaryDate)
+	if err != nil {
+		return nil, err
+	}
 
-// 	date, err := utils.ParseDatePtr(specificDate)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	// Call the SQLC-generated query
+	arg := utvsqlc.GetTypesFromOuraDataParams{
+		UserID: uid,
+		Date:   date,
+	}
 
-// 	start, err := utils.ParseDatePtr(startDate)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	types, err := queries.GetTypesFromOuraData(ctx, arg)
+	if err != nil {
+		return nil, err
+	}
 
-// 	end, err := utils.ParseDatePtr(endDate)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	arg := utvsql.GetTypesFromOuraDataParams{
-// 		UserID:       uid,
-// 		SpecificDate: date,
-// 		StartDate:    start,
-// 		EndDate:      end,
-// 	}
-
-// 	return queries.GetTypesFromOuraData(ctx, arg)
-// }
+	return types, nil
+}
 
 // // Get all data for a specific date (or filter by type)
 // func (s *OuraDataStore) GetData(ctx context.Context, userID string, summaryDate string, key *string) (interface{}, error) {

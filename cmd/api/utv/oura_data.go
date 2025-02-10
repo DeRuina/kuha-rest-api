@@ -62,26 +62,47 @@ func (h *OuraDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 	utils.WriteJSON(w, http.StatusOK, dates)
 }
 
-// // Get all JSON keys from Oura data (with optional filtering)
-// func (h *OuraDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
-// 	userID := r.URL.Query().Get("user_id")
-// 	specificDate := r.URL.Query().Get("specific_date")
-// 	startDate := r.URL.Query().Get("start_date")
-// 	endDate := r.URL.Query().Get("end_date")
+// Get all JSON keys (types) from Oura data on a specific date
+func (h *OuraDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
+	userID := r.URL.Query().Get("user_id")
+	summaryDate := r.URL.Query().Get("date")
 
-// 	if userID == "" {
-// 		utils.BadRequestResponse(w, r, fmt.Errorf("user_id is required"))
-// 		return
-// 	}
+	if userID == "" {
+		utils.BadRequestResponse(w, r, utils.ErrMissingUserID)
+		return
+	}
+	if summaryDate == "" {
+		utils.BadRequestResponse(w, r, utils.ErrMissingDate)
+		return
+	}
 
-// 	types, err := h.store.GetTypes(context.Background(), userID, &specificDate, &startDate, &endDate)
-// 	if err != nil {
-// 		utils.InternalServerError(w, r, err)
-// 		return
-// 	}
+	err := utils.ValidateParams(r, []string{"user_id", "date"})
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
 
-// 	utils.WriteJSON(w, http.StatusOK, types)
-// }
+	types, err := h.store.GetTypes(context.Background(), userID, summaryDate)
+	if err != nil {
+		switch {
+		case errors.Is(err, utils.ErrInvalidUUID):
+			utils.BadRequestResponse(w, r, err)
+		case errors.Is(err, utils.ErrInvalidDate):
+			utils.BadRequestResponse(w, r, err)
+		default:
+			utils.InternalServerError(w, r, err)
+		}
+		return
+	}
+
+	if len(types) == 0 {
+		w.Header().Set("Content-Length", "0")
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, types)
+}
 
 // // Get all data for a specific date (or filter by type)
 // func (h *OuraDataHandler) GetData(w http.ResponseWriter, r *http.Request) {

@@ -54,6 +54,7 @@ func (h *OuraDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(dates) == 0 {
+		w.Header().Set("Content-Length", "0")
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}

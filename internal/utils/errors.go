@@ -7,9 +7,10 @@ import (
 )
 
 var (
-	ErrInvalidUUID   = errors.New("invalid UUID format")
-	ErrInvalidDate   = errors.New("invalid date format, expected YYYY-MM-DD")
-	ErrMissingUserID = errors.New("user_id is required")
+	ErrInvalidUUID      = errors.New("invalid UUID format")
+	ErrInvalidDate      = errors.New("invalid date format, expected YYYY-MM-DD")
+	ErrMissingUserID    = errors.New("user_id is required")
+	ErrInvalidParameter = errors.New("invalid parameter provided")
 )
 
 func InternalServerError(w http.ResponseWriter, r *http.Request, err error) {

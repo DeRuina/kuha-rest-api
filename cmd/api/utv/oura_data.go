@@ -29,6 +29,12 @@ func (h *OuraDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err := utils.ValidateQueryParams(r, []string{"user_id", "after_date", "before_date"})
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
 	dates, err := h.store.GetDates(context.Background(), userID, &afterDate, &beforeDate)
 	if err != nil {
 		switch {
@@ -42,6 +48,7 @@ func (h *OuraDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// If no dates found, return an empty list
 	if dates == nil {
 		dates = []string{}
 	}

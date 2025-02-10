@@ -2,6 +2,8 @@ package utils
 
 import (
 	"database/sql"
+	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/google/uuid"
@@ -60,4 +62,19 @@ func NullTimeIfEmpty(t *time.Time) sql.NullTime {
 		return sql.NullTime{Valid: false}
 	}
 	return sql.NullTime{Time: *t, Valid: true}
+}
+
+// checks if only allowed parameters are used in the request.
+func ValidateQueryParams(r *http.Request, allowedParams []string) error {
+	allowed := make(map[string]bool)
+	for _, param := range allowedParams {
+		allowed[param] = true
+	}
+
+	for param := range r.URL.Query() {
+		if !allowed[param] {
+			return fmt.Errorf("%w: %s", ErrInvalidParameter, param)
+		}
+	}
+	return nil
 }

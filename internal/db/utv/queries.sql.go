@@ -149,7 +149,7 @@ AND summary_date = $2
 
 type GetAllDataForDateOuraParams struct {
 	UserID      uuid.UUID
-	Date time.Time
+	Date 		time.Time
 }
 
 func (q *Queries) GetAllDataForDateOura(ctx context.Context, arg GetAllDataForDateOuraParams) (json.RawMessage, error) {
@@ -168,7 +168,7 @@ AND summary_date = $2
 
 type GetAllDataForDatePolarParams struct {
 	UserID      uuid.UUID
-	Date time.Time
+	Date 		time.Time
 }
 
 func (q *Queries) GetAllDataForDatePolar(ctx context.Context, arg GetAllDataForDatePolarParams) (json.RawMessage, error) {
@@ -187,7 +187,7 @@ AND summary_date = $2
 
 type GetAllDataForDateSuuntoParams struct {
 	UserID      uuid.UUID
-	Date time.Time
+	Date 		time.Time
 }
 
 func (q *Queries) GetAllDataForDateSuunto(ctx context.Context, arg GetAllDataForDateSuuntoParams) (json.RawMessage, error) {

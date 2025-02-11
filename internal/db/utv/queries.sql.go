@@ -549,6 +549,26 @@ func (q *Queries) GetSpecificDataForDateOura(ctx context.Context, arg GetSpecifi
 	return column_1, err
 }
 
+const getSpecificDataForDatePolar = `-- name: GetSpecificDataForDatePolar :one
+SELECT data->$3::text
+FROM polar_data
+WHERE user_id = $1
+AND summary_date = $2
+`
+
+type GetSpecificDataForDatePolarParams struct {
+	UserID      uuid.UUID
+	Date 		time.Time
+	Key     	*string
+}
+
+func (q *Queries) GetSpecificDataForDatePolar(ctx context.Context, arg GetSpecificDataForDatePolarParams) (interface{}, error) {
+	row := q.queryRow(ctx, q.getSpecificDataForDatePolarStmt, getSpecificDataForDatePolar, arg.UserID, arg.Date, arg.Key)
+	var column_1 interface{}
+	err := row.Scan(&column_1)
+	return column_1, err
+}
+
 const getSpecificDataForDateSuunto = `-- name: GetSpecificDataForDateSuunto :one
 SELECT data->$3::text
 FROM suunto_data

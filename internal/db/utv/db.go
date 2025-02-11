@@ -84,6 +84,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getSpecificDataForDateOuraStmt, err = db.PrepareContext(ctx, getSpecificDataForDateOura); err != nil {
 		return nil, fmt.Errorf("error preparing query GetSpecificDataForDateOura: %w", err)
 	}
+	if q.getSpecificDataForDatePolarStmt, err = db.PrepareContext(ctx, getSpecificDataForDatePolar); err != nil {
+		return nil, fmt.Errorf("error preparing query GetSpecificDataForDatePolar: %w", err)
+	}
 	if q.getSpecificDataForDateSuuntoStmt, err = db.PrepareContext(ctx, getSpecificDataForDateSuunto); err != nil {
 		return nil, fmt.Errorf("error preparing query GetSpecificDataForDateSuunto: %w", err)
 	}
@@ -240,6 +243,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing getSpecificDataForDateOuraStmt: %w", cerr)
 		}
 	}
+	if q.getSpecificDataForDatePolarStmt != nil {
+		if cerr := q.getSpecificDataForDatePolarStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getSpecificDataForDatePolarStmt: %w", cerr)
+		}
+	}
 	if q.getSpecificDataForDateSuuntoStmt != nil {
 		if cerr := q.getSpecificDataForDateSuuntoStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getSpecificDataForDateSuuntoStmt: %w", cerr)
@@ -384,6 +392,7 @@ type Queries struct {
 	getNotificationStmt               *sql.Stmt
 	getResourceMetadataStmt           *sql.Stmt
 	getSpecificDataForDateOuraStmt    *sql.Stmt
+	getSpecificDataForDatePolarStmt   *sql.Stmt
 	getSpecificDataForDateSuuntoStmt  *sql.Stmt
 	getTypesFromCoachtechDataStmt     *sql.Stmt
 	getTypesFromOuraDataStmt          *sql.Stmt
@@ -427,6 +436,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		getNotificationStmt:               q.getNotificationStmt,
 		getResourceMetadataStmt:           q.getResourceMetadataStmt,
 		getSpecificDataForDateOuraStmt:    q.getSpecificDataForDateOuraStmt,
+		getSpecificDataForDatePolarStmt:   q.getSpecificDataForDatePolarStmt,
 		getSpecificDataForDateSuuntoStmt:  q.getSpecificDataForDateSuuntoStmt,
 		getTypesFromCoachtechDataStmt:     q.getTypesFromCoachtechDataStmt,
 		getTypesFromOuraDataStmt:          q.getTypesFromOuraDataStmt,

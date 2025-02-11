@@ -255,7 +255,7 @@ FROM coachtech_data
 WHERE coachtech_id = (SELECT coachtech_id FROM cte)
 AND summary_date BETWEEN to_timestamp($2)::date AND to_timestamp($3)::date;
 
---- name: GetSpecificDataForDatePolar :one
+-- name: GetSpecificDataForDatePolar :one
 SELECT data->$3::text
 FROM polar_data
 WHERE user_id = $1

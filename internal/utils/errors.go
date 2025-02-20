@@ -53,7 +53,7 @@ func FormatValidationErrors(err error) map[string]string {
 func InternalServerError(w http.ResponseWriter, r *http.Request, err error) {
 	log.Printf("Internal server error: %s path: %s error: %s", r.Method, r.URL.Path, err)
 
-	WriteJSONError(w, http.StatusInternalServerError, "The server encountered a problem")
+	WriteJSONError(w, http.StatusInternalServerError, map[string]string{"error": "The server encountered a problem"})
 }
 
 // 400 Bad Request
@@ -73,11 +73,12 @@ func BadRequestResponse(w http.ResponseWriter, r *http.Request, err error) {
 func NotFoundResponse(w http.ResponseWriter, r *http.Request, err error) {
 	log.Printf("Not found error: %s path: %s error: %s", r.Method, r.URL.Path, err)
 
-	WriteJSONError(w, http.StatusNotFound, "Not found")
+	WriteJSONError(w, http.StatusNotFound, map[string]string{"error": "Not found"})
 }
 
 // 422 Unprocessable Entity
 func UnprocessableEntityResponse(w http.ResponseWriter, r *http.Request, err error) {
 	log.Printf("Unprocessable Entity: %s path: %s error: %s", r.Method, r.URL.Path, err)
-	WriteJSONError(w, http.StatusUnprocessableEntity, err.Error())
+
+	WriteJSONError(w, http.StatusUnprocessableEntity, map[string]string{"error": err.Error()})
 }

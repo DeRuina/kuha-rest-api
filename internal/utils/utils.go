@@ -12,6 +12,9 @@ import (
 	"github.com/google/uuid"
 )
 
+// query timeout duration
+const QueryTimeout = 5 * time.Second
+
 // Validator to be initialized once
 var validate *validator.Validate
 var once sync.Once

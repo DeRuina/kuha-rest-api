@@ -42,8 +42,14 @@ func (s *PolarDataStore) GetDates(ctx context.Context, userID string, startDate 
 		BeforeDate: utils.NullTimeIfEmpty(end),
 	}
 
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	rawDates, err := queries.GetDatesFromPolarData(ctx, arg)
 	if err != nil {
+		if errors.Is(err, context.DeadlineExceeded) {
+			return nil, utils.ErrQueryTimeOut
+		}
 		return nil, err
 	}
 
@@ -73,8 +79,14 @@ func (s *PolarDataStore) GetTypes(ctx context.Context, userID string, summaryDat
 		Date:   date,
 	}
 
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	types, err := queries.GetTypesFromPolarData(ctx, arg)
 	if err != nil {
+		if errors.Is(err, context.DeadlineExceeded) {
+			return nil, utils.ErrQueryTimeOut
+		}
 		return nil, err
 	}
 
@@ -93,6 +105,8 @@ func (s *PolarDataStore) GetData(ctx context.Context, userID string, Date string
 	if err != nil {
 		return nil, err
 	}
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
 
 	// If a key is provided, fetch only that specific type
 	if key != nil {
@@ -105,6 +119,9 @@ func (s *PolarDataStore) GetData(ctx context.Context, userID string, Date string
 		if err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
 				return nil, nil
+			}
+			if errors.Is(err, context.DeadlineExceeded) {
+				return nil, utils.ErrQueryTimeOut
 			}
 			return nil, err
 		}
@@ -131,6 +148,9 @@ func (s *PolarDataStore) GetData(ctx context.Context, userID string, Date string
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
+		}
+		if errors.Is(err, context.DeadlineExceeded) {
+			return nil, utils.ErrQueryTimeOut
 		}
 		return nil, err
 	}

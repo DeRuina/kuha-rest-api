@@ -42,8 +42,14 @@ func (s *OuraDataStore) GetDates(ctx context.Context, userID string, startDate *
 		BeforeDate: utils.NullTimeIfEmpty(end),
 	}
 
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	rawDates, err := queries.GetDatesFromOuraData(ctx, arg)
 	if err != nil {
+		if errors.Is(err, context.DeadlineExceeded) {
+			return nil, utils.ErrQueryTimeOut
+		}
 		return nil, err
 	}
 
@@ -73,8 +79,14 @@ func (s *OuraDataStore) GetTypes(ctx context.Context, userID string, summaryDate
 		Date:   date,
 	}
 
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	types, err := queries.GetTypesFromOuraData(ctx, arg)
 	if err != nil {
+		if errors.Is(err, context.DeadlineExceeded) {
+			return nil, utils.ErrQueryTimeOut
+		}
 		return nil, err
 	}
 
@@ -94,6 +106,9 @@ func (s *OuraDataStore) GetData(ctx context.Context, userID string, Date string,
 		return nil, err
 	}
 
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	// If a key is provided, fetch only that specific type
 	if key != nil {
 		arg := utvsqlc.GetSpecificDataForDateOuraParams{
@@ -105,6 +120,9 @@ func (s *OuraDataStore) GetData(ctx context.Context, userID string, Date string,
 		if err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
 				return nil, nil
+			}
+			if errors.Is(err, context.DeadlineExceeded) {
+				return nil, utils.ErrQueryTimeOut
 			}
 			return nil, err
 		}
@@ -131,6 +149,9 @@ func (s *OuraDataStore) GetData(ctx context.Context, userID string, Date string,
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
+		}
+		if errors.Is(err, context.DeadlineExceeded) {
+			return nil, utils.ErrQueryTimeOut
 		}
 		return nil, err
 	}

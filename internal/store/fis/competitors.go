@@ -3,8 +3,10 @@ package fis
 import (
 	"context"
 	"database/sql"
+	"errors"
 
 	fissqlc "github.com/DeRuina/KUHA-REST-API/internal/db/fis"
+	"github.com/DeRuina/KUHA-REST-API/internal/utils"
 )
 
 // CompetitorsStore struct
@@ -24,8 +26,15 @@ func (s *CompetitorsStore) GetAthletesBySector(ctx context.Context, sectorCode s
 	queries := fissqlc.New(s.db)
 
 	dbSectorCode := sql.NullString{String: sectorCode, Valid: true}
+
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	competitors, err := queries.GetAthletesBySector(ctx, dbSectorCode)
 	if err != nil {
+		if errors.Is(err, context.DeadlineExceeded) {
+			return nil, utils.ErrQueryTimeOut
+		}
 		return nil, err
 	}
 
@@ -47,8 +56,15 @@ func (s *CompetitorsStore) GetNationsBySector(ctx context.Context, sectorCode st
 	queries := fissqlc.New(s.db)
 
 	dbSectorCode := sql.NullString{String: sectorCode, Valid: true}
+
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	nations, err := queries.GetNationsBySector(ctx, dbSectorCode)
 	if err != nil {
+		if errors.Is(err, context.DeadlineExceeded) {
+			return nil, utils.ErrQueryTimeOut
+		}
 		return nil, err
 	}
 

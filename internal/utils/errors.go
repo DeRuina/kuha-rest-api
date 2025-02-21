@@ -11,6 +11,9 @@ import (
 // Errors
 var (
 
+	//General
+	ErrQueryTimeOut = errors.New("database query timed out")
+
 	//ErrMissing
 	ErrMissingUserID  = errors.New("user_id is required")
 	ErrMissingSector  = errors.New("sector is required")

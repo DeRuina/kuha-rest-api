@@ -1,0 +1,18 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for integrating, analyzing, and visualizing sports and health data",
+        "title": "KUHA REST API",
+        "termsOfService": "https://csc.fi/en/security-privacy-data-policy-and-open-source-policy/privacy/",
+        "contact": {}
+    },
+    "basePath": "/v1",
+    "paths": {},
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

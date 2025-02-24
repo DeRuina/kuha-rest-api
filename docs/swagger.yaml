@@ -1,0 +1,13 @@
+basePath: /v1
+info:
+  contact: {}
+  description: API for integrating, analyzing, and visualizing sports and health data
+  termsOfService: https://csc.fi/en/security-privacy-data-policy-and-open-source-policy/privacy/
+  title: KUHA REST API
+paths: {}
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

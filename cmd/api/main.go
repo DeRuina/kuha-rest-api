@@ -8,10 +8,23 @@ import (
 	"github.com/DeRuina/KUHA-REST-API/internal/store"
 )
 
+const version = "0.0.1"
+
+//	@title			KUHA REST API
+//	@description	API for integrating, analyzing, and visualizing sports and health data
+//	@termsOfService	https://csc.fi/en/security-privacy-data-policy-and-open-source-policy/privacy/
+
+//	@BasePath	/v1
+
+//	@securityDefinitions.apikey	ApiKeyAuth
+//	@in							header
+//	@name						Authorization
+//	@description
 func main() {
 
 	cfg := config{
-		addr: env.GetString("ADDR", ":8080"),
+		addr:   env.GetString("ADDR", ":8080"),
+		apiURL: env.GetString("EXTERNAL_URL", "http://localhost:8080"),
 		db: dbConfig{
 			fisAddr:      env.GetString("FIS_DB_ADDR", ""),
 			utvAddr:      env.GetString("UTV_DB_ADDR", ""),

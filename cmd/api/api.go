@@ -1,13 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"time"
 
+	"github.com/DeRuina/KUHA-REST-API/docs" // This is required to generate swagger docs
 	"github.com/DeRuina/KUHA-REST-API/internal/store"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 
 	fisapi "github.com/DeRuina/KUHA-REST-API/cmd/api/fis"
 	utvapi "github.com/DeRuina/KUHA-REST-API/cmd/api/utv"
@@ -19,9 +22,10 @@ type api struct {
 }
 
 type config struct {
-	addr string
-	db   dbConfig
-	env  string
+	addr   string
+	db     dbConfig
+	env    string
+	apiURL string
 }
 
 type dbConfig struct {
@@ -46,6 +50,9 @@ func (app *api) mount() http.Handler {
 
 	r.Route("/v1", func(r chi.Router) {
 		r.Get("/health", app.healthCheckHandler)
+
+		docsURL := fmt.Sprintf("%s/swagger/doc.json", app.config.addr)
+		r.Get("/swagger/*", httpSwagger.Handler(httpSwagger.URL(docsURL)))
 
 		// FIS routes
 		r.Route("/fis", func(r chi.Router) {
@@ -91,6 +98,10 @@ func (app *api) mount() http.Handler {
 }
 
 func (app *api) run(mux http.Handler) error {
+	// Docs
+	docs.SwaggerInfo.Version = version
+	docs.SwaggerInfo.Host = app.config.apiURL
+	docs.SwaggerInfo.BasePath = "/v1"
 
 	srv := &http.Server{
 		Addr:         app.config.addr,

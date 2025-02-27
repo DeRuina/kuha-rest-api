@@ -21,8 +21,18 @@ func NewCompetitorsHandler(store fis.Competitors) *CompetitorsHandler {
 	return &CompetitorsHandler{store: store}
 }
 
-// GetAthletesBySector
-
+// GetAthletesBySector godoc
+//
+//	@Summary		Get athletes by sector
+//	@Description	Returns a list of athletes for a given sector
+//	@Tags			FIS
+//	@Accept			json
+//	@Produce		json
+//	@Param			sector	query		string						true	"Sector Code (JP, NK, CC)"
+//	@Success		200		{object}	swagger.AthleteListResponse	"List of athletes"
+//	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Router			/fis/athlete [get]
 func (h *CompetitorsHandler) GetAthletesBySector(w http.ResponseWriter, r *http.Request) {
 	err := utils.ValidateParams(r, []string{"sector"})
 	if err != nil {
@@ -57,8 +67,18 @@ func (h *CompetitorsHandler) GetAthletesBySector(w http.ResponseWriter, r *http.
 	utils.WriteJSON(w, http.StatusOK, response)
 }
 
-// GetNationsBySector
-
+// GetNationsBySector godoc
+//
+//	@Summary		Get nations by sector
+//	@Description	Returns a list of nations for a given sector
+//	@Tags			FIS
+//	@Accept			json
+//	@Produce		json
+//	@Param			sector	query		string					true	"Sector Code (JP, NK, CC)"
+//	@Success		200		{object}	swagger.NationsResponse	"List of nations"
+//	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Router			/fis/nation [get]
 func (h *CompetitorsHandler) GetNationsBySector(w http.ResponseWriter, r *http.Request) {
 	err := utils.ValidateParams(r, []string{"sector"})
 	if err != nil {

@@ -1,5 +1,24 @@
 basePath: /v1
 definitions:
+  swagger.Athlete:
+    properties:
+      first_name:
+        example: John
+        type: string
+      fis_code:
+        example: 123456
+        type: integer
+      last_name:
+        example: Doe
+        type: string
+    type: object
+  swagger.AthleteListResponse:
+    properties:
+      athletes:
+        items:
+          $ref: '#/definitions/swagger.Athlete'
+        type: array
+    type: object
   swagger.DailyActivity:
     properties:
       day:
@@ -14,6 +33,15 @@ definitions:
       total_calories:
         example: 4272
         type: integer
+    type: object
+  swagger.HealthStatusResponse:
+    properties:
+      env:
+        example: production
+        type: string
+      status:
+        example: ok
+        type: string
     type: object
   swagger.HeartRateData:
     properties:
@@ -38,6 +66,17 @@ definitions:
       errors:
         items:
           $ref: '#/definitions/swagger.InternalServerError'
+        type: array
+    type: object
+  swagger.NationsResponse:
+    properties:
+      nations:
+        example:
+        - USA
+        - NOR
+        - GER
+        items:
+          type: string
         type: array
     type: object
   swagger.OuraData:
@@ -239,6 +278,64 @@ info:
   termsOfService: https://csc.fi/en/security-privacy-data-policy-and-open-source-policy/privacy/
   title: KUHA REST API
 paths:
+  /fis/athlete:
+    get:
+      consumes:
+      - application/json
+      description: Returns a list of athletes for a given sector
+      parameters:
+      - description: Sector Code (JP, NK, CC)
+        in: query
+        name: sector
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of athletes
+          schema:
+            $ref: '#/definitions/swagger.AthleteListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      summary: Get athletes by sector
+      tags:
+      - FIS
+  /fis/nation:
+    get:
+      consumes:
+      - application/json
+      description: Returns a list of nations for a given sector
+      parameters:
+      - description: Sector Code (JP, NK, CC)
+        in: query
+        name: sector
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of nations
+          schema:
+            $ref: '#/definitions/swagger.NationsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      summary: Get nations by sector
+      tags:
+      - FIS
   /health:
     get:
       description: Healthcheck endpoint
@@ -246,12 +343,13 @@ paths:
       - application/json
       responses:
         "200":
-          description: ok
+          description: Health status
           schema:
-            type: string
+            $ref: '#/definitions/swagger.HealthStatusResponse'
         "500":
           description: Internal Server Error
-          schema: {}
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
       summary: Healthcheck
       tags:
       - Ops

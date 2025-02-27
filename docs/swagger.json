@@ -8,6 +8,94 @@
     },
     "basePath": "/v1",
     "paths": {
+        "/fis/athlete": {
+            "get": {
+                "description": "Returns a list of athletes for a given sector",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS"
+                ],
+                "summary": "Get athletes by sector",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sector Code (JP, NK, CC)",
+                        "name": "sector",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of athletes",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.AthleteListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/fis/nation": {
+            "get": {
+                "description": "Returns a list of nations for a given sector",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS"
+                ],
+                "summary": "Get nations by sector",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sector Code (JP, NK, CC)",
+                        "name": "sector",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of nations",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.NationsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/health": {
             "get": {
                 "description": "Healthcheck endpoint",
@@ -20,14 +108,16 @@
                 "summary": "Healthcheck",
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "Health status",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/swagger.HealthStatusResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {}
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
                     }
                 }
             }
@@ -616,6 +706,34 @@
         }
     },
     "definitions": {
+        "swagger.Athlete": {
+            "type": "object",
+            "properties": {
+                "first_name": {
+                    "type": "string",
+                    "example": "John"
+                },
+                "fis_code": {
+                    "type": "integer",
+                    "example": 123456
+                },
+                "last_name": {
+                    "type": "string",
+                    "example": "Doe"
+                }
+            }
+        },
+        "swagger.AthleteListResponse": {
+            "type": "object",
+            "properties": {
+                "athletes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.Athlete"
+                    }
+                }
+            }
+        },
         "swagger.DailyActivity": {
             "type": "object",
             "properties": {
@@ -634,6 +752,19 @@
                 "total_calories": {
                     "type": "integer",
                     "example": 4272
+                }
+            }
+        },
+        "swagger.HealthStatusResponse": {
+            "type": "object",
+            "properties": {
+                "env": {
+                    "type": "string",
+                    "example": "production"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "ok"
                 }
             }
         },
@@ -671,6 +802,22 @@
                     "items": {
                         "$ref": "#/definitions/swagger.InternalServerError"
                     }
+                }
+            }
+        },
+        "swagger.NationsResponse": {
+            "type": "object",
+            "properties": {
+                "nations": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "USA",
+                        "NOR",
+                        "GER"
+                    ]
                 }
             }
         },

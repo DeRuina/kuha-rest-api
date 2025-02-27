@@ -12,8 +12,8 @@ import (
 //	@Description	Healthcheck endpoint
 //	@Tags			Ops
 //	@Produce		json
-//	@Success		200	{object}	string	"ok"
-//	@Failure		500	{object}	error
+//	@Success		200	{object}	swagger.HealthStatusResponse	"Health status"
+//	@Failure		500	{object}	swagger.InternalServerErrorResponse
 //	@Router			/health [get]
 func (app *api) healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	data := map[string]string{

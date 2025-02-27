@@ -49,10 +49,15 @@ func (app *api) mount() http.Handler {
 	r.Use(middleware.Timeout(60 * time.Second))
 
 	r.Route("/v1", func(r chi.Router) {
+		// Healthcheck
 		r.Get("/health", app.healthCheckHandler)
 
+		// Swagger docs
 		docsURL := fmt.Sprintf("%s/swagger/doc.json", app.config.addr)
-		r.Get("/swagger/*", httpSwagger.Handler(httpSwagger.URL(docsURL)))
+		r.Get("/docs", func(w http.ResponseWriter, r *http.Request) {
+			http.Redirect(w, r, "/v1/docs/", http.StatusMovedPermanently)
+		})
+		r.Get("/docs/*", httpSwagger.Handler(httpSwagger.URL(docsURL)))
 
 		// FIS routes
 		r.Route("/fis", func(r chi.Router) {

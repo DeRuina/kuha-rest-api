@@ -1,10 +1,548 @@
 basePath: /v1
+definitions:
+  swagger.DailyActivity:
+    properties:
+      day:
+        example: "2023-12-01"
+        type: string
+      sedentary_time:
+        example: 27480
+        type: integer
+      steps:
+        example: 6653
+        type: integer
+      total_calories:
+        example: 4272
+        type: integer
+    type: object
+  swagger.HeartRateData:
+    properties:
+      bpm:
+        example: 43
+        type: integer
+      source:
+        example: rest
+        type: string
+      timestamp:
+        example: "2023-12-01T00:00:43+00:00"
+        type: string
+    type: object
+  swagger.InternalServerError:
+    properties:
+      error:
+        example: the server encountered a problem
+        type: string
+    type: object
+  swagger.InternalServerErrorResponse:
+    properties:
+      errors:
+        items:
+          $ref: '#/definitions/swagger.InternalServerError'
+        type: array
+    type: object
+  swagger.OuraData:
+    properties:
+      daily_activity:
+        items:
+          $ref: '#/definitions/swagger.DailyActivity'
+        type: array
+      heartrate:
+        items:
+          $ref: '#/definitions/swagger.HeartRateData'
+        type: array
+      sleep:
+        items:
+          $ref: '#/definitions/swagger.SleepData'
+        type: array
+    type: object
+  swagger.OuraDataResponse:
+    properties:
+      data:
+        $ref: '#/definitions/swagger.OuraData'
+    type: object
+  swagger.OuraDatesResponse:
+    properties:
+      dates:
+        example:
+        - "2024-02-25"
+        - "2024-02-26"
+        - "2024-03-25"
+        items:
+          type: string
+        type: array
+    type: object
+  swagger.OuraInvalidDateRange:
+    properties:
+      errors:
+        items:
+          $ref: '#/definitions/swagger.UnprocessableEntityError'
+        type: array
+    type: object
+  swagger.OuraTypesResponse:
+    properties:
+      types:
+        example:
+        - heartrate
+        - sleep
+        - daily_activity
+        items:
+          type: string
+        type: array
+    type: object
+  swagger.SleepData:
+    properties:
+      average_heart_rate:
+        example: 47
+        type: integer
+      awake_time:
+        example: 1530
+        type: integer
+      bedtime_end:
+        example: "2023-12-01T06:21:59+02:00"
+        type: string
+      bedtime_start:
+        example: "2023-11-30T23:23:59+02:00"
+        type: string
+      day:
+        example: "2023-12-01"
+        type: string
+      deep_sleep_duration:
+        example: 6630
+        type: integer
+      id:
+        example: 82496435-af96-462e-90c9-806d38418e87
+        type: string
+      type:
+        example: long_sleep
+        type: string
+    type: object
+  swagger.UnprocessableEntityError:
+    properties:
+      error:
+        example: invalid date range
+        type: string
+    type: object
+  swagger.ValidationError:
+    properties:
+      error:
+        example: full description of the error
+        type: string
+    type: object
+  swagger.ValidationErrorResponse:
+    properties:
+      errors:
+        items:
+          $ref: '#/definitions/swagger.ValidationError'
+        type: array
+    type: object
 info:
   contact: {}
   description: API for integrating, analyzing, and visualizing sports and health data
   termsOfService: https://csc.fi/en/security-privacy-data-policy-and-open-source-policy/privacy/
   title: KUHA REST API
-paths: {}
+paths:
+  /health:
+    get:
+      description: Healthcheck endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Healthcheck
+      tags:
+      - Ops
+  /utv/oura/data:
+    get:
+      consumes:
+      - application/json
+      description: Returns data for the specified user on the specified date (optionally
+        filtered by key)
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Date (YYYY-MM-DD)
+        in: query
+        name: date
+        required: true
+        type: string
+      - description: Type
+        in: query
+        name: key
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Data
+          schema:
+            $ref: '#/definitions/swagger.OuraDataResponse'
+        "204":
+          description: 'No Content: No data found'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get available data (Oura)
+      tags:
+      - UTV
+  /utv/oura/dates:
+    get:
+      consumes:
+      - application/json
+      description: Returns available dates for the specified user (optionally filtered
+        by date range)
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Filter dates after this date (YYYY-MM-DD)
+        in: query
+        name: after_date
+        type: string
+      - description: Filter dates before this date (YYYY-MM-DD)
+        in: query
+        name: before_date
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of available dates
+          schema:
+            $ref: '#/definitions/swagger.OuraDatesResponse'
+        "204":
+          description: 'No Content: No available dates found'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/swagger.OuraInvalidDateRange'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get available dates (Oura)
+      tags:
+      - UTV
+  /utv/oura/types:
+    get:
+      consumes:
+      - application/json
+      description: Returns available types for the specified user on the specified
+        date
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Date (YYYY-MM-DD)
+        in: query
+        name: date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of available types
+          schema:
+            $ref: '#/definitions/swagger.OuraTypesResponse'
+        "204":
+          description: 'No Content: No available types found'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get available types (Oura)
+      tags:
+      - UTV
+  /utv/polar/data:
+    get:
+      consumes:
+      - application/json
+      description: Returns data for the specified user on the specified date (optionally
+        filtered by key)
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Date (YYYY-MM-DD)
+        in: query
+        name: date
+        required: true
+        type: string
+      - description: Type
+        in: query
+        name: key
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Data
+          schema:
+            additionalProperties: true
+            type: object
+        "204":
+          description: 'No Content: No data found'
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Get available data (Polar)
+      tags:
+      - UTV
+  /utv/polar/dates:
+    get:
+      consumes:
+      - application/json
+      description: Returns available dates for the specified user (optionally filtered
+        by date range)
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Filter dates after this date (YYYY-MM-DD)
+        in: query
+        name: after_date
+        type: string
+      - description: Filter dates before this date (YYYY-MM-DD)
+        in: query
+        name: before_date
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of available dates
+          schema:
+            items:
+              type: string
+            type: array
+        "204":
+          description: 'No Content: No available dates found'
+        "400":
+          description: Bad Request
+          schema: {}
+        "422":
+          description: Unprocessable Entity
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Get available dates (Polar)
+      tags:
+      - UTV
+  /utv/polar/types:
+    get:
+      consumes:
+      - application/json
+      description: Returns available types for the specified user on the specified
+        date
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Date (YYYY-MM-DD)
+        in: query
+        name: date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of available types
+          schema:
+            items:
+              type: string
+            type: array
+        "204":
+          description: 'No Content: No available types found'
+        "400":
+          description: Bad Request
+          schema: {}
+        "422":
+          description: Unprocessable Entity
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Get available types (Polar)
+      tags:
+      - UTV
+  /utv/suunto/data:
+    get:
+      consumes:
+      - application/json
+      description: Returns data for the specified user on the specified date (optionally
+        filtered by key)
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Date (YYYY-MM-DD)
+        in: query
+        name: date
+        required: true
+        type: string
+      - description: Type
+        in: query
+        name: key
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Data
+          schema:
+            additionalProperties: true
+            type: object
+        "204":
+          description: 'No Content: No data found'
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Get available data (Suunto)
+      tags:
+      - UTV
+  /utv/suunto/dates:
+    get:
+      consumes:
+      - application/json
+      description: Returns available dates for the specified user (optionally filtered
+        by date range)
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Filter dates after this date (YYYY-MM-DD)
+        in: query
+        name: after_date
+        type: string
+      - description: Filter dates before this date (YYYY-MM-DD)
+        in: query
+        name: before_date
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of available dates
+          schema:
+            items:
+              type: string
+            type: array
+        "204":
+          description: 'No Content: No available dates found'
+        "400":
+          description: Bad Request
+          schema: {}
+        "422":
+          description: Unprocessable Entity
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Get available dates (Suunto)
+      tags:
+      - UTV
+  /utv/suunto/types:
+    get:
+      consumes:
+      - application/json
+      description: Returns available types for the specified user on the specified
+        date
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Date (YYYY-MM-DD)
+        in: query
+        name: date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of available types
+          schema:
+            items:
+              type: string
+            type: array
+        "204":
+          description: 'No Content: No available types found'
+        "400":
+          description: Bad Request
+          schema: {}
+        "422":
+          description: Unprocessable Entity
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Get available types (Suunto)
+      tags:
+      - UTV
 securityDefinitions:
   ApiKeyAuth:
     in: header

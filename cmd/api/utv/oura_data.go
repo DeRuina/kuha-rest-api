@@ -35,7 +35,23 @@ func NewOuraDataHandler(store utv.OuraData) *OuraDataHandler {
 	return &OuraDataHandler{store: store}
 }
 
-// Get available dates from Oura data (with optional filtering)
+// GetDatesOura godoc
+//
+//	@Summary		Get available dates (Oura)
+//	@Description	Returns available dates for the specified user (optionally filtered by date range)
+//	@Tags			UTV
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id		query		string						true	"User ID (UUID)"
+//	@Param			after_date	query		string						false	"Filter dates after this date (YYYY-MM-DD)"
+//	@Param			before_date	query		string						false	"Filter dates before this date (YYYY-MM-DD)"
+//	@Success		200			{object}	swagger.OuraDatesResponse	"List of available dates"
+//	@Success		204			"No Content: No available dates found"
+//	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		422			{object}	swagger.OuraInvalidDateRange
+//	@Failure		500			{object}	swagger.InternalServerErrorResponse
+//	@Security		ApiKeyAuth
+//	@Router			/utv/oura/dates [get]
 func (h *OuraDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 	err := utils.ValidateParams(r, []string{"user_id", "after_date", "before_date"})
 	if err != nil {
@@ -71,10 +87,28 @@ func (h *OuraDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, dates)
+	response := map[string]interface{}{
+		"dates": dates,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response)
 }
 
-// Get all JSON keys (types) from Oura data on a specific date
+// GetTypesOura godoc
+
+//	@Summary		Get available types (Oura)
+//	@Description	Returns available types for the specified user on the specified date
+//	@Tags			UTV
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id	query		string						true	"User ID (UUID)"
+//	@Param			date	query		string						true	"Date (YYYY-MM-DD)"
+//	@Success		200		{object}	swagger.OuraTypesResponse	"List of available types"
+//	@Success		204		"No Content: No available types found"
+//	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Security		ApiKeyAuth
+//	@Router			/utv/oura/types [get]
 func (h *OuraDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 	err := utils.ValidateParams(r, []string{"user_id", "date"})
 	if err != nil {
@@ -104,10 +138,29 @@ func (h *OuraDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, types)
+	response := map[string]interface{}{
+		"types": types,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response)
 }
 
-// Get all data or a specific type for a given user and date
+// GetDataOura godoc
+
+//	@Summary		Get available data (Oura)
+//	@Description	Returns data for the specified user on the specified date (optionally filtered by key)
+//	@Tags			UTV
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id	query		string						true	"User ID (UUID)"
+//	@Param			date	query		string						true	"Date (YYYY-MM-DD)"
+//	@Param			key		query		string						false	"Type"
+//	@Success		200		{object}	swagger.OuraDataResponse	"Data"
+//	@Success		204		"No Content: No data found"
+//	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Security		ApiKeyAuth
+//	@Router			/utv/oura/data [get]
 func (h *OuraDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 	err := utils.ValidateParams(r, []string{"user_id", "date", "key"})
 	if err != nil {
@@ -138,5 +191,9 @@ func (h *OuraDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, data)
+	response := map[string]interface{}{
+		"data": data,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response)
 }

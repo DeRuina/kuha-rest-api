@@ -27,10 +27,22 @@ func WriteJSONError(w http.ResponseWriter, statusCode int, message interface{}) 
 
 	switch msg := message.(type) {
 	case string:
-		_ = json.NewEncoder(w).Encode(map[string]string{"error": msg})
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
+			"errors": []map[string]string{
+				{"error": msg},
+			},
+		})
 	case map[string]string:
-		_ = json.NewEncoder(w).Encode(map[string]interface{}{"errors": msg})
+		var errorList []map[string]string
+		for key, val := range msg {
+			errorList = append(errorList, map[string]string{key: val})
+		}
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{"errors": errorList})
 	default:
-		_ = json.NewEncoder(w).Encode(map[string]string{"error": "An unexpected error occurred"})
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
+			"errors": []map[string]string{
+				{"error": "An unexpected error occurred"},
+			},
+		})
 	}
 }

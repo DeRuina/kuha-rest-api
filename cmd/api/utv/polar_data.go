@@ -35,7 +35,23 @@ func NewPolarDataHandler(store utv.PolarData) *PolarDataHandler {
 	return &PolarDataHandler{store: store}
 }
 
-// Get available dates from Polar data (with optional filtering)
+// GetDatesPolar godoc
+//
+//	@Summary		Get available dates (Polar)
+//	@Description	Returns available dates for the specified user (optionally filtered by date range)
+//	@Tags			UTV
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id		query	string	true	"User ID (UUID)"
+//	@Param			after_date	query	string	false	"Filter dates after this date (YYYY-MM-DD)"
+//	@Param			before_date	query	string	false	"Filter dates before this date (YYYY-MM-DD)"
+//	@Success		200			{array}	string	"List of available dates"
+//	@Success		204			"No Content: No available dates found"
+//	@Failure		400			{object}	error
+//	@Failure		422			{object}	error
+//	@Failure		500			{object}	error
+//	@Security		ApiKeyAuth
+//	@Router			/utv/polar/dates [get]
 func (h *PolarDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 	err := utils.ValidateParams(r, []string{"user_id", "after_date", "before_date"})
 	if err != nil {
@@ -72,10 +88,29 @@ func (h *PolarDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, dates)
+	response := map[string]interface{}{
+		"dates": dates,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response)
 }
 
-// Get all JSON keys (types) from Polar data on a specific date
+// GetTypesPolar godoc
+//
+//	@Summary		Get available types (Polar)
+//	@Description	Returns available types for the specified user on the specified date
+//	@Tags			UTV
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id	query	string	true	"User ID (UUID)"
+//	@Param			date	query	string	true	"Date (YYYY-MM-DD)"
+//	@Success		200		{array}	string	"List of available types"
+//	@Success		204		"No Content: No available types found"
+//	@Failure		400		{object}	error
+//	@Failure		422		{object}	error
+//	@Failure		500		{object}	error
+//	@Security		ApiKeyAuth
+//	@Router			/utv/polar/types [get]
 func (h *PolarDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 	err := utils.ValidateParams(r, []string{"user_id", "date"})
 	if err != nil {
@@ -105,10 +140,29 @@ func (h *PolarDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, types)
+	response := map[string]interface{}{
+		"types": types,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response)
 }
 
-// Get all data or a specific type for a given user and date
+// GetDataPolar godoc
+//
+//	@Summary		Get available data (Polar)
+//	@Description	Returns data for the specified user on the specified date (optionally filtered by key)
+//	@Tags			UTV
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id	query		string					true	"User ID (UUID)"
+//	@Param			date	query		string					true	"Date (YYYY-MM-DD)"
+//	@Param			key		query		string					false	"Type"
+//	@Success		200		{object}	map[string]interface{}	"Data"
+//	@Success		204		"No Content: No data found"
+//	@Failure		400		{object}	error
+//	@Failure		500		{object}	error
+//	@Security		ApiKeyAuth
+//	@Router			/utv/polar/data [get]
 func (h *PolarDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 	err := utils.ValidateParams(r, []string{"user_id", "date", "key"})
 	if err != nil {
@@ -139,5 +193,9 @@ func (h *PolarDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, data)
+	response := map[string]interface{}{
+		"data": data,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response)
 }

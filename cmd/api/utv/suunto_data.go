@@ -35,7 +35,23 @@ func NewSuuntoDataHandler(store utv.SuuntoData) *SuuntoDataHandler {
 	return &SuuntoDataHandler{store: store}
 }
 
-// Get available dates from Suunto data (with optional filtering)
+// GetDatesSuunto godoc
+//
+//	@Summary		Get available dates (Suunto)
+//	@Description	Returns available dates for the specified user (optionally filtered by date range)
+//	@Tags			UTV
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id		query	string	true	"User ID (UUID)"
+//	@Param			after_date	query	string	false	"Filter dates after this date (YYYY-MM-DD)"
+//	@Param			before_date	query	string	false	"Filter dates before this date (YYYY-MM-DD)"
+//	@Success		200			{array}	string	"List of available dates"
+//	@Success		204			"No Content: No available dates found"
+//	@Failure		400			{object}	error
+//	@Failure		422			{object}	error
+//	@Failure		500			{object}	error
+//	@Security		ApiKeyAuth
+//	@Router			/utv/suunto/dates [get]
 func (h *SuuntoDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 	err := utils.ValidateParams(r, []string{"user_id", "after_date", "before_date"})
 	if err != nil {
@@ -70,10 +86,29 @@ func (h *SuuntoDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, dates)
+	response := map[string]interface{}{
+		"dates": dates,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response)
 }
 
-// Get all JSON keys (types) from Suunto data on a specific date
+// GetTypesSuunto godoc
+//
+//	@Summary		Get available types (Suunto)
+//	@Description	Returns available types for the specified user on the specified date
+//	@Tags			UTV
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id	query	string	true	"User ID (UUID)"
+//	@Param			date	query	string	true	"Date (YYYY-MM-DD)"
+//	@Success		200		{array}	string	"List of available types"
+//	@Success		204		"No Content: No available types found"
+//	@Failure		400		{object}	error
+//	@Failure		422		{object}	error
+//	@Failure		500		{object}	error
+//	@Security		ApiKeyAuth
+//	@Router			/utv/suunto/types [get]
 func (h *SuuntoDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 	err := utils.ValidateParams(r, []string{"user_id", "date"})
 	if err != nil {
@@ -103,10 +138,29 @@ func (h *SuuntoDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, types)
+	response := map[string]interface{}{
+		"types": types,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response)
 }
 
-// Get all data or a specific type for a given user and date
+// GetDataSuunto godoc
+//
+//	@Summary		Get available data (Suunto)
+//	@Description	Returns data for the specified user on the specified date (optionally filtered by key)
+//	@Tags			UTV
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id	query		string					true	"User ID (UUID)"
+//	@Param			date	query		string					true	"Date (YYYY-MM-DD)"
+//	@Param			key		query		string					false	"Type"
+//	@Success		200		{object}	map[string]interface{}	"Data"
+//	@Success		204		"No Content: No data found"
+//	@Failure		400		{object}	error
+//	@Failure		500		{object}	error
+//	@Security		ApiKeyAuth
+//	@Router			/utv/suunto/data [get]
 func (h *SuuntoDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 	err := utils.ValidateParams(r, []string{"user_id", "date", "key"})
 	if err != nil {
@@ -137,5 +191,9 @@ func (h *SuuntoDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, data)
+	response := map[string]interface{}{
+		"data": data,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response)
 }

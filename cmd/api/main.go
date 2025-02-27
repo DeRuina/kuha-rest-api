@@ -16,15 +16,15 @@ const version = "0.0.1"
 
 //	@BasePath	/v1
 
-//	@securityDefinitions.apikey	ApiKeyAuth
-//	@in							header
-//	@name						Authorization
-//	@description
+// @securityDefinitions.apikey	ApiKeyAuth
+// @in							header
+// @name						Authorization
+// @description
 func main() {
 
 	cfg := config{
 		addr:   env.GetString("ADDR", ":8080"),
-		apiURL: env.GetString("EXTERNAL_URL", "http://localhost:8080"),
+		apiURL: env.GetString("EXTERNAL_URL", "localhost:8080"),
 		db: dbConfig{
 			fisAddr:      env.GetString("FIS_DB_ADDR", ""),
 			utvAddr:      env.GetString("UTV_DB_ADDR", ""),

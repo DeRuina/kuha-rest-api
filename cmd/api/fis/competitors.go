@@ -50,7 +50,11 @@ func (h *CompetitorsHandler) GetAthletesBySector(w http.ResponseWriter, r *http.
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, competitors)
+	response := map[string]interface{}{
+		"athletes": competitors,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response)
 }
 
 // GetNationsBySector
@@ -82,5 +86,9 @@ func (h *CompetitorsHandler) GetNationsBySector(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, nations)
+	response := map[string]interface{}{
+		"nations": nations,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, response)
 }

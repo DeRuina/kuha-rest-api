@@ -13,7 +13,7 @@ import (
 )
 
 // query timeout duration
-const QueryTimeout = 5 * time.Second
+const QueryTimeout = 20 * time.Second
 
 // Validator to be initialized once
 var validate *validator.Validate

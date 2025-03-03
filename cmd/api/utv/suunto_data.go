@@ -82,6 +82,7 @@ func (h *SuuntoDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 	}
 	if len(dates) == 0 {
 		w.Header().Set("Content-Length", "0")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
@@ -133,6 +134,7 @@ func (h *SuuntoDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 
 	if len(types) == 0 {
 		w.Header().Set("Content-Length", "0")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
@@ -186,6 +188,7 @@ func (h *SuuntoDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 
 	if len(data) == 0 {
 		w.Header().Set("Content-Length", "0")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}

@@ -84,6 +84,7 @@ func (h *PolarDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 
 	if len(dates) == 0 {
 		w.Header().Set("Content-Length", "0")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
@@ -135,6 +136,7 @@ func (h *PolarDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 
 	if len(types) == 0 {
 		w.Header().Set("Content-Length", "0")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
@@ -188,6 +190,7 @@ func (h *PolarDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 
 	if len(data) == 0 {
 		w.Header().Set("Content-Length", "0")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}

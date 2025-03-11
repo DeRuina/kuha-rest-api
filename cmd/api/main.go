@@ -1,10 +1,9 @@
 package main
 
 import (
-	"log"
-
 	"github.com/DeRuina/KUHA-REST-API/internal/db"
 	"github.com/DeRuina/KUHA-REST-API/internal/env"
+	"github.com/DeRuina/KUHA-REST-API/internal/logger"
 	"github.com/DeRuina/KUHA-REST-API/internal/store"
 )
 
@@ -35,23 +34,29 @@ func main() {
 		env: env.GetString("ENV", "development"),
 	}
 
+	// Logger
+	logger.Init()
+	defer logger.Cleanup()
+
+	// Database
 	databases, err := db.New(cfg.db.fisAddr, cfg.db.utvAddr, cfg.db.maxOpenConns, cfg.db.maxIdleConns, cfg.db.maxIdleTime)
 	if err != nil {
-		log.Panic(err)
+		logger.Logger.Fatal(err)
 	}
 
 	defer databases.FIS.Close()
 	defer databases.UTV.Close()
-	log.Println("database connection pool established")
+	logger.Logger.Info("database connection pool established")
 
 	store := store.NewStorage(databases)
 
 	app := &api{
 		config: cfg,
 		store:  *store,
+		logger: logger.Logger,
 	}
 
 	mux := app.mount()
 
-	log.Fatal(app.run(mux))
+	logger.Logger.Fatal(app.run(mux))
 }

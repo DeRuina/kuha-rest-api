@@ -1,5 +1,4 @@
 CREATE TABLE revoked_tokens (
-    id SERIAL PRIMARY KEY,
-    client_token TEXT UNIQUE NOT NULL,
+    client_token TEXT PRIMARY KEY,
     revoked_at TIMESTAMP DEFAULT now()
 );

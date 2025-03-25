@@ -1,0 +1,2 @@
+ALTER TABLE clients
+ALTER COLUMN role TYPE TEXT[] USING ARRAY[role];

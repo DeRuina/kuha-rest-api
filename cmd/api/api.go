@@ -33,6 +33,7 @@ type config struct {
 type dbConfig struct {
 	fisAddr      string
 	utvAddr      string
+	authAddr     string
 	maxOpenConns int
 	maxIdleConns int
 	maxIdleTime  string

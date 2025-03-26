@@ -27,6 +27,7 @@ func main() {
 		db: dbConfig{
 			fisAddr:      env.GetString("FIS_DB_ADDR", ""),
 			utvAddr:      env.GetString("UTV_DB_ADDR", ""),
+			authAddr:     env.GetString("AUTH_DB_ADDR", ""),
 			maxOpenConns: env.GetInt("DB_MAX_OPEN_CONNS", 30),
 			maxIdleConns: env.GetInt("DB_MAX_IDLE_CONNS", 30),
 			maxIdleTime:  env.GetString("DB_MAX_IDLE_TIME", "15m"),
@@ -39,13 +40,14 @@ func main() {
 	defer logger.Cleanup()
 
 	// Database
-	databases, err := db.New(cfg.db.fisAddr, cfg.db.utvAddr, cfg.db.maxOpenConns, cfg.db.maxIdleConns, cfg.db.maxIdleTime)
+	databases, err := db.New(cfg.db.fisAddr, cfg.db.utvAddr, cfg.db.authAddr, cfg.db.maxOpenConns, cfg.db.maxIdleConns, cfg.db.maxIdleTime)
 	if err != nil {
 		logger.Logger.Fatal(err)
 	}
 
 	defer databases.FIS.Close()
 	defer databases.UTV.Close()
+	defer databases.Auth.Close()
 	logger.Logger.Info("database connection pool established")
 
 	store := store.NewStorage(databases)

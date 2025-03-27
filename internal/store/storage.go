@@ -1,6 +1,8 @@
 package store
 
 import (
+	"database/sql"
+
 	"github.com/DeRuina/KUHA-REST-API/internal/db"
 	authsqlc "github.com/DeRuina/KUHA-REST-API/internal/db/auth"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/auth"
@@ -36,5 +38,12 @@ func NewStorage(databases *db.Database) *Storage {
 		FIS:  fis.NewFISStorage(databases.FIS),
 		UTV:  utv.NewUTVStorage(databases.UTV),
 		Auth: auth.NewAuthStorage(databases.Auth),
+	}
+}
+
+// Initializes storage for only the auth database
+func NewAuthOnlyStore(authDB *sql.DB) *Storage {
+	return &Storage{
+		Auth: auth.NewAuthStorage(authDB),
 	}
 }

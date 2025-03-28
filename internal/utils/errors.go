@@ -104,3 +104,38 @@ func UnprocessableEntityResponse(w http.ResponseWriter, r *http.Request, err err
 
 	WriteJSONError(w, http.StatusUnprocessableEntity, map[string]string{"error": err.Error()})
 }
+
+// 401 Unauthorized (JWT or client token)
+func UnauthorizedResponse(w http.ResponseWriter, r *http.Request, err error) {
+	logger.Logger.Warnw("Unauthorized", "method", r.Method, "path", r.URL.Path, "error", err.Error())
+	WriteJSONError(w, http.StatusUnauthorized, map[string]string{"error": "unauthorized"})
+}
+
+// 401 Unauthorized (Basic Auth)
+func UnauthorizedBasicErrorResponse(w http.ResponseWriter, r *http.Request, err error) {
+	logger.Logger.Warnw("Unauthorized (Basic Auth)", "method", r.Method, "path", r.URL.Path, "error", err.Error())
+	w.Header().Set("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
+	WriteJSONError(w, http.StatusUnauthorized, map[string]string{"error": "unauthorized"})
+}
+
+// 403 Forbidden
+func ForbiddenResponse(w http.ResponseWriter, r *http.Request, err error) {
+	logger.Logger.Warnw("Forbidden", "method", r.Method, "path", r.URL.Path, "error", err.Error())
+	WriteJSONError(w, http.StatusForbidden, map[string]string{"error": "forbidden"})
+}
+
+// 409 Conflict
+func ConflictResponse(w http.ResponseWriter, r *http.Request, err error) {
+	logger.Logger.Errorw("Conflict", "method", r.Method, "path", r.URL.Path, "error", err.Error())
+	WriteJSONError(w, http.StatusConflict, map[string]string{"error": err.Error()})
+}
+
+// 429 Too Many Requests
+func RateLimitExceededResponse(w http.ResponseWriter, r *http.Request, retryAfter string) {
+	logger.Logger.Warnw("Rate limit exceeded", "method", r.Method, "path", r.URL.Path)
+	w.Header().Set("Retry-After", retryAfter)
+	WriteJSONError(w, http.StatusTooManyRequests, map[string]string{
+		"error":       "rate limit exceeded",
+		"retry_after": retryAfter,
+	})
+}

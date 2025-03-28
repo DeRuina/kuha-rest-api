@@ -17,8 +17,9 @@ import (
 //	@Router			/health [get]
 func (app *api) healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	data := map[string]string{
-		"status": "ok",
-		"env":    app.config.env,
+		"status":  "ok",
+		"env":     app.config.env,
+		"version": version,
 	}
 
 	if err := utils.WriteJSON(w, http.StatusOK, data); err != nil {

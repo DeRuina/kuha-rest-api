@@ -28,6 +28,16 @@ type config struct {
 	db     dbConfig
 	env    string
 	apiURL string
+	auth   authConfig
+}
+
+type authConfig struct {
+	basic basicConfig
+}
+
+type basicConfig struct {
+	user string
+	pass string
 }
 
 type dbConfig struct {

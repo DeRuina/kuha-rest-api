@@ -7,7 +7,7 @@ import (
 	"github.com/DeRuina/KUHA-REST-API/internal/store"
 )
 
-const version = "0.0.1"
+const version = "1.0.0"
 
 //	@title			KUHA REST API
 //	@description	API for integrating, analyzing, and visualizing sports and health data
@@ -33,6 +33,12 @@ func main() {
 			maxIdleTime:  env.GetString("DB_MAX_IDLE_TIME", "15m"),
 		},
 		env: env.GetString("ENV", "development"),
+		auth: authConfig{
+			basic: basicConfig{
+				user: env.GetString("BASIC_AUTH_USER", ""),
+				pass: env.GetString("BASIC_AUTH_PASS", ""),
+			},
+		},
 	}
 
 	// Logger

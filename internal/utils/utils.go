@@ -77,6 +77,11 @@ func NullTimeIfEmpty(t *time.Time) sql.NullTime {
 	return sql.NullTime{Time: *t, Valid: true}
 }
 
+// Converts a string into sql.NullString with Valid=true
+func NullString(s string) sql.NullString {
+	return sql.NullString{String: s, Valid: true}
+}
+
 // Checks if only allowed parameters are used in the request.
 func ValidateParams(r *http.Request, allowedParams []string) error {
 	allowed := make(map[string]bool)

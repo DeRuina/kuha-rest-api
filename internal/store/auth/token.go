@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"crypto/sha256"
+	"database/sql"
 	"encoding/hex"
 	"errors"
 	"time"
@@ -18,7 +19,7 @@ type Tokens struct {
 	RefreshToken string
 }
 
-func (a *AuthStorage) IssueToken(ctx context.Context, clientTokenRaw string) (*Tokens, error) {
+func (a *AuthStorage) IssueToken(ctx context.Context, clientTokenRaw, ip, userAgent string) (*Tokens, error) {
 	hashed := sha256.Sum256([]byte(clientTokenRaw))
 	clientToken := hex.EncodeToString(hashed[:])
 
@@ -55,6 +56,8 @@ func (a *AuthStorage) IssueToken(ctx context.Context, clientTokenRaw string) (*T
 			TokenType:   "refresh",
 			Action:      "revoked",
 			Token:       utils.NullString(old.Token),
+			IpAddress:   sql.NullString{String: ip, Valid: true},
+			UserAgent:   sql.NullString{String: userAgent, Valid: true},
 			Metadata:    meta,
 		}); err != nil {
 			return nil, err
@@ -96,6 +99,8 @@ func (a *AuthStorage) IssueToken(ctx context.Context, clientTokenRaw string) (*T
 		TokenType:   "refresh",
 		Action:      "issued",
 		Token:       utils.NullString(refresh),
+		IpAddress:   sql.NullString{String: ip, Valid: true},
+		UserAgent:   sql.NullString{String: userAgent, Valid: true},
 		Metadata:    metaRefresh,
 	}); err != nil {
 		return nil, err
@@ -106,6 +111,8 @@ func (a *AuthStorage) IssueToken(ctx context.Context, clientTokenRaw string) (*T
 		TokenType:   "jwt",
 		Action:      "issued",
 		Token:       utils.NullString(refresh),
+		IpAddress:   sql.NullString{String: ip, Valid: true},
+		UserAgent:   sql.NullString{String: userAgent, Valid: true},
 		Metadata:    metaJWT,
 	}); err != nil {
 		return nil, err

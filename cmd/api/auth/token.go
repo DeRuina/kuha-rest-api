@@ -29,14 +29,19 @@ func (h *AuthHandler) IssueToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokens, err := h.store.IssueToken(r.Context(), req.ClientToken)
+	ip := r.RemoteAddr
+	userAgent := r.UserAgent()
+
+	tokens, err := h.store.IssueToken(r.Context(), req.ClientToken, ip, userAgent)
 	if err != nil {
 		utils.UnauthorizedResponse(w, r, err)
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, TokenResponse{
-		JWT:          tokens.JWT,
-		RefreshToken: tokens.RefreshToken,
+	utils.WriteJSON(w, http.StatusOK, map[string]interface{}{
+		"tokens": TokenResponse{
+			JWT:          tokens.JWT,
+			RefreshToken: tokens.RefreshToken,
+		},
 	})
 }

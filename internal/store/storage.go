@@ -22,8 +22,8 @@ type UTV interface {
 }
 
 type Auth interface {
-	IssueToken(ctx context.Context, clientToken string) (*auth.Tokens, error)
-	RefreshToken(ctx context.Context, refreshToken string) (string, error)
+	IssueToken(ctx context.Context, clientToken, ip, userAgent string) (*auth.Tokens, error)
+	RefreshToken(ctx context.Context, refreshToken, ip, userAgent string) (string, error)
 }
 
 // Storage struct for multiple databases

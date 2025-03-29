@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"time"
 
@@ -11,7 +12,7 @@ import (
 	"github.com/sqlc-dev/pqtype"
 )
 
-func (a *AuthStorage) RefreshToken(ctx context.Context, refreshToken string) (string, error) {
+func (a *AuthStorage) RefreshToken(ctx context.Context, refreshToken, ip, userAgent string) (string, error) {
 	revoked, err := a.queries.IsRevokedRefreshToken(ctx, refreshToken)
 	if err != nil {
 		return "", err
@@ -53,6 +54,8 @@ func (a *AuthStorage) RefreshToken(ctx context.Context, refreshToken string) (st
 		TokenType:   "refresh",
 		Action:      "used",
 		Token:       utils.NullString(refreshToken),
+		IpAddress:   sql.NullString{String: ip, Valid: true},
+		UserAgent:   sql.NullString{String: userAgent, Valid: true},
 		Metadata:    metaRefresh,
 	}); err != nil {
 		return "", err
@@ -63,6 +66,8 @@ func (a *AuthStorage) RefreshToken(ctx context.Context, refreshToken string) (st
 		TokenType:   "jwt",
 		Action:      "issued",
 		Token:       utils.NullString(refreshToken),
+		IpAddress:   sql.NullString{String: ip, Valid: true},
+		UserAgent:   sql.NullString{String: userAgent, Valid: true},
 		Metadata:    metaJWT,
 	}); err != nil {
 		return "", err

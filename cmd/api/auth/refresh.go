@@ -28,11 +28,16 @@ func (h *AuthHandler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jwt, err := h.store.RefreshToken(r.Context(), req.RefreshToken)
+	ip := r.RemoteAddr
+	userAgent := r.UserAgent()
+
+	jwt, err := h.store.RefreshToken(r.Context(), req.RefreshToken, ip, userAgent)
 	if err != nil {
 		utils.UnauthorizedResponse(w, r, err)
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, RefreshResponse{JWT: jwt})
+	utils.WriteJSON(w, http.StatusOK, map[string]interface{}{
+		"tokens": RefreshResponse{JWT: jwt},
+	})
 }

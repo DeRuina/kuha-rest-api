@@ -23,7 +23,7 @@ type OuraGetTypesParams struct {
 type OuraGetDataParams struct {
 	UserID string `form:"user_id" validate:"required,uuid4"`
 	Date   string `form:"date" validate:"required,datetime=2006-01-02"`
-	Key    string `form:"key" validate:"omitempty,alphanum"`
+	Key    string `form:"key" validate:"omitempty,key"`
 }
 
 type OuraDataHandler struct {

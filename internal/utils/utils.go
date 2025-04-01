@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"regexp"
 	"strings"
 	"sync"
 	"time"
@@ -23,6 +24,13 @@ var once sync.Once
 func GetValidator() *validator.Validate {
 	once.Do(func() {
 		validate = validator.New(validator.WithRequiredStructEnabled())
+
+		// Custom validation
+		validate.RegisterValidation("key", func(fl validator.FieldLevel) bool {
+			value := fl.Field().String()
+			match, _ := regexp.MatchString(`^[a-zA-Z0-9_]+$`, value)
+			return match
+		})
 	})
 	return validate
 }

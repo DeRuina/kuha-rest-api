@@ -6,7 +6,7 @@ import (
 	"github.com/DeRuina/KUHA-REST-API/internal/db"
 	"github.com/DeRuina/KUHA-REST-API/internal/env"
 	"github.com/DeRuina/KUHA-REST-API/internal/seed"
-	"github.com/DeRuina/KUHA-REST-API/internal/store"
+	"github.com/DeRuina/KUHA-REST-API/internal/store/auth"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func main() {
 	}
 	defer conn.Close()
 
-	authStore := store.NewAuthOnlyStore(conn)
+	authStore := auth.NewAuthStorage(conn)
 
-	seed.Seed(authStore.Auth, conn)
+	seed.Seed(authStore, conn)
 }

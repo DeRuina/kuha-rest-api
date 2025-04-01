@@ -11,27 +11,18 @@ import (
 	"os"
 
 	authsqlc "github.com/DeRuina/KUHA-REST-API/internal/db/auth"
-	"github.com/DeRuina/KUHA-REST-API/internal/store"
+	"github.com/DeRuina/KUHA-REST-API/internal/store/auth"
 	"github.com/sqlc-dev/pqtype"
 )
 
 // Map of clients to their assigned roles
 // {clientName: {roles}}
-var clientsToSeed = map[string][]string{
-	"admin":      {"admin"},
-	"utv":        {"utv"},
-	"kamk":       {"kamk", "utv_read", "fis_read"},
-	"fis":        {"fis"},
-	"klab":       {"klab"},
-	"tietoevry":  {"m360", "fis_read"},
-	"couchtech":  {"couchtech"},
-	"archinisis": {"archinisis"},
-}
+var clientsToSeed = map[string][]string{}
 
 // Seed inserts predefined clients with hashed client_tokens into the database
-func Seed(store store.Auth, db *sql.DB) {
+func Seed(authStorage *auth.AuthStorage, db *sql.DB) {
 	ctx := context.Background()
-	queries := store.Queries()
+	queries := authStorage.Queries()
 
 	// Delete all existing clients and reset their ID sequence
 	if _, err := db.ExecContext(ctx, `DELETE FROM clients`); err != nil {
@@ -50,6 +41,12 @@ func Seed(store store.Auth, db *sql.DB) {
 		log.Fatalf("Failed to reset token_logs_id_seq: %v", err)
 	}
 	log.Println("Token logs cleared and sequence reset.")
+
+	// Delete all revoked refresh tokens and reset their ID sequence
+	if _, err := db.ExecContext(ctx, `DELETE FROM revoked_refresh_tokens`); err != nil {
+		log.Fatalf("Failed to delete revoked refresh tokens: %v", err)
+	}
+	log.Println("Revoked refresh tokens cleared.")
 
 	// Create or overwrite the output file
 	file, err := os.Create("client_tokens.txt")

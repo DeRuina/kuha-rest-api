@@ -83,8 +83,8 @@ const docTemplate = `{
                 "summary": "Issue JWT and Refresh token",
                 "parameters": [
                     {
-                        "description": "Client Token Request",
-                        "name": "request",
+                        "description": "Client Token",
+                        "name": "client_token",
                         "in": "body",
                         "required": true,
                         "schema": {

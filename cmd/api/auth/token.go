@@ -23,11 +23,11 @@ type TokenResponse struct {
 //	@Tags			Auth
 //	@Accept			json
 //	@Produce		json
-//	@Param			request	body		TokenRequest	true	"Client Token Request"
-//	@Success		200		{object}	TokenResponse	"Tokens"
-//	@Failure		400		{object}	swagger.ValidationErrorResponse
-//	@Failure		401		{object}	swagger.UnauthorizedResponse
-//	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Param			client_token	body		TokenRequest	true	"Client Token"
+//	@Success		200				{object}	TokenResponse	"Tokens"
+//	@Failure		400				{object}	swagger.ValidationErrorResponse
+//	@Failure		401				{object}	swagger.UnauthorizedResponse
+//	@Failure		500				{object}	swagger.InternalServerErrorResponse
 //	@Router			/auth/token [post]
 func (h *AuthHandler) IssueTokens(w http.ResponseWriter, r *http.Request) {
 	var req TokenRequest

@@ -370,9 +370,9 @@ paths:
       - application/json
       description: Authenticates the client_token and returns a JWT and refresh token
       parameters:
-      - description: Client Token Request
+      - description: Client Token
         in: body
-        name: request
+        name: client_token
         required: true
         schema:
           $ref: '#/definitions/authapi.TokenRequest'

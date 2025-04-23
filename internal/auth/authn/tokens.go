@@ -7,16 +7,27 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/DeRuina/KUHA-REST-API/internal/env"
 	"github.com/golang-jwt/jwt/v5"
 )
 
 // Load the JWT env
+type JWTConfig struct {
+	Secret   []byte
+	Issuer   string
+	Audience string
+}
+
 var (
-	jwtSecret   = []byte(env.GetString("JWT_SECRET", ""))
-	jwtIssuer   = env.GetString("JWT_ISSUER", "")
-	jwtAudience = env.GetString("JWT_AUDIENCE", "")
+	jwtSecret   []byte
+	jwtIssuer   string
+	jwtAudience string
 )
+
+func LoadJWTConfig(cfg JWTConfig) {
+	jwtSecret = cfg.Secret
+	jwtIssuer = cfg.Issuer
+	jwtAudience = cfg.Audience
+}
 
 // GenerateRandomToken returns a secure 32-byte (256-bit) random token as hex string
 func GenerateRandomToken() (string, error) {

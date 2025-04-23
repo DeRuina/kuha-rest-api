@@ -34,11 +34,18 @@ type config struct {
 
 type authConfig struct {
 	basic basicConfig
+	jwt   jwtConfig
 }
 
 type basicConfig struct {
 	user string
 	pass string
+}
+
+type jwtConfig struct {
+	secret   []byte
+	issuer   string
+	audience string
 }
 
 type dbConfig struct {

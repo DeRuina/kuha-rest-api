@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/DeRuina/KUHA-REST-API/internal/auth/authn"
 	"github.com/DeRuina/KUHA-REST-API/internal/db"
 	"github.com/DeRuina/KUHA-REST-API/internal/env"
 	"github.com/DeRuina/KUHA-REST-API/internal/logger"
@@ -15,10 +16,10 @@ const version = "1.0.0"
 
 //	@BasePath	/v1
 
-//	@securityDefinitions.apikey	BearerAuth
-//	@in							header
-//	@name						Authorization
-//	@description				Use format: Bearer your_JWT_here
+// @securityDefinitions.apikey	BearerAuth
+// @in							header
+// @name						Authorization
+// @description					Use format: Bearer your_JWT_here
 func main() {
 
 	cfg := config{
@@ -38,6 +39,11 @@ func main() {
 				user: env.GetString("BASIC_AUTH_USER", ""),
 				pass: env.GetString("BASIC_AUTH_PASS", ""),
 			},
+			jwt: jwtConfig{
+				secret:   []byte(env.GetString("JWT_SECRET", "")),
+				issuer:   env.GetString("JWT_ISSUER", ""),
+				audience: env.GetString("JWT_AUDIENCE", ""),
+			},
 		},
 	}
 
@@ -56,6 +62,14 @@ func main() {
 	defer databases.Auth.Close()
 	logger.Logger.Info("database connection pool established")
 
+	// Authentication
+	authn.LoadJWTConfig(authn.JWTConfig{
+		Secret:   cfg.auth.jwt.secret,
+		Issuer:   cfg.auth.jwt.issuer,
+		Audience: cfg.auth.jwt.audience,
+	})
+
+	// Storage
 	store := store.NewStorage(databases)
 
 	app := &api{

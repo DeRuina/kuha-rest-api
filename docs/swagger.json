@@ -10,11 +10,6 @@
     "paths": {
         "/auth/refresh": {
             "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "Authenticates the refresh token and returns a new JWT token",
                 "consumes": [
                     "application/json"
@@ -67,11 +62,6 @@
         },
         "/auth/token": {
             "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "Authenticates the client_token and returns a JWT and refresh token",
                 "consumes": [
                     "application/json"
@@ -126,7 +116,7 @@
             "get": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "Returns a list of athletes for a given sector",
@@ -162,6 +152,12 @@
                             "$ref": "#/definitions/swagger.ValidationErrorResponse"
                         }
                     },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -175,7 +171,7 @@
             "get": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "Returns a list of nations for a given sector",
@@ -209,6 +205,12 @@
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
                         }
                     },
                     "500": {
@@ -250,7 +252,7 @@
             "get": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "Returns data for the specified user on the specified date (optionally filtered by key)",
@@ -302,6 +304,12 @@
                             "$ref": "#/definitions/swagger.ValidationErrorResponse"
                         }
                     },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -315,7 +323,7 @@
             "get": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "Returns available dates for the specified user (optionally filtered by date range)",
@@ -366,6 +374,12 @@
                             "$ref": "#/definitions/swagger.ValidationErrorResponse"
                         }
                     },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
@@ -385,7 +399,7 @@
             "get": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "Returns available types for the specified user on the specified date",
@@ -431,6 +445,12 @@
                             "$ref": "#/definitions/swagger.ValidationErrorResponse"
                         }
                     },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -444,7 +464,7 @@
             "get": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "Returns data for the specified user on the specified date (optionally filtered by key)",
@@ -496,6 +516,12 @@
                             "$ref": "#/definitions/swagger.ValidationErrorResponse"
                         }
                     },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -509,7 +535,7 @@
             "get": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "Returns available dates for the specified user (optionally filtered by date range)",
@@ -560,6 +586,12 @@
                             "$ref": "#/definitions/swagger.ValidationErrorResponse"
                         }
                     },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
@@ -579,7 +611,7 @@
             "get": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "Returns available types for the specified user on the specified date",
@@ -625,6 +657,12 @@
                             "$ref": "#/definitions/swagger.ValidationErrorResponse"
                         }
                     },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -638,7 +676,7 @@
             "get": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "Returns data for the specified user on the specified date (optionally filtered by key)",
@@ -690,6 +728,12 @@
                             "$ref": "#/definitions/swagger.ValidationErrorResponse"
                         }
                     },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -703,7 +747,7 @@
             "get": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "Returns available dates for the specified user (optionally filtered by date range)",
@@ -754,6 +798,12 @@
                             "$ref": "#/definitions/swagger.ValidationErrorResponse"
                         }
                     },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
@@ -773,7 +823,7 @@
             "get": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "Returns available types for the specified user on the specified date",
@@ -817,6 +867,12 @@
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
                         }
                     },
                     "500": {
@@ -917,6 +973,26 @@
                 "total_calories": {
                     "type": "integer",
                     "example": 4272
+                }
+            }
+        },
+        "swagger.ForbiddenError": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "forbidden"
+                }
+            }
+        },
+        "swagger.ForbiddenResponse": {
+            "type": "object",
+            "properties": {
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.ForbiddenError"
+                    }
                 }
             }
         },
@@ -1294,8 +1370,8 @@
         }
     },
     "securityDefinitions": {
-        "ApiKeyAuth": {
-            "description": "Use auth endpoints to authenticate (Then JWT)",
+        "BearerAuth": {
+            "description": "Use format: Bearer your_JWT_here",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"

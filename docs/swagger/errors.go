@@ -20,6 +20,15 @@ type UnauthorizedError struct {
 	Error1 string `json:"error" example:"unauthorized"`
 }
 
+// 403
+type ForbiddenResponse struct {
+	Errors []ForbiddenError `json:"errors"`
+}
+
+type ForbiddenError struct {
+	Error1 string `json:"error" example:"forbidden"`
+}
+
 // 500
 type InternalServerErrorResponse struct {
 	Errors []InternalServerError `json:"errors"`

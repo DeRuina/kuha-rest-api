@@ -2,8 +2,11 @@ package utvapi
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
+	"github.com/DeRuina/KUHA-REST-API/internal/auth/authn"
+	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/utv"
 	"github.com/DeRuina/KUHA-REST-API/internal/utils"
 )
@@ -48,11 +51,20 @@ func NewOuraDataHandler(store utv.OuraData) *OuraDataHandler {
 //	@Success		200			{object}	swagger.OuraDatesResponse	"List of available dates"
 //	@Success		204			"No Content: No available dates found"
 //	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		403			{object}	swagger.ForbiddenResponse
 //	@Failure		422			{object}	swagger.OuraInvalidDateRange
 //	@Failure		500			{object}	swagger.InternalServerErrorResponse
-//	@Security		ApiKeyAuth
+//	@Security		BearerAuth
 //	@Router			/utv/oura/dates [get]
 func (h *OuraDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	client := authn.GetClientName(r.Context())
+	fmt.Println("Client:", client)
+
 	err := utils.ValidateParams(r, []string{"user_id", "after_date", "before_date"})
 	if err != nil {
 		utils.BadRequestResponse(w, r, err)
@@ -106,10 +118,19 @@ func (h *OuraDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 // @Success		200		{object}	swagger.OuraTypesResponse	"List of available types"
 // @Success		204		"No Content: No available types found"
 // @Failure		400		{object}	swagger.ValidationErrorResponse
+// @Failure		403		{object}	swagger.ForbiddenResponse
 // @Failure		500		{object}	swagger.InternalServerErrorResponse
-// @Security		ApiKeyAuth
+// @Security		BearerAuth
 // @Router			/utv/oura/types [get]
 func (h *OuraDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	client := authn.GetClientName(r.Context())
+	fmt.Println("Client:", client)
+
 	err := utils.ValidateParams(r, []string{"user_id", "date"})
 	if err != nil {
 		utils.BadRequestResponse(w, r, err)
@@ -158,10 +179,19 @@ func (h *OuraDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 // @Success		200		{object}	swagger.OuraDataResponse	"Data"
 // @Success		204		"No Content: No data found"
 // @Failure		400		{object}	swagger.ValidationErrorResponse
+// @Failure		403		{object}	swagger.ForbiddenResponse
 // @Failure		500		{object}	swagger.InternalServerErrorResponse
-// @Security		ApiKeyAuth
+// @Security		BearerAuth
 // @Router			/utv/oura/data [get]
 func (h *OuraDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	client := authn.GetClientName(r.Context())
+	fmt.Println("Client:", client)
+
 	err := utils.ValidateParams(r, []string{"user_id", "date", "key"})
 	if err != nil {
 		utils.BadRequestResponse(w, r, err)

@@ -2,8 +2,11 @@ package utvapi
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
+	"github.com/DeRuina/KUHA-REST-API/internal/auth/authn"
+	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/utv"
 	"github.com/DeRuina/KUHA-REST-API/internal/utils"
 )
@@ -48,11 +51,20 @@ func NewPolarDataHandler(store utv.PolarData) *PolarDataHandler {
 //	@Success		200			{object}	swagger.OuraDatesResponse	"List of available dates"
 //	@Success		204			"No Content: No available dates found"
 //	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		403			{object}	swagger.ForbiddenResponse
 //	@Failure		422			{object}	swagger.OuraInvalidDateRange
 //	@Failure		500			{object}	swagger.InternalServerErrorResponse
-//	@Security		ApiKeyAuth
+//	@Security		BearerAuth
 //	@Router			/utv/polar/dates [get]
 func (h *PolarDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	client := authn.GetClientName(r.Context())
+	fmt.Println("Client:", client)
+
 	err := utils.ValidateParams(r, []string{"user_id", "after_date", "before_date"})
 	if err != nil {
 		utils.BadRequestResponse(w, r, err)
@@ -107,10 +119,19 @@ func (h *PolarDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 //	@Success		200		{object}	swagger.PolarTypesResponse	"List of available types"
 //	@Success		204		"No Content: No available types found"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
-//	@Security		ApiKeyAuth
+//	@Security		BearerAuth
 //	@Router			/utv/polar/types [get]
 func (h *PolarDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	client := authn.GetClientName(r.Context())
+	fmt.Println("Client:", client)
+
 	err := utils.ValidateParams(r, []string{"user_id", "date"})
 	if err != nil {
 		utils.BadRequestResponse(w, r, err)
@@ -159,10 +180,19 @@ func (h *PolarDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 //	@Success		200		{object}	swagger.PolarDataResponse	"Data"
 //	@Success		204		"No Content: No data found"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
-//	@Security		ApiKeyAuth
+//	@Security		BearerAuth
 //	@Router			/utv/polar/data [get]
 func (h *PolarDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	client := authn.GetClientName(r.Context())
+	fmt.Println("Client:", client)
+
 	err := utils.ValidateParams(r, []string{"user_id", "date", "key"})
 	if err != nil {
 		utils.BadRequestResponse(w, r, err)

@@ -60,6 +60,19 @@ definitions:
         example: 4272
         type: integer
     type: object
+  swagger.ForbiddenError:
+    properties:
+      error:
+        example: forbidden
+        type: string
+    type: object
+  swagger.ForbiddenResponse:
+    properties:
+      errors:
+        items:
+          $ref: '#/definitions/swagger.ForbiddenError'
+        type: array
+    type: object
   swagger.HealthStatusResponse:
     properties:
       env:
@@ -348,8 +361,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
-      security:
-      - ApiKeyAuth: []
       summary: Issue a new JWT token
       tags:
       - Auth
@@ -384,8 +395,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
-      security:
-      - ApiKeyAuth: []
       summary: Issue JWT and Refresh token
       tags:
       - Auth
@@ -411,12 +420,16 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Get athletes by sector
       tags:
       - FIS
@@ -442,12 +455,16 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Get nations by sector
       tags:
       - FIS
@@ -502,12 +519,16 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Get available data
       tags:
       - UTV - Oura
@@ -544,6 +565,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
         "422":
           description: Unprocessable Entity
           schema:
@@ -553,7 +578,7 @@ paths:
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Get available dates
       tags:
       - UTV - Oura
@@ -587,12 +612,16 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Get available types
       tags:
       - UTV - Oura
@@ -630,12 +659,16 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Get available data
       tags:
       - UTV - Polar
@@ -672,6 +705,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
         "422":
           description: Unprocessable Entity
           schema:
@@ -681,7 +718,7 @@ paths:
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Get available dates
       tags:
       - UTV - Polar
@@ -715,12 +752,16 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Get available types
       tags:
       - UTV - Polar
@@ -758,12 +799,16 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Get available data
       tags:
       - UTV - Suunto
@@ -800,6 +845,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
         "422":
           description: Unprocessable Entity
           schema:
@@ -809,7 +858,7 @@ paths:
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Get available dates
       tags:
       - UTV - Suunto
@@ -843,18 +892,22 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Get available types
       tags:
       - UTV - Suunto
 securityDefinitions:
-  ApiKeyAuth:
-    description: Use auth endpoints to authenticate (Then JWT)
+  BearerAuth:
+    description: 'Use format: Bearer your_JWT_here'
     in: header
     name: Authorization
     type: apiKey

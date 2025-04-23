@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/DeRuina/KUHA-REST-API/internal/auth/authn"
+	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/fis"
 	"github.com/DeRuina/KUHA-REST-API/internal/utils"
 )
@@ -31,10 +33,20 @@ func NewCompetitorsHandler(store fis.Competitors) *CompetitorsHandler {
 //	@Param			sector	query		string						true	"Sector Code (JP, NK, CC)"
 //	@Success		200		{object}	swagger.AthleteListResponse	"List of athletes"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		403 	{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
-//	@Security		ApiKeyAuth
+//	@Security		BearerAuth
 //	@Router			/fis/athlete [get]
 func (h *CompetitorsHandler) GetAthletesBySector(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("roles:", authn.GetClientRoles(r.Context()))
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	client := authn.GetClientName(r.Context())
+	fmt.Println("Client:", client)
+
 	err := utils.ValidateParams(r, []string{"sector"})
 	if err != nil {
 		utils.BadRequestResponse(w, r, err)
@@ -78,10 +90,19 @@ func (h *CompetitorsHandler) GetAthletesBySector(w http.ResponseWriter, r *http.
 //	@Param			sector	query		string					true	"Sector Code (JP, NK, CC)"
 //	@Success		200		{object}	swagger.NationsResponse	"List of nations"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		403 	{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
-//	@Security		ApiKeyAuth
+//	@Security		BearerAuth
 //	@Router			/fis/nation [get]
 func (h *CompetitorsHandler) GetNationsBySector(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	client := authn.GetClientName(r.Context())
+	fmt.Println("Client:", client)
+
 	err := utils.ValidateParams(r, []string{"sector"})
 	if err != nil {
 		utils.BadRequestResponse(w, r, err)

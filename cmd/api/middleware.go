@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/DeRuina/KUHA-REST-API/internal/auth/authn"
 	"github.com/DeRuina/KUHA-REST-API/internal/utils"
 )
 
@@ -44,6 +45,38 @@ func (app *api) BasicAuthMiddleware() func(http.Handler) http.Handler {
 			}
 
 			next.ServeHTTP(w, r)
+		})
+	}
+}
+
+func JWTMiddleware() func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			authHeader := r.Header.Get("Authorization")
+			if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+				utils.UnauthorizedResponse(w, r, fmt.Errorf("missing or malformed Authorization header"))
+				return
+			}
+
+			tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
+			_, claims, err := authn.ValidateJWT(tokenStr)
+			if err != nil {
+				utils.UnauthorizedResponse(w, r, err)
+				return
+			}
+
+			clientName, _ := claims["sub"].(string)
+			rawRoles, _ := claims["roles"].([]interface{})
+
+			var roles []string
+			for _, r := range rawRoles {
+				if s, ok := r.(string); ok {
+					roles = append(roles, s)
+				}
+			}
+
+			ctx := authn.WithClientMetadata(r.Context(), clientName, roles)
+			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}
 }

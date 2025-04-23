@@ -15,11 +15,10 @@ const version = "1.0.0"
 
 //	@BasePath	/v1
 
-// @securityDefinitions.apikey	ApiKeyAuth
-// @in							header
-// @name						Authorization
-// @description				Use auth endpoints to authenticate (Then JWT)
-// @Security					ApiKeyAuth
+//	@securityDefinitions.apikey	BearerAuth
+//	@in							header
+//	@name						Authorization
+//	@description				Use format: Bearer your_JWT_here
 func main() {
 
 	cfg := config{

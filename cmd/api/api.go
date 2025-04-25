@@ -12,7 +12,6 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
-	"go.uber.org/zap"
 
 	authapi "github.com/DeRuina/KUHA-REST-API/cmd/api/auth"
 	fisapi "github.com/DeRuina/KUHA-REST-API/cmd/api/fis"
@@ -22,7 +21,6 @@ import (
 type api struct {
 	config config
 	store  store.Storage
-	logger *zap.SugaredLogger
 }
 
 type config struct {
@@ -157,6 +155,6 @@ func (app *api) run(mux http.Handler) error {
 		IdleTimeout:  time.Minute,
 	}
 
-	app.logger.Infow("server started", "addr", app.config.addr, "env", app.config.env)
+	logger.Logger.Infow("server started", "addr", app.config.addr, "env", app.config.env)
 	return srv.ListenAndServe()
 }

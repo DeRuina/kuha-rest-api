@@ -16,10 +16,10 @@ const version = "1.0.0"
 
 //	@BasePath	/v1
 
-//	@securityDefinitions.apikey	BearerAuth
-//	@in							header
-//	@name						Authorization
-//	@description				Use format: Bearer your_JWT_here
+// @securityDefinitions.apikey	BearerAuth
+// @in							header
+// @name						Authorization
+// @description				Use format: Bearer your_JWT_here
 func main() {
 
 	cfg := config{
@@ -75,7 +75,6 @@ func main() {
 	app := &api{
 		config: cfg,
 		store:  *store,
-		logger: logger.Logger,
 	}
 
 	mux := app.mount()

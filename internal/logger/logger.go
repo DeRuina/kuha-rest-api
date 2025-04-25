@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authn"
-	"github.com/DeRuina/KUHA-REST-API/internal/utils"
 	"github.com/go-chi/chi/v5/middleware"
 	"go.uber.org/zap"
 )
@@ -59,16 +58,11 @@ func LoggerMiddleware(next http.Handler) http.Handler {
 			zap.Duration("response_time", time.Since(start)),
 		}
 
-		// Only log errors if the status isn't in the 200 range
-		if errVal := r.Context().Value(utils.ContextKeyRequestError); errVal != nil && (rr.statusCode < 200 || rr.statusCode >= 300) {
-			logFields = append(logFields, zap.String("error", errVal.(string)))
-		}
-
 		switch {
 		case rr.statusCode >= 500:
-			Logger.Desugar().With(logFields...).Error("Request failed")
+			Logger.Desugar().With(logFields...).Error("Internal server error")
 		case rr.statusCode >= 400:
-			Logger.Desugar().With(logFields...).Warn("Client error")
+			Logger.Desugar().With(logFields...).Warn("error response")
 		default:
 			Logger.Desugar().With(logFields...).Info("Request completed")
 		}

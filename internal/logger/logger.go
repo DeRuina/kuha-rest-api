@@ -2,19 +2,54 @@ package logger
 
 import (
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authn"
+	"github.com/DeRuina/timberjack"
 	"github.com/go-chi/chi/v5/middleware"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 var Logger *zap.SugaredLogger
 
 // Initialize the global zap logger
 func Init() {
-	rawLogger, _ := zap.NewProduction()
-	Logger = rawLogger.Sugar()
+	logDir := "./logs"
+	_ = os.MkdirAll(logDir, os.ModePerm)
+
+	logFile := &timberjack.Logger{
+		Filename:         filepath.Join(logDir, "app.log"),
+		MaxSize:          100, // MB
+		MaxBackups:       7,
+		MaxAge:           30,
+		Compress:         false,
+		LocalTime:        true,           // for naming
+		RotationInterval: 24 * time.Hour, // daily rotation
+	}
+
+	encoderCfg := zap.NewProductionEncoderConfig()
+	encoderCfg.TimeKey = "ts"
+	encoderCfg.EncodeTime = zapcore.ISO8601TimeEncoder
+
+	fileCore := zapcore.NewCore(
+		zapcore.NewJSONEncoder(encoderCfg),
+		zapcore.AddSync(logFile),
+		zapcore.InfoLevel,
+	)
+
+	stdoutCore := zapcore.NewCore(
+		zapcore.NewJSONEncoder(encoderCfg),
+		zapcore.AddSync(os.Stdout),
+		zapcore.InfoLevel,
+	)
+
+	combinedCore := zapcore.NewTee(fileCore, stdoutCore)
+
+	zapLogger := zap.New(combinedCore, zap.AddCaller())
+	Logger = zapLogger.Sugar()
 }
 
 // Ensures logs are flushed before the application exits

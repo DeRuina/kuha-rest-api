@@ -48,7 +48,8 @@ func main() {
 	}
 
 	// Logger
-	logger.Init()
+	logDir := env.GetString("LOG_DIR", "./logs")
+	logger.Init(logDir)
 	defer logger.Cleanup()
 
 	// Database

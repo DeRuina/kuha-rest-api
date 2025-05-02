@@ -15,9 +15,8 @@ import (
 
 var Logger *zap.SugaredLogger
 
-// Initialize the global zap logger
-func Init() {
-	logDir := "./logs"
+// Initialize the global zap logger with timberjack for file rotation
+func Init(logDir string) {
 	_ = os.MkdirAll(logDir, os.ModePerm)
 
 	logFile := &timberjack.Logger{

@@ -20,7 +20,7 @@ func Init(logDir string) {
 	_ = os.MkdirAll(logDir, os.ModePerm)
 
 	logFile := &timberjack.Logger{
-		Filename:         filepath.Join(logDir, "app.log"),
+		Filename:         filepath.Join(logDir, "kuha.log"),
 		MaxSize:          100, // MB
 		MaxBackups:       7,
 		MaxAge:           30,

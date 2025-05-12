@@ -8,6 +8,7 @@ import (
 	"github.com/DeRuina/KUHA-REST-API/docs" // This is required to generate swagger docs
 	"github.com/DeRuina/KUHA-REST-API/internal/logger"
 	"github.com/DeRuina/KUHA-REST-API/internal/store"
+	"github.com/DeRuina/KUHA-REST-API/internal/store/cache"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
@@ -19,16 +20,25 @@ import (
 )
 
 type api struct {
-	config config
-	store  store.Storage
+	config       config
+	store        store.Storage
+	cacheStorage *cache.Storage
 }
 
 type config struct {
-	addr   string
-	db     dbConfig
-	env    string
-	apiURL string
-	auth   authConfig
+	addr     string
+	db       dbConfig
+	env      string
+	apiURL   string
+	auth     authConfig
+	redisCfg redisConfig
+}
+
+type redisConfig struct {
+	addr    string
+	pw      string
+	db      int
+	enabled bool
 }
 
 type authConfig struct {

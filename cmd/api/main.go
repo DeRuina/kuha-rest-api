@@ -1,11 +1,14 @@
 package main
 
 import (
+	"context"
+
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authn"
 	"github.com/DeRuina/KUHA-REST-API/internal/db"
 	"github.com/DeRuina/KUHA-REST-API/internal/env"
 	"github.com/DeRuina/KUHA-REST-API/internal/logger"
 	"github.com/DeRuina/KUHA-REST-API/internal/store"
+	"github.com/DeRuina/KUHA-REST-API/internal/store/cache"
 )
 
 const version = "1.0.0"
@@ -33,6 +36,12 @@ func main() {
 			maxIdleConns: env.GetInt("DB_MAX_IDLE_CONNS", 30),
 			maxIdleTime:  env.GetString("DB_MAX_IDLE_TIME", "15m"),
 		},
+		redisCfg: redisConfig{
+			addr:    env.GetString("REDIS_ADDR", "localhost:6379"),
+			pw:      env.GetString("REDIS_PW", ""),
+			db:      env.GetInt("REDIS_DB", 0),
+			enabled: env.GetBool("REDIS_ENABLED", false),
+		},
 		env: env.GetString("ENV", "development"),
 		auth: authConfig{
 			basic: basicConfig{
@@ -51,6 +60,22 @@ func main() {
 	logDir := env.GetString("LOG_DIR", "./logs")
 	logger.Init(logDir)
 	defer logger.Cleanup()
+
+	// Cache
+	var cacheStorage *cache.Storage
+	if cfg.redisCfg.enabled {
+		rdb := cache.NewRedisClient(cfg.redisCfg.addr, cfg.redisCfg.pw, cfg.redisCfg.db)
+		if err := rdb.Ping(context.Background()).Err(); err != nil {
+			logger.Logger.Warnw("failed to connect to Redis", "error", err)
+		} else {
+			cacheStorage = cache.NewRedisStorage(rdb)
+			logger.Logger.Info("Redis cache connection established")
+			defer rdb.Close()
+		}
+		defer rdb.Close()
+	} else {
+		logger.Logger.Info("Redis cache disabled by configuration")
+	}
 
 	// Database
 	databases, err := db.New(cfg.db.fisAddr, cfg.db.utvAddr, cfg.db.authAddr, cfg.db.maxOpenConns, cfg.db.maxIdleConns, cfg.db.maxIdleTime)
@@ -74,8 +99,9 @@ func main() {
 	store := store.NewStorage(databases)
 
 	app := &api{
-		config: cfg,
-		store:  *store,
+		config:       cfg,
+		store:        *store,
+		cacheStorage: cacheStorage,
 	}
 
 	mux := app.mount()

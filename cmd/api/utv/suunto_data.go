@@ -2,10 +2,13 @@ package utvapi
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
+	"github.com/DeRuina/KUHA-REST-API/internal/store/cache"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/utv"
 	"github.com/DeRuina/KUHA-REST-API/internal/utils"
 )
@@ -30,11 +33,12 @@ type SuuntoGetDataParams struct {
 
 type SuuntoDataHandler struct {
 	store utv.SuuntoData
+	cache *cache.Storage
 }
 
 // NewSuuntoDataHandler initializes SuuntoData handler
-func NewSuuntoDataHandler(store utv.SuuntoData) *SuuntoDataHandler {
-	return &SuuntoDataHandler{store: store}
+func NewSuuntoDataHandler(store utv.SuuntoData, cache *cache.Storage) *SuuntoDataHandler {
+	return &SuuntoDataHandler{store: store, cache: cache}
 }
 
 // GetDatesSuunto godoc
@@ -83,6 +87,15 @@ func (h *SuuntoDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	cacheKey := fmt.Sprintf("suunto:dates:%s:%s:%s", params.UserID, params.AfterDate, params.BeforeDate)
+
+	if h.cache != nil {
+		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
+			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
+			return
+		}
+	}
+
 	dates, err := h.store.GetDates(context.Background(), params.UserID, &params.AfterDate, &params.BeforeDate)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
@@ -97,6 +110,8 @@ func (h *SuuntoDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 	response := map[string]interface{}{
 		"dates": dates,
 	}
+
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 10*time.Minute)
 
 	utils.WriteJSON(w, http.StatusOK, response)
 }
@@ -139,6 +154,15 @@ func (h *SuuntoDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	cacheKey := fmt.Sprintf("suunto:types:%s:%s", params.UserID, params.Date)
+
+	if h.cache != nil {
+		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
+			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
+			return
+		}
+	}
+
 	types, err := h.store.GetTypes(context.Background(), params.UserID, params.Date)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
@@ -154,6 +178,8 @@ func (h *SuuntoDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 	response := map[string]interface{}{
 		"types": types,
 	}
+
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 10*time.Minute)
 
 	utils.WriteJSON(w, http.StatusOK, response)
 }
@@ -198,6 +224,19 @@ func (h *SuuntoDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	keyPart := "all"
+	if params.Key != "" {
+		keyPart = params.Key
+	}
+	cacheKey := fmt.Sprintf("suunto:data:%s:%s:%s", params.UserID, params.Date, keyPart)
+
+	if h.cache != nil {
+		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
+			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
+			return
+		}
+	}
+
 	data, err := h.store.GetData(context.Background(), params.UserID, params.Date, utils.NilIfEmpty(&params.Key))
 	if err != nil {
 		utils.InternalServerError(w, r, err)
@@ -213,6 +252,8 @@ func (h *SuuntoDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 	response := map[string]interface{}{
 		"data": data,
 	}
+
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 10*time.Minute)
 
 	utils.WriteJSON(w, http.StatusOK, response)
 }

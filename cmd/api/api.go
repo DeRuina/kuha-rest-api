@@ -120,9 +120,9 @@ func (app *api) mount() http.Handler {
 			// UTV routes
 			r.Route("/utv", func(r chi.Router) {
 				//register handlers
-				ouraHandler := utvapi.NewOuraDataHandler(app.store.UTV.Oura())
-				polarHandler := utvapi.NewPolarDataHandler(app.store.UTV.Polar())
-				suuntoHandler := utvapi.NewSuuntoDataHandler(app.store.UTV.Suunto())
+				ouraHandler := utvapi.NewOuraDataHandler(app.store.UTV.Oura(), app.cacheStorage)
+				polarHandler := utvapi.NewPolarDataHandler(app.store.UTV.Polar(), app.cacheStorage)
+				suuntoHandler := utvapi.NewSuuntoDataHandler(app.store.UTV.Suunto(), app.cacheStorage)
 
 				// Oura routes
 				r.Route("/oura", func(r chi.Router) {

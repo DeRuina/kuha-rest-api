@@ -2,10 +2,13 @@ package utvapi
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
+	"github.com/DeRuina/KUHA-REST-API/internal/store/cache"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/utv"
 	"github.com/DeRuina/KUHA-REST-API/internal/utils"
 )
@@ -30,11 +33,12 @@ type OuraGetDataParams struct {
 
 type OuraDataHandler struct {
 	store utv.OuraData
+	cache *cache.Storage
 }
 
 // NewOuraDataHandler initializes OuraData handler
-func NewOuraDataHandler(store utv.OuraData) *OuraDataHandler {
-	return &OuraDataHandler{store: store}
+func NewOuraDataHandler(store utv.OuraData, cache *cache.Storage) *OuraDataHandler {
+	return &OuraDataHandler{store: store, cache: cache}
 }
 
 // GetDatesOura godoc
@@ -83,6 +87,15 @@ func (h *OuraDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	cacheKey := fmt.Sprintf("oura:dates:%s:%s:%s", params.UserID, params.AfterDate, params.BeforeDate)
+
+	if h.cache != nil {
+		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
+			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
+			return
+		}
+	}
+
 	dates, err := h.store.GetDates(context.Background(), params.UserID, &params.AfterDate, &params.BeforeDate)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
@@ -99,25 +112,27 @@ func (h *OuraDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 		"dates": dates,
 	}
 
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 10*time.Minute)
+
 	utils.WriteJSON(w, http.StatusOK, response)
 }
 
 // GetTypesOura godoc
 
-//	@Summary		Get available types
-//	@Description	Returns available types for the specified user on the specified date
-//	@Tags			UTV - Oura
-//	@Accept			json
-//	@Produce		json
-//	@Param			user_id	query		string						true	"User ID (UUID)"
-//	@Param			date	query		string						true	"Date (YYYY-MM-DD)"
-//	@Success		200		{object}	swagger.OuraTypesResponse	"List of available types"
-//	@Success		204		"No Content: No available types found"
-//	@Failure		400		{object}	swagger.ValidationErrorResponse
-//	@Failure		403		{object}	swagger.ForbiddenResponse
-//	@Failure		500		{object}	swagger.InternalServerErrorResponse
-//	@Security		BearerAuth
-//	@Router			/utv/oura/types [get]
+// @Summary		Get available types
+// @Description	Returns available types for the specified user on the specified date
+// @Tags			UTV - Oura
+// @Accept			json
+// @Produce		json
+// @Param			user_id	query		string						true	"User ID (UUID)"
+// @Param			date	query		string						true	"Date (YYYY-MM-DD)"
+// @Success		200		{object}	swagger.OuraTypesResponse	"List of available types"
+// @Success		204		"No Content: No available types found"
+// @Failure		400		{object}	swagger.ValidationErrorResponse
+// @Failure		403		{object}	swagger.ForbiddenResponse
+// @Failure		500		{object}	swagger.InternalServerErrorResponse
+// @Security		BearerAuth
+// @Router			/utv/oura/types [get]
 func (h *OuraDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 	if !authz.Authorize(r) {
 		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
@@ -140,6 +155,15 @@ func (h *OuraDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	cacheKey := fmt.Sprintf("oura:types:%s:%s", params.UserID, params.Date)
+
+	if h.cache != nil {
+		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
+			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
+			return
+		}
+	}
+
 	types, err := h.store.GetTypes(context.Background(), params.UserID, params.Date)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
@@ -156,26 +180,28 @@ func (h *OuraDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 		"types": types,
 	}
 
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 10*time.Minute)
+
 	utils.WriteJSON(w, http.StatusOK, response)
 }
 
 // GetDataOura godoc
 
-//	@Summary		Get available data
-//	@Description	Returns data for the specified user on the specified date (optionally filtered by key)
-//	@Tags			UTV - Oura
-//	@Accept			json
-//	@Produce		json
-//	@Param			user_id	query		string						true	"User ID (UUID)"
-//	@Param			date	query		string						true	"Date (YYYY-MM-DD)"
-//	@Param			key		query		string						false	"Type"
-//	@Success		200		{object}	swagger.OuraDataResponse	"Data"
-//	@Success		204		"No Content: No data found"
-//	@Failure		400		{object}	swagger.ValidationErrorResponse
-//	@Failure		403		{object}	swagger.ForbiddenResponse
-//	@Failure		500		{object}	swagger.InternalServerErrorResponse
-//	@Security		BearerAuth
-//	@Router			/utv/oura/data [get]
+// @Summary		Get available data
+// @Description	Returns data for the specified user on the specified date (optionally filtered by key)
+// @Tags			UTV - Oura
+// @Accept			json
+// @Produce		json
+// @Param			user_id	query		string						true	"User ID (UUID)"
+// @Param			date	query		string						true	"Date (YYYY-MM-DD)"
+// @Param			key		query		string						false	"Type"
+// @Success		200		{object}	swagger.OuraDataResponse	"Data"
+// @Success		204		"No Content: No data found"
+// @Failure		400		{object}	swagger.ValidationErrorResponse
+// @Failure		403		{object}	swagger.ForbiddenResponse
+// @Failure		500		{object}	swagger.InternalServerErrorResponse
+// @Security		BearerAuth
+// @Router			/utv/oura/data [get]
 func (h *OuraDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 	if !authz.Authorize(r) {
 		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
@@ -199,6 +225,19 @@ func (h *OuraDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	keyPart := "all"
+	if params.Key != "" {
+		keyPart = params.Key
+	}
+	cacheKey := fmt.Sprintf("oura:data:%s:%s:%s", params.UserID, params.Date, keyPart)
+
+	if h.cache != nil {
+		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
+			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
+			return
+		}
+	}
+
 	data, err := h.store.GetData(context.Background(), params.UserID, params.Date, utils.NilIfEmpty(&params.Key))
 	if err != nil {
 		utils.InternalServerError(w, r, err)
@@ -214,6 +253,8 @@ func (h *OuraDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 	response := map[string]interface{}{
 		"data": data,
 	}
+
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 10*time.Minute)
 
 	utils.WriteJSON(w, http.StatusOK, response)
 }

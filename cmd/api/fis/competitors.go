@@ -127,6 +127,15 @@ func (h *CompetitorsHandler) GetNationsBySector(w http.ResponseWriter, r *http.R
 		return
 	}
 
+	cacheKey := fmt.Sprintf("fis:nations:%s", params.Sector)
+
+	if h.cache != nil {
+		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
+			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
+			return
+		}
+	}
+
 	nations, err := h.store.GetNationsBySector(context.Background(), params.Sector)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
@@ -141,6 +150,8 @@ func (h *CompetitorsHandler) GetNationsBySector(w http.ResponseWriter, r *http.R
 	response := map[string]interface{}{
 		"nations": nations,
 	}
+
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 10*time.Minute)
 
 	utils.WriteJSON(w, http.StatusOK, response)
 }

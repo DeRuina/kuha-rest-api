@@ -2,10 +2,13 @@ package utvapi
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
+	"github.com/DeRuina/KUHA-REST-API/internal/store/cache"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/utv"
 	"github.com/DeRuina/KUHA-REST-API/internal/utils"
 )
@@ -30,11 +33,12 @@ type PolarGetDataParams struct {
 
 type PolarDataHandler struct {
 	store utv.PolarData
+	cache *cache.Storage
 }
 
 // NewPolarDataHandler initializes PolarData handler
-func NewPolarDataHandler(store utv.PolarData) *PolarDataHandler {
-	return &PolarDataHandler{store: store}
+func NewPolarDataHandler(store utv.PolarData, cache *cache.Storage) *PolarDataHandler {
+	return &PolarDataHandler{store: store, cache: cache}
 }
 
 // GetDatesPolar godoc
@@ -83,6 +87,15 @@ func (h *PolarDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	cacheKey := fmt.Sprintf("polar:dates:%s:%s:%s", params.UserID, params.AfterDate, params.BeforeDate)
+
+	if h.cache != nil {
+		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
+			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
+			return
+		}
+	}
+
 	dates, err := h.store.GetDates(context.Background(), params.UserID, &params.AfterDate, &params.BeforeDate)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
@@ -99,6 +112,8 @@ func (h *PolarDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 	response := map[string]interface{}{
 		"dates": dates,
 	}
+
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 10*time.Minute)
 
 	utils.WriteJSON(w, http.StatusOK, response)
 }
@@ -141,6 +156,15 @@ func (h *PolarDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	cacheKey := fmt.Sprintf("polar:types:%s:%s", params.UserID, params.Date)
+
+	if h.cache != nil {
+		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
+			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
+			return
+		}
+	}
+
 	types, err := h.store.GetTypes(context.Background(), params.UserID, params.Date)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
@@ -156,6 +180,8 @@ func (h *PolarDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 	response := map[string]interface{}{
 		"types": types,
 	}
+
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 10*time.Minute)
 
 	utils.WriteJSON(w, http.StatusOK, response)
 }
@@ -200,6 +226,19 @@ func (h *PolarDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	keyPart := "all"
+	if params.Key != "" {
+		keyPart = params.Key
+	}
+	cacheKey := fmt.Sprintf("polar:data:%s:%s:%s", params.UserID, params.Date, keyPart)
+
+	if h.cache != nil {
+		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
+			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
+			return
+		}
+	}
+
 	data, err := h.store.GetData(context.Background(), params.UserID, params.Date, utils.NilIfEmpty(&params.Key))
 	if err != nil {
 		utils.InternalServerError(w, r, err)
@@ -215,6 +254,8 @@ func (h *PolarDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 	response := map[string]interface{}{
 		"data": data,
 	}
+
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 10*time.Minute)
 
 	utils.WriteJSON(w, http.StatusOK, response)
 }

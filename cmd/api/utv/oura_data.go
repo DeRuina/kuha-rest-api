@@ -1,7 +1,6 @@
 package utvapi
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -96,7 +95,7 @@ func (h *OuraDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	dates, err := h.store.GetDates(context.Background(), params.UserID, &params.AfterDate, &params.BeforeDate)
+	dates, err := h.store.GetDates(r.Context(), params.UserID, &params.AfterDate, &params.BeforeDate)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
 		return
@@ -164,7 +163,7 @@ func (h *OuraDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	types, err := h.store.GetTypes(context.Background(), params.UserID, params.Date)
+	types, err := h.store.GetTypes(r.Context(), params.UserID, params.Date)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
 		return
@@ -238,7 +237,7 @@ func (h *OuraDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	data, err := h.store.GetData(context.Background(), params.UserID, params.Date, utils.NilIfEmpty(&params.Key))
+	data, err := h.store.GetData(r.Context(), params.UserID, params.Date, utils.NilIfEmpty(&params.Key))
 	if err != nil {
 		utils.InternalServerError(w, r, err)
 		return

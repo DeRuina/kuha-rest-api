@@ -1,7 +1,6 @@
 package fisapi
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -72,7 +71,7 @@ func (h *CompetitorsHandler) GetAthletesBySector(w http.ResponseWriter, r *http.
 		}
 	}
 
-	competitors, err := h.store.GetAthletesBySector(context.Background(), params.Sector)
+	competitors, err := h.store.GetAthletesBySector(r.Context(), params.Sector)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
 		return
@@ -136,7 +135,7 @@ func (h *CompetitorsHandler) GetNationsBySector(w http.ResponseWriter, r *http.R
 		}
 	}
 
-	nations, err := h.store.GetNationsBySector(context.Background(), params.Sector)
+	nations, err := h.store.GetNationsBySector(r.Context(), params.Sector)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
 		return

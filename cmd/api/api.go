@@ -89,11 +89,11 @@ func (app *api) mount() http.Handler {
 	r.Use(logger.LoggerMiddleware)
 
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{env.GetString("CORS_ALLOWED_ORIGIN", "")},
+		AllowedOrigins:   []string{env.GetString("CORS_ALLOWED_ORIGIN", "https://urheilun-data-alusta.fi")},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
-		AllowCredentials: false,
+		AllowCredentials: true,
 		MaxAge:           300,
 	}))
 

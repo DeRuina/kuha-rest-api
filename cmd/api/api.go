@@ -89,13 +89,6 @@ func (app *api) mount() http.Handler {
 	r.Use(middleware.RequestID)
 	r.Use(logger.LoggerMiddleware)
 
-	r.Use(func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			fmt.Printf("🟡 Incoming request Origin: %s\n", r.Header.Get("Origin"))
-			next.ServeHTTP(w, r)
-		})
-	})
-
 	origins := strings.Split(env.GetString("CORS_ALLOWED_ORIGIN", ""), ",")
 	for i := range origins {
 		origins[i] = strings.TrimSpace(origins[i])

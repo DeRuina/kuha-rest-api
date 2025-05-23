@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/DeRuina/KUHA-REST-API/docs" // This is required to generate swagger docs
+	"github.com/DeRuina/KUHA-REST-API/internal/env"
 	"github.com/DeRuina/KUHA-REST-API/internal/logger"
 	"github.com/DeRuina/KUHA-REST-API/internal/ratelimiter"
 	"github.com/DeRuina/KUHA-REST-API/internal/store"
@@ -95,19 +96,11 @@ func (app *api) mount() http.Handler {
 	})
 
 	r.Use(cors.Handler(cors.Options{
-		AllowOriginFunc: func(r *http.Request, origin string) bool {
-			fmt.Printf("🔎 Checking CORS Origin: %s\n", origin)
-			switch origin {
-			case "https://urheilun-data-alusta.fi", "http://127.0.0.1:3000":
-				return true
-			default:
-				return false
-			}
-		},
+		AllowedOrigins:   []string{env.GetString("CORS_ALLOWED_ORIGIN", "")},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
-		AllowCredentials: true,
+		AllowCredentials: false,
 		MaxAge:           300,
 	}))
 

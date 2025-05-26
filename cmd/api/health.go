@@ -33,7 +33,7 @@ func (app *api) healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	statusCode := http.StatusOK
 	status := "ok"
 
-	// --- Redis Check ---
+	//  Redis Check
 	if app.cacheStorage != nil {
 		if err := app.cacheStorage.Ping(ctx); err != nil {
 			data["redis"] = "unreachable"
@@ -46,7 +46,7 @@ func (app *api) healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 		data["redis"] = "disabled"
 	}
 
-	// --- DB Checks ---
+	// DB Checks
 	if err := app.store.FIS.Ping(ctx); err != nil {
 		data["db_fis"] = "unreachable"
 		status = "fail"
@@ -71,7 +71,6 @@ func (app *api) healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 		data["db_auth"] = "ok"
 	}
 
-	// Optional: Uptime and goroutines
 	data["uptime_seconds"] = int64(time.Since(startTime).Seconds())
 	data["goroutines"] = runtime.NumGoroutine()
 

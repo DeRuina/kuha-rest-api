@@ -13,7 +13,13 @@ type Competitors interface {
 
 // FISStorage struct to hold table-specific storage
 type FISStorage struct {
+	db          *sql.DB
 	competitors Competitors
+}
+
+// Ping method
+func (s *FISStorage) Ping(ctx context.Context) error {
+	return s.db.PingContext(ctx)
 }
 
 // Methods to return each table's storage interface
@@ -24,6 +30,7 @@ func (s *FISStorage) Competitors() Competitors {
 // Storage for FIS database tables
 func NewFISStorage(db *sql.DB) *FISStorage {
 	return &FISStorage{
+		db:          db,
 		competitors: &CompetitorsStore{db: db},
 	}
 }

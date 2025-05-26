@@ -125,6 +125,7 @@ func main() {
 	}
 
 	// metrics
+	expvar.NewString("version").Set(version)
 	expvar.Publish("database_fis", expvar.Func(func() any {
 		if databases.FIS != nil {
 			return databases.FIS.Stats()

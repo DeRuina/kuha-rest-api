@@ -12,16 +12,19 @@ import (
 
 // Define database interfaces
 type FIS interface {
+	Ping(ctx context.Context) error
 	Competitors() fis.Competitors
 }
 
 type UTV interface {
+	Ping(ctx context.Context) error
 	Oura() utv.OuraData
 	Polar() utv.PolarData
 	Suunto() utv.SuuntoData
 }
 
 type Auth interface {
+	Ping(ctx context.Context) error
 	IssueToken(ctx context.Context, clientToken, ip, userAgent string) (*auth.Tokens, error)
 	RefreshToken(ctx context.Context, refreshToken, ip, userAgent string) (string, error)
 }

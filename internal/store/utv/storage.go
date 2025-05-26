@@ -29,9 +29,15 @@ type SuuntoData interface {
 
 // UTVStorage struct to hold table-specific storage
 type UTVStorage struct {
+	db     *sql.DB
 	oura   OuraData
 	polar  PolarData
 	suunto SuuntoData
+}
+
+// Ping method
+func (s *UTVStorage) Ping(ctx context.Context) error {
+	return s.db.PingContext(ctx)
 }
 
 // Methods to return each table's storage interface
@@ -50,6 +56,7 @@ func (s *UTVStorage) Suunto() SuuntoData {
 // Storage for UTV database tables
 func NewUTVStorage(db *sql.DB) *UTVStorage {
 	return &UTVStorage{
+		db:     db,
 		oura:   &OuraDataStore{db: db},
 		polar:  &PolarDataStore{db: db},
 		suunto: &SuuntoDataStore{db: db},

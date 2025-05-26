@@ -26,3 +26,7 @@ func (s *Storage) Set(ctx context.Context, key string, value string, ttl time.Du
 func (s *Storage) Delete(ctx context.Context, key string) error {
 	return s.client.Del(ctx, key).Err()
 }
+
+func (s *Storage) Ping(ctx context.Context) error {
+	return s.client.Ping(ctx).Err()
+}

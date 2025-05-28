@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0 (2025-05-28)
+
+
+### Features
+
+* relase please script ([a4cbb0b](https://github.com/DeRuina/KUHA-REST-API/commit/a4cbb0b9044f3d9bc51c1b4bffdcb03296de0c17))
+
 ## 2025-05-28
 
 ### Changed

@@ -260,3 +260,29 @@ SELECT data->$3::text
 FROM polar_data
 WHERE user_id = $1
 AND summary_date = $2;
+
+-- name: GetDatesFromGarminData :many
+SELECT DISTINCT summary_date
+FROM garmin_data
+WHERE user_id = @user_id
+AND (@after_date::date IS NULL OR summary_date >= @after_date)
+AND (@before_date::date IS NULL OR summary_date <= @before_date)
+ORDER BY summary_date DESC;
+
+-- name: GetAllDataForDateGarmin :one
+SELECT data
+FROM garmin_data
+WHERE user_id = $1
+AND summary_date = $2;
+
+-- name: GetSpecificDataForDateGarmin :one
+SELECT data->$3::text
+FROM garmin_data
+WHERE user_id = $1
+AND summary_date = $2;
+
+-- name: GetTypesFromGarminData :many
+SELECT DISTINCT jsonb_object_keys(data)
+FROM garmin_data
+WHERE user_id = @user_id
+AND summary_date = @date;

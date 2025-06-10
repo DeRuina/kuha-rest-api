@@ -96,3 +96,20 @@ CREATE TABLE app_data(
   PRIMARY KEY (app_id, field_name),
   data JSONB NOT NULL
 );
+
+CREATE TABLE garmin_data (
+  user_id UUID NOT NULL,
+  summary_date DATE NOT NULL,
+  PRIMARY KEY (user_id, summary_date),
+  data JSONB NOT NULL
+);
+
+CREATE TABLE garmin_tokens (
+  user_id UUID PRIMARY KEY,
+  data JSONB NOT NULL
+);
+
+CREATE TABLE klab_tokens (
+  user_id UUID PRIMARY KEY,
+  data JSONB NOT NULL
+);

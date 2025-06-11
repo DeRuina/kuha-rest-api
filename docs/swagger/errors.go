@@ -39,7 +39,7 @@ type InternalServerError struct {
 }
 
 // 422 - OURA, Polar, Suunto, Garmin
-type OuraInvalidDateRange struct {
+type InvalidDateRange struct {
 	Errors []UnprocessableEntityError `json:"errors"`
 }
 

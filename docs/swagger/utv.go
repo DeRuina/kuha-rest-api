@@ -1,7 +1,7 @@
 package swagger
 
 // Oura
-type OuraDatesResponse struct {
+type DatesResponse struct {
 	Dates []string `json:"dates" example:"2024-02-25,2024-02-26,2024-03-25"`
 }
 
@@ -98,4 +98,53 @@ type SuuntoData struct {
 
 type SuuntoDataResponse struct {
 	Data SuuntoData `json:"data"`
+}
+
+// Garmin
+type GarminTypesResponse struct {
+	Types []string `json:"types" example:"epochs, dailies, hrv"`
+}
+
+type GarminEpoch struct {
+	MET                   float64 `json:"met" example:"1.0"`
+	Steps                 int     `json:"steps" example:"0"`
+	Intensity             string  `json:"intensity" example:"SEDENTARY"`
+	SummaryID             string  `json:"summaryId" example:"x32c7d85-67b67080-9"`
+	ActivityType          string  `json:"activityType" example:"UNMONITORED"`
+	DistanceInMeters      float64 `json:"distanceInMeters" example:"0.0"`
+	DurationInSeconds     int     `json:"durationInSeconds" example:"900"`
+	ActiveKilocalories    int     `json:"activeKilocalories" example:"0"`
+	MaxMotionIntensity    float64 `json:"maxMotionIntensity" example:"0.0"`
+	StartTimeInSeconds    int64   `json:"startTimeInSeconds" example:"1740009600"`
+	ActiveTimeInSeconds   int     `json:"activeTimeInSeconds" example:"0"`
+	MeanMotionIntensity   float64 `json:"meanMotionIntensity" example:"0.0"`
+	StartTimeOffsetInSecs int     `json:"startTimeOffsetInSeconds" example:"7200"`
+}
+
+type GarminDaily struct {
+	Steps                              int     `json:"steps" example:"0"`
+	StepsGoal                          int     `json:"stepsGoal" example:"10000"`
+	SummaryID                          string  `json:"summaryId" example:"x32c7d85-67b65460-128f4-0"`
+	ActivityType                       string  `json:"activityType" example:"GENERIC"`
+	CalendarDate                       string  `json:"calendarDate" example:"2025-02-20"`
+	BMRKilocalories                    int     `json:"bmrKilocalories" example:"1967"`
+	DistanceInMeters                   float64 `json:"distanceInMeters" example:"0.0"`
+	DurationInSeconds                  int     `json:"durationInSeconds" example:"76020"`
+	FloorsClimbedGoal                  int     `json:"floorsClimbedGoal" example:"10"`
+	ActiveKilocalories                 int     `json:"activeKilocalories" example:"0"`
+	StartTimeInSeconds                 int64   `json:"startTimeInSeconds" example:"1740002400"`
+	ActiveTimeInSeconds                int     `json:"activeTimeInSeconds" example:"0"`
+	StartTimeOffsetInSeconds           int     `json:"startTimeOffsetInSeconds" example:"7200"`
+	IntensityDurationGoalInSeconds     int     `json:"intensityDurationGoalInSeconds" example:"36000"`
+	ModerateIntensityDurationInSeconds int     `json:"moderateIntensityDurationInSeconds" example:"0"`
+	VigorousIntensityDurationInSeconds int     `json:"vigorousIntensityDurationInSeconds" example:"0"`
+}
+
+type GarminData struct {
+	Epochs  GarminEpoch `json:"epochs"`
+	Dailies GarminDaily `json:"dailies"`
+}
+
+type GarminDataResponse struct {
+	Data GarminData `json:"data"`
 }

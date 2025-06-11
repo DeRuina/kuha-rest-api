@@ -248,6 +248,218 @@
                 }
             }
         },
+        "/utv/garmin/data": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns data for the specified user on the specified date (optionally filtered by key)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UTV - Garmin"
+                ],
+                "summary": "Get available data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID (UUID)",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Date (YYYY-MM-DD)",
+                        "name": "date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Type",
+                        "name": "key",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.GarminDataResponse"
+                        }
+                    },
+                    "204": {
+                        "description": "No Content: No data found"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/utv/garmin/dates": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns available dates for the specified user (optionally filtered by date range)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UTV - Garmin"
+                ],
+                "summary": "Get available dates",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID (UUID)",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter dates after this date (YYYY-MM-DD)",
+                        "name": "after_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter dates before this date (YYYY-MM-DD)",
+                        "name": "before_date",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of available dates",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.DatesResponse"
+                        }
+                    },
+                    "204": {
+                        "description": "No Content: No available dates found"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InvalidDateRange"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/utv/garmin/types": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns available types for the specified user on the specified date",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UTV - Garmin"
+                ],
+                "summary": "Get available types",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID (UUID)",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Date (YYYY-MM-DD)",
+                        "name": "date",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of available types",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.GarminTypesResponse"
+                        }
+                    },
+                    "204": {
+                        "description": "No Content: No available types found"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/utv/oura/data": {
             "get": {
                 "security": [
@@ -362,7 +574,7 @@
                     "200": {
                         "description": "List of available dates",
                         "schema": {
-                            "$ref": "#/definitions/swagger.OuraDatesResponse"
+                            "$ref": "#/definitions/swagger.DatesResponse"
                         }
                     },
                     "204": {
@@ -383,7 +595,7 @@
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/swagger.OuraInvalidDateRange"
+                            "$ref": "#/definitions/swagger.InvalidDateRange"
                         }
                     },
                     "500": {
@@ -574,7 +786,7 @@
                     "200": {
                         "description": "List of available dates",
                         "schema": {
-                            "$ref": "#/definitions/swagger.OuraDatesResponse"
+                            "$ref": "#/definitions/swagger.DatesResponse"
                         }
                     },
                     "204": {
@@ -595,7 +807,7 @@
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/swagger.OuraInvalidDateRange"
+                            "$ref": "#/definitions/swagger.InvalidDateRange"
                         }
                     },
                     "500": {
@@ -786,7 +998,7 @@
                     "200": {
                         "description": "List of available dates",
                         "schema": {
-                            "$ref": "#/definitions/swagger.OuraDatesResponse"
+                            "$ref": "#/definitions/swagger.DatesResponse"
                         }
                     },
                     "204": {
@@ -807,7 +1019,7 @@
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/swagger.OuraInvalidDateRange"
+                            "$ref": "#/definitions/swagger.InvalidDateRange"
                         }
                     },
                     "500": {
@@ -976,6 +1188,22 @@
                 }
             }
         },
+        "swagger.DatesResponse": {
+            "type": "object",
+            "properties": {
+                "dates": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "2024-02-25",
+                        "2024-02-26",
+                        "2024-03-25"
+                    ]
+                }
+            }
+        },
         "swagger.ForbiddenError": {
             "type": "object",
             "properties": {
@@ -993,6 +1221,167 @@
                     "items": {
                         "$ref": "#/definitions/swagger.ForbiddenError"
                     }
+                }
+            }
+        },
+        "swagger.GarminDaily": {
+            "type": "object",
+            "properties": {
+                "activeKilocalories": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "activeTimeInSeconds": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "activityType": {
+                    "type": "string",
+                    "example": "GENERIC"
+                },
+                "bmrKilocalories": {
+                    "type": "integer",
+                    "example": 1967
+                },
+                "calendarDate": {
+                    "type": "string",
+                    "example": "2025-02-20"
+                },
+                "distanceInMeters": {
+                    "type": "number",
+                    "example": 0
+                },
+                "durationInSeconds": {
+                    "type": "integer",
+                    "example": 76020
+                },
+                "floorsClimbedGoal": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "intensityDurationGoalInSeconds": {
+                    "type": "integer",
+                    "example": 36000
+                },
+                "moderateIntensityDurationInSeconds": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "startTimeInSeconds": {
+                    "type": "integer",
+                    "example": 1740002400
+                },
+                "startTimeOffsetInSeconds": {
+                    "type": "integer",
+                    "example": 7200
+                },
+                "steps": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "stepsGoal": {
+                    "type": "integer",
+                    "example": 10000
+                },
+                "summaryId": {
+                    "type": "string",
+                    "example": "x32c7d85-67b65460-128f4-0"
+                },
+                "vigorousIntensityDurationInSeconds": {
+                    "type": "integer",
+                    "example": 0
+                }
+            }
+        },
+        "swagger.GarminData": {
+            "type": "object",
+            "properties": {
+                "dailies": {
+                    "$ref": "#/definitions/swagger.GarminDaily"
+                },
+                "epochs": {
+                    "$ref": "#/definitions/swagger.GarminEpoch"
+                }
+            }
+        },
+        "swagger.GarminDataResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/swagger.GarminData"
+                }
+            }
+        },
+        "swagger.GarminEpoch": {
+            "type": "object",
+            "properties": {
+                "activeKilocalories": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "activeTimeInSeconds": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "activityType": {
+                    "type": "string",
+                    "example": "UNMONITORED"
+                },
+                "distanceInMeters": {
+                    "type": "number",
+                    "example": 0
+                },
+                "durationInSeconds": {
+                    "type": "integer",
+                    "example": 900
+                },
+                "intensity": {
+                    "type": "string",
+                    "example": "SEDENTARY"
+                },
+                "maxMotionIntensity": {
+                    "type": "number",
+                    "example": 0
+                },
+                "meanMotionIntensity": {
+                    "type": "number",
+                    "example": 0
+                },
+                "met": {
+                    "type": "number",
+                    "example": 1
+                },
+                "startTimeInSeconds": {
+                    "type": "integer",
+                    "example": 1740009600
+                },
+                "startTimeOffsetInSeconds": {
+                    "type": "integer",
+                    "example": 7200
+                },
+                "steps": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "summaryId": {
+                    "type": "string",
+                    "example": "x32c7d85-67b67080-9"
+                }
+            }
+        },
+        "swagger.GarminTypesResponse": {
+            "type": "object",
+            "properties": {
+                "types": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "epochs",
+                        " dailies",
+                        " hrv"
+                    ]
                 }
             }
         },
@@ -1046,6 +1435,17 @@
                 }
             }
         },
+        "swagger.InvalidDateRange": {
+            "type": "object",
+            "properties": {
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.UnprocessableEntityError"
+                    }
+                }
+            }
+        },
         "swagger.NationsResponse": {
             "type": "object",
             "properties": {
@@ -1090,33 +1490,6 @@
             "properties": {
                 "data": {
                     "$ref": "#/definitions/swagger.OuraData"
-                }
-            }
-        },
-        "swagger.OuraDatesResponse": {
-            "type": "object",
-            "properties": {
-                "dates": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "2024-02-25",
-                        "2024-02-26",
-                        "2024-03-25"
-                    ]
-                }
-            }
-        },
-        "swagger.OuraInvalidDateRange": {
-            "type": "object",
-            "properties": {
-                "errors": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/swagger.UnprocessableEntityError"
-                    }
                 }
             }
         },

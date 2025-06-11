@@ -60,6 +60,17 @@ definitions:
         example: 4272
         type: integer
     type: object
+  swagger.DatesResponse:
+    properties:
+      dates:
+        example:
+        - "2024-02-25"
+        - "2024-02-26"
+        - "2024-03-25"
+        items:
+          type: string
+        type: array
+    type: object
   swagger.ForbiddenError:
     properties:
       error:
@@ -71,6 +82,122 @@ definitions:
       errors:
         items:
           $ref: '#/definitions/swagger.ForbiddenError'
+        type: array
+    type: object
+  swagger.GarminDaily:
+    properties:
+      activeKilocalories:
+        example: 0
+        type: integer
+      activeTimeInSeconds:
+        example: 0
+        type: integer
+      activityType:
+        example: GENERIC
+        type: string
+      bmrKilocalories:
+        example: 1967
+        type: integer
+      calendarDate:
+        example: "2025-02-20"
+        type: string
+      distanceInMeters:
+        example: 0
+        type: number
+      durationInSeconds:
+        example: 76020
+        type: integer
+      floorsClimbedGoal:
+        example: 10
+        type: integer
+      intensityDurationGoalInSeconds:
+        example: 36000
+        type: integer
+      moderateIntensityDurationInSeconds:
+        example: 0
+        type: integer
+      startTimeInSeconds:
+        example: 1740002400
+        type: integer
+      startTimeOffsetInSeconds:
+        example: 7200
+        type: integer
+      steps:
+        example: 0
+        type: integer
+      stepsGoal:
+        example: 10000
+        type: integer
+      summaryId:
+        example: x32c7d85-67b65460-128f4-0
+        type: string
+      vigorousIntensityDurationInSeconds:
+        example: 0
+        type: integer
+    type: object
+  swagger.GarminData:
+    properties:
+      dailies:
+        $ref: '#/definitions/swagger.GarminDaily'
+      epochs:
+        $ref: '#/definitions/swagger.GarminEpoch'
+    type: object
+  swagger.GarminDataResponse:
+    properties:
+      data:
+        $ref: '#/definitions/swagger.GarminData'
+    type: object
+  swagger.GarminEpoch:
+    properties:
+      activeKilocalories:
+        example: 0
+        type: integer
+      activeTimeInSeconds:
+        example: 0
+        type: integer
+      activityType:
+        example: UNMONITORED
+        type: string
+      distanceInMeters:
+        example: 0
+        type: number
+      durationInSeconds:
+        example: 900
+        type: integer
+      intensity:
+        example: SEDENTARY
+        type: string
+      maxMotionIntensity:
+        example: 0
+        type: number
+      meanMotionIntensity:
+        example: 0
+        type: number
+      met:
+        example: 1
+        type: number
+      startTimeInSeconds:
+        example: 1740009600
+        type: integer
+      startTimeOffsetInSeconds:
+        example: 7200
+        type: integer
+      steps:
+        example: 0
+        type: integer
+      summaryId:
+        example: x32c7d85-67b67080-9
+        type: string
+    type: object
+  swagger.GarminTypesResponse:
+    properties:
+      types:
+        example:
+        - epochs
+        - ' dailies'
+        - ' hrv'
+        items:
+          type: string
         type: array
     type: object
   swagger.HealthStatusResponse:
@@ -107,6 +234,13 @@ definitions:
           $ref: '#/definitions/swagger.InternalServerError'
         type: array
     type: object
+  swagger.InvalidDateRange:
+    properties:
+      errors:
+        items:
+          $ref: '#/definitions/swagger.UnprocessableEntityError'
+        type: array
+    type: object
   swagger.NationsResponse:
     properties:
       nations:
@@ -137,24 +271,6 @@ definitions:
     properties:
       data:
         $ref: '#/definitions/swagger.OuraData'
-    type: object
-  swagger.OuraDatesResponse:
-    properties:
-      dates:
-        example:
-        - "2024-02-25"
-        - "2024-02-26"
-        - "2024-03-25"
-        items:
-          type: string
-        type: array
-    type: object
-  swagger.OuraInvalidDateRange:
-    properties:
-      errors:
-        items:
-          $ref: '#/definitions/swagger.UnprocessableEntityError'
-        type: array
     type: object
   swagger.OuraTypesResponse:
     properties:
@@ -485,6 +601,146 @@ paths:
       summary: Healthcheck
       tags:
       - Health
+  /utv/garmin/data:
+    get:
+      consumes:
+      - application/json
+      description: Returns data for the specified user on the specified date (optionally
+        filtered by key)
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Date (YYYY-MM-DD)
+        in: query
+        name: date
+        required: true
+        type: string
+      - description: Type
+        in: query
+        name: key
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Data
+          schema:
+            $ref: '#/definitions/swagger.GarminDataResponse'
+        "204":
+          description: 'No Content: No data found'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get available data
+      tags:
+      - UTV - Garmin
+  /utv/garmin/dates:
+    get:
+      consumes:
+      - application/json
+      description: Returns available dates for the specified user (optionally filtered
+        by date range)
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Filter dates after this date (YYYY-MM-DD)
+        in: query
+        name: after_date
+        type: string
+      - description: Filter dates before this date (YYYY-MM-DD)
+        in: query
+        name: before_date
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of available dates
+          schema:
+            $ref: '#/definitions/swagger.DatesResponse'
+        "204":
+          description: 'No Content: No available dates found'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/swagger.InvalidDateRange'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get available dates
+      tags:
+      - UTV - Garmin
+  /utv/garmin/types:
+    get:
+      consumes:
+      - application/json
+      description: Returns available types for the specified user on the specified
+        date
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Date (YYYY-MM-DD)
+        in: query
+        name: date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of available types
+          schema:
+            $ref: '#/definitions/swagger.GarminTypesResponse'
+        "204":
+          description: 'No Content: No available types found'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get available types
+      tags:
+      - UTV - Garmin
   /utv/oura/data:
     get:
       consumes:
@@ -558,7 +814,7 @@ paths:
         "200":
           description: List of available dates
           schema:
-            $ref: '#/definitions/swagger.OuraDatesResponse'
+            $ref: '#/definitions/swagger.DatesResponse'
         "204":
           description: 'No Content: No available dates found'
         "400":
@@ -572,7 +828,7 @@ paths:
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/swagger.OuraInvalidDateRange'
+            $ref: '#/definitions/swagger.InvalidDateRange'
         "500":
           description: Internal Server Error
           schema:
@@ -698,7 +954,7 @@ paths:
         "200":
           description: List of available dates
           schema:
-            $ref: '#/definitions/swagger.OuraDatesResponse'
+            $ref: '#/definitions/swagger.DatesResponse'
         "204":
           description: 'No Content: No available dates found'
         "400":
@@ -712,7 +968,7 @@ paths:
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/swagger.OuraInvalidDateRange'
+            $ref: '#/definitions/swagger.InvalidDateRange'
         "500":
           description: Internal Server Error
           schema:
@@ -838,7 +1094,7 @@ paths:
         "200":
           description: List of available dates
           schema:
-            $ref: '#/definitions/swagger.OuraDatesResponse'
+            $ref: '#/definitions/swagger.DatesResponse'
         "204":
           description: 'No Content: No available dates found'
         "400":
@@ -852,7 +1108,7 @@ paths:
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/swagger.OuraInvalidDateRange'
+            $ref: '#/definitions/swagger.InvalidDateRange'
         "500":
           description: Internal Server Error
           schema:

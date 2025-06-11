@@ -47,14 +47,14 @@ func NewPolarDataHandler(store utv.PolarData, cache *cache.Storage) *PolarDataHa
 //	@Tags			UTV - Polar
 //	@Accept			json
 //	@Produce		json
-//	@Param			user_id		query		string						true	"User ID (UUID)"
-//	@Param			after_date	query		string						false	"Filter dates after this date (YYYY-MM-DD)"
-//	@Param			before_date	query		string						false	"Filter dates before this date (YYYY-MM-DD)"
-//	@Success		200			{object}	swagger.OuraDatesResponse	"List of available dates"
+//	@Param			user_id		query		string					true	"User ID (UUID)"
+//	@Param			after_date	query		string					false	"Filter dates after this date (YYYY-MM-DD)"
+//	@Param			before_date	query		string					false	"Filter dates before this date (YYYY-MM-DD)"
+//	@Success		200			{object}	swagger.DatesResponse	"List of available dates"
 //	@Success		204			"No Content: No available dates found"
 //	@Failure		400			{object}	swagger.ValidationErrorResponse
 //	@Failure		403			{object}	swagger.ForbiddenResponse
-//	@Failure		422			{object}	swagger.OuraInvalidDateRange
+//	@Failure		422			{object}	swagger.InvalidDateRange
 //	@Failure		500			{object}	swagger.InternalServerErrorResponse
 //	@Security		BearerAuth
 //	@Router			/utv/polar/dates [get]

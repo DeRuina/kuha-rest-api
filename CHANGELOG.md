@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/DeRuina/KUHA-REST-API/compare/v1.1.0...v1.2.0) (2025-06-11)
+
+
+### Features
+
+* garmin endpoints ([60bdcc5](https://github.com/DeRuina/KUHA-REST-API/commit/60bdcc542e4edf4381bcb3c9f697e4ec47d0d528))
+
 ## [1.1.0](https://github.com/DeRuina/KUHA-REST-API/compare/v1.0.0...v1.1.0) (2025-05-28)
 
 

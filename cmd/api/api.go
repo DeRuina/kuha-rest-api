@@ -144,6 +144,7 @@ func (app *api) mount() http.Handler {
 				ouraHandler := utvapi.NewOuraDataHandler(app.store.UTV.Oura(), app.cacheStorage)
 				polarHandler := utvapi.NewPolarDataHandler(app.store.UTV.Polar(), app.cacheStorage)
 				suuntoHandler := utvapi.NewSuuntoDataHandler(app.store.UTV.Suunto(), app.cacheStorage)
+				garminHandler := utvapi.NewGarminDataHandler(app.store.UTV.Garmin(), app.cacheStorage)
 
 				// Oura routes
 				r.Route("/oura", func(r chi.Router) {
@@ -164,6 +165,13 @@ func (app *api) mount() http.Handler {
 					r.Get("/dates", suuntoHandler.GetDates)
 					r.Get("/types", suuntoHandler.GetTypes)
 					r.Get("/data", suuntoHandler.GetData)
+				})
+
+				// Garmin routes
+				r.Route("/garmin", func(r chi.Router) {
+					r.Get("/dates", garminHandler.GetDates)
+					r.Get("/types", garminHandler.GetTypes)
+					r.Get("/data", garminHandler.GetData)
 				})
 
 			})

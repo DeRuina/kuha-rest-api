@@ -21,6 +21,7 @@ type UTV interface {
 	Oura() utv.OuraData
 	Polar() utv.PolarData
 	Suunto() utv.SuuntoData
+	Garmin() utv.GarminData
 }
 
 type Auth interface {

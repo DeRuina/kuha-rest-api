@@ -15,7 +15,7 @@ import (
 	"github.com/DeRuina/KUHA-REST-API/internal/store/cache"
 )
 
-const version = "1.2.0"
+const version = "1.2.1"
 
 //	@title			KUHA REST API
 //	@description	API for integrating, analyzing, and visualizing sports and health data

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/DeRuina/KUHA-REST-API/compare/v1.2.0...v1.2.1) (2025-06-11)
+
+
+### Bug Fixes
+
+* update api version automatically fix ([addd09d](https://github.com/DeRuina/KUHA-REST-API/commit/addd09d58ab90d2a4a4306f532c8bdde36feb6f7))
+
 ## [1.2.0](https://github.com/DeRuina/KUHA-REST-API/compare/v1.1.0...v1.2.0) (2025-06-11)
 
 

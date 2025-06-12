@@ -310,3 +310,19 @@ INSERT INTO garmin_data (user_id, summary_date, data)
 VALUES ($1, $2, $3)
 ON CONFLICT (user_id, summary_date)
 DO UPDATE SET data = EXCLUDED.data;
+
+-- name: DeleteGarminData :exec
+DELETE FROM garmin_data
+WHERE user_id = $1 AND summary_date = $2;
+
+-- name: DeleteOuraData :exec
+DELETE FROM oura_data
+WHERE user_id = $1 AND summary_date = $2;
+
+-- name: DeletePolarData :exec
+DELETE FROM polar_data
+WHERE user_id = $1 AND summary_date = $2;
+
+-- name: DeleteSuuntoData :exec
+DELETE FROM suunto_data
+WHERE user_id = $1 AND summary_date = $2;

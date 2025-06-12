@@ -1237,3 +1237,61 @@ func (q *Queries) ToggleNotificationExpiration(ctx context.Context, id uuid.UUID
 	err := row.Scan(&expires)
 	return expires, err
 }
+
+const deleteOuraData = `-- name: DeleteOuraData :exec
+DELETE FROM oura_data
+WHERE user_id = $1 AND summary_date = $2
+`
+
+type DeleteOuraDataParams struct {
+	UserID      uuid.UUID
+	Date 		time.Time
+}
+
+func (q *Queries) DeleteOuraData(ctx context.Context, arg DeleteOuraDataParams) error {
+	_, err := q.exec(ctx, q.deleteOuraDataStmt, deleteOuraData, arg.UserID, arg.Date)
+	return err
+}
+
+const deletePolarData = `-- name: DeletePolarData :exec
+DELETE FROM polar_data
+WHERE user_id = $1 AND summary_date = $2
+`
+
+type DeletePolarDataParams struct {
+	UserID      uuid.UUID
+	Date 		time.Time
+}
+
+func (q *Queries) DeletePolarData(ctx context.Context, arg DeletePolarDataParams) error {
+	_, err := q.exec(ctx, q.deletePolarDataStmt, deletePolarData, arg.UserID, arg.Date)
+	return err
+}
+
+const deleteSuuntoData = `-- name: DeleteSuuntoData :exec
+DELETE FROM suunto_data
+WHERE user_id = $1 AND summary_date = $2
+`
+
+type DeleteSuuntoDataParams struct {
+	UserID      uuid.UUID
+	Date 		time.Time
+}
+
+func (q *Queries) DeleteSuuntoData(ctx context.Context, arg DeleteSuuntoDataParams) error {
+	_, err := q.exec(ctx, q.deleteSuuntoDataStmt, deleteSuuntoData, arg.UserID, arg.Date)
+	return err
+}
+
+const deleteGarminData = `-- name: DeleteGarminData :exec
+DELETE FROM garmin_data
+WHERE user_id = $1 AND summary_date = $2
+`
+type DeleteGarminDataParams struct {
+	UserID      uuid.UUID
+	Date 		time.Time
+}
+func (q *Queries) DeleteGarminData(ctx context.Context, arg DeleteGarminDataParams) error {
+	_, err := q.exec(ctx, q.deleteGarminDataStmt, deleteGarminData, arg.UserID, arg.Date)
+	return err
+}

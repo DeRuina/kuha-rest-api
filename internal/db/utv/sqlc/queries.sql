@@ -311,18 +311,18 @@ VALUES ($1, $2, $3)
 ON CONFLICT (user_id, summary_date)
 DO UPDATE SET data = EXCLUDED.data;
 
--- name: DeleteGarminData :exec
+-- name: DeleteGarminData :execrows
 DELETE FROM garmin_data
 WHERE user_id = $1 AND summary_date = $2;
 
--- name: DeleteOuraData :exec
+-- name: DeleteOuraData :execrows
 DELETE FROM oura_data
 WHERE user_id = $1 AND summary_date = $2;
 
--- name: DeletePolarData :exec
+-- name: DeletePolarData :execrows
 DELETE FROM polar_data
 WHERE user_id = $1 AND summary_date = $2;
 
--- name: DeleteSuuntoData :exec
+-- name: DeleteSuuntoData :execrows
 DELETE FROM suunto_data
 WHERE user_id = $1 AND summary_date = $2;

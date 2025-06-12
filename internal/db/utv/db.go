@@ -39,8 +39,20 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.createGroupStmt, err = db.PrepareContext(ctx, createGroup); err != nil {
 		return nil, fmt.Errorf("error preparing query CreateGroup: %w", err)
 	}
+	if q.deleteGarminDataStmt, err = db.PrepareContext(ctx, deleteGarminData); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteGarminData: %w", err)
+	}
 	if q.deleteGroupStmt, err = db.PrepareContext(ctx, deleteGroup); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteGroup: %w", err)
+	}
+	if q.deleteOuraDataStmt, err = db.PrepareContext(ctx, deleteOuraData); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteOuraData: %w", err)
+	}
+	if q.deletePolarDataStmt, err = db.PrepareContext(ctx, deletePolarData); err != nil {
+		return nil, fmt.Errorf("error preparing query DeletePolarData: %w", err)
+	}
+	if q.deleteSuuntoDataStmt, err = db.PrepareContext(ctx, deleteSuuntoData); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteSuuntoData: %w", err)
 	}
 	if q.deleteUserStmt, err = db.PrepareContext(ctx, deleteUser); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteUser: %w", err)
@@ -192,9 +204,29 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing createGroupStmt: %w", cerr)
 		}
 	}
+	if q.deleteGarminDataStmt != nil {
+		if cerr := q.deleteGarminDataStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteGarminDataStmt: %w", cerr)
+		}
+	}
 	if q.deleteGroupStmt != nil {
 		if cerr := q.deleteGroupStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing deleteGroupStmt: %w", cerr)
+		}
+	}
+	if q.deleteOuraDataStmt != nil {
+		if cerr := q.deleteOuraDataStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteOuraDataStmt: %w", cerr)
+		}
+	}
+	if q.deletePolarDataStmt != nil {
+		if cerr := q.deletePolarDataStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deletePolarDataStmt: %w", cerr)
+		}
+	}
+	if q.deleteSuuntoDataStmt != nil {
+		if cerr := q.deleteSuuntoDataStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteSuuntoDataStmt: %w", cerr)
 		}
 	}
 	if q.deleteUserStmt != nil {
@@ -441,7 +473,11 @@ type Queries struct {
 	addUserStmt                       *sql.Stmt
 	addUserToGroupStmt                *sql.Stmt
 	createGroupStmt                   *sql.Stmt
+	deleteGarminDataStmt              *sql.Stmt
 	deleteGroupStmt                   *sql.Stmt
+	deleteOuraDataStmt                *sql.Stmt
+	deletePolarDataStmt               *sql.Stmt
+	deleteSuuntoDataStmt              *sql.Stmt
 	deleteUserStmt                    *sql.Stmt
 	getAllDataForDateGarminStmt       *sql.Stmt
 	getAllDataForDateOuraStmt         *sql.Stmt
@@ -493,7 +529,11 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		addUserStmt:                       q.addUserStmt,
 		addUserToGroupStmt:                q.addUserToGroupStmt,
 		createGroupStmt:                   q.createGroupStmt,
+		deleteGarminDataStmt:              q.deleteGarminDataStmt,
 		deleteGroupStmt:                   q.deleteGroupStmt,
+		deleteOuraDataStmt:                q.deleteOuraDataStmt,
+		deletePolarDataStmt:               q.deletePolarDataStmt,
+		deleteSuuntoDataStmt:              q.deleteSuuntoDataStmt,
 		deleteUserStmt:                    q.deleteUserStmt,
 		getAllDataForDateGarminStmt:       q.getAllDataForDateGarminStmt,
 		getAllDataForDateOuraStmt:         q.getAllDataForDateOuraStmt,

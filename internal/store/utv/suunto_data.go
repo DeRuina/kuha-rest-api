@@ -9,6 +9,7 @@ import (
 
 	utvsqlc "github.com/DeRuina/KUHA-REST-API/internal/db/utv"
 	"github.com/DeRuina/KUHA-REST-API/internal/utils"
+	"github.com/google/uuid"
 )
 
 // SuuntoDataStore struct
@@ -157,4 +158,20 @@ func (s *SuuntoDataStore) GetData(ctx context.Context, userID string, Date strin
 	}
 
 	return data, nil
+}
+
+// insertData inserts Suunto data into the database
+func (s *SuuntoDataStore) InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error {
+	queries := utvsqlc.New(s.db)
+
+	arg := utvsqlc.InsertSuuntoDataParams{
+		UserID: userID,
+		Date:   date,
+		Data:   data,
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	return queries.InsertSuuntoData(ctx, arg)
 }

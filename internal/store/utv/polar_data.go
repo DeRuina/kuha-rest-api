@@ -9,6 +9,7 @@ import (
 
 	utvsqlc "github.com/DeRuina/KUHA-REST-API/internal/db/utv"
 	"github.com/DeRuina/KUHA-REST-API/internal/utils"
+	"github.com/google/uuid"
 )
 
 // PolarDataStore struct
@@ -156,4 +157,20 @@ func (s *PolarDataStore) GetData(ctx context.Context, userID string, Date string
 	}
 
 	return data, nil
+}
+
+// insertData inserts Polar data into the database
+func (s *PolarDataStore) InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error {
+	queries := utvsqlc.New(s.db)
+
+	arg := utvsqlc.InsertPolarDataParams{
+		UserID: userID,
+		Date:   date,
+		Data:   data,
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	return queries.InsertPolarData(ctx, arg)
 }

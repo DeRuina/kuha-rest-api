@@ -14,6 +14,7 @@ type OuraData interface {
 	GetDates(ctx context.Context, userID string, startDate *string, endDate *string) ([]string, error)
 	GetTypes(ctx context.Context, userID string, summaryDate string) ([]string, error)
 	GetData(ctx context.Context, userID string, summaryDate string, key *string) (json.RawMessage, error)
+	InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error
 }
 
 // PolarData interface
@@ -21,6 +22,7 @@ type PolarData interface {
 	GetDates(ctx context.Context, userID string, startDate *string, endDate *string) ([]string, error)
 	GetTypes(ctx context.Context, userID string, summaryDate string) ([]string, error)
 	GetData(ctx context.Context, userID string, summaryDate string, key *string) (json.RawMessage, error)
+	InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error
 }
 
 // SuuntoData interface
@@ -28,6 +30,7 @@ type SuuntoData interface {
 	GetDates(ctx context.Context, userID string, startDate *string, endDate *string) ([]string, error)
 	GetTypes(ctx context.Context, userID string, summaryDate string) ([]string, error)
 	GetData(ctx context.Context, userID string, summaryDate string, key *string) (json.RawMessage, error)
+	InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error
 }
 
 // GarminData interface

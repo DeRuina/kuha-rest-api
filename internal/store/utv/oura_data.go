@@ -9,6 +9,7 @@ import (
 
 	utvsqlc "github.com/DeRuina/KUHA-REST-API/internal/db/utv"
 	"github.com/DeRuina/KUHA-REST-API/internal/utils"
+	"github.com/google/uuid"
 )
 
 // OuraDataStore struct
@@ -157,4 +158,20 @@ func (s *OuraDataStore) GetData(ctx context.Context, userID string, Date string,
 	}
 
 	return data, nil
+}
+
+// insertData inserts Oura data into the database
+func (s *OuraDataStore) InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error {
+	queries := utvsqlc.New(s.db)
+
+	arg := utvsqlc.InsertOuraDataParams{
+		UserID: userID,
+		Date:   date,
+		Data:   data,
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	return queries.InsertOuraData(ctx, arg)
 }

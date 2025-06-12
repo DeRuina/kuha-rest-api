@@ -30,6 +30,13 @@ type OuraGetDataParams struct {
 	Key    string `form:"key" validate:"omitempty,key"`
 }
 
+type OuraPostDataInput struct {
+	UserID string          `json:"user_id" validate:"required,uuid4"`
+	Date   string          `json:"date" validate:"required,datetime=2006-01-02"`
+	Data   json.RawMessage `json:"data" validate:"required"`
+}
+
+// store and cache interfaces
 type OuraDataHandler struct {
 	store utv.OuraData
 	cache *cache.Storage
@@ -118,20 +125,20 @@ func (h *OuraDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 
 // GetTypesOura godoc
 
-//	@Summary		Get available types
-//	@Description	Returns available types for the specified user on the specified date
-//	@Tags			UTV - Oura
-//	@Accept			json
-//	@Produce		json
-//	@Param			user_id	query		string						true	"User ID (UUID)"
-//	@Param			date	query		string						true	"Date (YYYY-MM-DD)"
-//	@Success		200		{object}	swagger.OuraTypesResponse	"List of available types"
-//	@Success		204		"No Content: No available types found"
-//	@Failure		400		{object}	swagger.ValidationErrorResponse
-//	@Failure		403		{object}	swagger.ForbiddenResponse
-//	@Failure		500		{object}	swagger.InternalServerErrorResponse
-//	@Security		BearerAuth
-//	@Router			/utv/oura/types [get]
+// @Summary		Get available types
+// @Description	Returns available types for the specified user on the specified date
+// @Tags			UTV - Oura
+// @Accept			json
+// @Produce		json
+// @Param			user_id	query		string						true	"User ID (UUID)"
+// @Param			date	query		string						true	"Date (YYYY-MM-DD)"
+// @Success		200		{object}	swagger.OuraTypesResponse	"List of available types"
+// @Success		204		"No Content: No available types found"
+// @Failure		400		{object}	swagger.ValidationErrorResponse
+// @Failure		403		{object}	swagger.ForbiddenResponse
+// @Failure		500		{object}	swagger.InternalServerErrorResponse
+// @Security		BearerAuth
+// @Router			/utv/oura/types [get]
 func (h *OuraDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 	if !authz.Authorize(r) {
 		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
@@ -186,21 +193,21 @@ func (h *OuraDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 
 // GetDataOura godoc
 
-//	@Summary		Get available data
-//	@Description	Returns data for the specified user on the specified date (optionally filtered by key)
-//	@Tags			UTV - Oura
-//	@Accept			json
-//	@Produce		json
-//	@Param			user_id	query		string						true	"User ID (UUID)"
-//	@Param			date	query		string						true	"Date (YYYY-MM-DD)"
-//	@Param			key		query		string						false	"Type"
-//	@Success		200		{object}	swagger.OuraDataResponse	"Data"
-//	@Success		204		"No Content: No data found"
-//	@Failure		400		{object}	swagger.ValidationErrorResponse
-//	@Failure		403		{object}	swagger.ForbiddenResponse
-//	@Failure		500		{object}	swagger.InternalServerErrorResponse
-//	@Security		BearerAuth
-//	@Router			/utv/oura/data [get]
+// @Summary		Get available data
+// @Description	Returns data for the specified user on the specified date (optionally filtered by key)
+// @Tags			UTV - Oura
+// @Accept			json
+// @Produce		json
+// @Param			user_id	query		string						true	"User ID (UUID)"
+// @Param			date	query		string						true	"Date (YYYY-MM-DD)"
+// @Param			key		query		string						false	"Type"
+// @Success		200		{object}	swagger.OuraDataResponse	"Data"
+// @Success		204		"No Content: No data found"
+// @Failure		400		{object}	swagger.ValidationErrorResponse
+// @Failure		403		{object}	swagger.ForbiddenResponse
+// @Failure		500		{object}	swagger.InternalServerErrorResponse
+// @Security		BearerAuth
+// @Router			/utv/oura/data [get]
 func (h *OuraDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 	if !authz.Authorize(r) {
 		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
@@ -256,4 +263,56 @@ func (h *OuraDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 10*time.Minute)
 
 	utils.WriteJSON(w, http.StatusOK, response)
+}
+
+// PostDataOura godoc
+//
+//	@Summary		Post Oura data
+//	@Description	Posts Oura data for the specified user on the specified date
+//	@Tags			UTV - Oura
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body	swagger.OuraPostDataInput	true	"Oura data input"
+//	@Success		201		"Created: Data successfully stored (no content in response body)"
+//	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		403		{object}	swagger.ForbiddenResponse
+//	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Security		BearerAuth
+//	@Router			/utv/oura/data [post]
+func (h *OuraDataHandler) InsertData(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	var input OuraPostDataInput
+	if err := utils.ReadJSON(w, r, &input); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	if err := utils.GetValidator().Struct(input); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	userID, err := utils.ParseUUID(input.UserID)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	date, err := utils.ParseDate(input.Date)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	err = h.store.InsertData(r.Context(), userID, date, input.Data)
+	if err != nil {
+		utils.InternalServerError(w, r, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
 }

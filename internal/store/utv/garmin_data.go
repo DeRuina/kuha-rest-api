@@ -175,3 +175,13 @@ func (s *GarminDataStore) InsertData(ctx context.Context, userID uuid.UUID, date
 
 	return queries.InsertGarminData(ctx, arg)
 }
+
+// DeleteAllData deletes Garmin data for a specific user
+func (s *GarminDataStore) DeleteAllData(ctx context.Context, userID uuid.UUID) (int64, error) {
+	queries := utvsqlc.New(s.db)
+
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	return queries.DeleteAllGarminData(ctx, userID)
+}

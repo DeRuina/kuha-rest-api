@@ -731,6 +731,40 @@ paths:
       tags:
       - Health
   /utv/garmin/data:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes all Garmin data entries for a specific user
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Deleted: Data successfully removed'
+        "204":
+          description: 'No Content: No matching data'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete all Garmin data for a user
+      tags:
+      - UTV - Garmin
     get:
       consumes:
       - application/json
@@ -905,6 +939,40 @@ paths:
       tags:
       - UTV - Garmin
   /utv/oura/data:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes all Oura data entries for a specific user
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Deleted: Data successfully removed'
+        "204":
+          description: 'No Content: No matching data'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete all Oura data for a user
+      tags:
+      - UTV - Oura
     get:
       consumes:
       - application/json
@@ -1079,6 +1147,40 @@ paths:
       tags:
       - UTV - Oura
   /utv/polar/data:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes all Polar data entries for a specific user
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Deleted: Data successfully removed'
+        "204":
+          description: 'No Content: No matching data'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete all Polar data for a user
+      tags:
+      - UTV - Polar
     get:
       consumes:
       - application/json
@@ -1253,6 +1355,40 @@ paths:
       tags:
       - UTV - Polar
   /utv/suunto/data:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes all Suunto data entries for a specific user
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Deleted: Data successfully removed'
+        "204":
+          description: 'No Content: No matching data'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete all Suunto data for a user
+      tags:
+      - UTV - Suunto
     get:
       consumes:
       - application/json

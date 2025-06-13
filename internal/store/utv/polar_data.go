@@ -174,3 +174,13 @@ func (s *PolarDataStore) InsertData(ctx context.Context, userID uuid.UUID, date 
 
 	return queries.InsertPolarData(ctx, arg)
 }
+
+// DeleteAllData deletes Polar data for a specific user
+func (s *PolarDataStore) DeleteAllData(ctx context.Context, userID uuid.UUID) (int64, error) {
+	queries := utvsqlc.New(s.db)
+
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	return queries.DeleteAllPolarData(ctx, userID)
+}

@@ -175,3 +175,13 @@ func (s *SuuntoDataStore) InsertData(ctx context.Context, userID uuid.UUID, date
 
 	return queries.InsertSuuntoData(ctx, arg)
 }
+
+// DeleteAllData deletes Suunto data for a specific user
+func (s *SuuntoDataStore) DeleteAllData(ctx context.Context, userID uuid.UUID) (int64, error) {
+	queries := utvsqlc.New(s.db)
+
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	return queries.DeleteAllSuuntoData(ctx, userID)
+}

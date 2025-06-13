@@ -152,6 +152,7 @@ func (app *api) mount() http.Handler {
 					r.Get("/types", ouraHandler.GetTypes)
 					r.Get("/data", ouraHandler.GetData)
 					r.Post("/data", ouraHandler.InsertData)
+					r.Delete("/data", ouraHandler.DeleteAllData)
 				})
 
 				// Polar routes
@@ -160,6 +161,7 @@ func (app *api) mount() http.Handler {
 					r.Get("/types", polarHandler.GetTypes)
 					r.Get("/data", polarHandler.GetData)
 					r.Post("/data", polarHandler.InsertData)
+					r.Delete("/data", polarHandler.DeleteAllData)
 				})
 
 				// Suunto routes
@@ -168,6 +170,7 @@ func (app *api) mount() http.Handler {
 					r.Get("/types", suuntoHandler.GetTypes)
 					r.Get("/data", suuntoHandler.GetData)
 					r.Post("/data", suuntoHandler.InsertData)
+					r.Delete("/data", suuntoHandler.DeleteAllData)
 				})
 
 				// Garmin routes
@@ -176,6 +179,7 @@ func (app *api) mount() http.Handler {
 					r.Get("/types", garminHandler.GetTypes)
 					r.Get("/data", garminHandler.GetData)
 					r.Post("/data", garminHandler.InsertData)
+					r.Delete("/data", garminHandler.DeleteAllData)
 				})
 
 			})

@@ -15,6 +15,7 @@ type OuraData interface {
 	GetTypes(ctx context.Context, userID string, summaryDate string) ([]string, error)
 	GetData(ctx context.Context, userID string, summaryDate string, key *string) (json.RawMessage, error)
 	InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error
+	DeleteAllData(ctx context.Context, userID uuid.UUID) (int64, error)
 }
 
 // PolarData interface
@@ -23,6 +24,7 @@ type PolarData interface {
 	GetTypes(ctx context.Context, userID string, summaryDate string) ([]string, error)
 	GetData(ctx context.Context, userID string, summaryDate string, key *string) (json.RawMessage, error)
 	InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error
+	DeleteAllData(ctx context.Context, userID uuid.UUID) (int64, error)
 }
 
 // SuuntoData interface
@@ -31,6 +33,7 @@ type SuuntoData interface {
 	GetTypes(ctx context.Context, userID string, summaryDate string) ([]string, error)
 	GetData(ctx context.Context, userID string, summaryDate string, key *string) (json.RawMessage, error)
 	InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error
+	DeleteAllData(ctx context.Context, userID uuid.UUID) (int64, error)
 }
 
 // GarminData interface
@@ -39,6 +42,7 @@ type GarminData interface {
 	GetTypes(ctx context.Context, userID string, summaryDate string) ([]string, error)
 	GetData(ctx context.Context, userID string, summaryDate string, key *string) (json.RawMessage, error)
 	InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error
+	DeleteAllData(ctx context.Context, userID uuid.UUID) (int64, error)
 }
 
 // UTVStorage struct to hold table-specific storage

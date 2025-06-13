@@ -36,6 +36,11 @@ type PolarPostDataInput struct {
 	Data   json.RawMessage `json:"data" validate:"required"`
 }
 
+type PolarDeleteDataInput struct {
+	UserID string `json:"user_id" validate:"required,uuid4"`
+	Date   string `json:"date" validate:"required,datetime=2006-01-02"`
+}
+
 // store and cache interfaces
 type PolarDataHandler struct {
 	store utv.PolarData
@@ -316,4 +321,57 @@ func (h *PolarDataHandler) InsertData(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+// DeleteAllDataPolar godoc
+//
+// @Summary		Delete all Polar data for a user
+// @Description	Deletes all Polar data entries for a specific user
+// @Tags			UTV - Polar
+// @Accept			json
+// @Produce		json
+// @Param			user_id	query	string	true	"User ID (UUID)"
+// @Success		200		"Deleted: Data successfully removed"
+// @Success		204		"No Content: No matching data"
+// @Failure		400		{object} swagger.ValidationErrorResponse
+// @Failure		403		{object} swagger.ForbiddenResponse
+// @Failure		500		{object} swagger.InternalServerErrorResponse
+// @Security		BearerAuth
+// @Router			/utv/polar/data [delete]
+func (h *PolarDataHandler) DeleteAllData(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	err := utils.ValidateParams(r, []string{"user_id"})
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	userIDParam := r.URL.Query().Get("user_id")
+	if err := utils.GetValidator().Var(userIDParam, "required,uuid4"); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	userID, err := utils.ParseUUID(userIDParam)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	rows, err := h.store.DeleteAllData(r.Context(), userID)
+	if err != nil {
+		utils.InternalServerError(w, r, err)
+		return
+	}
+
+	if rows == 0 {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

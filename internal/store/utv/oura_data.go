@@ -175,3 +175,13 @@ func (s *OuraDataStore) InsertData(ctx context.Context, userID uuid.UUID, date t
 
 	return queries.InsertOuraData(ctx, arg)
 }
+
+// DeleteAllData deletes Oura data for a specific user
+func (s *OuraDataStore) DeleteAllData(ctx context.Context, userID uuid.UUID) (int64, error) {
+	queries := utvsqlc.New(s.db)
+
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	return queries.DeleteAllOuraData(ctx, userID)
+}

@@ -41,6 +41,10 @@ type OuraDeleteDataInput struct {
 	Date   string `json:"date" validate:"required,datetime=2006-01-02"`
 }
 
+type DeleteAllOuraParams struct {
+	UserID string `validate:"required,uuid4" json:"user_id"`
+}
+
 // store and cache interfaces
 type OuraDataHandler struct {
 	store utv.OuraData
@@ -349,13 +353,14 @@ func (h *OuraDataHandler) DeleteAllData(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	userIDParam := r.URL.Query().Get("user_id")
-	if err := utils.GetValidator().Var(userIDParam, "required,uuid4"); err != nil {
+	params := DeleteAllOuraParams{UserID: r.URL.Query().Get("user_id")}
+
+	if err := utils.GetValidator().Struct(params); err != nil {
 		utils.BadRequestResponse(w, r, err)
 		return
 	}
 
-	userID, err := utils.ParseUUID(userIDParam)
+	userID, err := utils.ParseUUID(params.UserID)
 	if err != nil {
 		utils.BadRequestResponse(w, r, err)
 		return

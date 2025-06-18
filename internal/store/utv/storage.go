@@ -9,6 +9,13 @@ import (
 	"github.com/google/uuid"
 )
 
+// LatestDataEntry struct to hold latest data entry
+type LatestDataEntry struct {
+	Device string
+	Date   time.Time
+	Data   json.RawMessage
+}
+
 // OuraData interface
 type OuraData interface {
 	GetDates(ctx context.Context, userID string, startDate *string, endDate *string) ([]string, error)
@@ -16,6 +23,7 @@ type OuraData interface {
 	GetData(ctx context.Context, userID string, summaryDate string, key *string) (json.RawMessage, error)
 	InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error
 	DeleteAllData(ctx context.Context, userID uuid.UUID) (int64, error)
+	GetLatestByType(ctx context.Context, userID uuid.UUID, typ string, limit int32) ([]LatestDataEntry, error)
 }
 
 // PolarData interface
@@ -25,6 +33,7 @@ type PolarData interface {
 	GetData(ctx context.Context, userID string, summaryDate string, key *string) (json.RawMessage, error)
 	InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error
 	DeleteAllData(ctx context.Context, userID uuid.UUID) (int64, error)
+	GetLatestByType(ctx context.Context, userID uuid.UUID, typ string, limit int32) ([]LatestDataEntry, error)
 }
 
 // SuuntoData interface
@@ -34,6 +43,7 @@ type SuuntoData interface {
 	GetData(ctx context.Context, userID string, summaryDate string, key *string) (json.RawMessage, error)
 	InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error
 	DeleteAllData(ctx context.Context, userID uuid.UUID) (int64, error)
+	GetLatestByType(ctx context.Context, userID uuid.UUID, typ string, limit int32) ([]LatestDataEntry, error)
 }
 
 // GarminData interface
@@ -43,6 +53,7 @@ type GarminData interface {
 	GetData(ctx context.Context, userID string, summaryDate string, key *string) (json.RawMessage, error)
 	InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error
 	DeleteAllData(ctx context.Context, userID uuid.UUID) (int64, error)
+	GetLatestByType(ctx context.Context, userID uuid.UUID, typ string, limit int32) ([]LatestDataEntry, error)
 }
 
 // UTVStorage struct to hold table-specific storage

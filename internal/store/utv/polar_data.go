@@ -184,3 +184,33 @@ func (s *PolarDataStore) DeleteAllData(ctx context.Context, userID uuid.UUID) (i
 
 	return queries.DeleteAllPolarData(ctx, userID)
 }
+
+// GetLatestByType
+func (s *PolarDataStore) GetLatestByType(ctx context.Context, userID uuid.UUID, typ string, limit int32) ([]LatestDataEntry, error) {
+	queries := utvsqlc.New(s.db)
+
+	arg := utvsqlc.GetLatestPolarDataByTypeParams{
+		UserID: userID,
+		Type:   typ,
+		Limit:  limit,
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	rows, err := queries.GetLatestPolarDataByType(ctx, arg)
+	if err != nil {
+		return nil, err
+	}
+
+	var entries []LatestDataEntry
+	for _, row := range rows {
+		entries = append(entries, LatestDataEntry{
+			Device: "polar",
+			Date:   row.SummaryDate,
+			Data:   row.Data,
+		})
+	}
+
+	return entries, nil
+}

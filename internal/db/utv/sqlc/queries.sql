@@ -322,3 +322,33 @@ DELETE FROM polar_data WHERE user_id = $1;
 
 -- name: DeleteAllSuuntoData :execrows
 DELETE FROM suunto_data WHERE user_id = $1;
+
+-- name: GetLatestGarminDataByType :many
+SELECT summary_date, (data -> $2::text)::jsonb AS data
+FROM garmin_data
+WHERE user_id = $1 AND data ? $2
+ORDER BY summary_date DESC
+LIMIT $3;
+
+-- name: GetLatestOuraDataByType :many
+SELECT summary_date, (data -> $2::text)::jsonb AS data
+FROM oura_data
+WHERE user_id = $1 AND data ? $2
+ORDER BY summary_date DESC
+LIMIT $3;
+
+-- name: GetLatestPolarDataByType :many
+SELECT summary_date, (data -> $2::text)::jsonb AS data
+FROM polar_data
+WHERE user_id = $1 AND data ? $2
+ORDER BY summary_date DESC
+LIMIT $3;
+
+-- name: GetLatestSuuntoDataByType :many
+SELECT summary_date, (data -> $2::text)::jsonb AS data
+FROM suunto_data
+WHERE user_id = $1 AND data ? $2
+ORDER BY summary_date DESC
+LIMIT $3;
+
+

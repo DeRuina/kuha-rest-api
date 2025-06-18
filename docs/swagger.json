@@ -565,6 +565,86 @@
                 }
             }
         },
+        "/utv/latest": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns latest entries of a specific type for a user, optionally filtered by device and limited in number",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UTV - General"
+                ],
+                "summary": "Get latest data by type",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID (UUID)",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Data type (e.g., 'sleep', 'activity')",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Device type (one of: 'garmin', 'oura', 'polar', 'suunto')",
+                        "name": "device",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit the number of results (default: 5, max: 100)",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Latest Data",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/swagger.LatestDataResponse"
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "No Content: No data found"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/utv/oura/data": {
             "get": {
                 "security": [
@@ -1624,6 +1704,17 @@
                 }
             }
         },
+        "swagger.DeviceData": {
+            "type": "object",
+            "properties": {
+                "sleep": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.SleepSample"
+                    }
+                }
+            }
+        },
         "swagger.ForbiddenError": {
             "type": "object",
             "properties": {
@@ -1906,6 +1997,22 @@
                 }
             }
         },
+        "swagger.LatestDataResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/swagger.DeviceData"
+                },
+                "date": {
+                    "type": "string",
+                    "example": "2025-06-12"
+                },
+                "device": {
+                    "type": "string",
+                    "example": "garmin"
+                }
+            }
+        },
         "swagger.NationsResponse": {
             "type": "object",
             "properties": {
@@ -2172,6 +2279,23 @@
                 "id": {
                     "type": "string",
                     "example": "82496435-af96-462e-90c9-806d38418e87"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "long_sleep"
+                }
+            }
+        },
+        "swagger.SleepSample": {
+            "type": "object",
+            "properties": {
+                "day": {
+                    "type": "string",
+                    "example": "2025-06-12"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123"
                 },
                 "type": {
                     "type": "string",

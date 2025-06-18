@@ -218,3 +218,19 @@ type PolarAlertness struct {
 	SleepType  string  `json:"sleep_type" example:"SLEEP_TYPE_PRIMARY"`
 	ResultType string  `json:"result_type" example:"ALERTNESS_TYPE_HISTORY"`
 }
+
+type SleepSample struct {
+	ID   string `json:"id" example:"123"`
+	Day  string `json:"day" example:"2025-06-12"`
+	Type string `json:"type" example:"long_sleep"`
+}
+
+type DeviceData struct {
+	Sleep []SleepSample `json:"sleep"`
+}
+
+type LatestDataResponse struct {
+	Device string     `json:"device" example:"garmin"`
+	Date   string     `json:"date" example:"2025-06-12"`
+	Data   DeviceData `json:"data"`
+}

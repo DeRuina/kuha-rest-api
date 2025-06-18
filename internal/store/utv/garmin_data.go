@@ -185,3 +185,33 @@ func (s *GarminDataStore) DeleteAllData(ctx context.Context, userID uuid.UUID) (
 
 	return queries.DeleteAllGarminData(ctx, userID)
 }
+
+// GetLatestByType
+func (s *GarminDataStore) GetLatestByType(ctx context.Context, userID uuid.UUID, typ string, limit int32) ([]LatestDataEntry, error) {
+	queries := utvsqlc.New(s.db)
+
+	arg := utvsqlc.GetLatestGarminDataByTypeParams{
+		UserID: userID,
+		Type:   typ,
+		Limit:  limit,
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	rows, err := queries.GetLatestGarminDataByType(ctx, arg)
+	if err != nil {
+		return nil, err
+	}
+
+	var entries []LatestDataEntry
+	for _, row := range rows {
+		entries = append(entries, LatestDataEntry{
+			Device: "garmin",
+			Date:   row.SummaryDate,
+			Data:   row.Data,
+		})
+	}
+
+	return entries, nil
+}

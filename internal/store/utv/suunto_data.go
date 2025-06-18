@@ -185,3 +185,33 @@ func (s *SuuntoDataStore) DeleteAllData(ctx context.Context, userID uuid.UUID) (
 
 	return queries.DeleteAllSuuntoData(ctx, userID)
 }
+
+// GetLatestByType
+func (s *SuuntoDataStore) GetLatestByType(ctx context.Context, userID uuid.UUID, typ string, limit int32) ([]LatestDataEntry, error) {
+	queries := utvsqlc.New(s.db)
+
+	arg := utvsqlc.GetLatestSuuntoDataByTypeParams{
+		UserID: userID,
+		Type:   typ,
+		Limit:  limit,
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	rows, err := queries.GetLatestSuuntoDataByType(ctx, arg)
+	if err != nil {
+		return nil, err
+	}
+
+	var entries []LatestDataEntry
+	for _, row := range rows {
+		entries = append(entries, LatestDataEntry{
+			Device: "suunto",
+			Date:   row.SummaryDate,
+			Data:   row.Data,
+		})
+	}
+
+	return entries, nil
+}

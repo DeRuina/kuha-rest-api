@@ -1286,3 +1286,171 @@ func (q *Queries) ToggleNotificationExpiration(ctx context.Context, id uuid.UUID
 	err := row.Scan(&expires)
 	return expires, err
 }
+
+const getLatestGarminDataByType = `-- name: GetLatestGarminDataByType :many
+SELECT summary_date, (data -> $2::text)::jsonb AS data
+FROM garmin_data
+WHERE user_id = $1 AND data ? $2
+ORDER BY summary_date DESC
+LIMIT $3
+`
+
+type GetLatestGarminDataByTypeParams struct {
+	UserID  uuid.UUID
+	Type 	string
+	Limit   int32
+}
+
+type GetLatestGarminDataByTypeRow struct {
+	SummaryDate time.Time
+	Data        json.RawMessage
+}
+
+func (q *Queries) GetLatestGarminDataByType(ctx context.Context, arg GetLatestGarminDataByTypeParams) ([]GetLatestGarminDataByTypeRow, error) {
+	rows, err := q.query(ctx, q.getLatestGarminDataByTypeStmt, getLatestGarminDataByType, arg.UserID, arg.Type, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetLatestGarminDataByTypeRow
+	for rows.Next() {
+		var i GetLatestGarminDataByTypeRow
+		if err := rows.Scan(&i.SummaryDate, &i.Data); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getLatestOuraDataByType = `-- name: GetLatestOuraDataByType :many
+SELECT summary_date, (data -> $2::text)::jsonb AS data
+FROM oura_data
+WHERE user_id = $1 AND data ? $2
+ORDER BY summary_date DESC
+LIMIT $3
+`
+
+type GetLatestOuraDataByTypeParams struct {
+	UserID  uuid.UUID
+	Type 	string
+	Limit   int32
+}
+
+type GetLatestOuraDataByTypeRow struct {
+	SummaryDate time.Time
+	Data        json.RawMessage
+}
+
+func (q *Queries) GetLatestOuraDataByType(ctx context.Context, arg GetLatestOuraDataByTypeParams) ([]GetLatestOuraDataByTypeRow, error) {
+	rows, err := q.query(ctx, q.getLatestOuraDataByTypeStmt, getLatestOuraDataByType, arg.UserID, arg.Type, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetLatestOuraDataByTypeRow
+	for rows.Next() {
+		var i GetLatestOuraDataByTypeRow
+		if err := rows.Scan(&i.SummaryDate, &i.Data); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getLatestPolarDataByType = `-- name: GetLatestPolarDataByType :many
+SELECT summary_date, (data -> $2::text)::jsonb AS data
+FROM polar_data
+WHERE user_id = $1 AND data ? $2
+ORDER BY summary_date DESC
+LIMIT $3
+`
+
+type GetLatestPolarDataByTypeParams struct {
+	UserID  uuid.UUID
+	Type 	string
+	Limit   int32
+}
+
+type GetLatestPolarDataByTypeRow struct {
+	SummaryDate time.Time
+	Data        json.RawMessage
+}
+
+func (q *Queries) GetLatestPolarDataByType(ctx context.Context, arg GetLatestPolarDataByTypeParams) ([]GetLatestPolarDataByTypeRow, error) {
+	rows, err := q.query(ctx, q.getLatestPolarDataByTypeStmt, getLatestPolarDataByType, arg.UserID, arg.Type, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetLatestPolarDataByTypeRow
+	for rows.Next() {
+		var i GetLatestPolarDataByTypeRow
+		if err := rows.Scan(&i.SummaryDate, &i.Data); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getLatestSuuntoDataByType = `-- name: GetLatestSuuntoDataByType :many
+SELECT summary_date, (data -> $2::text)::jsonb AS data
+FROM suunto_data
+WHERE user_id = $1 AND data ? $2
+ORDER BY summary_date DESC
+LIMIT $3
+`
+
+type GetLatestSuuntoDataByTypeParams struct {
+	UserID  uuid.UUID
+	Type 	string
+	Limit   int32
+}
+
+type GetLatestSuuntoDataByTypeRow struct {
+	SummaryDate time.Time
+	Data        json.RawMessage
+}
+
+func (q *Queries) GetLatestSuuntoDataByType(ctx context.Context, arg GetLatestSuuntoDataByTypeParams) ([]GetLatestSuuntoDataByTypeRow, error) {
+	rows, err := q.query(ctx, q.getLatestSuuntoDataByTypeStmt, getLatestSuuntoDataByType, arg.UserID, arg.Type, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetLatestSuuntoDataByTypeRow
+	for rows.Next() {
+		var i GetLatestSuuntoDataByTypeRow
+		if err := rows.Scan(&i.SummaryDate, &i.Data); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

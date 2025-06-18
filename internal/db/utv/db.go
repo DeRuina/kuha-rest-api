@@ -93,6 +93,18 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getDatesFromSuuntoDataStmt, err = db.PrepareContext(ctx, getDatesFromSuuntoData); err != nil {
 		return nil, fmt.Errorf("error preparing query GetDatesFromSuuntoData: %w", err)
 	}
+	if q.getLatestGarminDataByTypeStmt, err = db.PrepareContext(ctx, getLatestGarminDataByType); err != nil {
+		return nil, fmt.Errorf("error preparing query GetLatestGarminDataByType: %w", err)
+	}
+	if q.getLatestOuraDataByTypeStmt, err = db.PrepareContext(ctx, getLatestOuraDataByType); err != nil {
+		return nil, fmt.Errorf("error preparing query GetLatestOuraDataByType: %w", err)
+	}
+	if q.getLatestPolarDataByTypeStmt, err = db.PrepareContext(ctx, getLatestPolarDataByType); err != nil {
+		return nil, fmt.Errorf("error preparing query GetLatestPolarDataByType: %w", err)
+	}
+	if q.getLatestSuuntoDataByTypeStmt, err = db.PrepareContext(ctx, getLatestSuuntoDataByType); err != nil {
+		return nil, fmt.Errorf("error preparing query GetLatestSuuntoDataByType: %w", err)
+	}
 	if q.getNotificationStmt, err = db.PrepareContext(ctx, getNotification); err != nil {
 		return nil, fmt.Errorf("error preparing query GetNotification: %w", err)
 	}
@@ -294,6 +306,26 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing getDatesFromSuuntoDataStmt: %w", cerr)
 		}
 	}
+	if q.getLatestGarminDataByTypeStmt != nil {
+		if cerr := q.getLatestGarminDataByTypeStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getLatestGarminDataByTypeStmt: %w", cerr)
+		}
+	}
+	if q.getLatestOuraDataByTypeStmt != nil {
+		if cerr := q.getLatestOuraDataByTypeStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getLatestOuraDataByTypeStmt: %w", cerr)
+		}
+	}
+	if q.getLatestPolarDataByTypeStmt != nil {
+		if cerr := q.getLatestPolarDataByTypeStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getLatestPolarDataByTypeStmt: %w", cerr)
+		}
+	}
+	if q.getLatestSuuntoDataByTypeStmt != nil {
+		if cerr := q.getLatestSuuntoDataByTypeStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getLatestSuuntoDataByTypeStmt: %w", cerr)
+		}
+	}
 	if q.getNotificationStmt != nil {
 		if cerr := q.getNotificationStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getNotificationStmt: %w", cerr)
@@ -491,6 +523,10 @@ type Queries struct {
 	getDatesFromOuraDataStmt          *sql.Stmt
 	getDatesFromPolarDataStmt         *sql.Stmt
 	getDatesFromSuuntoDataStmt        *sql.Stmt
+	getLatestGarminDataByTypeStmt     *sql.Stmt
+	getLatestOuraDataByTypeStmt       *sql.Stmt
+	getLatestPolarDataByTypeStmt      *sql.Stmt
+	getLatestSuuntoDataByTypeStmt     *sql.Stmt
 	getNotificationStmt               *sql.Stmt
 	getResourceMetadataStmt           *sql.Stmt
 	getSpecificDataForDateGarminStmt  *sql.Stmt
@@ -547,6 +583,10 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		getDatesFromOuraDataStmt:          q.getDatesFromOuraDataStmt,
 		getDatesFromPolarDataStmt:         q.getDatesFromPolarDataStmt,
 		getDatesFromSuuntoDataStmt:        q.getDatesFromSuuntoDataStmt,
+		getLatestGarminDataByTypeStmt:     q.getLatestGarminDataByTypeStmt,
+		getLatestOuraDataByTypeStmt:       q.getLatestOuraDataByTypeStmt,
+		getLatestPolarDataByTypeStmt:      q.getLatestPolarDataByTypeStmt,
+		getLatestSuuntoDataByTypeStmt:     q.getLatestSuuntoDataByTypeStmt,
 		getNotificationStmt:               q.getNotificationStmt,
 		getResourceMetadataStmt:           q.getResourceMetadataStmt,
 		getSpecificDataForDateGarminStmt:  q.getSpecificDataForDateGarminStmt,

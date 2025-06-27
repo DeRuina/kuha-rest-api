@@ -435,6 +435,52 @@ definitions:
         example: f47ac10b-58cc-4372-a567-0e02b2c3d479
         type: string
     type: object
+  swagger.PolarStatusResponse:
+    properties:
+      connected:
+        example: true
+        type: boolean
+      data:
+        example: true
+        type: boolean
+    type: object
+  swagger.PolarTokenByIDResponse:
+    properties:
+      data:
+        $ref: '#/definitions/swagger.PolarTokenDetails'
+      user_id:
+        example: 208e2ffb-ac68-4980-a8a6-b7e0136e0798
+        type: string
+    type: object
+  swagger.PolarTokenDetails:
+    properties:
+      access_token:
+        example: abc123token
+        type: string
+      data_last_fetched:
+        example: 2025-06-18 10:54
+        type: string
+      expires_in:
+        example: 315359999
+        type: integer
+      member_id:
+        example: 7112b057-2b8d-47ab-a8f1-140dc09664cf
+        type: string
+      token_last_refreshed:
+        example: 2025-03-03 10:53
+        type: string
+      x_user_id:
+        example: 45071318
+        type: integer
+    type: object
+  swagger.PolarTokenInput:
+    properties:
+      details:
+        $ref: '#/definitions/swagger.PolarTokenDetails'
+      user_id:
+        example: 208e2ffb-ac68-4980-a8a6-b7e0136e0798
+        type: string
+    type: object
   swagger.PolarTypesResponse:
     properties:
       types:
@@ -1449,6 +1495,107 @@ paths:
       security:
       - BearerAuth: []
       summary: Get available dates
+      tags:
+      - UTV - Polar
+  /utv/polar/status:
+    get:
+      consumes:
+      - application/json
+      description: Returns whether a user has connected their Polar account and whether
+        any Polar data exists
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.PolarStatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Check Polar connection & data status
+      tags:
+      - UTV - Polar
+  /utv/polar/token:
+    post:
+      consumes:
+      - application/json
+      description: Upserts the Polar token details for a specific user
+      parameters:
+      - description: Polar token input
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.PolarTokenInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Save or update Polar token
+      tags:
+      - UTV - Polar
+  /utv/polar/token-by-id:
+    get:
+      consumes:
+      - application/json
+      description: Returns user_id and token data associated with a given Polar x_user_id
+      parameters:
+      - description: Polar x_user_id
+        in: query
+        name: polar-id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.PolarTokenByIDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user token by Polar ID
       tags:
       - UTV - Polar
   /utv/polar/types:

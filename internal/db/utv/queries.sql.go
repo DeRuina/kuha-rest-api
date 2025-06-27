@@ -1655,3 +1655,57 @@ func (q *Queries) GetDataByTypeSuunto(ctx context.Context, arg GetDataByTypeSuun
 	}
 	return items, nil
 }
+
+const upsertPolarToken = `-- name: UpsertPolarToken :exec
+INSERT INTO polar_tokens (user_id, data)
+VALUES ($1, $2)
+ON CONFLICT (user_id) DO UPDATE SET data = $2
+`
+
+type UpsertPolarTokenParams struct {
+	UserID uuid.UUID
+	Data   json.RawMessage
+}
+
+func (q *Queries) UpsertPolarToken(ctx context.Context, arg UpsertPolarTokenParams) error {
+	_, err := q.exec(ctx, q.upsertPolarTokenStmt, upsertPolarToken, arg.UserID, arg.Data)
+	return err
+}
+
+const getPolarStatus = `-- name: GetPolarStatus :one
+WITH input AS (
+  SELECT $1::uuid AS uid
+),
+pt AS (
+  SELECT EXISTS(SELECT 1 FROM polar_tokens WHERE user_id = input.uid) AS connected FROM input
+),
+pd AS (
+  SELECT EXISTS(SELECT 1 FROM polar_data WHERE user_id = input.uid) AS data_exists FROM input
+)
+SELECT pt.connected, pd.data_exists FROM pt, pd
+`
+
+type GetPolarStatusRow struct {
+	Connected  bool
+	DataExists bool
+}
+
+func (q *Queries) GetPolarStatus(ctx context.Context, dollar_1 uuid.UUID) (GetPolarStatusRow, error) {
+	row := q.queryRow(ctx, q.getPolarStatusStmt, getPolarStatus, dollar_1)
+	var i GetPolarStatusRow
+	err := row.Scan(&i.Connected, &i.DataExists)
+	return i, err
+}
+
+const getPolarTokenByPolarID = `-- name: GetPolarTokenByPolarID :one
+SELECT user_id, data
+FROM polar_tokens
+WHERE data->>'x_user_id' = $1::text
+`
+
+func (q *Queries) GetPolarTokenByPolarID(ctx context.Context, dollar_1 string) (PolarToken, error) {
+	row := q.queryRow(ctx, q.getPolarTokenByPolarIDStmt, getPolarTokenByPolarID, dollar_1)
+	var i PolarToken
+	err := row.Scan(&i.UserID, &i.Data)
+	return i, err
+}

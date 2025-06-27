@@ -120,6 +120,12 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getNotificationStmt, err = db.PrepareContext(ctx, getNotification); err != nil {
 		return nil, fmt.Errorf("error preparing query GetNotification: %w", err)
 	}
+	if q.getPolarStatusStmt, err = db.PrepareContext(ctx, getPolarStatus); err != nil {
+		return nil, fmt.Errorf("error preparing query GetPolarStatus: %w", err)
+	}
+	if q.getPolarTokenByPolarIDStmt, err = db.PrepareContext(ctx, getPolarTokenByPolarID); err != nil {
+		return nil, fmt.Errorf("error preparing query GetPolarTokenByPolarID: %w", err)
+	}
 	if q.getResourceMetadataStmt, err = db.PrepareContext(ctx, getResourceMetadata); err != nil {
 		return nil, fmt.Errorf("error preparing query GetResourceMetadata: %w", err)
 	}
@@ -197,6 +203,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.toggleNotificationExpirationStmt, err = db.PrepareContext(ctx, toggleNotificationExpiration); err != nil {
 		return nil, fmt.Errorf("error preparing query ToggleNotificationExpiration: %w", err)
+	}
+	if q.upsertPolarTokenStmt, err = db.PrepareContext(ctx, upsertPolarToken); err != nil {
+		return nil, fmt.Errorf("error preparing query UpsertPolarToken: %w", err)
 	}
 	return &q, nil
 }
@@ -363,6 +372,16 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing getNotificationStmt: %w", cerr)
 		}
 	}
+	if q.getPolarStatusStmt != nil {
+		if cerr := q.getPolarStatusStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getPolarStatusStmt: %w", cerr)
+		}
+	}
+	if q.getPolarTokenByPolarIDStmt != nil {
+		if cerr := q.getPolarTokenByPolarIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getPolarTokenByPolarIDStmt: %w", cerr)
+		}
+	}
 	if q.getResourceMetadataStmt != nil {
 		if cerr := q.getResourceMetadataStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getResourceMetadataStmt: %w", cerr)
@@ -493,6 +512,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing toggleNotificationExpirationStmt: %w", cerr)
 		}
 	}
+	if q.upsertPolarTokenStmt != nil {
+		if cerr := q.upsertPolarTokenStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing upsertPolarTokenStmt: %w", cerr)
+		}
+	}
 	return err
 }
 
@@ -564,6 +588,8 @@ type Queries struct {
 	getLatestPolarDataByTypeStmt      *sql.Stmt
 	getLatestSuuntoDataByTypeStmt     *sql.Stmt
 	getNotificationStmt               *sql.Stmt
+	getPolarStatusStmt                *sql.Stmt
+	getPolarTokenByPolarIDStmt        *sql.Stmt
 	getResourceMetadataStmt           *sql.Stmt
 	getSpecificDataForDateGarminStmt  *sql.Stmt
 	getSpecificDataForDateOuraStmt    *sql.Stmt
@@ -590,6 +616,7 @@ type Queries struct {
 	setPersonalInformationStmt        *sql.Stmt
 	setResourceMetadataStmt           *sql.Stmt
 	toggleNotificationExpirationStmt  *sql.Stmt
+	upsertPolarTokenStmt              *sql.Stmt
 }
 
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
@@ -628,6 +655,8 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		getLatestPolarDataByTypeStmt:      q.getLatestPolarDataByTypeStmt,
 		getLatestSuuntoDataByTypeStmt:     q.getLatestSuuntoDataByTypeStmt,
 		getNotificationStmt:               q.getNotificationStmt,
+		getPolarStatusStmt:                q.getPolarStatusStmt,
+		getPolarTokenByPolarIDStmt:        q.getPolarTokenByPolarIDStmt,
 		getResourceMetadataStmt:           q.getResourceMetadataStmt,
 		getSpecificDataForDateGarminStmt:  q.getSpecificDataForDateGarminStmt,
 		getSpecificDataForDateOuraStmt:    q.getSpecificDataForDateOuraStmt,
@@ -654,5 +683,6 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		setPersonalInformationStmt:        q.setPersonalInformationStmt,
 		setResourceMetadataStmt:           q.setResourceMetadataStmt,
 		toggleNotificationExpirationStmt:  q.toggleNotificationExpirationStmt,
+		upsertPolarTokenStmt:              q.upsertPolarTokenStmt,
 	}
 }

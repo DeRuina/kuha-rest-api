@@ -234,3 +234,27 @@ type LatestDataResponse struct {
 	Date   string     `json:"date" example:"2025-06-12"`
 	Data   DeviceData `json:"data"`
 }
+
+type PolarTokenDetails struct {
+	XUserID         int    `json:"x_user_id" example:"45071318"`
+	AccessToken     string `json:"access_token" example:"abc123token"`
+	ExpiresIn       int    `json:"expires_in" example:"315359999"`
+	MemberID        string `json:"member_id" example:"7112b057-2b8d-47ab-a8f1-140dc09664cf"`
+	TokenRefreshed  string `json:"token_last_refreshed" example:"2025-03-03 10:53"`
+	DataLastFetched string `json:"data_last_fetched" example:"2025-06-18 10:54"`
+}
+
+type PolarTokenInput struct {
+	UserID  string            `json:"user_id" example:"208e2ffb-ac68-4980-a8a6-b7e0136e0798"`
+	Details PolarTokenDetails `json:"details"`
+}
+
+type PolarStatusResponse struct {
+	Connected bool `json:"connected" example:"true"`
+	Data      bool `json:"data" example:"true"`
+}
+
+type PolarTokenByIDResponse struct {
+	UserID string            `json:"user_id" example:"208e2ffb-ac68-4980-a8a6-b7e0136e0798"`
+	Data   PolarTokenDetails `json:"data"`
+}

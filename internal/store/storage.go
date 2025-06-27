@@ -22,6 +22,7 @@ type UTV interface {
 	Polar() utv.PolarData
 	Suunto() utv.SuuntoData
 	Garmin() utv.GarminData
+	PolarToken() utv.PolarToken
 }
 
 type Auth interface {

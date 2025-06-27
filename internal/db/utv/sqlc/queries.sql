@@ -387,4 +387,27 @@ WHERE user_id = $1
   AND ($4::date IS NULL OR summary_date <= $4)
 ORDER BY summary_date DESC;
 
+-- name: GetPolarStatus :one
+WITH input AS (
+  SELECT $1::uuid AS uid
+),
+pt AS (
+  SELECT EXISTS(SELECT 1 FROM polar_tokens WHERE user_id = input.uid) AS connected FROM input
+),
+pd AS (
+  SELECT EXISTS(SELECT 1 FROM polar_data WHERE user_id = input.uid) AS data_exists FROM input
+)
+SELECT pt.connected, pd.data_exists FROM pt, pd;
+
+
+-- name: UpsertPolarToken :exec
+INSERT INTO polar_tokens (user_id, data)
+VALUES ($1, $2)
+ON CONFLICT (user_id) DO UPDATE SET data = $2;
+
+-- name: GetPolarTokenByPolarID :one
+SELECT user_id, data
+FROM polar_tokens
+WHERE data->>'x_user_id' = $1::text;
+
 

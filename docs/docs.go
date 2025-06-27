@@ -1308,6 +1308,164 @@ const docTemplate = `{
                 }
             }
         },
+        "/utv/polar/status": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns whether a user has connected their Polar account and whether any Polar data exists",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UTV - Polar"
+                ],
+                "summary": "Check Polar connection \u0026 data status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID (UUID)",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.PolarStatusResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/utv/polar/token": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Upserts the Polar token details for a specific user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UTV - Polar"
+                ],
+                "summary": "Save or update Polar token",
+                "parameters": [
+                    {
+                        "description": "Polar token input",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/swagger.PolarTokenInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/utv/polar/token-by-id": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns user_id and token data associated with a given Polar x_user_id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UTV - Polar"
+                ],
+                "summary": "Get user token by Polar ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Polar x_user_id",
+                        "name": "polar-id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.PolarTokenByIDResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/utv/polar/types": {
             "get": {
                 "security": [
@@ -2324,6 +2482,72 @@ const docTemplate = `{
                 "user_id": {
                     "type": "string",
                     "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+                }
+            }
+        },
+        "swagger.PolarStatusResponse": {
+            "type": "object",
+            "properties": {
+                "connected": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "data": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "swagger.PolarTokenByIDResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/swagger.PolarTokenDetails"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "208e2ffb-ac68-4980-a8a6-b7e0136e0798"
+                }
+            }
+        },
+        "swagger.PolarTokenDetails": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string",
+                    "example": "abc123token"
+                },
+                "data_last_fetched": {
+                    "type": "string",
+                    "example": "2025-06-18 10:54"
+                },
+                "expires_in": {
+                    "type": "integer",
+                    "example": 315359999
+                },
+                "member_id": {
+                    "type": "string",
+                    "example": "7112b057-2b8d-47ab-a8f1-140dc09664cf"
+                },
+                "token_last_refreshed": {
+                    "type": "string",
+                    "example": "2025-03-03 10:53"
+                },
+                "x_user_id": {
+                    "type": "integer",
+                    "example": 45071318
+                }
+            }
+        },
+        "swagger.PolarTokenInput": {
+            "type": "object",
+            "properties": {
+                "details": {
+                    "$ref": "#/definitions/swagger.PolarTokenDetails"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "208e2ffb-ac68-4980-a8a6-b7e0136e0798"
                 }
             }
         },

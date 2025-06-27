@@ -152,6 +152,7 @@ func (app *api) mount() http.Handler {
 				polarHandler := utvapi.NewPolarDataHandler(app.store.UTV.Polar(), app.cacheStorage)
 				suuntoHandler := utvapi.NewSuuntoDataHandler(app.store.UTV.Suunto(), app.cacheStorage)
 				garminHandler := utvapi.NewGarminDataHandler(app.store.UTV.Garmin(), app.cacheStorage)
+				polarTokenHandler := utvapi.NewPolarTokenHandler(app.store.UTV.PolarToken())
 
 				// General routes
 				r.Get("/latest", generalHandler.GetLatestData)
@@ -173,6 +174,9 @@ func (app *api) mount() http.Handler {
 					r.Get("/data", polarHandler.GetData)
 					r.Post("/data", polarHandler.InsertData)
 					r.Delete("/data", polarHandler.DeleteAllData)
+					r.Get("/status", polarTokenHandler.GetStatus)
+					r.Post("/token", polarTokenHandler.UpsertToken)
+					r.Get("/token-by-id", polarTokenHandler.GetTokenByPolarID)
 				})
 
 				// Suunto routes

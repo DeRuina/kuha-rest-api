@@ -163,7 +163,7 @@ func (h *PolarTokenHandler) GetTokenByPolarID(w http.ResponseWriter, r *http.Req
 
 	userID, data, err := h.store.GetTokenByPolarID(r.Context(), params.PolarID)
 	if err != nil {
-		utils.WriteJSON(w, http.StatusOK, map[string]any{}) // return empty dict
+		utils.WriteJSON(w, http.StatusOK, map[string]any{})
 		return
 	}
 

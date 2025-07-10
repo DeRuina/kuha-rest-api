@@ -17,6 +17,7 @@ var (
 
 	//ErrMissing
 	ErrMissingUserID  = errors.New("user_id is required")
+	ErrMissingPolarID = errors.New("polar-id is required")
 	ErrMissingSector  = errors.New("sector is required")
 	ErrMissingDate    = errors.New("date is required")
 	ErrMissingGeneral = errors.New("this field is required")
@@ -44,6 +45,8 @@ func FormatValidationErrors(err error) map[string]string {
 			switch field {
 			case "UserID":
 				errors["user_id"] = ErrMissingUserID.Error()
+			case "PolarID":
+				errors["polar-id"] = ErrMissingPolarID.Error()
 			case "Date":
 				errors["date"] = ErrMissingDate.Error()
 			case "Type":

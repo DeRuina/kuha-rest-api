@@ -156,10 +156,17 @@ func (app *api) mount() http.Handler {
 				ouraTokenHandler := utvapi.NewOuraTokenHandler(app.store.UTV.OuraToken(), app.cacheStorage)
 				suuntoTokenHandler := utvapi.NewSuuntoTokenHandler(app.store.UTV.SuuntoToken(), app.cacheStorage)
 				garminTokenHandler := utvapi.NewGarminTokenHandler(app.store.UTV.GarminToken(), app.cacheStorage)
+				klabTokenHandler := utvapi.NewKlabTokenHandler(app.store.UTV.KlabToken(), app.cacheStorage)
 
 				// General routes
 				r.Get("/latest", generalHandler.GetLatestData)
 				r.Get("/all", generalHandler.GetAllByType)
+
+				// Klab routes
+				r.Route("/klab", func(r chi.Router) {
+					r.Get("/status", klabTokenHandler.GetStatus)
+					r.Post("/token", klabTokenHandler.UpsertToken)
+				})
 
 				// Oura routes
 				r.Route("/oura", func(r chi.Router) {

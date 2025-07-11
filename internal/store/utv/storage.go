@@ -89,6 +89,12 @@ type GarminToken interface {
 	GetUserIDByToken(ctx context.Context, token string) (uuid.UUID, error)
 }
 
+// KlabToken interface
+type KlabToken interface {
+	GetStatus(ctx context.Context, userID uuid.UUID) (bool, error)
+	UpsertToken(ctx context.Context, userID uuid.UUID, data json.RawMessage) error
+}
+
 // UTVStorage struct to hold table-specific storage
 type UTVStorage struct {
 	db          *sql.DB
@@ -100,6 +106,7 @@ type UTVStorage struct {
 	garminToken GarminToken
 	suuntoToken SuuntoToken
 	ouraToken   OuraToken
+	klabToken   KlabToken
 }
 
 // Ping method
@@ -140,6 +147,10 @@ func (s *UTVStorage) SuuntoToken() SuuntoToken {
 	return s.suuntoToken
 }
 
+func (s *UTVStorage) KlabToken() KlabToken {
+	return s.klabToken
+}
+
 // Storage for UTV database tables
 func NewUTVStorage(db *sql.DB) *UTVStorage {
 	return &UTVStorage{
@@ -152,5 +163,6 @@ func NewUTVStorage(db *sql.DB) *UTVStorage {
 		garminToken: &GarminTokenStore{db: db},
 		suuntoToken: &SuuntoTokenStore{db: db},
 		ouraToken:   &OuraTokenStore{db: db},
+		klabToken:   &KlabTokenStore{db: db},
 	}
 }

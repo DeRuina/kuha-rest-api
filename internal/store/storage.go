@@ -26,6 +26,7 @@ type UTV interface {
 	GarminToken() utv.GarminToken
 	SuuntoToken() utv.SuuntoToken
 	OuraToken() utv.OuraToken
+	KlabToken() utv.KlabToken
 }
 
 type Auth interface {

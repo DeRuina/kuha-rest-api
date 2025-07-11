@@ -1881,3 +1881,30 @@ func (q *Queries) GetSuuntoTokenByUsername(ctx context.Context, dollar_1 string)
 	err := row.Scan(&i.UserID, &i.Data)
 	return i, err
 }
+
+const getKlabStatus = `-- name: GetKlabStatus :one
+SELECT EXISTS(SELECT 1 FROM klab_tokens WHERE user_id = $1) AS connected
+`
+
+func (q *Queries) GetKlabStatus(ctx context.Context, userID uuid.UUID) (bool, error) {
+	row := q.queryRow(ctx, q.getKlabStatusStmt, getKlabStatus, userID)
+	var connected bool
+	err := row.Scan(&connected)
+	return connected, err
+}
+
+const upsertKlabToken = `-- name: UpsertKlabToken :exec
+INSERT INTO klab_tokens (user_id, data)
+VALUES ($1, $2)
+ON CONFLICT (user_id) DO UPDATE SET data = $2
+`
+
+type UpsertKlabTokenParams struct {
+	UserID uuid.UUID
+	Data   json.RawMessage
+}
+
+func (q *Queries) UpsertKlabToken(ctx context.Context, arg UpsertKlabTokenParams) error {
+	_, err := q.exec(ctx, q.upsertKlabTokenStmt, upsertKlabToken, arg.UserID, arg.Data)
+	return err
+}

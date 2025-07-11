@@ -316,6 +316,29 @@ definitions:
           $ref: '#/definitions/swagger.UnprocessableEntityError'
         type: array
     type: object
+  swagger.KlabStatusResponse:
+    properties:
+      connected:
+        example: true
+        type: boolean
+    type: object
+  swagger.KlabTokenDetails:
+    properties:
+      sport_id:
+        example: 51678043
+        type: integer
+      suomisport_id:
+        example: "138538"
+        type: string
+    type: object
+  swagger.KlabTokenInput:
+    properties:
+      details:
+        $ref: '#/definitions/swagger.KlabTokenDetails'
+      user_id:
+        example: 208e2ffb-ac68-4980-a8b6-b7e0136e4172
+        type: string
+    type: object
   swagger.LatestDataResponse:
     properties:
       data:
@@ -1376,6 +1399,75 @@ paths:
       summary: Get user_id by Garmin access token
       tags:
       - UTV - Garmin
+  /utv/klab/status:
+    get:
+      consumes:
+      - application/json
+      description: Returns whether a user has connected their Klab account
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.KlabStatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Check Klab connection
+      tags:
+      - UTV - Klab
+  /utv/klab/token:
+    post:
+      consumes:
+      - application/json
+      description: Upserts a Klab token for a user
+      parameters:
+      - description: Klab token input
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.KlabTokenInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Upsert Klab token
+      tags:
+      - UTV - Klab
   /utv/latest:
     get:
       consumes:

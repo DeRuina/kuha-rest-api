@@ -478,4 +478,11 @@ SELECT user_id
 FROM garmin_tokens
 WHERE data->>'access_token' = $1::text;
 
+-- name: GetKlabStatus :one
+SELECT EXISTS(SELECT 1 FROM klab_tokens WHERE user_id = $1) AS connected;
+
+-- name: UpsertKlabToken :exec
+INSERT INTO klab_tokens (user_id, data)
+VALUES ($1, $2)
+ON CONFLICT (user_id) DO UPDATE SET data = $2;
 

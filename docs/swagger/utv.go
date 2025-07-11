@@ -343,3 +343,17 @@ type GarminUserIDResponse struct {
 type GarminTokenExistsResponse struct {
 	Exists bool `json:"exists" example:"true"`
 }
+
+type KlabStatusResponse struct {
+	Connected bool `json:"connected" example:"true"`
+}
+
+type KlabTokenDetails struct {
+	SportID      int    `json:"sport_id" example:"51678043"`
+	SuomisportID string `json:"suomisport_id" example:"138538"`
+}
+
+type KlabTokenInput struct {
+	UserID  string           `json:"user_id" example:"208e2ffb-ac68-4980-a8b6-b7e0136e4172"`
+	Details KlabTokenDetails `json:"details"`
+}

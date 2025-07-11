@@ -114,6 +114,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getGarminUserIDByTokenStmt, err = db.PrepareContext(ctx, getGarminUserIDByToken); err != nil {
 		return nil, fmt.Errorf("error preparing query GetGarminUserIDByToken: %w", err)
 	}
+	if q.getKlabStatusStmt, err = db.PrepareContext(ctx, getKlabStatus); err != nil {
+		return nil, fmt.Errorf("error preparing query GetKlabStatus: %w", err)
+	}
 	if q.getLatestGarminDataByTypeStmt, err = db.PrepareContext(ctx, getLatestGarminDataByType); err != nil {
 		return nil, fmt.Errorf("error preparing query GetLatestGarminDataByType: %w", err)
 	}
@@ -227,6 +230,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.upsertGarminTokenStmt, err = db.PrepareContext(ctx, upsertGarminToken); err != nil {
 		return nil, fmt.Errorf("error preparing query UpsertGarminToken: %w", err)
+	}
+	if q.upsertKlabTokenStmt, err = db.PrepareContext(ctx, upsertKlabToken); err != nil {
+		return nil, fmt.Errorf("error preparing query UpsertKlabToken: %w", err)
 	}
 	if q.upsertOuraTokenStmt, err = db.PrepareContext(ctx, upsertOuraToken); err != nil {
 		return nil, fmt.Errorf("error preparing query UpsertOuraToken: %w", err)
@@ -390,6 +396,11 @@ func (q *Queries) Close() error {
 	if q.getGarminUserIDByTokenStmt != nil {
 		if cerr := q.getGarminUserIDByTokenStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getGarminUserIDByTokenStmt: %w", cerr)
+		}
+	}
+	if q.getKlabStatusStmt != nil {
+		if cerr := q.getKlabStatusStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getKlabStatusStmt: %w", cerr)
 		}
 	}
 	if q.getLatestGarminDataByTypeStmt != nil {
@@ -582,6 +593,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing upsertGarminTokenStmt: %w", cerr)
 		}
 	}
+	if q.upsertKlabTokenStmt != nil {
+		if cerr := q.upsertKlabTokenStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing upsertKlabTokenStmt: %w", cerr)
+		}
+	}
 	if q.upsertOuraTokenStmt != nil {
 		if cerr := q.upsertOuraTokenStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing upsertOuraTokenStmt: %w", cerr)
@@ -666,6 +682,7 @@ type Queries struct {
 	getDatesFromSuuntoDataStmt        *sql.Stmt
 	getGarminStatusStmt               *sql.Stmt
 	getGarminUserIDByTokenStmt        *sql.Stmt
+	getKlabStatusStmt                 *sql.Stmt
 	getLatestGarminDataByTypeStmt     *sql.Stmt
 	getLatestOuraDataByTypeStmt       *sql.Stmt
 	getLatestPolarDataByTypeStmt      *sql.Stmt
@@ -704,6 +721,7 @@ type Queries struct {
 	setResourceMetadataStmt           *sql.Stmt
 	toggleNotificationExpirationStmt  *sql.Stmt
 	upsertGarminTokenStmt             *sql.Stmt
+	upsertKlabTokenStmt               *sql.Stmt
 	upsertOuraTokenStmt               *sql.Stmt
 	upsertPolarTokenStmt              *sql.Stmt
 	upsertSuuntoTokenStmt             *sql.Stmt
@@ -743,6 +761,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		getDatesFromSuuntoDataStmt:        q.getDatesFromSuuntoDataStmt,
 		getGarminStatusStmt:               q.getGarminStatusStmt,
 		getGarminUserIDByTokenStmt:        q.getGarminUserIDByTokenStmt,
+		getKlabStatusStmt:                 q.getKlabStatusStmt,
 		getLatestGarminDataByTypeStmt:     q.getLatestGarminDataByTypeStmt,
 		getLatestOuraDataByTypeStmt:       q.getLatestOuraDataByTypeStmt,
 		getLatestPolarDataByTypeStmt:      q.getLatestPolarDataByTypeStmt,
@@ -781,6 +800,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		setResourceMetadataStmt:           q.setResourceMetadataStmt,
 		toggleNotificationExpirationStmt:  q.toggleNotificationExpirationStmt,
 		upsertGarminTokenStmt:             q.upsertGarminTokenStmt,
+		upsertKlabTokenStmt:               q.upsertKlabTokenStmt,
 		upsertOuraTokenStmt:               q.upsertOuraTokenStmt,
 		upsertPolarTokenStmt:              q.upsertPolarTokenStmt,
 		upsertSuuntoTokenStmt:             q.upsertSuuntoTokenStmt,

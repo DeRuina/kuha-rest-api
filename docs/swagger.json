@@ -870,6 +870,115 @@
                 }
             }
         },
+        "/utv/klab/status": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns whether a user has connected their Klab account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UTV - Klab"
+                ],
+                "summary": "Check Klab connection",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID (UUID)",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.KlabStatusResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/utv/klab/token": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Upserts a Klab token for a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UTV - Klab"
+                ],
+                "summary": "Upsert Klab token",
+                "parameters": [
+                    {
+                        "description": "Klab token input",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/swagger.KlabTokenInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/utv/latest": {
             "get": {
                 "security": [
@@ -2851,6 +2960,40 @@
                     "items": {
                         "$ref": "#/definitions/swagger.UnprocessableEntityError"
                     }
+                }
+            }
+        },
+        "swagger.KlabStatusResponse": {
+            "type": "object",
+            "properties": {
+                "connected": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "swagger.KlabTokenDetails": {
+            "type": "object",
+            "properties": {
+                "sport_id": {
+                    "type": "integer",
+                    "example": 51678043
+                },
+                "suomisport_id": {
+                    "type": "string",
+                    "example": "138538"
+                }
+            }
+        },
+        "swagger.KlabTokenInput": {
+            "type": "object",
+            "properties": {
+                "details": {
+                    "$ref": "#/definitions/swagger.KlabTokenDetails"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "208e2ffb-ac68-4980-a8b6-b7e0136e4172"
                 }
             }
         },

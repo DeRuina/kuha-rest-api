@@ -167,6 +167,7 @@ func (app *api) mount() http.Handler {
 				r.Get("/latest", generalHandler.GetLatestData)
 				r.Get("/all", generalHandler.GetAllByType)
 				r.Delete("/disconnect", generalHandler.Disconnect)
+				r.Get("/tokens4update", generalHandler.GetTokensForUpdate)
 
 				// Klab routes
 				r.Route("/klab", func(r chi.Router) {

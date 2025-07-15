@@ -357,3 +357,8 @@ type KlabTokenInput struct {
 	UserID  string           `json:"user_id" example:"208e2ffb-ac68-4980-a8b6-b7e0136e4172"`
 	Details KlabTokenDetails `json:"details"`
 }
+
+type TokensForUpdateResponse struct {
+	UserID string                 `json:"user_id" example:"dcabe48a-3578-4743-93ba-001409c82a82"`
+	Data   map[string]interface{} `json:"data" swaggertype:"object" example:"{\"token_last_refreshed\":\"2025-02-21T13:02:00Z\"}"`
+}

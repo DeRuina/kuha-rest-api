@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"time"
 
+	utvsqlc "github.com/DeRuina/KUHA-REST-API/internal/db/utv"
 	"github.com/google/uuid"
 )
 
@@ -33,6 +34,7 @@ type OuraToken interface {
 	UpsertToken(ctx context.Context, userID uuid.UUID, data json.RawMessage) error
 	GetTokenByOuraID(ctx context.Context, ouraID string) (uuid.UUID, json.RawMessage, error)
 	DeleteToken(ctx context.Context, userID uuid.UUID) error
+	GetTokensForUpdate(ctx context.Context, cutoff time.Time) ([]utvsqlc.OuraToken, error)
 }
 
 // PolarData interface
@@ -52,6 +54,7 @@ type PolarToken interface {
 	UpsertToken(ctx context.Context, userID uuid.UUID, data json.RawMessage) error
 	GetTokenByPolarID(ctx context.Context, polarID string) (uuid.UUID, json.RawMessage, error)
 	DeleteToken(ctx context.Context, userID uuid.UUID) error
+	GetTokensForUpdate(ctx context.Context, cutoff time.Time) ([]utvsqlc.PolarToken, error)
 }
 
 // SuuntoData interface
@@ -71,6 +74,7 @@ type SuuntoToken interface {
 	UpsertToken(ctx context.Context, userID uuid.UUID, data json.RawMessage) error
 	GetTokenByUsername(ctx context.Context, username string) (uuid.UUID, json.RawMessage, error)
 	DeleteToken(ctx context.Context, userID uuid.UUID) error
+	GetTokensForUpdate(ctx context.Context, cutoff time.Time) ([]utvsqlc.SuuntoToken, error)
 }
 
 // GarminData interface
@@ -91,6 +95,7 @@ type GarminToken interface {
 	TokenExists(ctx context.Context, token string) (bool, error)
 	GetUserIDByToken(ctx context.Context, token string) (uuid.UUID, error)
 	DeleteToken(ctx context.Context, userID uuid.UUID) error
+	GetTokensForUpdate(ctx context.Context, cutoff time.Time) ([]utvsqlc.GarminToken, error)
 }
 
 // KlabToken interface

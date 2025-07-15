@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"time"
 
 	utvsqlc "github.com/DeRuina/KUHA-REST-API/internal/db/utv"
 	"github.com/google/uuid"
@@ -43,4 +44,9 @@ func (s *GarminTokenStore) GetUserIDByToken(ctx context.Context, token string) (
 func (s *GarminTokenStore) DeleteToken(ctx context.Context, userID uuid.UUID) error {
 	queries := utvsqlc.New(s.db)
 	return queries.DeleteGarminToken(ctx, userID)
+}
+
+func (s *GarminTokenStore) GetTokensForUpdate(ctx context.Context, cutoff time.Time) ([]utvsqlc.GarminToken, error) {
+	queries := utvsqlc.New(s.db)
+	return queries.GetGarminTokensForUpdate(ctx, cutoff)
 }

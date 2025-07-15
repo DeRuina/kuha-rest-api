@@ -1953,3 +1953,115 @@ func (q *Queries) DeleteSuuntoToken(ctx context.Context, userID uuid.UUID) error
 	_, err := q.exec(ctx, q.deleteSuuntoTokenStmt, deleteSuuntoToken, userID)
 	return err
 }
+
+const getGarminTokensForUpdate = `-- name: GetGarminTokensForUpdate :many
+SELECT user_id, data FROM garmin_tokens
+WHERE (data ->> 'token_last_refreshed')::timestamp < $1::timestamp
+`
+
+func (q *Queries) GetGarminTokensForUpdate(ctx context.Context, cutoff time.Time) ([]GarminToken, error) {
+	rows, err := q.query(ctx, q.getGarminTokensForUpdateStmt, getGarminTokensForUpdate, cutoff)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GarminToken
+	for rows.Next() {
+		var i GarminToken
+		if err := rows.Scan(&i.UserID, &i.Data); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getOuraTokensForUpdate = `-- name: GetOuraTokensForUpdate :many
+SELECT user_id, data FROM oura_tokens
+WHERE (data ->> 'token_last_refreshed')::timestamp < $1::timestamp
+`
+
+func (q *Queries) GetOuraTokensForUpdate(ctx context.Context, cutoff time.Time) ([]OuraToken, error) {
+	rows, err := q.query(ctx, q.getOuraTokensForUpdateStmt, getOuraTokensForUpdate, cutoff)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []OuraToken
+	for rows.Next() {
+		var i OuraToken
+		if err := rows.Scan(&i.UserID, &i.Data); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPolarTokensForUpdate = `-- name: GetPolarTokensForUpdate :many
+SELECT user_id, data FROM polar_tokens
+WHERE (data ->> 'token_last_refreshed')::timestamp < $1::timestamp
+`
+
+func (q *Queries) GetPolarTokensForUpdate(ctx context.Context, cutoff time.Time) ([]PolarToken, error) {
+	rows, err := q.query(ctx, q.getPolarTokensForUpdateStmt, getPolarTokensForUpdate, cutoff)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []PolarToken
+	for rows.Next() {
+		var i PolarToken
+		if err := rows.Scan(&i.UserID, &i.Data); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSuuntoTokensForUpdate = `-- name: GetSuuntoTokensForUpdate :many
+SELECT user_id, data FROM suunto_tokens
+WHERE (data ->> 'token_last_refreshed')::timestamp < $1::timestamp
+`
+
+func (q *Queries) GetSuuntoTokensForUpdate(ctx context.Context, cutoff time.Time) ([]SuuntoToken, error) {
+	rows, err := q.query(ctx, q.getSuuntoTokensForUpdateStmt, getSuuntoTokensForUpdate, cutoff)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []SuuntoToken
+	for rows.Next() {
+		var i SuuntoToken
+		if err := rows.Scan(&i.UserID, &i.Data); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

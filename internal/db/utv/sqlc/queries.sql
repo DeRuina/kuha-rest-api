@@ -501,3 +501,18 @@ DELETE FROM suunto_tokens WHERE user_id = $1;
 -- name: DeleteKlabToken :exec
 DELETE FROM klab_tokens WHERE user_id = $1;
 
+-- name: GetPolarTokensForUpdate :many
+SELECT user_id, data FROM polar_tokens
+WHERE (data ->> 'token_last_refreshed')::timestamp < sqlc.arg(cutoff)::timestamp;
+
+-- name: GetOuraTokensForUpdate :many
+SELECT user_id, data FROM oura_tokens
+WHERE (data ->> 'token_last_refreshed')::timestamp < sqlc.arg(cutoff)::timestamp;
+
+-- name: GetGarminTokensForUpdate :many
+SELECT user_id, data FROM garmin_tokens
+WHERE (data ->> 'token_last_refreshed')::timestamp < sqlc.arg(cutoff)::timestamp;
+
+-- name: GetSuuntoTokensForUpdate :many
+SELECT user_id, data FROM suunto_tokens
+WHERE (data ->> 'token_last_refreshed')::timestamp < sqlc.arg(cutoff)::timestamp;

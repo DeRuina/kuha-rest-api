@@ -2501,6 +2501,51 @@ paths:
       summary: Get available types
       tags:
       - UTV - Suunto
+  /utv/tokens4update:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves tokens that need to be updated based on the source and
+        time cutoff
+      parameters:
+      - description: 'Source device (one of: ''polar'', ''oura'', ''suunto'', ''garmin'')'
+        in: query
+        name: source
+        required: true
+        type: string
+      - description: Number of hours to look back (1-8760)
+        in: query
+        name: hours
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of tokens needing update
+          schema:
+            items:
+              $ref: '#/definitions/swagger.PolarTokenInput'
+            type: array
+        "204":
+          description: 'No Content: No tokens found'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get tokens for update
+      tags:
+      - UTV - General
 securityDefinitions:
   BearerAuth:
     description: 'Use format: Bearer your_JWT_here'

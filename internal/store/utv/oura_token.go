@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"time"
 
 	utvsqlc "github.com/DeRuina/KUHA-REST-API/internal/db/utv"
 	"github.com/google/uuid"
@@ -42,4 +43,9 @@ func (s *OuraTokenStore) GetTokenByOuraID(ctx context.Context, ouraID string) (u
 func (s *OuraTokenStore) DeleteToken(ctx context.Context, userID uuid.UUID) error {
 	queries := utvsqlc.New(s.db)
 	return queries.DeleteOuraToken(ctx, userID)
+}
+
+func (s *OuraTokenStore) GetTokensForUpdate(ctx context.Context, cutoff time.Time) ([]utvsqlc.OuraToken, error) {
+	queries := utvsqlc.New(s.db)
+	return queries.GetOuraTokensForUpdate(ctx, cutoff)
 }

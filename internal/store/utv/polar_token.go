@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"time"
 
 	utvsqlc "github.com/DeRuina/KUHA-REST-API/internal/db/utv"
 	"github.com/google/uuid"
@@ -42,4 +43,9 @@ func (s *PolarTokenStore) GetTokenByPolarID(ctx context.Context, polarID string)
 func (s *PolarTokenStore) DeleteToken(ctx context.Context, userID uuid.UUID) error {
 	queries := utvsqlc.New(s.db)
 	return queries.DeletePolarToken(ctx, userID)
+}
+
+func (s *PolarTokenStore) GetTokensForUpdate(ctx context.Context, cutoff time.Time) ([]utvsqlc.PolarToken, error) {
+	queries := utvsqlc.New(s.db)
+	return queries.GetPolarTokensForUpdate(ctx, cutoff)
 }

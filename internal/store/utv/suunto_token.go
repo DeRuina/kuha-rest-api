@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"time"
 
 	utvsqlc "github.com/DeRuina/KUHA-REST-API/internal/db/utv"
 	"github.com/google/uuid"
@@ -42,4 +43,9 @@ func (s *SuuntoTokenStore) GetTokenByUsername(ctx context.Context, username stri
 func (s *SuuntoTokenStore) DeleteToken(ctx context.Context, userID uuid.UUID) error {
 	queries := utvsqlc.New(s.db)
 	return queries.DeleteSuuntoToken(ctx, userID)
+}
+
+func (s *SuuntoTokenStore) GetTokensForUpdate(ctx context.Context, cutoff time.Time) ([]utvsqlc.SuuntoToken, error) {
+	queries := utvsqlc.New(s.db)
+	return queries.GetSuuntoTokensForUpdate(ctx, cutoff)
 }

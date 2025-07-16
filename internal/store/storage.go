@@ -5,6 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/DeRuina/KUHA-REST-API/internal/db"
+	"github.com/DeRuina/KUHA-REST-API/internal/store/archinisis"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/auth"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/fis"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/kamk"
@@ -52,25 +53,31 @@ type Klab interface {
 	Ping(ctx context.Context) error
 }
 
+type Archinisis interface {
+	Ping(ctx context.Context) error
+}
+
 // Storage struct for multiple databases
 type Storage struct {
-	FIS       FIS
-	UTV       UTV
-	Auth      Auth
-	Tietoevry Tietoevry
-	KAMK      KAMK
-	KLAB      Klab
+	FIS        FIS
+	UTV        UTV
+	Auth       Auth
+	Tietoevry  Tietoevry
+	KAMK       KAMK
+	KLAB       Klab
+	ARCHINISIS Archinisis
 }
 
 // Initializes storage for multiple databases
 func NewStorage(databases *db.Database) *Storage {
 	return &Storage{
-		FIS:       fis.NewFISStorage(databases.FIS),
-		UTV:       utv.NewUTVStorage(databases.UTV),
-		Auth:      auth.NewAuthStorage(databases.Auth),
-		Tietoevry: tietoevry.NewTietoevryStorage(databases.Tietoevry),
-		KAMK:      kamk.NewKAMKStorage(databases.KAMK),
-		KLAB:      klab.NewkLABStorage(databases.KLAB),
+		FIS:        fis.NewFISStorage(databases.FIS),
+		UTV:        utv.NewUTVStorage(databases.UTV),
+		Auth:       auth.NewAuthStorage(databases.Auth),
+		Tietoevry:  tietoevry.NewTietoevryStorage(databases.Tietoevry),
+		KAMK:       kamk.NewKAMKStorage(databases.KAMK),
+		KLAB:       klab.NewKLABStorage(databases.KLAB),
+		ARCHINISIS: archinisis.NewArchinisisStorage(databases.ARCHINISIS),
 	}
 }
 

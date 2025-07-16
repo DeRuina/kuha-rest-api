@@ -6,18 +6,18 @@ import (
 )
 
 // kLABStorage
-type kLABStorage struct {
+type KLABStorage struct {
 	db *sql.DB
 }
 
 // Methods
-func (s *kLABStorage) Ping(ctx context.Context) error {
+func (s *KLABStorage) Ping(ctx context.Context) error {
 	return s.db.PingContext(ctx)
 }
 
-// NewkLABStorage creates a new kLABStorage instance
-func NewkLABStorage(db *sql.DB) *kLABStorage {
-	return &kLABStorage{
+// NewKLABStorage creates a new KLABStorage instance
+func NewKLABStorage(db *sql.DB) *KLABStorage {
+	return &KLABStorage{
 		db: db,
 	}
 }

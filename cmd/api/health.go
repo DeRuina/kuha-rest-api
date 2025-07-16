@@ -95,6 +95,14 @@ func (app *api) healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 		data["db_klab"] = "ok"
 	}
 
+	if err := app.store.ARCHINISIS.Ping(ctx); err != nil {
+		data["db_archinisis"] = "unreachable"
+		status = "fail"
+		statusCode = http.StatusInternalServerError
+	} else {
+		data["db_archinisis"] = "ok"
+	}
+
 	data["uptime_seconds"] = int64(time.Since(startTime).Seconds())
 	data["goroutines"] = runtime.NumGoroutine()
 

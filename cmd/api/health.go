@@ -87,6 +87,14 @@ func (app *api) healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 		data["db_kamk"] = "ok"
 	}
 
+	if err := app.store.KLAB.Ping(ctx); err != nil {
+		data["db_klab"] = "unreachable"
+		status = "fail"
+		statusCode = http.StatusInternalServerError
+	} else {
+		data["db_klab"] = "ok"
+	}
+
 	data["uptime_seconds"] = int64(time.Since(startTime).Seconds())
 	data["goroutines"] = runtime.NumGoroutine()
 

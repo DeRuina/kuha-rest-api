@@ -75,6 +75,7 @@ type dbConfig struct {
 	authAddr      string
 	tietoevryAddr string
 	kamkAddr      string
+	klabAddr      string
 	maxOpenConns  int
 	maxIdleConns  int
 	maxIdleTime   string

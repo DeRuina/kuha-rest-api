@@ -38,6 +38,7 @@ func main() {
 			authAddr:      env.GetString("AUTH_DB_ADDR", ""),
 			tietoevryAddr: env.GetString("TIETOEVRY_DB_ADDR", ""),
 			kamkAddr:      env.GetString("KAMK_DB_ADDR", ""),
+			klabAddr:      env.GetString("KLAB_DB_ADDR", ""),
 			maxOpenConns:  env.GetInt("DB_MAX_OPEN_CONNS", 30),
 			maxIdleConns:  env.GetInt("DB_MAX_IDLE_CONNS", 30),
 			maxIdleTime:   env.GetString("DB_MAX_IDLE_TIME", "15m"),
@@ -98,7 +99,7 @@ func main() {
 	}
 
 	// Database
-	databases, err := db.New(cfg.db.fisAddr, cfg.db.utvAddr, cfg.db.authAddr, cfg.db.tietoevryAddr, cfg.db.kamkAddr, cfg.db.maxOpenConns, cfg.db.maxIdleConns, cfg.db.maxIdleTime)
+	databases, err := db.New(cfg.db.fisAddr, cfg.db.utvAddr, cfg.db.authAddr, cfg.db.tietoevryAddr, cfg.db.kamkAddr, cfg.db.klabAddr, cfg.db.maxOpenConns, cfg.db.maxIdleConns, cfg.db.maxIdleTime)
 	if err != nil {
 		logger.Logger.Fatal(err)
 	}
@@ -108,6 +109,7 @@ func main() {
 	defer databases.Auth.Close()
 	defer databases.Tietoevry.Close()
 	defer databases.KAMK.Close()
+	defer databases.KLAB.Close()
 	logger.Logger.Info("database connection pool established")
 
 	// Authentication
@@ -158,6 +160,13 @@ func main() {
 	expvar.Publish("database_kamk", expvar.Func(func() any {
 		if databases.KAMK != nil {
 			return databases.KAMK.Stats()
+		}
+		return nil
+	}))
+
+	expvar.Publish("database_klab", expvar.Func(func() any {
+		if databases.KLAB != nil {
+			return databases.KLAB.Stats()
 		}
 		return nil
 	}))

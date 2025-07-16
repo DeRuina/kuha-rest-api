@@ -14,6 +14,7 @@ type Database struct {
 	UTV       *sql.DB
 	Auth      *sql.DB
 	Tietoevry *sql.DB
+	KAMK      *sql.DB
 }
 
 func NewSingleDB(addr string, maxOpenConns, maxIdleConns int, maxIdleTime string) (*sql.DB, error) {
@@ -25,7 +26,7 @@ func NewSingleDB(addr string, maxOpenConns, maxIdleConns int, maxIdleTime string
 	return db, nil
 }
 
-func New(fisAddr, utvAddr, authAddr, tietoevryAddr string, maxOpenConns, maxIdleConns int, maxIdleTime string) (*Database, error) {
+func New(fisAddr, utvAddr, authAddr, tietoevryAddr, kamkAddr string, maxOpenConns, maxIdleConns int, maxIdleTime string) (*Database, error) {
 	fisDB, err := connectDB(fisAddr, maxOpenConns, maxIdleConns, maxIdleTime)
 	if err != nil {
 		return nil, err
@@ -46,7 +47,12 @@ func New(fisAddr, utvAddr, authAddr, tietoevryAddr string, maxOpenConns, maxIdle
 		return nil, err
 	}
 
-	return &Database{FIS: fisDB, UTV: utvDB, Auth: authDB, Tietoevry: tietoevryDB}, nil
+	kamkDB, err := connectDB(kamkAddr, maxOpenConns, maxIdleConns, maxIdleTime)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Database{FIS: fisDB, UTV: utvDB, Auth: authDB, Tietoevry: tietoevryDB, KAMK: kamkDB}, nil
 }
 
 func connectDB(addr string, maxOpenConns, maxIdleConns int, maxIdleTime string) (*sql.DB, error) {

@@ -79,6 +79,14 @@ func (app *api) healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 		data["db_tietoevry"] = "ok"
 	}
 
+	if err := app.store.KAMK.Ping(ctx); err != nil {
+		data["db_kamk"] = "unreachable"
+		status = "fail"
+		statusCode = http.StatusInternalServerError
+	} else {
+		data["db_kamk"] = "ok"
+	}
+
 	data["uptime_seconds"] = int64(time.Since(startTime).Seconds())
 	data["goroutines"] = runtime.NumGoroutine()
 

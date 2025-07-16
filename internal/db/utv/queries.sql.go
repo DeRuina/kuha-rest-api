@@ -2247,7 +2247,8 @@ WHERE coachtech_id = (
     FROM coachtech_ids 
     WHERE user_id = $1
 )
-AND summary_date BETWEEN $2 AND $3
+AND ($2::date IS NULL OR summary_date >= $2)
+AND ($3::date IS NULL OR summary_date <= $3)
 ORDER BY summary_date DESC
 `
 

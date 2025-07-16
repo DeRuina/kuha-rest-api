@@ -112,7 +112,7 @@ type KlabToken interface {
 // CoachtechData interface
 type CoachtechData interface {
 	GetStatus(ctx context.Context, userID uuid.UUID) (bool, error)
-	GetData(ctx context.Context, userID string, afterStr, beforeStr *string) ([]json.RawMessage, error)
+	GetData(ctx context.Context, userID uuid.UUID, after, before *time.Time) ([]json.RawMessage, error)
 }
 
 // UserData interface

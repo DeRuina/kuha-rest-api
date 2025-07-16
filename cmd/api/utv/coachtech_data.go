@@ -81,14 +81,15 @@ type CoachtechDataParams struct {
 // GetCoachtechData godoc
 //
 //	@Summary		Get Coachtech data
-//	@Description	Returns Coachtech data for a user between two dates
+//	@Description	Returns Coachtech data for a user
 //	@Tags			UTV - Coachtech
 //	@Accept			json
 //	@Produce		json
 //	@Param			user_id		query	string	true	"User ID (UUID)"
-//	@Param			after_date	query	string	false	"Start date (YYYY-MM-DD)"
-//	@Param			before_date	query	string	false	"End date (YYYY-MM-DD)"
+//	@Param			after_date	query	string	false	"Filter data after this date (YYYY-MM-DD)"
+//	@Param			before_date	query	string	false	"Filter data before this date (YYYY-MM-DD)"
 //	@Success		200
+//	@Success		204	"No Content"
 //	@Failure		400	{object}	swagger.ValidationErrorResponse
 //	@Failure		403	{object}	swagger.ForbiddenResponse
 //	@Failure		500	{object}	swagger.InternalServerErrorResponse
@@ -117,7 +118,31 @@ func (h *CoachtechDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err := h.store.GetData(r.Context(), params.UserID, &params.AfterDate, &params.BeforeDate)
+	userID, err := utils.ParseUUID(params.UserID)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	after, err := utils.ParseDatePtr(utils.NilIfEmpty(&params.AfterDate))
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	before, err := utils.ParseDatePtr(utils.NilIfEmpty(&params.BeforeDate))
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	// Validate date range
+	if after != nil && before != nil && after.After(*before) {
+		utils.UnprocessableEntityResponse(w, r, utils.ErrInvalidDateRange)
+		return
+	}
+
+	data, err := h.store.GetData(r.Context(), userID, after, before)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
 		return

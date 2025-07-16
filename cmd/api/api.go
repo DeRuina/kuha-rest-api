@@ -187,6 +187,7 @@ func (app *api) mount() http.Handler {
 				// Coachtech routes
 				r.Route("/coachtech", func(r chi.Router) {
 					r.Get("/status", coachtechHandler.GetStatus)
+					r.Get("/data", coachtechHandler.GetData)
 				})
 
 				// Oura routes

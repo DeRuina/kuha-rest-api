@@ -19,6 +19,9 @@ type OuraDataStore struct {
 
 // Get available dates from Oura data
 func (s *OuraDataStore) GetDates(ctx context.Context, userID string, startDate *string, endDate *string) ([]string, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 
 	uid, err := utils.ParseUUID(userID)
@@ -43,14 +46,8 @@ func (s *OuraDataStore) GetDates(ctx context.Context, userID string, startDate *
 		BeforeDate: utils.NullTimeIfEmpty(end),
 	}
 
-	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
-	defer cancel()
-
 	rawDates, err := queries.GetDatesFromOuraData(ctx, arg)
 	if err != nil {
-		if errors.Is(err, context.DeadlineExceeded) {
-			return nil, utils.ErrQueryTimeOut
-		}
 		return nil, err
 	}
 
@@ -64,6 +61,9 @@ func (s *OuraDataStore) GetDates(ctx context.Context, userID string, startDate *
 
 // Get all JSON keys (types) from Oura data for a specific date
 func (s *OuraDataStore) GetTypes(ctx context.Context, userID string, summaryDate string) ([]string, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 
 	uid, err := utils.ParseUUID(userID)
@@ -80,14 +80,8 @@ func (s *OuraDataStore) GetTypes(ctx context.Context, userID string, summaryDate
 		Date:   date,
 	}
 
-	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
-	defer cancel()
-
 	types, err := queries.GetTypesFromOuraData(ctx, arg)
 	if err != nil {
-		if errors.Is(err, context.DeadlineExceeded) {
-			return nil, utils.ErrQueryTimeOut
-		}
 		return nil, err
 	}
 
@@ -96,6 +90,9 @@ func (s *OuraDataStore) GetTypes(ctx context.Context, userID string, summaryDate
 
 // Get all data for a specific date (or filter by key)
 func (s *OuraDataStore) GetData(ctx context.Context, userID string, Date string, key *string) (json.RawMessage, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 
 	uid, err := utils.ParseUUID(userID)
@@ -106,9 +103,6 @@ func (s *OuraDataStore) GetData(ctx context.Context, userID string, Date string,
 	if err != nil {
 		return nil, err
 	}
-
-	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
-	defer cancel()
 
 	// If a key is provided, fetch only that specific type
 	if key != nil {
@@ -121,9 +115,6 @@ func (s *OuraDataStore) GetData(ctx context.Context, userID string, Date string,
 		if err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
 				return nil, nil
-			}
-			if errors.Is(err, context.DeadlineExceeded) {
-				return nil, utils.ErrQueryTimeOut
 			}
 			return nil, err
 		}
@@ -151,9 +142,6 @@ func (s *OuraDataStore) GetData(ctx context.Context, userID string, Date string,
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
-		if errors.Is(err, context.DeadlineExceeded) {
-			return nil, utils.ErrQueryTimeOut
-		}
 		return nil, err
 	}
 
@@ -162,6 +150,9 @@ func (s *OuraDataStore) GetData(ctx context.Context, userID string, Date string,
 
 // insertData inserts Oura data into the database
 func (s *OuraDataStore) InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 
 	arg := utvsqlc.InsertOuraDataParams{
@@ -170,24 +161,24 @@ func (s *OuraDataStore) InsertData(ctx context.Context, userID uuid.UUID, date t
 		Data:   data,
 	}
 
-	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
-	defer cancel()
-
 	return queries.InsertOuraData(ctx, arg)
 }
 
 // DeleteAllData deletes Oura data for a specific user
 func (s *OuraDataStore) DeleteAllData(ctx context.Context, userID uuid.UUID) (int64, error) {
-	queries := utvsqlc.New(s.db)
-
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
+
+	queries := utvsqlc.New(s.db)
 
 	return queries.DeleteAllOuraData(ctx, userID)
 }
 
 // GetLatestByType
 func (s *OuraDataStore) GetLatestByType(ctx context.Context, userID uuid.UUID, typ string, limit int32) ([]LatestDataEntry, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 
 	arg := utvsqlc.GetLatestOuraDataByTypeParams{
@@ -195,9 +186,6 @@ func (s *OuraDataStore) GetLatestByType(ctx context.Context, userID uuid.UUID, t
 		Type:   typ,
 		Limit:  limit,
 	}
-
-	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
-	defer cancel()
 
 	rows, err := queries.GetLatestOuraDataByType(ctx, arg)
 	if err != nil {
@@ -218,6 +206,9 @@ func (s *OuraDataStore) GetLatestByType(ctx context.Context, userID uuid.UUID, t
 
 // GetAllByType
 func (s *OuraDataStore) GetAllByType(ctx context.Context, userID uuid.UUID, typ string, after, before *time.Time) ([]LatestDataEntry, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 
 	arg := utvsqlc.GetDataByTypeOuraParams{
@@ -226,9 +217,6 @@ func (s *OuraDataStore) GetAllByType(ctx context.Context, userID uuid.UUID, typ 
 		AfterDate:  utils.NullTimeIfEmpty(after),
 		BeforeDate: utils.NullTimeIfEmpty(before),
 	}
-
-	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
-	defer cancel()
 
 	rows, err := queries.GetDataByTypeOura(ctx, arg)
 	if err != nil {

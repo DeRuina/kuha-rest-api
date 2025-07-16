@@ -19,6 +19,9 @@ type PolarDataStore struct {
 
 // Get available dates from Polar data
 func (s *PolarDataStore) GetDates(ctx context.Context, userID string, startDate *string, endDate *string) ([]string, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 
 	uid, err := utils.ParseUUID(userID)
@@ -43,14 +46,8 @@ func (s *PolarDataStore) GetDates(ctx context.Context, userID string, startDate 
 		BeforeDate: utils.NullTimeIfEmpty(end),
 	}
 
-	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
-	defer cancel()
-
 	rawDates, err := queries.GetDatesFromPolarData(ctx, arg)
 	if err != nil {
-		if errors.Is(err, context.DeadlineExceeded) {
-			return nil, utils.ErrQueryTimeOut
-		}
 		return nil, err
 	}
 
@@ -64,6 +61,9 @@ func (s *PolarDataStore) GetDates(ctx context.Context, userID string, startDate 
 
 // Get all JSON keys (types) from Polar data for a specific date
 func (s *PolarDataStore) GetTypes(ctx context.Context, userID string, summaryDate string) ([]string, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 
 	uid, err := utils.ParseUUID(userID)
@@ -80,14 +80,8 @@ func (s *PolarDataStore) GetTypes(ctx context.Context, userID string, summaryDat
 		Date:   date,
 	}
 
-	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
-	defer cancel()
-
 	types, err := queries.GetTypesFromPolarData(ctx, arg)
 	if err != nil {
-		if errors.Is(err, context.DeadlineExceeded) {
-			return nil, utils.ErrQueryTimeOut
-		}
 		return nil, err
 	}
 
@@ -96,6 +90,9 @@ func (s *PolarDataStore) GetTypes(ctx context.Context, userID string, summaryDat
 
 // Get all data for a specific date (or filter by key)
 func (s *PolarDataStore) GetData(ctx context.Context, userID string, Date string, key *string) (json.RawMessage, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 
 	uid, err := utils.ParseUUID(userID)
@@ -106,9 +103,6 @@ func (s *PolarDataStore) GetData(ctx context.Context, userID string, Date string
 	if err != nil {
 		return nil, err
 	}
-	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
-	defer cancel()
-
 	// If a key is provided, fetch only that specific type
 	if key != nil {
 		arg := utvsqlc.GetSpecificDataForDatePolarParams{
@@ -120,9 +114,6 @@ func (s *PolarDataStore) GetData(ctx context.Context, userID string, Date string
 		if err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
 				return nil, nil
-			}
-			if errors.Is(err, context.DeadlineExceeded) {
-				return nil, utils.ErrQueryTimeOut
 			}
 			return nil, err
 		}
@@ -150,9 +141,6 @@ func (s *PolarDataStore) GetData(ctx context.Context, userID string, Date string
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
-		if errors.Is(err, context.DeadlineExceeded) {
-			return nil, utils.ErrQueryTimeOut
-		}
 		return nil, err
 	}
 
@@ -161,6 +149,9 @@ func (s *PolarDataStore) GetData(ctx context.Context, userID string, Date string
 
 // insertData inserts Polar data into the database
 func (s *PolarDataStore) InsertData(ctx context.Context, userID uuid.UUID, date time.Time, data json.RawMessage) error {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 
 	arg := utvsqlc.InsertPolarDataParams{
@@ -169,24 +160,24 @@ func (s *PolarDataStore) InsertData(ctx context.Context, userID uuid.UUID, date 
 		Data:   data,
 	}
 
-	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
-	defer cancel()
-
 	return queries.InsertPolarData(ctx, arg)
 }
 
 // DeleteAllData deletes Polar data for a specific user
 func (s *PolarDataStore) DeleteAllData(ctx context.Context, userID uuid.UUID) (int64, error) {
-	queries := utvsqlc.New(s.db)
-
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
+
+	queries := utvsqlc.New(s.db)
 
 	return queries.DeleteAllPolarData(ctx, userID)
 }
 
 // GetLatestByType
 func (s *PolarDataStore) GetLatestByType(ctx context.Context, userID uuid.UUID, typ string, limit int32) ([]LatestDataEntry, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 
 	arg := utvsqlc.GetLatestPolarDataByTypeParams{
@@ -194,9 +185,6 @@ func (s *PolarDataStore) GetLatestByType(ctx context.Context, userID uuid.UUID, 
 		Type:   typ,
 		Limit:  limit,
 	}
-
-	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
-	defer cancel()
 
 	rows, err := queries.GetLatestPolarDataByType(ctx, arg)
 	if err != nil {
@@ -217,6 +205,9 @@ func (s *PolarDataStore) GetLatestByType(ctx context.Context, userID uuid.UUID, 
 
 // GetAllByType
 func (s *PolarDataStore) GetAllByType(ctx context.Context, userID uuid.UUID, typ string, after, before *time.Time) ([]LatestDataEntry, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 
 	arg := utvsqlc.GetDataByTypePolarParams{
@@ -225,9 +216,6 @@ func (s *PolarDataStore) GetAllByType(ctx context.Context, userID uuid.UUID, typ
 		AfterDate:  utils.NullTimeIfEmpty(after),
 		BeforeDate: utils.NullTimeIfEmpty(before),
 	}
-
-	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
-	defer cancel()
 
 	rows, err := queries.GetDataByTypePolar(ctx, arg)
 	if err != nil {

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	utvsqlc "github.com/DeRuina/KUHA-REST-API/internal/db/utv"
+	"github.com/DeRuina/KUHA-REST-API/internal/utils"
 	"github.com/google/uuid"
 )
 
@@ -15,6 +16,9 @@ type OuraTokenStore struct {
 }
 
 func (s *OuraTokenStore) GetStatus(ctx context.Context, userID uuid.UUID) (bool, bool, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 	row, err := queries.GetOuraStatus(ctx, userID)
 	if err != nil {
@@ -24,6 +28,9 @@ func (s *OuraTokenStore) GetStatus(ctx context.Context, userID uuid.UUID) (bool,
 }
 
 func (s *OuraTokenStore) UpsertToken(ctx context.Context, userID uuid.UUID, data json.RawMessage) error {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 	return queries.UpsertOuraToken(ctx, utvsqlc.UpsertOuraTokenParams{
 		UserID: userID,
@@ -32,6 +39,9 @@ func (s *OuraTokenStore) UpsertToken(ctx context.Context, userID uuid.UUID, data
 }
 
 func (s *OuraTokenStore) GetTokenByOuraID(ctx context.Context, ouraID string) (uuid.UUID, json.RawMessage, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 	row, err := queries.GetOuraTokenByOuraID(ctx, ouraID)
 	if err != nil {
@@ -41,16 +51,25 @@ func (s *OuraTokenStore) GetTokenByOuraID(ctx context.Context, ouraID string) (u
 }
 
 func (s *OuraTokenStore) DeleteToken(ctx context.Context, userID uuid.UUID) error {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 	return queries.DeleteOuraToken(ctx, userID)
 }
 
 func (s *OuraTokenStore) GetTokensForUpdate(ctx context.Context, cutoff time.Time) ([]utvsqlc.OuraToken, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 	return queries.GetOuraTokensForUpdate(ctx, cutoff)
 }
 
 func (s *OuraTokenStore) GetDataForUpdate(ctx context.Context, cutoff time.Time) ([]utvsqlc.OuraToken, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	queries := utvsqlc.New(s.db)
 	return queries.GetOuraDataForUpdate(ctx, cutoff)
 }

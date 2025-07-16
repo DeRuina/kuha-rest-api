@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
@@ -123,6 +124,12 @@ func logError(r *http.Request, msg string, err error, status int) {
 
 // 500 Internal Server Error
 func InternalServerError(w http.ResponseWriter, r *http.Request, err error) {
+	if errors.Is(err, context.DeadlineExceeded) {
+		logError(r, "Database timeout", err, http.StatusGatewayTimeout)
+		WriteJSONError(w, http.StatusGatewayTimeout, map[string]string{"error": ErrQueryTimeOut.Error()})
+		return
+	}
+
 	logError(r, "Internal server error", err, http.StatusInternalServerError)
 	WriteJSONError(w, http.StatusInternalServerError, map[string]string{"error": "the server encountered a problem"})
 }

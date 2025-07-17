@@ -43,6 +43,7 @@ type Auth interface {
 
 type Tietoevry interface {
 	Ping(ctx context.Context) error
+	Users() tietoevry.Users
 }
 
 type KAMK interface {

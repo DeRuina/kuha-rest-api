@@ -318,11 +318,44 @@ definitions:
     type: object
   swagger.HealthStatusResponse:
     properties:
-      env:
-        example: production
-        type: string
-      status:
+      api:
         example: ok
+        type: string
+      db_archinisis:
+        example: ok
+        type: string
+      db_auth:
+        example: ok
+        type: string
+      db_fis:
+        example: ok
+        type: string
+      db_kamk:
+        example: ok
+        type: string
+      db_klab:
+        example: ok
+        type: string
+      db_tietoevry:
+        example: ok
+        type: string
+      db_utv:
+        example: ok
+        type: string
+      env:
+        example: development
+        type: string
+      goroutines:
+        example: 21
+        type: integer
+      redis:
+        example: ok
+        type: string
+      uptime_seconds:
+        example: 149039
+        type: integer
+      version:
+        example: 1.2.1
         type: string
     type: object
   swagger.HeartRateData:
@@ -848,6 +881,43 @@ definitions:
         example: 3707.57
         type: number
     type: object
+  swagger.TietoevryUserUpsertInput:
+    properties:
+      id:
+        example: 7cffe6e0-3f28-43b6-b511-d836d3a9f7b5
+        type: string
+      profile_aerobic_threshold:
+        example: 140
+        type: integer
+      profile_anaerobic_threshold:
+        example: 165
+        type: integer
+      profile_birthdate:
+        description: ISO 8601
+        example: "1990-08-15"
+        type: string
+      profile_gender:
+        example: male
+        type: string
+      profile_height:
+        example: 178.2
+        type: number
+      profile_maximum_heart_rate:
+        example: 190
+        type: integer
+      profile_resting_heart_rate:
+        example: 60
+        type: integer
+      profile_vo2max:
+        example: 50
+        type: integer
+      profile_weight:
+        example: 72.5
+        type: number
+      sportti_id:
+        example: 12345
+        type: integer
+    type: object
   swagger.UnauthorizedError:
     properties:
       error:
@@ -1117,6 +1187,72 @@ paths:
       summary: Healthcheck
       tags:
       - Health
+  /tietoevry/users:
+    delete:
+      consumes:
+      - application/json
+      description: Removes a user by ID
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a user
+      tags:
+      - Tietoevry - User
+    post:
+      consumes:
+      - application/json
+      description: Upserts a user with the provided data
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.TietoevryUserUpsertInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: created
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Upsert user
+      tags:
+      - Tietoevry - User
   /utv/all:
     get:
       consumes:
@@ -2828,6 +2964,8 @@ paths:
       - UTV - General
   /utv/user:
     delete:
+      consumes:
+      - application/json
       description: Removes a user
       parameters:
       - description: User ID (UUID)
@@ -2835,6 +2973,8 @@ paths:
         name: user_id
         required: true
         type: string
+      produces:
+      - application/json
       responses:
         "200":
           description: OK

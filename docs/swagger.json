@@ -248,6 +248,110 @@
                 }
             }
         },
+        "/tietoevry/users": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Upserts a user with the provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tietoevry - User"
+                ],
+                "summary": "Upsert user",
+                "parameters": [
+                    {
+                        "description": "User data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/swagger.TietoevryUserUpsertInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "created"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Removes a user by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tietoevry - User"
+                ],
+                "summary": "Delete a user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID (UUID)",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/utv/all": {
             "get": {
                 "security": [
@@ -2999,6 +3103,12 @@
                     }
                 ],
                 "description": "Removes a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "UTV - User"
                 ],
@@ -3559,13 +3669,57 @@
         "swagger.HealthStatusResponse": {
             "type": "object",
             "properties": {
-                "env": {
-                    "type": "string",
-                    "example": "production"
-                },
-                "status": {
+                "api": {
                     "type": "string",
                     "example": "ok"
+                },
+                "db_archinisis": {
+                    "type": "string",
+                    "example": "ok"
+                },
+                "db_auth": {
+                    "type": "string",
+                    "example": "ok"
+                },
+                "db_fis": {
+                    "type": "string",
+                    "example": "ok"
+                },
+                "db_kamk": {
+                    "type": "string",
+                    "example": "ok"
+                },
+                "db_klab": {
+                    "type": "string",
+                    "example": "ok"
+                },
+                "db_tietoevry": {
+                    "type": "string",
+                    "example": "ok"
+                },
+                "db_utv": {
+                    "type": "string",
+                    "example": "ok"
+                },
+                "env": {
+                    "type": "string",
+                    "example": "development"
+                },
+                "goroutines": {
+                    "type": "integer",
+                    "example": 21
+                },
+                "redis": {
+                    "type": "string",
+                    "example": "ok"
+                },
+                "uptime_seconds": {
+                    "type": "integer",
+                    "example": 149039
+                },
+                "version": {
+                    "type": "string",
+                    "example": "1.2.1"
                 }
             }
         },
@@ -4327,6 +4481,56 @@
                 "totalTime": {
                     "type": "number",
                     "example": 3707.57
+                }
+            }
+        },
+        "swagger.TietoevryUserUpsertInput": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "7cffe6e0-3f28-43b6-b511-d836d3a9f7b5"
+                },
+                "profile_aerobic_threshold": {
+                    "type": "integer",
+                    "example": 140
+                },
+                "profile_anaerobic_threshold": {
+                    "type": "integer",
+                    "example": 165
+                },
+                "profile_birthdate": {
+                    "description": "ISO 8601",
+                    "type": "string",
+                    "example": "1990-08-15"
+                },
+                "profile_gender": {
+                    "type": "string",
+                    "example": "male"
+                },
+                "profile_height": {
+                    "type": "number",
+                    "example": 178.2
+                },
+                "profile_maximum_heart_rate": {
+                    "type": "integer",
+                    "example": 190
+                },
+                "profile_resting_heart_rate": {
+                    "type": "integer",
+                    "example": 60
+                },
+                "profile_vo2max": {
+                    "type": "integer",
+                    "example": 50
+                },
+                "profile_weight": {
+                    "type": "number",
+                    "example": 72.5
+                },
+                "sportti_id": {
+                    "type": "integer",
+                    "example": 12345
                 }
             }
         },

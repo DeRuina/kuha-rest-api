@@ -25,6 +25,7 @@ import (
 
 	authapi "github.com/DeRuina/KUHA-REST-API/cmd/api/auth"
 	fisapi "github.com/DeRuina/KUHA-REST-API/cmd/api/fis"
+	tietoevryapi "github.com/DeRuina/KUHA-REST-API/cmd/api/tietoevry"
 	utvapi "github.com/DeRuina/KUHA-REST-API/cmd/api/utv"
 )
 
@@ -132,6 +133,16 @@ func (app *api) mount() http.Handler {
 
 		r.Group(func(r chi.Router) {
 			r.Use(JWTMiddleware())
+
+			// Tietoevry routes
+			r.Route("/tietoevry", func(r chi.Router) {
+				//register handlers
+				userHandler := tietoevryapi.NewTietoevryUserHandler(app.store.Tietoevry.Users(), app.cacheStorage)
+
+				// User routes
+				r.Post("/users", userHandler.UpsertUser)
+				r.Delete("/users", userHandler.DeleteUser)
+			})
 
 			// FIS routes
 			r.Route("/fis", func(r chi.Router) {

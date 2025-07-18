@@ -157,6 +157,8 @@ func (h *UserDataHandler) UpsertUserData(w http.ResponseWriter, r *http.Request)
 //	@Summary		Delete a user
 //	@Description	Removes a user
 //	@Tags			UTV - User
+//	@Accept			json
+//	@Produce		json
 //	@Param			user_id	query	string	true	"User ID (UUID)"
 //	@Success		200
 //	@Failure		400	{object}	swagger.ValidationErrorResponse

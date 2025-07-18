@@ -12,7 +12,7 @@ import (
 
 type Users interface {
 	UpsertUser(ctx context.Context, arg tietoevrysqlc.UpsertUserParams) error
-	DeleteUser(ctx context.Context, id uuid.UUID) error
+	DeleteUser(ctx context.Context, id uuid.UUID) (int64, error)
 }
 
 // TietoevryStorage

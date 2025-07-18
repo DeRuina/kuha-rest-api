@@ -337,7 +337,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "User deleted successfully"
+                    },
+                    "204": {
+                        "description": "No content, user not found"
                     },
                     "400": {
                         "description": "Bad Request",

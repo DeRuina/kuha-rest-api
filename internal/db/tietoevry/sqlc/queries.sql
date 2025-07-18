@@ -20,6 +20,6 @@ ON CONFLICT (id) DO UPDATE SET
     profile_anaerobic_threshold = EXCLUDED.profile_anaerobic_threshold,
     profile_vo2max = EXCLUDED.profile_vo2max;
 
--- name: DeleteUser :exec
+-- name: DeleteUser :execrows
 DELETE FROM users
 WHERE id = $1;

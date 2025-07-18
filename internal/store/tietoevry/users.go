@@ -21,7 +21,7 @@ func (s *UserStore) UpsertUser(ctx context.Context, arg tietoevrysqlc.UpsertUser
 	return q.UpsertUser(ctx, arg)
 }
 
-func (s *UserStore) DeleteUser(ctx context.Context, id uuid.UUID) error {
+func (s *UserStore) DeleteUser(ctx context.Context, id uuid.UUID) (int64, error) {
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 

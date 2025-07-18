@@ -113,7 +113,8 @@ func (h *TietoevryUserHandler) UpsertUser(w http.ResponseWriter, r *http.Request
 //	@Accept			json
 //	@Produce		json
 //	@Param			id	query	string	true	"User ID (UUID)"
-//	@Success		200
+//	@Success		200 "User deleted successfully"
+//	@Success		204 "No content, user not found"
 //	@Failure		400	{object}	swagger.ValidationErrorResponse
 //	@Failure		403	{object}	swagger.ForbiddenResponse
 //	@Failure		500	{object}	swagger.InternalServerErrorResponse
@@ -145,10 +146,17 @@ func (h *TietoevryUserHandler) DeleteUser(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	if err := h.store.DeleteUser(r.Context(), userID); err != nil {
+	rows, err := h.store.DeleteUser(r.Context(), userID)
+	if err != nil {
 		utils.InternalServerError(w, r, err)
 		return
 	}
 
+	if rows == 0 {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
+
 }

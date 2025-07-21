@@ -119,7 +119,7 @@ func (h *PolarTokenHandler) UpsertToken(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if err := h.store.UpsertToken(r.Context(), userID, input.Details); err != nil {
-		utils.InternalServerError(w, r, err)
+		utils.HandleDatabaseError(w, r, err)
 		return
 	}
 

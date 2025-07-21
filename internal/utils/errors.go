@@ -5,10 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/DeRuina/KUHA-REST-API/internal/logger"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-playground/validator/v10"
+	"github.com/lib/pq"
 )
 
 // Errors
@@ -45,6 +47,12 @@ var (
 	ErrInvalidSource       = errors.New("invalid source. Please use one of the allowed devices")
 	ErrInvalidSportID      = errors.New("invalid sport_id format")
 	ErrInvalidnumericValue = errors.New("value must be numeric")
+
+	// Database constraint errors
+	ErrUserNotFound        = errors.New("user does not exist. Please create the user first")
+	ErrExerciseNotFound    = errors.New("exercise does not exist")
+	ErrForeignKeyViolation = errors.New("referenced record does not exist")
+	ErrInvalidExerciseData = errors.New("exercise data contains invalid references")
 )
 
 func FormatValidationErrors(err error) map[string]string {
@@ -214,6 +222,41 @@ func ForbiddenResponse(w http.ResponseWriter, r *http.Request, err error) {
 func ConflictResponse(w http.ResponseWriter, r *http.Request, err error) {
 	logError(r, "Conflict", err, http.StatusConflict)
 	WriteJSONError(w, http.StatusConflict, map[string]string{"error": err.Error()})
+}
+
+// HandleDatabaseError analyzes database errors and returns appropriate HTTP responses - defualt 500 Internal Server Error
+func HandleDatabaseError(w http.ResponseWriter, r *http.Request, err error) {
+	// Check if it's a PostgreSQL error
+	if pqErr, ok := err.(*pq.Error); ok {
+		switch pqErr.Code {
+		case "23503": // foreign_key_violation
+			if strings.Contains(pqErr.Message, "user_id") || strings.Contains(pqErr.Detail, "user_id") {
+				BadRequestResponse(w, r, ErrUserNotFound)
+				return
+			} else if strings.Contains(pqErr.Message, "exercise_id") || strings.Contains(pqErr.Detail, "exercise_id") {
+				BadRequestResponse(w, r, ErrInvalidExerciseData)
+				return
+			}
+			// Generic foreign key violation
+			BadRequestResponse(w, r, ErrForeignKeyViolation)
+			return
+		case "23505": // unique_violation
+			ConflictResponse(w, r, errors.New("record already exists"))
+			return
+		case "23514": // check_violation
+			BadRequestResponse(w, r, errors.New("data violates database constraints"))
+			return
+		}
+	}
+
+	// Check for context timeout
+	if errors.Is(err, context.DeadlineExceeded) {
+		InternalServerError(w, r, ErrQueryTimeOut)
+		return
+	}
+
+	// Default to internal server error
+	InternalServerError(w, r, err)
 }
 
 // 429 Too Many Requests

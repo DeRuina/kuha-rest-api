@@ -98,7 +98,7 @@ func (h *TietoevryUserHandler) UpsertUser(w http.ResponseWriter, r *http.Request
 	}
 
 	if err := h.store.UpsertUser(r.Context(), arg); err != nil {
-		utils.InternalServerError(w, r, err)
+		utils.HandleDatabaseError(w, r, err)
 		return
 	}
 
@@ -148,7 +148,7 @@ func (h *TietoevryUserHandler) DeleteUser(w http.ResponseWriter, r *http.Request
 
 	rows, err := h.store.DeleteUser(r.Context(), userID)
 	if err != nil {
-		utils.InternalServerError(w, r, err)
+		utils.HandleDatabaseError(w, r, err)
 		return
 	}
 

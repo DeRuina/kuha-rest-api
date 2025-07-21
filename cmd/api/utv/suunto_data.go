@@ -318,7 +318,7 @@ func (h *SuuntoDataHandler) InsertData(w http.ResponseWriter, r *http.Request) {
 
 	err = h.store.InsertData(r.Context(), userID, date, input.Data)
 	if err != nil {
-		utils.InternalServerError(w, r, err)
+		utils.HandleDatabaseError(w, r, err)
 		return
 	}
 

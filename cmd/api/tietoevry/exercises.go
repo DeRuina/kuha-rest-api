@@ -248,7 +248,7 @@ func (h *TietoevryExerciseHandler) UpsertExercise(w http.ResponseWriter, r *http
 	}
 
 	if err := h.store.InsertExerciseBundle(r.Context(), payload); err != nil {
-		utils.InternalServerError(w, r, err)
+		utils.HandleDatabaseError(w, r, err)
 		return
 	}
 

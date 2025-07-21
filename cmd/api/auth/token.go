@@ -47,7 +47,7 @@ func (h *AuthHandler) IssueTokens(w http.ResponseWriter, r *http.Request) {
 
 	tokens, err := h.store.IssueToken(r.Context(), req.ClientToken, ip, userAgent)
 	if err != nil {
-		utils.UnauthorizedResponse(w, r, err)
+		utils.HandleDatabaseError(w, r, err)
 		return
 	}
 

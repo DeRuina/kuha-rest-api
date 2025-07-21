@@ -36,13 +36,22 @@ func (a *AuthStorage) IssueToken(ctx context.Context, clientTokenRaw, ip, userAg
 		return nil, errors.New("invalid client_token")
 	}
 
+	// Start a transaction to ensure atomicity
+	tx, err := a.db.BeginTx(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback() // This will be a no-op if the transaction is committed
+
+	queries := authsqlc.New(tx)
+
 	// Check and revoke old refresh token
-	old, err := a.queries.GetRefreshTokenByClient(ctx, clientToken)
+	old, err := queries.GetRefreshTokenByClient(ctx, clientToken)
 	if err == nil {
-		if err := a.queries.DeleteRefreshToken(ctx, old.Token); err != nil {
+		if err := queries.DeleteRefreshToken(ctx, old.Token); err != nil {
 			return nil, err
 		}
-		if err := a.queries.CreateRevokedRefreshToken(ctx, old.Token); err != nil {
+		if err := queries.CreateRevokedRefreshToken(ctx, old.Token); err != nil {
 			return nil, err
 		}
 
@@ -51,7 +60,7 @@ func (a *AuthStorage) IssueToken(ctx context.Context, clientTokenRaw, ip, userAg
 			return nil, err
 		}
 
-		if err := a.queries.InsertTokenLog(ctx, authsqlc.InsertTokenLogParams{
+		if err := queries.InsertTokenLog(ctx, authsqlc.InsertTokenLogParams{
 			ClientToken: clientToken,
 			TokenType:   "refresh",
 			Action:      "revoked",
@@ -70,7 +79,7 @@ func (a *AuthStorage) IssueToken(ctx context.Context, clientTokenRaw, ip, userAg
 		return nil, err
 	}
 	expires := time.Now().Add(90 * 24 * time.Hour)
-	if err := a.queries.CreateRefreshToken(ctx, authsqlc.CreateRefreshTokenParams{
+	if err := queries.CreateRefreshToken(ctx, authsqlc.CreateRefreshTokenParams{
 		ClientToken: clientToken,
 		Token:       refresh,
 		ExpiresAt:   expires,
@@ -94,7 +103,7 @@ func (a *AuthStorage) IssueToken(ctx context.Context, clientTokenRaw, ip, userAg
 		return nil, err
 	}
 
-	if err := a.queries.InsertTokenLog(ctx, authsqlc.InsertTokenLogParams{
+	if err := queries.InsertTokenLog(ctx, authsqlc.InsertTokenLogParams{
 		ClientToken: clientToken,
 		TokenType:   "refresh",
 		Action:      "issued",
@@ -106,7 +115,7 @@ func (a *AuthStorage) IssueToken(ctx context.Context, clientTokenRaw, ip, userAg
 		return nil, err
 	}
 
-	if err := a.queries.InsertTokenLog(ctx, authsqlc.InsertTokenLogParams{
+	if err := queries.InsertTokenLog(ctx, authsqlc.InsertTokenLogParams{
 		ClientToken: clientToken,
 		TokenType:   "jwt",
 		Action:      "issued",
@@ -115,6 +124,11 @@ func (a *AuthStorage) IssueToken(ctx context.Context, clientTokenRaw, ip, userAg
 		UserAgent:   sql.NullString{String: userAgent, Valid: true},
 		Metadata:    metaJWT,
 	}); err != nil {
+		return nil, err
+	}
+
+	// Commit the transaction if all operations succeeded
+	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
 

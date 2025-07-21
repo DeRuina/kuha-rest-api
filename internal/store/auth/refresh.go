@@ -39,6 +39,15 @@ func (a *AuthStorage) RefreshToken(ctx context.Context, refreshToken, ip, userAg
 		return "", err
 	}
 
+	// Start a transaction to ensure atomicity
+	tx, err := a.db.BeginTx(ctx, nil)
+	if err != nil {
+		return "", err
+	}
+	defer tx.Rollback() // This will be a no-op if the transaction is committed
+
+	queries := authsqlc.New(tx)
+
 	metaRefresh := pqtype.NullRawMessage{Valid: true}
 	if err := metaRefresh.Scan([]byte(`{"reason":"used refresh"}`)); err != nil {
 		return "", err
@@ -49,7 +58,7 @@ func (a *AuthStorage) RefreshToken(ctx context.Context, refreshToken, ip, userAg
 		return "", err
 	}
 
-	if err := a.queries.InsertTokenLog(ctx, authsqlc.InsertTokenLogParams{
+	if err := queries.InsertTokenLog(ctx, authsqlc.InsertTokenLogParams{
 		ClientToken: tokenData.ClientToken,
 		TokenType:   "refresh",
 		Action:      "used",
@@ -61,7 +70,7 @@ func (a *AuthStorage) RefreshToken(ctx context.Context, refreshToken, ip, userAg
 		return "", err
 	}
 
-	if err := a.queries.InsertTokenLog(ctx, authsqlc.InsertTokenLogParams{
+	if err := queries.InsertTokenLog(ctx, authsqlc.InsertTokenLogParams{
 		ClientToken: tokenData.ClientToken,
 		TokenType:   "jwt",
 		Action:      "issued",
@@ -70,6 +79,11 @@ func (a *AuthStorage) RefreshToken(ctx context.Context, refreshToken, ip, userAg
 		UserAgent:   sql.NullString{String: userAgent, Valid: true},
 		Metadata:    metaJWT,
 	}); err != nil {
+		return "", err
+	}
+
+	// Commit the transaction if all operations succeeded
+	if err := tx.Commit(); err != nil {
 		return "", err
 	}
 

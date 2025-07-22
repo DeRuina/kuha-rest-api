@@ -263,7 +263,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Insert a new exercise bundle (main + zones + samples + sections)",
+                "description": "Insert multiple exercise bundles with idempotent behavior",
                 "consumes": [
                     "application/json"
                 ],
@@ -273,7 +273,7 @@ const docTemplate = `{
                 "tags": [
                     "Tietoevry - Exercise"
                 ],
-                "summary": "Insert exercise",
+                "summary": "Insert exercise (bulk)",
                 "parameters": [
                     {
                         "description": "Exercise data",
@@ -281,13 +281,13 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/swagger.TietoevryExerciseUpsertInput"
+                            "$ref": "#/definitions/swagger.TietoevryExercisesBulkInput"
                         }
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "created"
+                        "description": "Exercises processed successfully (idempotent operation)"
                     },
                     "400": {
                         "description": "Bad Request",
@@ -317,7 +317,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Insert a symptom records",
+                "description": "Insert multiple symptoms with idempotent behavior",
                 "consumes": [
                     "application/json"
                 ],
@@ -325,23 +325,23 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tietoevry - Symptom"
+                    "Tietoevry - Symptoms"
                 ],
-                "summary": "Insert symptoms",
+                "summary": "Insert symptoms (bulk)",
                 "parameters": [
                     {
                         "description": "Symptom data",
-                        "name": "symptom",
+                        "name": "symptoms",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/swagger.TietoevrySymptomInput"
+                            "$ref": "#/definitions/swagger.TietoevrySymptomsBulkInput"
                         }
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "created"
+                        "description": "Symptoms processed successfully (idempotent operation)"
                     },
                     "400": {
                         "description": "Bad Request",
@@ -4851,6 +4851,20 @@ const docTemplate = `{
                 }
             }
         },
+        "swagger.TietoevryExercisesBulkInput": {
+            "type": "object",
+            "required": [
+                "exercises"
+            ],
+            "properties": {
+                "exercises": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.TietoevryExerciseUpsertInput"
+                    }
+                }
+            }
+        },
         "swagger.TietoevrySymptomInput": {
             "type": "object",
             "required": [
@@ -4927,6 +4941,20 @@ const docTemplate = `{
                 "user_id": {
                     "type": "string",
                     "example": "7cffe6e0-3f28-43b6-b511-d836d3a9f7b5"
+                }
+            }
+        },
+        "swagger.TietoevrySymptomsBulkInput": {
+            "type": "object",
+            "required": [
+                "symptoms"
+            ],
+            "properties": {
+                "symptoms": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.TietoevrySymptomInput"
+                    }
                 }
             }
         },

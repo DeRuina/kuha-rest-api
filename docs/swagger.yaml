@@ -1062,6 +1062,15 @@ definitions:
         example: 7cffe6e0-3f28-43b6-b511-d836d3a9f7b5
         type: string
     type: object
+  swagger.TietoevryExercisesBulkInput:
+    properties:
+      exercises:
+        items:
+          $ref: '#/definitions/swagger.TietoevryExerciseUpsertInput'
+        type: array
+    required:
+    - exercises
+    type: object
   swagger.TietoevrySymptomInput:
     properties:
       additional_data:
@@ -1121,6 +1130,15 @@ definitions:
     - symptom
     - updated_at
     - user_id
+    type: object
+  swagger.TietoevrySymptomsBulkInput:
+    properties:
+      symptoms:
+        items:
+          $ref: '#/definitions/swagger.TietoevrySymptomInput'
+        type: array
+    required:
+    - symptoms
     type: object
   swagger.TietoevryUserUpsertInput:
     properties:
@@ -1432,19 +1450,19 @@ paths:
     post:
       consumes:
       - application/json
-      description: Insert a new exercise bundle (main + zones + samples + sections)
+      description: Insert multiple exercise bundles with idempotent behavior
       parameters:
       - description: Exercise data
         in: body
         name: exercise
         required: true
         schema:
-          $ref: '#/definitions/swagger.TietoevryExerciseUpsertInput'
+          $ref: '#/definitions/swagger.TietoevryExercisesBulkInput'
       produces:
       - application/json
       responses:
         "201":
-          description: created
+          description: Exercises processed successfully (idempotent operation)
         "400":
           description: Bad Request
           schema:
@@ -1459,26 +1477,26 @@ paths:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
       security:
       - BearerAuth: []
-      summary: Insert exercise
+      summary: Insert exercise (bulk)
       tags:
       - Tietoevry - Exercise
   /tietoevry/symptoms:
     post:
       consumes:
       - application/json
-      description: Insert a symptom records
+      description: Insert multiple symptoms with idempotent behavior
       parameters:
       - description: Symptom data
         in: body
-        name: symptom
+        name: symptoms
         required: true
         schema:
-          $ref: '#/definitions/swagger.TietoevrySymptomInput'
+          $ref: '#/definitions/swagger.TietoevrySymptomsBulkInput'
       produces:
       - application/json
       responses:
         "201":
-          description: created
+          description: Symptoms processed successfully (idempotent operation)
         "400":
           description: Bad Request
           schema:
@@ -1493,9 +1511,9 @@ paths:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
       security:
       - BearerAuth: []
-      summary: Insert symptoms
+      summary: Insert symptoms (bulk)
       tags:
-      - Tietoevry - Symptom
+      - Tietoevry - Symptoms
   /tietoevry/users:
     delete:
       consumes:

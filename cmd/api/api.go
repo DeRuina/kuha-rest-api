@@ -146,10 +146,10 @@ func (app *api) mount() http.Handler {
 				r.Delete("/users", userHandler.DeleteUser)
 
 				// Exercise routes
-				r.Post("/exercises", exerciseHandler.InsertExercise)
+				r.Post("/exercises", exerciseHandler.InsertExercisesBulk)
 
 				// Symptom routes
-				r.Post("/symptoms", symptomHandler.InsertSymptom)
+				r.Post("/symptoms", symptomHandler.InsertSymptomsBulk)
 			})
 
 			// FIS routes

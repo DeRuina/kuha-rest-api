@@ -15,11 +15,11 @@ type Users interface {
 }
 
 type Exercises interface {
-	InsertExerciseBundle(ctx context.Context, input ExercisePayload) error
+	InsertExercisesBulk(ctx context.Context, exercises []ExercisePayload) error
 }
 
 type Symptoms interface {
-	InsertSymptom(ctx context.Context, arg tietoevrysqlc.InsertSymptomParams) error
+	InsertSymptomsBulk(ctx context.Context, symptoms []tietoevrysqlc.InsertSymptomParams) error
 }
 
 // TietoevryStorage

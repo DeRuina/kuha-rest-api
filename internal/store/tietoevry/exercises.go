@@ -25,45 +25,48 @@ func NewExercisesStore(db *sql.DB) *ExercisesStore {
 	}
 }
 
-func (s *ExercisesStore) InsertExerciseBundle(ctx context.Context, input ExercisePayload) error {
+func (s *ExercisesStore) InsertExercisesBulk(ctx context.Context, exercises []ExercisePayload) error {
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
-	// Start a transaction to ensure atomicity
+	// Start a transaction to ensure atomicity for ALL exercises
 	tx, err := s.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback() // This will be a no-op if the transaction is committed
+	defer tx.Rollback()
 
 	q := tietoevrysqlc.New(tx)
 
-	// 1. Insert base exercise
-	if err := q.InsertExercise(ctx, input.Exercise); err != nil {
-		return err
-	}
-
-	// 2. Insert HR zones
-	for _, zone := range input.HRZones {
-		if err := q.InsertExerciseHRZone(ctx, zone); err != nil {
+	// Process each exercise bundle
+	for _, exercise := range exercises {
+		// 1. Insert base exercise
+		if err := q.InsertExercise(ctx, exercise.Exercise); err != nil {
 			return err
+		}
+
+		// 2. Insert HR zones
+		for _, zone := range exercise.HRZones {
+			if err := q.InsertExerciseHRZone(ctx, zone); err != nil {
+				return err
+			}
+		}
+
+		// 3. Insert samples
+		for _, sample := range exercise.Samples {
+			if err := q.InsertExerciseSample(ctx, sample); err != nil {
+				return err
+			}
+		}
+
+		// 4. Insert sections
+		for _, section := range exercise.Sections {
+			if err := q.InsertExerciseSection(ctx, section); err != nil {
+				return err
+			}
 		}
 	}
 
-	// 3. Insert samples
-	for _, sample := range input.Samples {
-		if err := q.InsertExerciseSample(ctx, sample); err != nil {
-			return err
-		}
-	}
-
-	// 4. Insert sections
-	for _, section := range input.Sections {
-		if err := q.InsertExerciseSection(ctx, section); err != nil {
-			return err
-		}
-	}
-
-	// Commit the transaction if all inserts succeeded
+	// Commit the transaction if all exercises succeeded
 	return tx.Commit()
 }

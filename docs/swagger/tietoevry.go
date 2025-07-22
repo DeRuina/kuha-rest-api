@@ -101,3 +101,12 @@ type TietoevrySymptomInput struct {
 	Category       *string `json:"category" example:"joint"`
 	AdditionalData *string `json:"additional_data" example:"{\"intensity\": \"moderate\", \"duration\": \"30min\"}"`
 }
+
+// Bulk input types
+type TietoevryExercisesBulkInput struct {
+	Exercises []TietoevryExerciseUpsertInput `json:"exercises" validate:"required,dive"`
+}
+
+type TietoevrySymptomsBulkInput struct {
+	Symptoms []TietoevrySymptomInput `json:"symptoms" validate:"required,dive"`
+}

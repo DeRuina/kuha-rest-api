@@ -41,27 +41,31 @@ type TietoevrySymptomInput struct {
 	AdditionalData *string `json:"additional_data"` // JSON as string
 }
 
-// InsertSymptom godoc
+type TietoevrySymptomsBulkInput struct {
+	Symptoms []TietoevrySymptomInput `json:"symptoms" validate:"required,dive"`
+}
+
+// InsertSymptoms godoc
 //
-//	@Summary		Insert symptoms
-//	@Description	Insert a symptom records
-//	@Tags			Tietoevry - Symptom
+//	@Summary		Insert symptoms (bulk)
+//	@Description	Insert multiple symptoms with idempotent behavior
+//	@Tags			Tietoevry - Symptoms
 //	@Accept			json
 //	@Produce		json
-//	@Param			symptom	body	swagger.TietoevrySymptomInput	true	"Symptom data"
-//	@Success		201		"created"
-//	@Failure		400		{object}	swagger.ValidationErrorResponse
-//	@Failure		403		{object}	swagger.ForbiddenResponse
-//	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Param			symptoms	body	swagger.TietoevrySymptomsBulkInput	true	"Symptom data"
+//	@Success		201			"Symptoms processed successfully (idempotent operation)"
+//	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		403			{object}	swagger.ForbiddenResponse
+//	@Failure		500			{object}	swagger.InternalServerErrorResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/symptoms [post]
-func (h *TietoevrySymptomHandler) InsertSymptom(w http.ResponseWriter, r *http.Request) {
+func (h *TietoevrySymptomHandler) InsertSymptomsBulk(w http.ResponseWriter, r *http.Request) {
 	if !authz.Authorize(r) {
 		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
 		return
 	}
 
-	var input TietoevrySymptomInput
+	var input TietoevrySymptomsBulkInput
 	if err := utils.ReadJSON(w, r, &input); err != nil {
 		utils.BadRequestResponse(w, r, err)
 		return
@@ -71,66 +75,69 @@ func (h *TietoevrySymptomHandler) InsertSymptom(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	// Parse and convert values
-	id, err := utils.ParseUUID(input.ID)
-	if err != nil {
-		utils.BadRequestResponse(w, r, err)
-		return
+	// Convert to database parameters
+	symptoms := make([]tietoevrysqlc.InsertSymptomParams, len(input.Symptoms))
+	for i, symptom := range input.Symptoms {
+		// Parse and convert values
+		id, err := utils.ParseUUID(symptom.ID)
+		if err != nil {
+			utils.BadRequestResponse(w, r, err)
+			return
+		}
+
+		userID, err := utils.ParseUUID(symptom.UserID)
+		if err != nil {
+			utils.BadRequestResponse(w, r, err)
+			return
+		}
+
+		date, err := utils.ParseDate(symptom.Date)
+		if err != nil {
+			utils.BadRequestResponse(w, r, err)
+			return
+		}
+
+		createdAt, err := utils.ParseTimestamp(symptom.CreatedAt)
+		if err != nil {
+			utils.BadRequestResponse(w, r, err)
+			return
+		}
+
+		updatedAt, err := utils.ParseTimestamp(symptom.UpdatedAt)
+		if err != nil {
+			utils.BadRequestResponse(w, r, err)
+			return
+		}
+
+		originalID, err := utils.ParseUUIDPtr(symptom.OriginalID)
+		if err != nil {
+			utils.BadRequestResponse(w, r, err)
+			return
+		}
+
+		rawData := utils.ParseRawJSON(symptom.AdditionalData)
+
+		symptoms[i] = tietoevrysqlc.InsertSymptomParams{
+			ID:             id,
+			UserID:         userID,
+			Date:           date,
+			Symptom:        symptom.Symptom,
+			Severity:       symptom.Severity,
+			Comment:        utils.NullStringPtr(symptom.Comment),
+			Source:         symptom.Source,
+			CreatedAt:      createdAt,
+			UpdatedAt:      updatedAt,
+			RawID:          utils.NullStringPtr(symptom.RawID),
+			OriginalID:     originalID,
+			Recovered:      utils.NullBoolPtr(symptom.Recovered),
+			PainIndex:      utils.NullInt32Ptr(symptom.PainIndex),
+			Side:           utils.NullStringPtr(symptom.Side),
+			Category:       utils.NullStringPtr(symptom.Category),
+			AdditionalData: rawData,
+		}
 	}
 
-	userID, err := utils.ParseUUID(input.UserID)
-	if err != nil {
-		utils.BadRequestResponse(w, r, err)
-		return
-	}
-
-	date, err := utils.ParseDate(input.Date)
-	if err != nil {
-		utils.BadRequestResponse(w, r, err)
-		return
-	}
-
-	createdAt, err := utils.ParseTimestamp(input.CreatedAt)
-	if err != nil {
-		utils.BadRequestResponse(w, r, err)
-		return
-	}
-
-	updatedAt, err := utils.ParseTimestamp(input.UpdatedAt)
-	if err != nil {
-		utils.BadRequestResponse(w, r, err)
-		return
-	}
-
-	originalID, err := utils.ParseUUIDPtr(input.OriginalID)
-	if err != nil {
-		utils.BadRequestResponse(w, r, err)
-		return
-	}
-
-	rawData := utils.ParseRawJSON(input.AdditionalData)
-
-	// Construct param
-	arg := tietoevrysqlc.InsertSymptomParams{
-		ID:             id,
-		UserID:         userID,
-		Date:           date,
-		Symptom:        input.Symptom,
-		Severity:       input.Severity,
-		Comment:        utils.NullStringPtr(input.Comment),
-		Source:         input.Source,
-		CreatedAt:      createdAt,
-		UpdatedAt:      updatedAt,
-		RawID:          utils.NullStringPtr(input.RawID),
-		OriginalID:     originalID,
-		Recovered:      utils.NullBoolPtr(input.Recovered),
-		PainIndex:      utils.NullInt32Ptr(input.PainIndex),
-		Side:           utils.NullStringPtr(input.Side),
-		Category:       utils.NullStringPtr(input.Category),
-		AdditionalData: rawData,
-	}
-
-	if err := h.store.InsertSymptom(r.Context(), arg); err != nil {
+	if err := h.store.InsertSymptomsBulk(r.Context(), symptoms); err != nil {
 		utils.HandleDatabaseError(w, r, err)
 		return
 	}

@@ -90,9 +90,9 @@ type TietoevryExerciseUpsertInput struct {
 	Sections []SectionInput `json:"sections"`
 }
 
-// UpsertExercise godoc
+// InsertExercise godoc
 //
-//	@Summary		Upsert exercise
+//	@Summary		Insert exercise
 //	@Description	Insert a new exercise bundle (main + zones + samples + sections)
 //	@Tags			Tietoevry - Exercise
 //	@Accept			json

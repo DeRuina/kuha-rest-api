@@ -104,7 +104,7 @@ type TietoevryExerciseUpsertInput struct {
 //	@Failure		500			{object}	swagger.InternalServerErrorResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/exercises [post]
-func (h *TietoevryExerciseHandler) UpsertExercise(w http.ResponseWriter, r *http.Request) {
+func (h *TietoevryExerciseHandler) InsertExercise(w http.ResponseWriter, r *http.Request) {
 	if !authz.Authorize(r) {
 		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
 		return

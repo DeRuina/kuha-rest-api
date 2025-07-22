@@ -1,3 +1,6 @@
 .envrc
 .env
 .air.toml
+bin
+logs
+.vscode

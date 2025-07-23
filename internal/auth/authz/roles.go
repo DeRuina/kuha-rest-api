@@ -48,26 +48,26 @@ var RolePermissions = map[string][]string{
 		"GET:/v1/klab",
 	},
 
-	// M360 roles
-	"m360": {
-		"GET:/v1/m360",
-		"POST:/v1/m360",
-		"PUT:/v1/m360",
-		"DELETE:/v1/m360",
+	// Tietoevry roles
+	"tietoevry": {
+		"GET:/v1/tietoevry",
+		"POST:/v1/tietoevry",
+		"PUT:/v1/tietoevry",
+		"DELETE:/v1/tietoevry",
 	},
-	"m360_read": {
-		"GET:/v1/m360",
+	"tietoevry_read": {
+		"GET:/v1/tietoevry",
 	},
 
-	// Couchtech roles
-	"couchtech": {
-		"GET:/v1/couchtech",
-		"POST:/v1/couchtech",
-		"PUT:/v1/couchtech",
-		"DELETE:/v1/couchtech",
+	// Coachtech roles
+	"coachtech": {
+		"GET:/v1/coachtech",
+		"POST:/v1/coachtech",
+		"PUT:/v1/coachtech",
+		"DELETE:/v1/coachtech",
 	},
-	"couchtech_read": {
-		"GET:/v1/couchtech",
+	"coachtech_read": {
+		"GET:/v1/coachtech",
 	},
 
 	// Archinisis roles

@@ -11,8 +11,8 @@ var RoleLimits = map[string]struct {
 	"utv":        {Limit: 100, Window: time.Minute},
 	"kamk":       {Limit: 300, Window: time.Minute},
 	"klab":       {Limit: 100, Window: time.Minute},
-	"m360":       {Limit: 100, Window: time.Minute},
-	"couchtech":  {Limit: 100, Window: time.Minute},
+	"tietoevry":  {Limit: 300, Window: time.Minute},
+	"coachtech":  {Limit: 100, Window: time.Minute},
 	"archinisis": {Limit: 100, Window: time.Minute},
 	"default":    {Limit: 100, Window: time.Minute},
 }

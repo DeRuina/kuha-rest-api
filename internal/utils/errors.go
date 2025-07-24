@@ -40,6 +40,9 @@ var (
 	ErrMissingDuration  = errors.New("duration is required")
 	ErrMissingSymptom   = errors.New("symptom is required")
 	ErrMissingSeverity  = errors.New("severity is required")
+	ErrMissingName      = errors.New("name is required")
+	ErrMissingNameType  = errors.New("name_type is required")
+	ErrMissingValue     = errors.New("value is required")
 
 	//ErrInvalid
 	ErrInvalidUUID         = errors.New("invalid UUID")
@@ -109,6 +112,12 @@ func FormatValidationErrors(err error) map[string]string {
 				errors["symptom"] = ErrMissingSymptom.Error()
 			case "Severity":
 				errors["severity"] = ErrMissingSeverity.Error()
+			case "Name":
+				errors["name"] = ErrMissingName.Error()
+			case "NameType":
+				errors["name_type"] = ErrMissingNameType.Error()
+			case "Value":
+				errors["value"] = ErrMissingValue.Error()
 			default:
 				errors[field] = ErrMissingGeneral.Error()
 			}

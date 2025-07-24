@@ -308,6 +308,66 @@
                 }
             }
         },
+        "/tietoevry/measurements": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Insert multiple measurements for user (idempotent)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tietoevry - Measurements"
+                ],
+                "summary": "Insert measurements (bulk)",
+                "parameters": [
+                    {
+                        "description": "Measurement data",
+                        "name": "measurements",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/swagger.TietoevryMeasurementsBulkInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Measurements processed successfully"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ConflictResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/tietoevry/symptoms": {
             "post": {
                 "security": [
@@ -4885,6 +4945,81 @@
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/swagger.TietoevryExerciseUpsertInput"
+                    }
+                }
+            }
+        },
+        "swagger.TietoevryMeasurementInput": {
+            "type": "object",
+            "properties": {
+                "additional_info": {
+                    "type": "string",
+                    "example": "{\"sensor_accuracy\": \"high\"}"
+                },
+                "comment": {
+                    "type": "string",
+                    "example": "Post training"
+                },
+                "created_at": {
+                    "type": "string",
+                    "example": "2024-07-23T08:00:00Z"
+                },
+                "date": {
+                    "type": "string",
+                    "example": "2024-07-22"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "b872a58e-1234-4baf-8c19-5f2ad34d9ef1"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "weight"
+                },
+                "name_type": {
+                    "type": "string",
+                    "example": "numeric"
+                },
+                "raw_data": {
+                    "type": "string",
+                    "example": "{\"unit\": \"kg\"}"
+                },
+                "raw_id": {
+                    "type": "string",
+                    "example": "ouraid-xyz-123"
+                },
+                "source": {
+                    "type": "string",
+                    "example": "oura"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2024-07-23T08:10:00Z"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "7cffe6e0-3f28-43b6-b511-d836d3a9f7b5"
+                },
+                "value": {
+                    "type": "string",
+                    "example": "72.5"
+                },
+                "value_numeric": {
+                    "type": "number",
+                    "example": 72.5
+                }
+            }
+        },
+        "swagger.TietoevryMeasurementsBulkInput": {
+            "type": "object",
+            "required": [
+                "measurements"
+            ],
+            "properties": {
+                "measurements": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.TietoevryMeasurementInput"
                     }
                 }
             }

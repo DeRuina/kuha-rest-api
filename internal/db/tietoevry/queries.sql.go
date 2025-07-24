@@ -220,6 +220,54 @@ func (q *Queries) InsertExerciseSection(ctx context.Context, arg InsertExerciseS
 	return err
 }
 
+const insertMeasurement = `-- name: InsertMeasurement :exec
+INSERT INTO measurements (
+    id, created_at, updated_at, user_id, date, name, name_type,
+    source, value, value_numeric, comment, raw_id, raw_data, additional_info
+) VALUES (
+    $1, $2, $3, $4, $5, $6, $7,
+    $8, $9, $10, $11, $12, $13, $14
+)
+ON CONFLICT (source, user_id, date, name, raw_id) DO NOTHING
+`
+
+type InsertMeasurementParams struct {
+	ID             uuid.UUID
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
+	UserID         uuid.UUID
+	Date           time.Time
+	Name           string
+	NameType       string
+	Source         string
+	Value          string
+	ValueNumeric   sql.NullFloat64
+	Comment        sql.NullString
+	RawID          sql.NullString
+	RawData        pqtype.NullRawMessage
+	AdditionalInfo pqtype.NullRawMessage
+}
+
+func (q *Queries) InsertMeasurement(ctx context.Context, arg InsertMeasurementParams) error {
+	_, err := q.exec(ctx, q.insertMeasurementStmt, insertMeasurement,
+		arg.ID,
+		arg.CreatedAt,
+		arg.UpdatedAt,
+		arg.UserID,
+		arg.Date,
+		arg.Name,
+		arg.NameType,
+		arg.Source,
+		arg.Value,
+		arg.ValueNumeric,
+		arg.Comment,
+		arg.RawID,
+		arg.RawData,
+		arg.AdditionalInfo,
+	)
+	return err
+}
+
 const insertSymptom = `-- name: InsertSymptom :exec
 INSERT INTO symptoms (
     id, user_id, date, symptom, severity, comment, source,

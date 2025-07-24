@@ -110,3 +110,24 @@ type TietoevryExercisesBulkInput struct {
 type TietoevrySymptomsBulkInput struct {
 	Symptoms []TietoevrySymptomInput `json:"symptoms" validate:"required,dive"`
 }
+
+type TietoevryMeasurementInput struct {
+	ID             string   `json:"id" example:"b872a58e-1234-4baf-8c19-5f2ad34d9ef1"`
+	CreatedAt      string   `json:"created_at" example:"2024-07-23T08:00:00Z"`
+	UpdatedAt      string   `json:"updated_at" example:"2024-07-23T08:10:00Z"`
+	UserID         string   `json:"user_id" example:"7cffe6e0-3f28-43b6-b511-d836d3a9f7b5"`
+	Date           string   `json:"date" example:"2024-07-22"`
+	Name           string   `json:"name" example:"weight"`
+	NameType       string   `json:"name_type" example:"numeric"`
+	Source         string   `json:"source" example:"oura"`
+	Value          string   `json:"value" example:"72.5"`
+	ValueNumeric   *float64 `json:"value_numeric" example:"72.5"`
+	Comment        *string  `json:"comment" example:"Post training"`
+	RawID          *string  `json:"raw_id" example:"ouraid-xyz-123"`
+	RawData        *string  `json:"raw_data" example:"{\"unit\": \"kg\"}"`
+	AdditionalInfo *string  `json:"additional_info" example:"{\"sensor_accuracy\": \"high\"}"`
+}
+
+type TietoevryMeasurementsBulkInput struct {
+	Measurements []TietoevryMeasurementInput `json:"measurements" validate:"required,dive"`
+}

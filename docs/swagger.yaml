@@ -1084,6 +1084,60 @@ definitions:
     required:
     - exercises
     type: object
+  swagger.TietoevryMeasurementInput:
+    properties:
+      additional_info:
+        example: '{"sensor_accuracy": "high"}'
+        type: string
+      comment:
+        example: Post training
+        type: string
+      created_at:
+        example: "2024-07-23T08:00:00Z"
+        type: string
+      date:
+        example: "2024-07-22"
+        type: string
+      id:
+        example: b872a58e-1234-4baf-8c19-5f2ad34d9ef1
+        type: string
+      name:
+        example: weight
+        type: string
+      name_type:
+        example: numeric
+        type: string
+      raw_data:
+        example: '{"unit": "kg"}'
+        type: string
+      raw_id:
+        example: ouraid-xyz-123
+        type: string
+      source:
+        example: oura
+        type: string
+      updated_at:
+        example: "2024-07-23T08:10:00Z"
+        type: string
+      user_id:
+        example: 7cffe6e0-3f28-43b6-b511-d836d3a9f7b5
+        type: string
+      value:
+        example: "72.5"
+        type: string
+      value_numeric:
+        example: 72.5
+        type: number
+    type: object
+  swagger.TietoevryMeasurementsBulkInput:
+    properties:
+      measurements:
+        items:
+          $ref: '#/definitions/swagger.TietoevryMeasurementInput'
+        type: array
+    required:
+    - measurements
+    type: object
   swagger.TietoevrySymptomInput:
     properties:
       additional_data:
@@ -1497,6 +1551,44 @@ paths:
       summary: Insert exercise (bulk)
       tags:
       - Tietoevry - Exercise
+  /tietoevry/measurements:
+    post:
+      consumes:
+      - application/json
+      description: Insert multiple measurements for user (idempotent)
+      parameters:
+      - description: Measurement data
+        in: body
+        name: measurements
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.TietoevryMeasurementsBulkInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Measurements processed successfully
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/swagger.ConflictResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Insert measurements (bulk)
+      tags:
+      - Tietoevry - Measurements
   /tietoevry/symptoms:
     post:
       consumes:

@@ -269,6 +269,64 @@ func (q *Queries) InsertMeasurement(ctx context.Context, arg InsertMeasurementPa
 	return err
 }
 
+const insertQuestionnaireAnswer = `-- name: InsertQuestionnaireAnswer :exec
+INSERT INTO question_answers (
+    user_id, questionnaire_instance_id, questionnaire_name_fi,
+    questionnaire_name_en, questionnaire_key, question_id, question_label_fi,
+    question_label_en, question_type, option_id, option_value,
+    option_label_fi, option_label_en, free_text, created_at, updated_at, value
+) VALUES (
+    $1, $2, $3,
+    $4, $5, $6, $7,
+    $8, $9, $10, $11,
+    $12, $13, $14, $15, $16, $17
+)
+ON CONFLICT (user_id, questionnaire_instance_id, question_id) DO NOTHING
+`
+
+type InsertQuestionnaireAnswerParams struct {
+	UserID                  uuid.UUID
+	QuestionnaireInstanceID uuid.UUID
+	QuestionnaireNameFi     sql.NullString
+	QuestionnaireNameEn     sql.NullString
+	QuestionnaireKey        string
+	QuestionID              uuid.UUID
+	QuestionLabelFi         sql.NullString
+	QuestionLabelEn         sql.NullString
+	QuestionType            string
+	OptionID                uuid.NullUUID
+	OptionValue             sql.NullInt32
+	OptionLabelFi           sql.NullString
+	OptionLabelEn           sql.NullString
+	FreeText                sql.NullString
+	CreatedAt               time.Time
+	UpdatedAt               time.Time
+	Value                   pqtype.NullRawMessage
+}
+
+func (q *Queries) InsertQuestionnaireAnswer(ctx context.Context, arg InsertQuestionnaireAnswerParams) error {
+	_, err := q.exec(ctx, q.insertQuestionnaireAnswerStmt, insertQuestionnaireAnswer,
+		arg.UserID,
+		arg.QuestionnaireInstanceID,
+		arg.QuestionnaireNameFi,
+		arg.QuestionnaireNameEn,
+		arg.QuestionnaireKey,
+		arg.QuestionID,
+		arg.QuestionLabelFi,
+		arg.QuestionLabelEn,
+		arg.QuestionType,
+		arg.OptionID,
+		arg.OptionValue,
+		arg.OptionLabelFi,
+		arg.OptionLabelEn,
+		arg.FreeText,
+		arg.CreatedAt,
+		arg.UpdatedAt,
+		arg.Value,
+	)
+	return err
+}
+
 const insertSymptom = `-- name: InsertSymptom :exec
 INSERT INTO symptoms (
     id, user_id, date, symptom, severity, comment, source,

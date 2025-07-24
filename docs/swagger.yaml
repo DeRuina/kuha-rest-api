@@ -1138,6 +1138,69 @@ definitions:
     required:
     - measurements
     type: object
+  swagger.TietoevryQuestionnaireAnswerInput:
+    properties:
+      created_at:
+        example: "2024-07-23T09:00:00Z"
+        type: string
+      free_text:
+        example: Had vivid dreams
+        type: string
+      option_id:
+        example: c3e8d954-bb0a-4d77-9885-f9e7cabc1234
+        type: string
+      option_label_en:
+        example: Well
+        type: string
+      option_label_fi:
+        example: Hyvin
+        type: string
+      option_value:
+        example: 4
+        type: integer
+      question_id:
+        example: 123e4567-e89b-4d3a-a456-426614174000
+        type: string
+      question_label_en:
+        example: How well did you sleep?
+        type: string
+      question_label_fi:
+        example: Kuinka hyvin nukuit?
+        type: string
+      question_type:
+        example: scale
+        type: string
+      questionnaire_instance_id:
+        example: 8c94dfeb-8f3e-4e61-9a66-64559eb354d2
+        type: string
+      questionnaire_key:
+        example: sleep_quality
+        type: string
+      questionnaire_name_en:
+        example: Sleep Survey
+        type: string
+      questionnaire_name_fi:
+        example: Unikysely
+        type: string
+      updated_at:
+        example: "2024-07-23T09:00:10Z"
+        type: string
+      user_id:
+        example: 7cffe6e0-3f28-43b6-b511-d836d3a9f7b5
+        type: string
+      value:
+        example: '{"scale": 4, "note": "slightly tired"}'
+        type: string
+    type: object
+  swagger.TietoevryQuestionnaireAnswersBulkInput:
+    properties:
+      questionnaires:
+        items:
+          $ref: '#/definitions/swagger.TietoevryQuestionnaireAnswerInput'
+        type: array
+    required:
+    - questionnaires
+    type: object
   swagger.TietoevrySymptomInput:
     properties:
       additional_data:
@@ -1655,6 +1718,44 @@ paths:
       summary: Insert measurements (bulk)
       tags:
       - Tietoevry - Measurements
+  /tietoevry/questionnaires:
+    post:
+      consumes:
+      - application/json
+      description: Insert multiple questionnaire answers for users (idempotent)
+      parameters:
+      - description: Questionnaire answers
+        in: body
+        name: questionnaires
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.TietoevryQuestionnaireAnswersBulkInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Questionnaire answers processed successfully
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/swagger.ConflictResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Insert questionnaire answers (bulk)
+      tags:
+      - Tietoevry - Questionnaires
   /tietoevry/symptoms:
     post:
       consumes:

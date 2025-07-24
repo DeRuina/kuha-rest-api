@@ -376,6 +376,66 @@ const docTemplate = `{
                 }
             }
         },
+        "/tietoevry/questionnaires": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Insert multiple questionnaire answers for users (idempotent)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tietoevry - Questionnaires"
+                ],
+                "summary": "Insert questionnaire answers (bulk)",
+                "parameters": [
+                    {
+                        "description": "Questionnaire answers",
+                        "name": "questionnaires",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/swagger.TietoevryQuestionnaireAnswersBulkInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Questionnaire answers processed successfully"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ConflictResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/tietoevry/symptoms": {
             "post": {
                 "security": [
@@ -5088,6 +5148,93 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/swagger.TietoevryMeasurementInput"
+                    }
+                }
+            }
+        },
+        "swagger.TietoevryQuestionnaireAnswerInput": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "2024-07-23T09:00:00Z"
+                },
+                "free_text": {
+                    "type": "string",
+                    "example": "Had vivid dreams"
+                },
+                "option_id": {
+                    "type": "string",
+                    "example": "c3e8d954-bb0a-4d77-9885-f9e7cabc1234"
+                },
+                "option_label_en": {
+                    "type": "string",
+                    "example": "Well"
+                },
+                "option_label_fi": {
+                    "type": "string",
+                    "example": "Hyvin"
+                },
+                "option_value": {
+                    "type": "integer",
+                    "example": 4
+                },
+                "question_id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-4d3a-a456-426614174000"
+                },
+                "question_label_en": {
+                    "type": "string",
+                    "example": "How well did you sleep?"
+                },
+                "question_label_fi": {
+                    "type": "string",
+                    "example": "Kuinka hyvin nukuit?"
+                },
+                "question_type": {
+                    "type": "string",
+                    "example": "scale"
+                },
+                "questionnaire_instance_id": {
+                    "type": "string",
+                    "example": "8c94dfeb-8f3e-4e61-9a66-64559eb354d2"
+                },
+                "questionnaire_key": {
+                    "type": "string",
+                    "example": "sleep_quality"
+                },
+                "questionnaire_name_en": {
+                    "type": "string",
+                    "example": "Sleep Survey"
+                },
+                "questionnaire_name_fi": {
+                    "type": "string",
+                    "example": "Unikysely"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2024-07-23T09:00:10Z"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "7cffe6e0-3f28-43b6-b511-d836d3a9f7b5"
+                },
+                "value": {
+                    "type": "string",
+                    "example": "{\"scale\": 4, \"note\": \"slightly tired\"}"
+                }
+            }
+        },
+        "swagger.TietoevryQuestionnaireAnswersBulkInput": {
+            "type": "object",
+            "required": [
+                "questionnaires"
+            ],
+            "properties": {
+                "questionnaires": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.TietoevryQuestionnaireAnswerInput"
                     }
                 }
             }

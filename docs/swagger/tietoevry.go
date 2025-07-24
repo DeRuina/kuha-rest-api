@@ -156,3 +156,27 @@ type TietoevryTestResultInput struct {
 type TietoevryTestResultsBulkInput struct {
 	TestResults []TietoevryTestResultInput `json:"test_results" validate:"required,dive"`
 }
+
+type TietoevryQuestionnaireAnswerInput struct {
+	UserID                  string  `json:"user_id" example:"7cffe6e0-3f28-43b6-b511-d836d3a9f7b5"`
+	QuestionnaireInstanceID string  `json:"questionnaire_instance_id" example:"8c94dfeb-8f3e-4e61-9a66-64559eb354d2"`
+	QuestionnaireNameFi     *string `json:"questionnaire_name_fi" example:"Unikysely"`
+	QuestionnaireNameEn     *string `json:"questionnaire_name_en" example:"Sleep Survey"`
+	QuestionnaireKey        string  `json:"questionnaire_key" example:"sleep_quality"`
+	QuestionID              string  `json:"question_id" example:"123e4567-e89b-4d3a-a456-426614174000"`
+	QuestionLabelFi         *string `json:"question_label_fi" example:"Kuinka hyvin nukuit?"`
+	QuestionLabelEn         *string `json:"question_label_en" example:"How well did you sleep?"`
+	QuestionType            string  `json:"question_type" example:"scale"`
+	OptionID                *string `json:"option_id" example:"c3e8d954-bb0a-4d77-9885-f9e7cabc1234"`
+	OptionValue             *int32  `json:"option_value" example:"4"`
+	OptionLabelFi           *string `json:"option_label_fi" example:"Hyvin"`
+	OptionLabelEn           *string `json:"option_label_en" example:"Well"`
+	FreeText                *string `json:"free_text" example:"Had vivid dreams"`
+	CreatedAt               string  `json:"created_at" example:"2024-07-23T09:00:00Z"`
+	UpdatedAt               string  `json:"updated_at" example:"2024-07-23T09:00:10Z"`
+	Value                   *string `json:"value" example:"{\"scale\": 4, \"note\": \"slightly tired\"}"`
+}
+
+type TietoevryQuestionnaireAnswersBulkInput struct {
+	Questionnaires []TietoevryQuestionnaireAnswerInput `json:"questionnaires" validate:"required,dive"`
+}

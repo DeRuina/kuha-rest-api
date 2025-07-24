@@ -20,33 +20,37 @@ var (
 	ErrQueryTimeOut = errors.New("database query timed out")
 
 	//ErrMissing
-	ErrMissingUserID         = errors.New("user_id is required")
-	ErrMissingUsername       = errors.New("username is required")
-	ErrMissingPolarID        = errors.New("polar-id is required")
-	ErrMissingOuraID         = errors.New("oura-id is required")
-	ErrMissingToken          = errors.New("token is required")
-	ErrMissingSector         = errors.New("sector is required")
-	ErrMissingDate           = errors.New("date is required")
-	ErrMissingGeneral        = errors.New("this field is required")
-	ErrMissingType           = errors.New("type is required")
-	ErrMissingSource         = errors.New("source is required")
-	ErrMissingHours          = errors.New("hours is required")
-	ErrMissingSportID        = errors.New("sport_id is required")
-	ErrMissingSporttiID      = errors.New("sportti_id is required")
-	ErrMissingID             = errors.New("id is required")
-	ErrMissingStartTime      = errors.New("start_time is required")
-	ErrMissingUpdatedAt      = errors.New("updated_at is required")
-	ErrMissingCreatedAt      = errors.New("created_at is required")
-	ErrMissingDuration       = errors.New("duration is required")
-	ErrMissingSymptom        = errors.New("symptom is required")
-	ErrMissingSeverity       = errors.New("severity is required")
-	ErrMissingName           = errors.New("name is required")
-	ErrMissingNameType       = errors.New("name_type is required")
-	ErrMissingValue          = errors.New("value is required")
-	ErrMissingTimestamp      = errors.New("timestamp is required")
-	ErrMissingData           = errors.New("data is required")
-	ErrMissingTypeID         = errors.New("type_id is required")
-	ErrMissingTypeResultType = errors.New("type_result_type is required")
+	ErrMissingUserID                  = errors.New("user_id is required")
+	ErrMissingUsername                = errors.New("username is required")
+	ErrMissingPolarID                 = errors.New("polar-id is required")
+	ErrMissingOuraID                  = errors.New("oura-id is required")
+	ErrMissingToken                   = errors.New("token is required")
+	ErrMissingSector                  = errors.New("sector is required")
+	ErrMissingDate                    = errors.New("date is required")
+	ErrMissingGeneral                 = errors.New("this field is required")
+	ErrMissingType                    = errors.New("type is required")
+	ErrMissingSource                  = errors.New("source is required")
+	ErrMissingHours                   = errors.New("hours is required")
+	ErrMissingSportID                 = errors.New("sport_id is required")
+	ErrMissingSporttiID               = errors.New("sportti_id is required")
+	ErrMissingID                      = errors.New("id is required")
+	ErrMissingStartTime               = errors.New("start_time is required")
+	ErrMissingUpdatedAt               = errors.New("updated_at is required")
+	ErrMissingCreatedAt               = errors.New("created_at is required")
+	ErrMissingDuration                = errors.New("duration is required")
+	ErrMissingSymptom                 = errors.New("symptom is required")
+	ErrMissingSeverity                = errors.New("severity is required")
+	ErrMissingName                    = errors.New("name is required")
+	ErrMissingNameType                = errors.New("name_type is required")
+	ErrMissingValue                   = errors.New("value is required")
+	ErrMissingTimestamp               = errors.New("timestamp is required")
+	ErrMissingData                    = errors.New("data is required")
+	ErrMissingTypeID                  = errors.New("type_id is required")
+	ErrMissingTypeResultType          = errors.New("type_result_type is required")
+	ErrMissingQuestionnaireInstanceID = errors.New("questionnaire_instance_id is required")
+	ErrMissingQuestionnaireKey        = errors.New("questionnaire_key is required")
+	ErrMissingQuestionID              = errors.New("question_id is required")
+	ErrMissingQuestionType            = errors.New("question_type is required")
 
 	//ErrInvalid
 	ErrInvalidUUID         = errors.New("invalid UUID")
@@ -130,6 +134,14 @@ func FormatValidationErrors(err error) map[string]string {
 				errors["type_id"] = ErrMissingTypeID.Error()
 			case "TypeResultType":
 				errors["type_result_type"] = ErrMissingTypeResultType.Error()
+			case "QuestionnaireInstanceID":
+				errors["questionnaire_instance_id"] = ErrMissingQuestionnaireInstanceID.Error()
+			case "QuestionnaireKey":
+				errors["questionnaire_key"] = ErrMissingQuestionnaireKey.Error()
+			case "QuestionID":
+				errors["question_id"] = ErrMissingQuestionID.Error()
+			case "QuestionType":
+				errors["question_type"] = ErrMissingQuestionType.Error()
 			default:
 				errors[field] = ErrMissingGeneral.Error()
 			}
@@ -154,6 +166,10 @@ func FormatValidationErrors(err error) map[string]string {
 				errors["id"] = ErrInvalidUUID.Error()
 			case "TypeID":
 				errors["type_id"] = ErrInvalidUUID.Error()
+			case "QuestionID":
+				errors["question_id"] = ErrInvalidUUID.Error()
+			case "QuestionnaireInstanceID":
+				errors["questionnaire_instance_id"] = ErrInvalidUUID.Error()
 			default:
 				errors[field] = ErrInvalidUUID.Error()
 			}

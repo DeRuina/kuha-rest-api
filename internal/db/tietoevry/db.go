@@ -42,6 +42,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.insertMeasurementStmt, err = db.PrepareContext(ctx, insertMeasurement); err != nil {
 		return nil, fmt.Errorf("error preparing query InsertMeasurement: %w", err)
 	}
+	if q.insertQuestionnaireAnswerStmt, err = db.PrepareContext(ctx, insertQuestionnaireAnswer); err != nil {
+		return nil, fmt.Errorf("error preparing query InsertQuestionnaireAnswer: %w", err)
+	}
 	if q.insertSymptomStmt, err = db.PrepareContext(ctx, insertSymptom); err != nil {
 		return nil, fmt.Errorf("error preparing query InsertSymptom: %w", err)
 	}
@@ -84,6 +87,11 @@ func (q *Queries) Close() error {
 	if q.insertMeasurementStmt != nil {
 		if cerr := q.insertMeasurementStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing insertMeasurementStmt: %w", cerr)
+		}
+	}
+	if q.insertQuestionnaireAnswerStmt != nil {
+		if cerr := q.insertQuestionnaireAnswerStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing insertQuestionnaireAnswerStmt: %w", cerr)
 		}
 	}
 	if q.insertSymptomStmt != nil {
@@ -138,31 +146,33 @@ func (q *Queries) queryRow(ctx context.Context, stmt *sql.Stmt, query string, ar
 }
 
 type Queries struct {
-	db                        DBTX
-	tx                        *sql.Tx
-	deleteUserStmt            *sql.Stmt
-	insertExerciseStmt        *sql.Stmt
-	insertExerciseHRZoneStmt  *sql.Stmt
-	insertExerciseSampleStmt  *sql.Stmt
-	insertExerciseSectionStmt *sql.Stmt
-	insertMeasurementStmt     *sql.Stmt
-	insertSymptomStmt         *sql.Stmt
-	insertTestResultStmt      *sql.Stmt
-	upsertUserStmt            *sql.Stmt
+	db                            DBTX
+	tx                            *sql.Tx
+	deleteUserStmt                *sql.Stmt
+	insertExerciseStmt            *sql.Stmt
+	insertExerciseHRZoneStmt      *sql.Stmt
+	insertExerciseSampleStmt      *sql.Stmt
+	insertExerciseSectionStmt     *sql.Stmt
+	insertMeasurementStmt         *sql.Stmt
+	insertQuestionnaireAnswerStmt *sql.Stmt
+	insertSymptomStmt             *sql.Stmt
+	insertTestResultStmt          *sql.Stmt
+	upsertUserStmt                *sql.Stmt
 }
 
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 	return &Queries{
-		db:                        tx,
-		tx:                        tx,
-		deleteUserStmt:            q.deleteUserStmt,
-		insertExerciseStmt:        q.insertExerciseStmt,
-		insertExerciseHRZoneStmt:  q.insertExerciseHRZoneStmt,
-		insertExerciseSampleStmt:  q.insertExerciseSampleStmt,
-		insertExerciseSectionStmt: q.insertExerciseSectionStmt,
-		insertMeasurementStmt:     q.insertMeasurementStmt,
-		insertSymptomStmt:         q.insertSymptomStmt,
-		insertTestResultStmt:      q.insertTestResultStmt,
-		upsertUserStmt:            q.upsertUserStmt,
+		db:                            tx,
+		tx:                            tx,
+		deleteUserStmt:                q.deleteUserStmt,
+		insertExerciseStmt:            q.insertExerciseStmt,
+		insertExerciseHRZoneStmt:      q.insertExerciseHRZoneStmt,
+		insertExerciseSampleStmt:      q.insertExerciseSampleStmt,
+		insertExerciseSectionStmt:     q.insertExerciseSectionStmt,
+		insertMeasurementStmt:         q.insertMeasurementStmt,
+		insertQuestionnaireAnswerStmt: q.insertQuestionnaireAnswerStmt,
+		insertSymptomStmt:             q.insertSymptomStmt,
+		insertTestResultStmt:          q.insertTestResultStmt,
+		upsertUserStmt:                q.upsertUserStmt,
 	}
 }

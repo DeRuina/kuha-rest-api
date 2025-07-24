@@ -111,3 +111,18 @@ INSERT INTO test_results (
     $13, $14, $15, $16, $17, $18
 )
 ON CONFLICT (id) DO NOTHING;
+
+
+-- name: InsertQuestionnaireAnswer :exec
+INSERT INTO question_answers (
+    user_id, questionnaire_instance_id, questionnaire_name_fi,
+    questionnaire_name_en, questionnaire_key, question_id, question_label_fi,
+    question_label_en, question_type, option_id, option_value,
+    option_label_fi, option_label_en, free_text, created_at, updated_at, value
+) VALUES (
+    $1, $2, $3,
+    $4, $5, $6, $7,
+    $8, $9, $10, $11,
+    $12, $13, $14, $15, $16, $17
+)
+ON CONFLICT (user_id, questionnaire_instance_id, question_id) DO NOTHING;

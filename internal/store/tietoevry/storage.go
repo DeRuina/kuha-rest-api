@@ -34,14 +34,20 @@ type TestResults interface {
 	InsertTestResultsBulk(ctx context.Context, results []tietoevrysqlc.InsertTestResultParams) error
 }
 
+type Questionnaires interface {
+	ValidateUsersExist(ctx context.Context, userIDs []uuid.UUID) error
+	InsertQuestionnaireAnswersBulk(ctx context.Context, answers []tietoevrysqlc.InsertQuestionnaireAnswerParams) error
+}
+
 // TietoevryStorage
 type TietoevryStorage struct {
-	db           *sql.DB
-	users        Users
-	exercises    Exercises
-	symptoms     Symptoms
-	measurements Measurements
-	testResults  TestResults
+	db             *sql.DB
+	users          Users
+	exercises      Exercises
+	symptoms       Symptoms
+	measurements   Measurements
+	testResults    TestResults
+	questionnaires Questionnaires
 }
 
 // Methods
@@ -69,14 +75,19 @@ func (s *TietoevryStorage) TestResults() TestResults {
 	return s.testResults
 }
 
+func (s *TietoevryStorage) Questionnaires() Questionnaires {
+	return s.questionnaires
+}
+
 // NewTietoevryStorage creates a new TietoevryStorage instance
 func NewTietoevryStorage(db *sql.DB) *TietoevryStorage {
 	return &TietoevryStorage{
-		db:           db,
-		users:        &UserStore{db: db},
-		exercises:    &ExercisesStore{db: db},
-		symptoms:     &SymptomsStore{db: db},
-		measurements: &MeasurementsStore{db: db},
-		testResults:  &TestResultsStore{db: db},
+		db:             db,
+		users:          &UserStore{db: db},
+		exercises:      &ExercisesStore{db: db},
+		symptoms:       &SymptomsStore{db: db},
+		measurements:   &MeasurementsStore{db: db},
+		testResults:    &TestResultsStore{db: db},
+		questionnaires: &QuestionnairesStore{db: db},
 	}
 }

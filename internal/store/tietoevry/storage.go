@@ -29,6 +29,11 @@ type Measurements interface {
 	InsertMeasurementsBulk(ctx context.Context, measurements []tietoevrysqlc.InsertMeasurementParams) error
 }
 
+type TestResults interface {
+	ValidateUsersExist(ctx context.Context, userIDs []uuid.UUID) error
+	InsertTestResultsBulk(ctx context.Context, results []tietoevrysqlc.InsertTestResultParams) error
+}
+
 // TietoevryStorage
 type TietoevryStorage struct {
 	db           *sql.DB
@@ -36,6 +41,7 @@ type TietoevryStorage struct {
 	exercises    Exercises
 	symptoms     Symptoms
 	measurements Measurements
+	testResults  TestResults
 }
 
 // Methods
@@ -59,6 +65,10 @@ func (s *TietoevryStorage) Measurements() Measurements {
 	return s.measurements
 }
 
+func (s *TietoevryStorage) TestResults() TestResults {
+	return s.testResults
+}
+
 // NewTietoevryStorage creates a new TietoevryStorage instance
 func NewTietoevryStorage(db *sql.DB) *TietoevryStorage {
 	return &TietoevryStorage{
@@ -67,5 +77,6 @@ func NewTietoevryStorage(db *sql.DB) *TietoevryStorage {
 		exercises:    &ExercisesStore{db: db},
 		symptoms:     &SymptomsStore{db: db},
 		measurements: &MeasurementsStore{db: db},
+		testResults:  &TestResultsStore{db: db},
 	}
 }

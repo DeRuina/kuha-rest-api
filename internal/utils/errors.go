@@ -20,29 +20,33 @@ var (
 	ErrQueryTimeOut = errors.New("database query timed out")
 
 	//ErrMissing
-	ErrMissingUserID    = errors.New("user_id is required")
-	ErrMissingUsername  = errors.New("username is required")
-	ErrMissingPolarID   = errors.New("polar-id is required")
-	ErrMissingOuraID    = errors.New("oura-id is required")
-	ErrMissingToken     = errors.New("token is required")
-	ErrMissingSector    = errors.New("sector is required")
-	ErrMissingDate      = errors.New("date is required")
-	ErrMissingGeneral   = errors.New("this field is required")
-	ErrMissingType      = errors.New("type is required")
-	ErrMissingSource    = errors.New("source is required")
-	ErrMissingHours     = errors.New("hours is required")
-	ErrMissingSportID   = errors.New("sport_id is required")
-	ErrMissingSporttiID = errors.New("sportti_id is required")
-	ErrMissingID        = errors.New("id is required")
-	ErrMissingStartTime = errors.New("start_time is required")
-	ErrMissingUpdatedAt = errors.New("updated_at is required")
-	ErrMissingCreatedAt = errors.New("created_at is required")
-	ErrMissingDuration  = errors.New("duration is required")
-	ErrMissingSymptom   = errors.New("symptom is required")
-	ErrMissingSeverity  = errors.New("severity is required")
-	ErrMissingName      = errors.New("name is required")
-	ErrMissingNameType  = errors.New("name_type is required")
-	ErrMissingValue     = errors.New("value is required")
+	ErrMissingUserID         = errors.New("user_id is required")
+	ErrMissingUsername       = errors.New("username is required")
+	ErrMissingPolarID        = errors.New("polar-id is required")
+	ErrMissingOuraID         = errors.New("oura-id is required")
+	ErrMissingToken          = errors.New("token is required")
+	ErrMissingSector         = errors.New("sector is required")
+	ErrMissingDate           = errors.New("date is required")
+	ErrMissingGeneral        = errors.New("this field is required")
+	ErrMissingType           = errors.New("type is required")
+	ErrMissingSource         = errors.New("source is required")
+	ErrMissingHours          = errors.New("hours is required")
+	ErrMissingSportID        = errors.New("sport_id is required")
+	ErrMissingSporttiID      = errors.New("sportti_id is required")
+	ErrMissingID             = errors.New("id is required")
+	ErrMissingStartTime      = errors.New("start_time is required")
+	ErrMissingUpdatedAt      = errors.New("updated_at is required")
+	ErrMissingCreatedAt      = errors.New("created_at is required")
+	ErrMissingDuration       = errors.New("duration is required")
+	ErrMissingSymptom        = errors.New("symptom is required")
+	ErrMissingSeverity       = errors.New("severity is required")
+	ErrMissingName           = errors.New("name is required")
+	ErrMissingNameType       = errors.New("name_type is required")
+	ErrMissingValue          = errors.New("value is required")
+	ErrMissingTimestamp      = errors.New("timestamp is required")
+	ErrMissingData           = errors.New("data is required")
+	ErrMissingTypeID         = errors.New("type_id is required")
+	ErrMissingTypeResultType = errors.New("type_result_type is required")
 
 	//ErrInvalid
 	ErrInvalidUUID         = errors.New("invalid UUID")
@@ -118,6 +122,14 @@ func FormatValidationErrors(err error) map[string]string {
 				errors["name_type"] = ErrMissingNameType.Error()
 			case "Value":
 				errors["value"] = ErrMissingValue.Error()
+			case "Timestamp":
+				errors["timestamp"] = ErrMissingTimestamp.Error()
+			case "Data":
+				errors["data"] = ErrMissingData.Error()
+			case "TypeID":
+				errors["type_id"] = ErrMissingTypeID.Error()
+			case "TypeResultType":
+				errors["type_result_type"] = ErrMissingTypeResultType.Error()
 			default:
 				errors[field] = ErrMissingGeneral.Error()
 			}
@@ -140,6 +152,10 @@ func FormatValidationErrors(err error) map[string]string {
 				errors["user_id"] = ErrInvalidUUID.Error()
 			case "ID":
 				errors["id"] = ErrInvalidUUID.Error()
+			case "TypeID":
+				errors["type_id"] = ErrInvalidUUID.Error()
+			default:
+				errors[field] = ErrInvalidUUID.Error()
 			}
 
 		case "datetime":
@@ -253,10 +269,31 @@ func ConflictResponse(w http.ResponseWriter, r *http.Request, err error) {
 }
 
 // HandleDatabaseError analyzes database errors and returns appropriate HTTP responses - defualt 500 Internal Server Error
+// HandleDatabaseError analyzes database errors and returns appropriate HTTP responses - defualt 500 Internal Server Error
 func HandleDatabaseError(w http.ResponseWriter, r *http.Request, err error) {
 	// Check if it's a PostgreSQL error
 	if pqErr, ok := err.(*pq.Error); ok {
 		switch pqErr.Code {
+		case "22P02": // invalid_text_representation (includes JSON syntax errors)
+			if strings.Contains(pqErr.Message, "json") || strings.Contains(pqErr.Message, "JSON") {
+				// Try to identify which field has the JSON error
+				if strings.Contains(pqErr.Message, "data") {
+					BadRequestResponse(w, r, errors.New("invalid JSON format in 'data' field - check for missing braces, quotes, or commas"))
+				} else if strings.Contains(pqErr.Message, "test_event_template_test_limits") {
+					BadRequestResponse(w, r, errors.New("invalid JSON format in 'test_event_template_test_limits' field - check for missing braces, quotes, or commas"))
+				} else if strings.Contains(pqErr.Message, "raw_data") {
+					BadRequestResponse(w, r, errors.New("invalid JSON format in 'raw_data' field - check for missing braces, quotes, or commas"))
+				} else if strings.Contains(pqErr.Message, "additional_info") {
+					BadRequestResponse(w, r, errors.New("invalid JSON format in 'additional_info' field - check for missing braces, quotes, or commas"))
+				} else if strings.Contains(pqErr.Message, "additional_data") {
+					BadRequestResponse(w, r, errors.New("invalid JSON format in 'additional_data' field - check for missing braces, quotes, or commas"))
+				} else {
+					BadRequestResponse(w, r, errors.New("invalid JSON format in one of the JSON fields - check for missing braces, quotes, or commas"))
+				}
+				return
+			}
+			BadRequestResponse(w, r, fmt.Errorf("invalid data format: %s", pqErr.Message))
+			return
 		case "23503": // foreign_key_violation
 			if strings.Contains(pqErr.Message, "user_id") || strings.Contains(pqErr.Detail, "user_id") {
 				// Try to extract the specific user_id from the error detail

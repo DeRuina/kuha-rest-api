@@ -436,6 +436,66 @@ const docTemplate = `{
                 }
             }
         },
+        "/tietoevry/test-results": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Insert multiple test results for users (idempotent)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tietoevry - TestResults"
+                ],
+                "summary": "Insert test results (bulk)",
+                "parameters": [
+                    {
+                        "description": "Test result data",
+                        "name": "test_results",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/swagger.TietoevryTestResultsBulkInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Test results processed successfully"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ConflictResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/tietoevry/users": {
             "post": {
                 "security": [
@@ -5121,6 +5181,97 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/swagger.TietoevrySymptomInput"
+                    }
+                }
+            }
+        },
+        "swagger.TietoevryTestResultInput": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string",
+                    "example": "User reached fatigue quickly"
+                },
+                "created_at": {
+                    "type": "string",
+                    "example": "2024-07-23T08:10:00Z"
+                },
+                "data": {
+                    "type": "string",
+                    "example": "{\"vo2\": 45.5, \"lactate\": 2.1}"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "d19f2c63-fc5a-4aeb-8b90-5fc7df5d1c0c"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Threshold Test 1"
+                },
+                "test_event_date": {
+                    "type": "string",
+                    "example": "2024-07-22"
+                },
+                "test_event_id": {
+                    "type": "string",
+                    "example": "8abf0123-4567-89ab-cdef-1234567890ab"
+                },
+                "test_event_name": {
+                    "type": "string",
+                    "example": "Summer Test Event"
+                },
+                "test_event_template_test_id": {
+                    "type": "string",
+                    "example": "4b9f2cde-8aaa-4e01-8103-8d1cabc712aa"
+                },
+                "test_event_template_test_limits": {
+                    "type": "string",
+                    "example": "{\"max\": 70, \"min\": 45}"
+                },
+                "test_event_template_test_name": {
+                    "type": "string",
+                    "example": "VO2 Max Lab Test"
+                },
+                "timestamp": {
+                    "type": "string",
+                    "example": "2024-07-23T08:00:00Z"
+                },
+                "type_id": {
+                    "type": "string",
+                    "example": "23d9453b-8d43-46f5-bb27-1db29a88456a"
+                },
+                "type_name": {
+                    "type": "string",
+                    "example": "Aerobic Threshold Test"
+                },
+                "type_result_type": {
+                    "type": "string",
+                    "example": "float"
+                },
+                "type_type": {
+                    "type": "string",
+                    "example": "threshold"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2024-07-23T08:10:01Z"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "7cffe6e0-3f28-43b6-b511-d836d3a9f7b5"
+                }
+            }
+        },
+        "swagger.TietoevryTestResultsBulkInput": {
+            "type": "object",
+            "required": [
+                "test_results"
+            ],
+            "properties": {
+                "test_results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.TietoevryTestResultInput"
                     }
                 }
             }

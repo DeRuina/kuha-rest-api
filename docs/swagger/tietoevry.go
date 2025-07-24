@@ -131,3 +131,28 @@ type TietoevryMeasurementInput struct {
 type TietoevryMeasurementsBulkInput struct {
 	Measurements []TietoevryMeasurementInput `json:"measurements" validate:"required,dive"`
 }
+
+type TietoevryTestResultInput struct {
+	ID                          string  `json:"id" example:"d19f2c63-fc5a-4aeb-8b90-5fc7df5d1c0c"`
+	UserID                      string  `json:"user_id" example:"7cffe6e0-3f28-43b6-b511-d836d3a9f7b5"`
+	TypeID                      string  `json:"type_id" example:"23d9453b-8d43-46f5-bb27-1db29a88456a"`
+	TypeType                    *string `json:"type_type" example:"threshold"`
+	TypeResultType              string  `json:"type_result_type" example:"float"`
+	TypeName                    *string `json:"type_name" example:"Aerobic Threshold Test"`
+	Timestamp                   string  `json:"timestamp" example:"2024-07-23T08:00:00Z"`
+	Name                        *string `json:"name" example:"Threshold Test 1"`
+	Comment                     *string `json:"comment" example:"User reached fatigue quickly"`
+	Data                        string  `json:"data" example:"{\"vo2\": 45.5, \"lactate\": 2.1}"`
+	CreatedAt                   string  `json:"created_at" example:"2024-07-23T08:10:00Z"`
+	UpdatedAt                   string  `json:"updated_at" example:"2024-07-23T08:10:01Z"`
+	TestEventID                 *string `json:"test_event_id" example:"8abf0123-4567-89ab-cdef-1234567890ab"`
+	TestEventName               *string `json:"test_event_name" example:"Summer Test Event"`
+	TestEventDate               *string `json:"test_event_date" example:"2024-07-22"`
+	TestEventTemplateTestID     *string `json:"test_event_template_test_id" example:"4b9f2cde-8aaa-4e01-8103-8d1cabc712aa"`
+	TestEventTemplateTestName   *string `json:"test_event_template_test_name" example:"VO2 Max Lab Test"`
+	TestEventTemplateTestLimits *string `json:"test_event_template_test_limits" example:"{\"max\": 70, \"min\": 45}"`
+}
+
+type TietoevryTestResultsBulkInput struct {
+	TestResults []TietoevryTestResultInput `json:"test_results" validate:"required,dive"`
+}

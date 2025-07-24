@@ -47,6 +47,7 @@ type Tietoevry interface {
 	Exercises() tietoevry.Exercises
 	Symptoms() tietoevry.Symptoms
 	Measurements() tietoevry.Measurements
+	TestResults() tietoevry.TestResults
 }
 
 type KAMK interface {

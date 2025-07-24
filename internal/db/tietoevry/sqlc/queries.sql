@@ -97,3 +97,17 @@ INSERT INTO measurements (
     $8, $9, $10, $11, $12, $13, $14
 )
 ON CONFLICT (source, user_id, date, name, raw_id) DO NOTHING;
+
+-- name: InsertTestResult :exec
+INSERT INTO test_results (
+    id, user_id, type_id, type_type, type_result_type, type_name,
+    timestamp, name, comment, data, created_at, updated_at,
+    test_event_id, test_event_name, test_event_date,
+    test_event_template_test_id, test_event_template_test_name,
+    test_event_template_test_limits
+) VALUES (
+    $1, $2, $3, $4, $5, $6,
+    $7, $8, $9, $10, $11, $12,
+    $13, $14, $15, $16, $17, $18
+)
+ON CONFLICT (id) DO NOTHING;

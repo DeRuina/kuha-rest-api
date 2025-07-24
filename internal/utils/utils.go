@@ -203,3 +203,19 @@ func NullBoolPtr(b *bool) sql.NullBool {
 	}
 	return sql.NullBool{Bool: *b, Valid: true}
 }
+
+// Converts a *time.Time to sql.NullTime
+func NullTimePtr(t *time.Time) sql.NullTime {
+	if t == nil {
+		return sql.NullTime{Valid: false}
+	}
+	return sql.NullTime{Time: *t, Valid: true}
+}
+
+// ParseRequiredJSON converts a required string to json.RawMessage
+func ParseRequiredJSON(s string) json.RawMessage {
+	if s == "" {
+		return json.RawMessage("null")
+	}
+	return json.RawMessage(s)
+}

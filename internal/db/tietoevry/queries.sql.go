@@ -8,6 +8,7 @@ package tietoevrysqlc
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"time"
 
 	"github.com/google/uuid"
@@ -318,6 +319,66 @@ func (q *Queries) InsertSymptom(ctx context.Context, arg InsertSymptomParams) er
 		arg.Side,
 		arg.Category,
 		arg.AdditionalData,
+	)
+	return err
+}
+
+const insertTestResult = `-- name: InsertTestResult :exec
+INSERT INTO test_results (
+    id, user_id, type_id, type_type, type_result_type, type_name,
+    timestamp, name, comment, data, created_at, updated_at,
+    test_event_id, test_event_name, test_event_date,
+    test_event_template_test_id, test_event_template_test_name,
+    test_event_template_test_limits
+) VALUES (
+    $1, $2, $3, $4, $5, $6,
+    $7, $8, $9, $10, $11, $12,
+    $13, $14, $15, $16, $17, $18
+)
+ON CONFLICT (id) DO NOTHING
+`
+
+type InsertTestResultParams struct {
+	ID                          uuid.UUID
+	UserID                      uuid.UUID
+	TypeID                      uuid.UUID
+	TypeType                    sql.NullString
+	TypeResultType              string
+	TypeName                    sql.NullString
+	Timestamp                   time.Time
+	Name                        sql.NullString
+	Comment                     sql.NullString
+	Data                        json.RawMessage
+	CreatedAt                   time.Time
+	UpdatedAt                   time.Time
+	TestEventID                 uuid.NullUUID
+	TestEventName               sql.NullString
+	TestEventDate               sql.NullTime
+	TestEventTemplateTestID     uuid.NullUUID
+	TestEventTemplateTestName   sql.NullString
+	TestEventTemplateTestLimits pqtype.NullRawMessage
+}
+
+func (q *Queries) InsertTestResult(ctx context.Context, arg InsertTestResultParams) error {
+	_, err := q.exec(ctx, q.insertTestResultStmt, insertTestResult,
+		arg.ID,
+		arg.UserID,
+		arg.TypeID,
+		arg.TypeType,
+		arg.TypeResultType,
+		arg.TypeName,
+		arg.Timestamp,
+		arg.Name,
+		arg.Comment,
+		arg.Data,
+		arg.CreatedAt,
+		arg.UpdatedAt,
+		arg.TestEventID,
+		arg.TestEventName,
+		arg.TestEventDate,
+		arg.TestEventTemplateTestID,
+		arg.TestEventTemplateTestName,
+		arg.TestEventTemplateTestLimits,
 	)
 	return err
 }

@@ -143,6 +143,7 @@ func (app *api) mount() http.Handler {
 				measurementHandler := tietoevryapi.NewTietoevryMeasurementHandler(app.store.Tietoevry.Measurements(), app.cacheStorage)
 				testResultHandler := tietoevryapi.NewTietoevryTestResultHandler(app.store.Tietoevry.TestResults(), app.cacheStorage)
 				questionnaireHandler := tietoevryapi.NewTietoevryQuestionnaireHandler(app.store.Tietoevry.Questionnaires(), app.cacheStorage)
+				activityZoneHandler := tietoevryapi.NewTietoevryActivityZoneHandler(app.store.Tietoevry.ActivityZones(), app.cacheStorage)
 
 				// User routes
 				r.Post("/users", userHandler.UpsertUser)
@@ -162,6 +163,9 @@ func (app *api) mount() http.Handler {
 
 				// Questionnaire routes
 				r.Post("/questionnaires", questionnaireHandler.InsertQuestionnaireAnswersBulk)
+
+				// Activity Zone routes
+				r.Post("/activity-zones", activityZoneHandler.InsertActivityZonesBulk)
 			})
 
 			// FIS routes

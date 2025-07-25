@@ -29,6 +29,54 @@ func (q *Queries) DeleteUser(ctx context.Context, id uuid.UUID) (int64, error) {
 	return result.RowsAffected()
 }
 
+const insertActivityZone = `-- name: InsertActivityZone :exec
+INSERT INTO activity_zones (
+    user_id, date, created_at, updated_at,
+    seconds_in_zone_0, seconds_in_zone_1, seconds_in_zone_2,
+    seconds_in_zone_3, seconds_in_zone_4, seconds_in_zone_5,
+    source, raw_data
+) VALUES (
+    $1, $2, $3, $4,
+    $5, $6, $7,
+    $8, $9, $10,
+    $11, $12
+)
+ON CONFLICT (user_id, date, source) DO NOTHING
+`
+
+type InsertActivityZoneParams struct {
+	UserID         uuid.UUID
+	Date           time.Time
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
+	SecondsInZone0 sql.NullFloat64
+	SecondsInZone1 sql.NullFloat64
+	SecondsInZone2 sql.NullFloat64
+	SecondsInZone3 sql.NullFloat64
+	SecondsInZone4 sql.NullFloat64
+	SecondsInZone5 sql.NullFloat64
+	Source         string
+	RawData        pqtype.NullRawMessage
+}
+
+func (q *Queries) InsertActivityZone(ctx context.Context, arg InsertActivityZoneParams) error {
+	_, err := q.exec(ctx, q.insertActivityZoneStmt, insertActivityZone,
+		arg.UserID,
+		arg.Date,
+		arg.CreatedAt,
+		arg.UpdatedAt,
+		arg.SecondsInZone0,
+		arg.SecondsInZone1,
+		arg.SecondsInZone2,
+		arg.SecondsInZone3,
+		arg.SecondsInZone4,
+		arg.SecondsInZone5,
+		arg.Source,
+		arg.RawData,
+	)
+	return err
+}
+
 const insertExercise = `-- name: InsertExercise :exec
 INSERT INTO exercises (
     id, created_at, updated_at, user_id, start_time, duration,

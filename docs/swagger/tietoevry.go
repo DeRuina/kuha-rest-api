@@ -180,3 +180,22 @@ type TietoevryQuestionnaireAnswerInput struct {
 type TietoevryQuestionnaireAnswersBulkInput struct {
 	Questionnaires []TietoevryQuestionnaireAnswerInput `json:"questionnaires" validate:"required,dive"`
 }
+
+type TietoevryActivityZoneInput struct {
+	UserID         string   `json:"user_id" example:"7cffe6e0-3f28-43b6-b511-d836d3a9f7b5"`
+	Date           string   `json:"date" example:"2024-07-22"`
+	CreatedAt      string   `json:"created_at" example:"2024-07-22T08:00:00Z"`
+	UpdatedAt      string   `json:"updated_at" example:"2024-07-22T08:01:00Z"`
+	SecondsInZone0 *float64 `json:"seconds_in_zone_0" example:"120.0"`
+	SecondsInZone1 *float64 `json:"seconds_in_zone_1" example:"300.0"`
+	SecondsInZone2 *float64 `json:"seconds_in_zone_2" example:"450.0"`
+	SecondsInZone3 *float64 `json:"seconds_in_zone_3" example:"180.0"`
+	SecondsInZone4 *float64 `json:"seconds_in_zone_4" example:"60.0"`
+	SecondsInZone5 *float64 `json:"seconds_in_zone_5" example:"15.0"`
+	Source         string   `json:"source" example:"polar"`
+	RawData        *string  `json:"raw_data" example:"{\"intensity_distribution\": \"balanced\"}"`
+}
+
+type TietoevryActivityZonesBulkInput struct {
+	ActivityZones []TietoevryActivityZoneInput `json:"activity_zones" validate:"required,dive"`
+}

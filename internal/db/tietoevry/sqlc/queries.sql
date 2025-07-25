@@ -126,3 +126,18 @@ INSERT INTO question_answers (
     $12, $13, $14, $15, $16, $17
 )
 ON CONFLICT (user_id, questionnaire_instance_id, question_id) DO NOTHING;
+
+
+-- name: InsertActivityZone :exec
+INSERT INTO activity_zones (
+    user_id, date, created_at, updated_at,
+    seconds_in_zone_0, seconds_in_zone_1, seconds_in_zone_2,
+    seconds_in_zone_3, seconds_in_zone_4, seconds_in_zone_5,
+    source, raw_data
+) VALUES (
+    $1, $2, $3, $4,
+    $5, $6, $7,
+    $8, $9, $10,
+    $11, $12
+)
+ON CONFLICT (user_id, date, source) DO NOTHING;

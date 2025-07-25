@@ -49,6 +49,7 @@ type Tietoevry interface {
 	Measurements() tietoevry.Measurements
 	TestResults() tietoevry.TestResults
 	Questionnaires() tietoevry.Questionnaires
+	ActivityZones() tietoevry.ActivityZones
 }
 
 type KAMK interface {

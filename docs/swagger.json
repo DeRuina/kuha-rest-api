@@ -248,6 +248,66 @@
                 }
             }
         },
+        "/tietoevry/activity-zones": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Insert multiple activity zone summaries for user (idempotent)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tietoevry - ActivityZones"
+                ],
+                "summary": "Insert activity zones (bulk)",
+                "parameters": [
+                    {
+                        "description": "Activity zone summaries",
+                        "name": "activity_zones",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/swagger.TietoevryActivityZonesBulkInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Activity zones processed successfully (idempotent operation)"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ConflictResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/tietoevry/exercises": {
             "post": {
                 "security": [
@@ -4929,6 +4989,73 @@
                 "totalTime": {
                     "type": "number",
                     "example": 3707.57
+                }
+            }
+        },
+        "swagger.TietoevryActivityZoneInput": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "2024-07-22T08:00:00Z"
+                },
+                "date": {
+                    "type": "string",
+                    "example": "2024-07-22"
+                },
+                "raw_data": {
+                    "type": "string",
+                    "example": "{\"intensity_distribution\": \"balanced\"}"
+                },
+                "seconds_in_zone_0": {
+                    "type": "number",
+                    "example": 120
+                },
+                "seconds_in_zone_1": {
+                    "type": "number",
+                    "example": 300
+                },
+                "seconds_in_zone_2": {
+                    "type": "number",
+                    "example": 450
+                },
+                "seconds_in_zone_3": {
+                    "type": "number",
+                    "example": 180
+                },
+                "seconds_in_zone_4": {
+                    "type": "number",
+                    "example": 60
+                },
+                "seconds_in_zone_5": {
+                    "type": "number",
+                    "example": 15
+                },
+                "source": {
+                    "type": "string",
+                    "example": "polar"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2024-07-22T08:01:00Z"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "7cffe6e0-3f28-43b6-b511-d836d3a9f7b5"
+                }
+            }
+        },
+        "swagger.TietoevryActivityZonesBulkInput": {
+            "type": "object",
+            "required": [
+                "activity_zones"
+            ],
+            "properties": {
+                "activity_zones": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.TietoevryActivityZoneInput"
+                    }
                 }
             }
         },

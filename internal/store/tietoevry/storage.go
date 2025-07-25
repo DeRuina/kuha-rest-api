@@ -39,6 +39,11 @@ type Questionnaires interface {
 	InsertQuestionnaireAnswersBulk(ctx context.Context, answers []tietoevrysqlc.InsertQuestionnaireAnswerParams) error
 }
 
+type ActivityZones interface {
+	ValidateUsersExist(ctx context.Context, userIDs []uuid.UUID) error
+	InsertActivityZonesBulk(ctx context.Context, zones []tietoevrysqlc.InsertActivityZoneParams) error
+}
+
 // TietoevryStorage
 type TietoevryStorage struct {
 	db             *sql.DB
@@ -48,6 +53,7 @@ type TietoevryStorage struct {
 	measurements   Measurements
 	testResults    TestResults
 	questionnaires Questionnaires
+	activityZones  ActivityZones
 }
 
 // Methods
@@ -79,6 +85,10 @@ func (s *TietoevryStorage) Questionnaires() Questionnaires {
 	return s.questionnaires
 }
 
+func (s *TietoevryStorage) ActivityZones() ActivityZones {
+	return s.activityZones
+}
+
 // NewTietoevryStorage creates a new TietoevryStorage instance
 func NewTietoevryStorage(db *sql.DB) *TietoevryStorage {
 	return &TietoevryStorage{
@@ -89,5 +99,6 @@ func NewTietoevryStorage(db *sql.DB) *TietoevryStorage {
 		measurements:   &MeasurementsStore{db: db},
 		testResults:    &TestResultsStore{db: db},
 		questionnaires: &QuestionnairesStore{db: db},
+		activityZones:  &ActivityZonesStore{db: db},
 	}
 }

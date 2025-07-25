@@ -147,6 +147,11 @@ SELECT * FROM users WHERE id = $1;
 
 -- name: LogDeletedUser :exec
 INSERT INTO deleted_users_log (user_id, sportti_id)
-SELECT id, sportti_id 
+SELECT users.id, users.sportti_id 
 FROM users 
-WHERE id = $1;
+WHERE users.id = $1;
+
+-- name: GetDeletedUsers :many
+SELECT id, user_id, sportti_id, deleted_at
+FROM deleted_users_log
+ORDER BY deleted_at DESC;

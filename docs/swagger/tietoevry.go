@@ -200,7 +200,16 @@ type TietoevryActivityZonesBulkInput struct {
 	ActivityZones []TietoevryActivityZoneInput `json:"activity_zones" validate:"required,dive"`
 }
 
-// TietoevryUserResponse represents the wrapped response for a single user
 type TietoevryUserResponse struct {
 	User TietoevryUserUpsertInput `json:"user"`
+}
+
+type TietoevryDeletedUser struct {
+	UserID    string `json:"user_id" example:"7cffe6e0-3f28-43b6-b511-d836d3a9f7b5"`
+	SporttiID int32  `json:"sportti_id" example:"12345"`
+	DeletedAt string `json:"deleted_at" example:"2024-07-25T10:30:00Z"`
+}
+
+type TietoevryDeletedUsersResponse struct {
+	DeletedUsers []TietoevryDeletedUser `json:"deleted_users"`
 }

@@ -15,6 +15,7 @@ type Users interface {
 	GetUser(ctx context.Context, id uuid.UUID) (tietoevrysqlc.User, error)
 	LogDeletedUser(ctx context.Context, userID uuid.UUID) error
 	DeleteUserWithLogging(ctx context.Context, userID uuid.UUID) (int64, error)
+	GetDeletedUsers(ctx context.Context) ([]tietoevrysqlc.DeletedUsersLog, error)
 }
 
 type Exercises interface {

@@ -1033,6 +1033,25 @@ definitions:
     required:
     - activity_zones
     type: object
+  swagger.TietoevryDeletedUser:
+    properties:
+      deleted_at:
+        example: "2024-07-25T10:30:00Z"
+        type: string
+      sportti_id:
+        example: 12345
+        type: integer
+      user_id:
+        example: 7cffe6e0-3f28-43b6-b511-d836d3a9f7b5
+        type: string
+    type: object
+  swagger.TietoevryDeletedUsersResponse:
+    properties:
+      deleted_users:
+        items:
+          $ref: '#/definitions/swagger.TietoevryDeletedUser'
+        type: array
+    type: object
   swagger.TietoevryExerciseUpsertInput:
     properties:
       avg_heart_rate:
@@ -1733,6 +1752,29 @@ paths:
       summary: Insert activity zones (bulk)
       tags:
       - Tietoevry - ActivityZones
+  /tietoevry/deleted-users:
+    get:
+      description: Returns a list of deleted users with timestamps
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.TietoevryDeletedUsersResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List deleted users
+      tags:
+      - Tietoevry - User
   /tietoevry/exercises:
     post:
       consumes:

@@ -266,7 +266,11 @@ create table activity_zones
 -- </ACTIVITY_ZONES>
 
 CREATE TABLE deleted_users_log (
-    user_id UUID PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
+    user_id UUID NOT NULL,
     sportti_id INT NOT NULL,
     deleted_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+CREATE INDEX idx_deleted_users_log_deleted_at
+    ON deleted_users_log(deleted_at DESC);

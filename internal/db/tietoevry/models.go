@@ -29,6 +29,7 @@ type ActivityZone struct {
 }
 
 type DeletedUsersLog struct {
+	ID        int32
 	UserID    uuid.UUID
 	SporttiID int32
 	DeletedAt time.Time

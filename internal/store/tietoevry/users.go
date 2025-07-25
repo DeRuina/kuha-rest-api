@@ -72,3 +72,11 @@ func (s *UserStore) DeleteUserWithLogging(ctx context.Context, userID uuid.UUID)
 
 	return rows, nil
 }
+
+func (s *UserStore) GetDeletedUsers(ctx context.Context) ([]tietoevrysqlc.DeletedUsersLog, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := tietoevrysqlc.New(s.db)
+	return q.GetDeletedUsers(ctx)
+}

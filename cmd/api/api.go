@@ -149,6 +149,7 @@ func (app *api) mount() http.Handler {
 				r.Post("/users", userHandler.UpsertUser)
 				r.Delete("/users", userHandler.DeleteUser)
 				r.Get("/users", userHandler.GetUser)
+				r.Get("/deleted-users", userHandler.GetDeletedUsers)
 
 				// Exercise routes
 				r.Post("/exercises", exerciseHandler.InsertExercisesBulk)

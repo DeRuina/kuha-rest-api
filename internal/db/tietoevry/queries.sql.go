@@ -29,6 +29,40 @@ func (q *Queries) DeleteUser(ctx context.Context, id uuid.UUID) (int64, error) {
 	return result.RowsAffected()
 }
 
+const getDeletedUsers = `-- name: GetDeletedUsers :many
+SELECT id, user_id, sportti_id, deleted_at
+FROM deleted_users_log
+ORDER BY deleted_at DESC
+`
+
+func (q *Queries) GetDeletedUsers(ctx context.Context) ([]DeletedUsersLog, error) {
+	rows, err := q.query(ctx, q.getDeletedUsersStmt, getDeletedUsers)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []DeletedUsersLog
+	for rows.Next() {
+		var i DeletedUsersLog
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.SporttiID,
+			&i.DeletedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getUser = `-- name: GetUser :one
 SELECT id, sportti_id, profile_gender, profile_birthdate, profile_weight, profile_height, profile_resting_heart_rate, profile_maximum_heart_rate, profile_aerobic_threshold, profile_anaerobic_threshold, profile_vo2max FROM users WHERE id = $1
 `
@@ -514,9 +548,9 @@ func (q *Queries) InsertTestResult(ctx context.Context, arg InsertTestResultPara
 
 const logDeletedUser = `-- name: LogDeletedUser :exec
 INSERT INTO deleted_users_log (user_id, sportti_id)
-SELECT id, sportti_id 
+SELECT users.id, users.sportti_id 
 FROM users 
-WHERE id = $1
+WHERE users.id = $1
 `
 
 func (q *Queries) LogDeletedUser(ctx context.Context, id uuid.UUID) error {

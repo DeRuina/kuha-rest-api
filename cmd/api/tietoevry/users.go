@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/DeRuina/KUHA-REST-API/docs/swagger"
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
@@ -232,4 +233,41 @@ func (h *TietoevryUserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 		"user": resp,
 	})
 
+}
+
+// GetDeletedUsers godoc
+//
+//	@Summary		List deleted users
+//	@Description	Returns a list of deleted users with timestamps
+//	@Tags			Tietoevry - User
+//	@Produce		json
+//	@Success		200	{object}	swagger.TietoevryDeletedUsersResponse
+//	@Failure		403	{object}	swagger.ForbiddenResponse
+//	@Failure		500	{object}	swagger.InternalServerErrorResponse
+//	@Security		BearerAuth
+//	@Router			/tietoevry/deleted-users [get]
+func (h *TietoevryUserHandler) GetDeletedUsers(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	data, err := h.store.GetDeletedUsers(r.Context())
+	if err != nil {
+		utils.InternalServerError(w, r, err)
+		return
+	}
+
+	var output []swagger.TietoevryDeletedUser
+	for _, d := range data {
+		output = append(output, swagger.TietoevryDeletedUser{
+			UserID:    d.UserID.String(),
+			SporttiID: d.SporttiID,
+			DeletedAt: d.DeletedAt.Format(time.RFC3339),
+		})
+	}
+
+	utils.WriteJSON(w, http.StatusOK, map[string]any{
+		"deleted_users": output,
+	})
 }

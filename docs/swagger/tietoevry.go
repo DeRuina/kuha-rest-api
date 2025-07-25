@@ -199,3 +199,8 @@ type TietoevryActivityZoneInput struct {
 type TietoevryActivityZonesBulkInput struct {
 	ActivityZones []TietoevryActivityZoneInput `json:"activity_zones" validate:"required,dive"`
 }
+
+// TietoevryUserResponse represents the wrapped response for a single user
+type TietoevryUserResponse struct {
+	User TietoevryUserUpsertInput `json:"user"`
+}

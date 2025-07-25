@@ -1384,6 +1384,11 @@ definitions:
     required:
     - test_results
     type: object
+  swagger.TietoevryUserResponse:
+    properties:
+      user:
+        $ref: '#/definitions/swagger.TietoevryUserUpsertInput'
+    type: object
   swagger.TietoevryUserUpsertInput:
     properties:
       id:
@@ -1951,6 +1956,44 @@ paths:
       security:
       - BearerAuth: []
       summary: Delete a user
+      tags:
+      - Tietoevry - User
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a single user by UUID
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.TietoevryUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user by ID
       tags:
       - Tietoevry - User
     post:

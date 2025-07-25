@@ -264,3 +264,9 @@ create table activity_zones
     primary key (user_id, date, source)
 );
 -- </ACTIVITY_ZONES>
+
+CREATE TABLE deleted_users_log (
+    user_id UUID PRIMARY KEY,
+    sportti_id INT NOT NULL,
+    deleted_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);

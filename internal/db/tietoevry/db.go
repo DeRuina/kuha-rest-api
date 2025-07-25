@@ -27,6 +27,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.deleteUserStmt, err = db.PrepareContext(ctx, deleteUser); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteUser: %w", err)
 	}
+	if q.getUserStmt, err = db.PrepareContext(ctx, getUser); err != nil {
+		return nil, fmt.Errorf("error preparing query GetUser: %w", err)
+	}
 	if q.insertActivityZoneStmt, err = db.PrepareContext(ctx, insertActivityZone); err != nil {
 		return nil, fmt.Errorf("error preparing query InsertActivityZone: %w", err)
 	}
@@ -65,6 +68,11 @@ func (q *Queries) Close() error {
 	if q.deleteUserStmt != nil {
 		if cerr := q.deleteUserStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing deleteUserStmt: %w", cerr)
+		}
+	}
+	if q.getUserStmt != nil {
+		if cerr := q.getUserStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getUserStmt: %w", cerr)
 		}
 	}
 	if q.insertActivityZoneStmt != nil {
@@ -157,6 +165,7 @@ type Queries struct {
 	db                            DBTX
 	tx                            *sql.Tx
 	deleteUserStmt                *sql.Stmt
+	getUserStmt                   *sql.Stmt
 	insertActivityZoneStmt        *sql.Stmt
 	insertExerciseStmt            *sql.Stmt
 	insertExerciseHRZoneStmt      *sql.Stmt
@@ -174,6 +183,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		db:                            tx,
 		tx:                            tx,
 		deleteUserStmt:                q.deleteUserStmt,
+		getUserStmt:                   q.getUserStmt,
 		insertActivityZoneStmt:        q.insertActivityZoneStmt,
 		insertExerciseStmt:            q.insertExerciseStmt,
 		insertExerciseHRZoneStmt:      q.insertExerciseHRZoneStmt,

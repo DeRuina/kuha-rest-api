@@ -141,3 +141,6 @@ INSERT INTO activity_zones (
     $11, $12
 )
 ON CONFLICT (user_id, date, source) DO NOTHING;
+
+-- name: GetUser :one
+SELECT * FROM users WHERE id = $1;

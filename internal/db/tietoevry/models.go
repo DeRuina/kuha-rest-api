@@ -28,6 +28,12 @@ type ActivityZone struct {
 	RawData        pqtype.NullRawMessage
 }
 
+type DeletedUsersLog struct {
+	UserID    uuid.UUID
+	SporttiID int32
+	DeletedAt time.Time
+}
+
 type Exercise struct {
 	ID                uuid.UUID
 	CreatedAt         time.Time

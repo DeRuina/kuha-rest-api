@@ -219,3 +219,36 @@ func ParseRequiredJSON(s string) json.RawMessage {
 	}
 	return json.RawMessage(s)
 }
+
+// Float64PtrOrNil converts sql.NullFloat64 to *float64
+func Float64PtrOrNil(f sql.NullFloat64) *float64 {
+	if f.Valid {
+		return &f.Float64
+	}
+	return nil
+}
+
+// Int32PtrOrNil converts sql.NullInt32 to *int32
+func Int32PtrOrNil(i sql.NullInt32) *int32 {
+	if i.Valid {
+		return &i.Int32
+	}
+	return nil
+}
+
+// FormatDatePtr formats sql.NullTime to a string pointer in "YYYY-MM-DD" format
+func FormatDatePtr(t sql.NullTime) *string {
+	if !t.Valid {
+		return nil
+	}
+	str := t.Time.Format("2006-01-02")
+	return &str
+}
+
+// StringPtrOrNil converts sql.NullString to *string
+func StringPtrOrNil(s sql.NullString) *string {
+	if s.Valid {
+		return &s.String
+	}
+	return nil
+}

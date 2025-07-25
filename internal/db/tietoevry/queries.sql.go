@@ -29,6 +29,29 @@ func (q *Queries) DeleteUser(ctx context.Context, id uuid.UUID) (int64, error) {
 	return result.RowsAffected()
 }
 
+const getUser = `-- name: GetUser :one
+SELECT id, sportti_id, profile_gender, profile_birthdate, profile_weight, profile_height, profile_resting_heart_rate, profile_maximum_heart_rate, profile_aerobic_threshold, profile_anaerobic_threshold, profile_vo2max FROM users WHERE id = $1
+`
+
+func (q *Queries) GetUser(ctx context.Context, id uuid.UUID) (User, error) {
+	row := q.queryRow(ctx, q.getUserStmt, getUser, id)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.SporttiID,
+		&i.ProfileGender,
+		&i.ProfileBirthdate,
+		&i.ProfileWeight,
+		&i.ProfileHeight,
+		&i.ProfileRestingHeartRate,
+		&i.ProfileMaximumHeartRate,
+		&i.ProfileAerobicThreshold,
+		&i.ProfileAnaerobicThreshold,
+		&i.ProfileVo2max,
+	)
+	return i, err
+}
+
 const insertActivityZone = `-- name: InsertActivityZone :exec
 INSERT INTO activity_zones (
     user_id, date, created_at, updated_at,

@@ -28,3 +28,11 @@ func (s *UserStore) DeleteUser(ctx context.Context, id uuid.UUID) (int64, error)
 	q := tietoevrysqlc.New(s.db)
 	return q.DeleteUser(ctx, id)
 }
+
+func (s *UserStore) GetUser(ctx context.Context, id uuid.UUID) (tietoevrysqlc.User, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	queries := tietoevrysqlc.New(s.db)
+	return queries.GetUser(ctx, id)
+}

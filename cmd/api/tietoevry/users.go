@@ -1,9 +1,11 @@
 package tietoevryapi
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 
+	"github.com/DeRuina/KUHA-REST-API/docs/swagger"
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
 	tietoevrysqlc "github.com/DeRuina/KUHA-REST-API/internal/db/tietoevry"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/cache"
@@ -158,5 +160,76 @@ func (h *TietoevryUserHandler) DeleteUser(w http.ResponseWriter, r *http.Request
 	}
 
 	w.WriteHeader(http.StatusOK)
+
+}
+
+// GetUser godoc
+//
+//	@Summary		Get user by ID
+//	@Description	Retrieve a single user by UUID
+//	@Tags			Tietoevry - User
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query		string	true	"User ID (UUID)"
+//	@Success		200	{object}	swagger.TietoevryUserResponse
+//	@Failure		400	{object}	swagger.ValidationErrorResponse
+//	@Failure		403	{object}	swagger.ForbiddenResponse
+//	@Failure		404	{object}	swagger.NotFoundResponse
+//	@Failure		500	{object}	swagger.InternalServerErrorResponse
+//	@Security		BearerAuth
+//	@Router			/tietoevry/users [get]
+func (h *TietoevryUserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	if err := utils.ValidateParams(r, []string{"id"}); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	params := TietoevryUserDeleteParams{
+		ID: r.URL.Query().Get("id"),
+	}
+
+	if err := utils.GetValidator().Struct(params); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	userID, err := utils.ParseUUID(params.ID)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	user, err := h.store.GetUser(r.Context(), userID)
+	if err == sql.ErrNoRows {
+		utils.NotFoundResponse(w, r, err)
+		return
+	}
+	if err != nil {
+		utils.InternalServerError(w, r, err)
+		return
+	}
+
+	resp := swagger.TietoevryUserUpsertInput{
+		ID:                        user.ID.String(),
+		SporttiID:                 user.SporttiID,
+		ProfileGender:             utils.StringPtrOrNil(user.ProfileGender),
+		ProfileBirthdate:          utils.FormatDatePtr(user.ProfileBirthdate),
+		ProfileWeight:             utils.Float64PtrOrNil(user.ProfileWeight),
+		ProfileHeight:             utils.Float64PtrOrNil(user.ProfileHeight),
+		ProfileRestingHeartRate:   utils.Int32PtrOrNil(user.ProfileRestingHeartRate),
+		ProfileMaximumHeartRate:   utils.Int32PtrOrNil(user.ProfileMaximumHeartRate),
+		ProfileAerobicThreshold:   utils.Int32PtrOrNil(user.ProfileAerobicThreshold),
+		ProfileAnaerobicThreshold: utils.Int32PtrOrNil(user.ProfileAnaerobicThreshold),
+		ProfileVo2max:             utils.Int32PtrOrNil(user.ProfileVo2max),
+	}
+
+	utils.WriteJSON(w, http.StatusOK, map[string]any{
+		"user": resp,
+	})
 
 }

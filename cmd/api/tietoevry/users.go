@@ -148,7 +148,7 @@ func (h *TietoevryUserHandler) DeleteUser(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	rows, err := h.store.DeleteUser(r.Context(), userID)
+	rows, err := h.store.DeleteUserWithLogging(r.Context(), userID)
 	if err != nil {
 		utils.HandleDatabaseError(w, r, err)
 		return

@@ -144,3 +144,9 @@ ON CONFLICT (user_id, date, source) DO NOTHING;
 
 -- name: GetUser :one
 SELECT * FROM users WHERE id = $1;
+
+-- name: LogDeletedUser :exec
+INSERT INTO deleted_users_log (user_id, sportti_id)
+SELECT id, sportti_id 
+FROM users 
+WHERE id = $1;

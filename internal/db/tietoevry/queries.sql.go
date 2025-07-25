@@ -512,6 +512,18 @@ func (q *Queries) InsertTestResult(ctx context.Context, arg InsertTestResultPara
 	return err
 }
 
+const logDeletedUser = `-- name: LogDeletedUser :exec
+INSERT INTO deleted_users_log (user_id, sportti_id)
+SELECT id, sportti_id 
+FROM users 
+WHERE id = $1
+`
+
+func (q *Queries) LogDeletedUser(ctx context.Context, id uuid.UUID) error {
+	_, err := q.exec(ctx, q.logDeletedUserStmt, logDeletedUser, id)
+	return err
+}
+
 const upsertUser = `-- name: UpsertUser :exec
 INSERT INTO users (
     id, sportti_id, profile_gender, profile_birthdate, profile_weight,

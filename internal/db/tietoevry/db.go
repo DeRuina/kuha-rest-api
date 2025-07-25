@@ -57,6 +57,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.insertTestResultStmt, err = db.PrepareContext(ctx, insertTestResult); err != nil {
 		return nil, fmt.Errorf("error preparing query InsertTestResult: %w", err)
 	}
+	if q.logDeletedUserStmt, err = db.PrepareContext(ctx, logDeletedUser); err != nil {
+		return nil, fmt.Errorf("error preparing query LogDeletedUser: %w", err)
+	}
 	if q.upsertUserStmt, err = db.PrepareContext(ctx, upsertUser); err != nil {
 		return nil, fmt.Errorf("error preparing query UpsertUser: %w", err)
 	}
@@ -120,6 +123,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing insertTestResultStmt: %w", cerr)
 		}
 	}
+	if q.logDeletedUserStmt != nil {
+		if cerr := q.logDeletedUserStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing logDeletedUserStmt: %w", cerr)
+		}
+	}
 	if q.upsertUserStmt != nil {
 		if cerr := q.upsertUserStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing upsertUserStmt: %w", cerr)
@@ -175,6 +183,7 @@ type Queries struct {
 	insertQuestionnaireAnswerStmt *sql.Stmt
 	insertSymptomStmt             *sql.Stmt
 	insertTestResultStmt          *sql.Stmt
+	logDeletedUserStmt            *sql.Stmt
 	upsertUserStmt                *sql.Stmt
 }
 
@@ -193,6 +202,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		insertQuestionnaireAnswerStmt: q.insertQuestionnaireAnswerStmt,
 		insertSymptomStmt:             q.insertSymptomStmt,
 		insertTestResultStmt:          q.insertTestResultStmt,
+		logDeletedUserStmt:            q.logDeletedUserStmt,
 		upsertUserStmt:                q.upsertUserStmt,
 	}
 }

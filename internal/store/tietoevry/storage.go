@@ -13,6 +13,8 @@ type Users interface {
 	UpsertUser(ctx context.Context, arg tietoevrysqlc.UpsertUserParams) error
 	DeleteUser(ctx context.Context, id uuid.UUID) (int64, error)
 	GetUser(ctx context.Context, id uuid.UUID) (tietoevrysqlc.User, error)
+	LogDeletedUser(ctx context.Context, userID uuid.UUID) error
+	DeleteUserWithLogging(ctx context.Context, userID uuid.UUID) (int64, error)
 }
 
 type Exercises interface {

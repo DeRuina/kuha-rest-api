@@ -1,6 +1,7 @@
 package tietoevryapi
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -65,7 +66,7 @@ type TietoevryExerciseUpsertInput struct {
 	UpdatedAt         string   `json:"updated_at" validate:"required"`
 	UserID            string   `json:"user_id" validate:"required,uuid4"`
 	StartTime         string   `json:"start_time" validate:"required"`
-	Duration          int64    `json:"duration" validate:"required"`
+	Duration          string   `json:"duration" validate:"required"`
 	Comment           *string  `json:"comment"`
 	SportType         *string  `json:"sport_type"`
 	DetailedSportType *string  `json:"detailed_sport_type"`
@@ -174,6 +175,16 @@ func (h *TietoevryExerciseHandler) InsertExercisesBulk(w http.ResponseWriter, r 
 			return
 		}
 
+		durationNanos, err := utils.ParseDurationToNanos(exercise.Duration)
+		if err != nil {
+			if errors.Is(err, utils.ErrInvalidDuration) || errors.Is(err, utils.ErrDurationRequired) {
+				utils.BadRequestResponse(w, r, err)
+				return
+			}
+			utils.InternalServerError(w, r, err)
+			return
+		}
+
 		rawData := utils.ParseRawJSON(exercise.RawData)
 
 		arg := tietoevrysqlc.InsertExerciseParams{
@@ -182,7 +193,7 @@ func (h *TietoevryExerciseHandler) InsertExercisesBulk(w http.ResponseWriter, r 
 			UpdatedAt:         updatedAt,
 			UserID:            userID,
 			StartTime:         startTime,
-			Duration:          exercise.Duration,
+			Duration:          durationNanos,
 			Comment:           utils.NullStringPtr(exercise.Comment),
 			SportType:         utils.NullStringPtr(exercise.SportType),
 			DetailedSportType: utils.NullStringPtr(exercise.DetailedSportType),

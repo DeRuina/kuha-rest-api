@@ -5223,8 +5223,9 @@ const docTemplate = `{
                     "example": 8.5
                 },
                 "duration": {
-                    "type": "integer",
-                    "example": 3600
+                    "description": "ISO 8601 duration format",
+                    "type": "string",
+                    "example": "PT1H30M45S"
                 },
                 "feeling": {
                     "type": "integer",

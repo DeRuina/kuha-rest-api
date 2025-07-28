@@ -1076,8 +1076,9 @@ definitions:
         example: 8.5
         type: number
       duration:
-        example: 3600
-        type: integer
+        description: ISO 8601 duration format
+        example: PT1H30M45S
+        type: string
       feeling:
         example: 4
         type: integer

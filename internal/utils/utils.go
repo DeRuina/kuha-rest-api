@@ -11,6 +11,7 @@ import (
 	"time"
 	"unicode"
 
+	"github.com/DeRuina/KUHA-REST-API/internal/utils/duration"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"github.com/sqlc-dev/pqtype"
@@ -251,4 +252,20 @@ func StringPtrOrNil(s sql.NullString) *string {
 		return &s.String
 	}
 	return nil
+}
+
+// ParseDurationToNanos converts an ISO 8601 duration string to nanoseconds
+func ParseDurationToNanos(durationStr string) (int64, error) {
+	isoDuration, err := duration.FromString(durationStr)
+	if err != nil {
+		// Fallback to Go duration format for backward compatibility
+		goDuration, goErr := time.ParseDuration(durationStr)
+		if goErr != nil {
+			return 0, DurationParseError(durationStr, err)
+		}
+		return int64(goDuration), nil
+	}
+
+	timeDuration := isoDuration.ToDuration()
+	return int64(timeDuration), nil
 }

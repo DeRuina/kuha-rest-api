@@ -19,6 +19,10 @@ var (
 	//General
 	ErrQueryTimeOut = errors.New("database query timed out")
 
+	// Duration
+	ErrInvalidDuration  = errors.New("invalid duration format")
+	ErrDurationRequired = errors.New("duration is required")
+
 	//ErrMissing
 	ErrMissingUserID                  = errors.New("user_id is required")
 	ErrMissingUsername                = errors.New("username is required")
@@ -285,7 +289,6 @@ func ConflictResponse(w http.ResponseWriter, r *http.Request, err error) {
 }
 
 // HandleDatabaseError analyzes database errors and returns appropriate HTTP responses - defualt 500 Internal Server Error
-// HandleDatabaseError analyzes database errors and returns appropriate HTTP responses - defualt 500 Internal Server Error
 func HandleDatabaseError(w http.ResponseWriter, r *http.Request, err error) {
 	// Check if it's a PostgreSQL error
 	if pqErr, ok := err.(*pq.Error); ok {
@@ -371,4 +374,9 @@ func RateLimitExceededResponse(w http.ResponseWriter, r *http.Request, retryAfte
 		"error":       "rate limit exceeded",
 		"retry_after": retryAfter,
 	})
+}
+
+func DurationParseError(input string, err error) error {
+	return fmt.Errorf("%w: '%s' - expected ISO 8601 format like 'PT1H30M45S': %v",
+		ErrInvalidDuration, input, err)
 }

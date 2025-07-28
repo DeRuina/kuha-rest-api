@@ -57,7 +57,7 @@ type TietoevryExerciseUpsertInput struct {
 	UpdatedAt         string   `json:"updated_at" example:"2024-07-21T08:00:00Z"`
 	UserID            string   `json:"user_id" example:"7cffe6e0-3f28-43b6-b511-d836d3a9f7b5"`
 	StartTime         string   `json:"start_time" example:"2024-07-21T08:10:00Z"`
-	Duration          int64    `json:"duration" example:"3600"`
+	Duration          string   `json:"duration" example:"PT1H30M45S"` // ISO 8601 duration format
 	Comment           *string  `json:"comment" example:"Morning run"`
 	SportType         *string  `json:"sport_type" example:"running"`
 	DetailedSportType *string  `json:"detailed_sport_type" example:"trail"`

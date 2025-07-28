@@ -30,6 +30,18 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getDeletedUsersStmt, err = db.PrepareContext(ctx, getDeletedUsers); err != nil {
 		return nil, fmt.Errorf("error preparing query GetDeletedUsers: %w", err)
 	}
+	if q.getExerciseHRZonesStmt, err = db.PrepareContext(ctx, getExerciseHRZones); err != nil {
+		return nil, fmt.Errorf("error preparing query GetExerciseHRZones: %w", err)
+	}
+	if q.getExerciseSamplesStmt, err = db.PrepareContext(ctx, getExerciseSamples); err != nil {
+		return nil, fmt.Errorf("error preparing query GetExerciseSamples: %w", err)
+	}
+	if q.getExerciseSectionsStmt, err = db.PrepareContext(ctx, getExerciseSections); err != nil {
+		return nil, fmt.Errorf("error preparing query GetExerciseSections: %w", err)
+	}
+	if q.getExercisesByUserStmt, err = db.PrepareContext(ctx, getExercisesByUser); err != nil {
+		return nil, fmt.Errorf("error preparing query GetExercisesByUser: %w", err)
+	}
 	if q.getUserStmt, err = db.PrepareContext(ctx, getUser); err != nil {
 		return nil, fmt.Errorf("error preparing query GetUser: %w", err)
 	}
@@ -79,6 +91,26 @@ func (q *Queries) Close() error {
 	if q.getDeletedUsersStmt != nil {
 		if cerr := q.getDeletedUsersStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getDeletedUsersStmt: %w", cerr)
+		}
+	}
+	if q.getExerciseHRZonesStmt != nil {
+		if cerr := q.getExerciseHRZonesStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getExerciseHRZonesStmt: %w", cerr)
+		}
+	}
+	if q.getExerciseSamplesStmt != nil {
+		if cerr := q.getExerciseSamplesStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getExerciseSamplesStmt: %w", cerr)
+		}
+	}
+	if q.getExerciseSectionsStmt != nil {
+		if cerr := q.getExerciseSectionsStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getExerciseSectionsStmt: %w", cerr)
+		}
+	}
+	if q.getExercisesByUserStmt != nil {
+		if cerr := q.getExercisesByUserStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getExercisesByUserStmt: %w", cerr)
 		}
 	}
 	if q.getUserStmt != nil {
@@ -182,6 +214,10 @@ type Queries struct {
 	tx                            *sql.Tx
 	deleteUserStmt                *sql.Stmt
 	getDeletedUsersStmt           *sql.Stmt
+	getExerciseHRZonesStmt        *sql.Stmt
+	getExerciseSamplesStmt        *sql.Stmt
+	getExerciseSectionsStmt       *sql.Stmt
+	getExercisesByUserStmt        *sql.Stmt
 	getUserStmt                   *sql.Stmt
 	insertActivityZoneStmt        *sql.Stmt
 	insertExerciseStmt            *sql.Stmt
@@ -202,6 +238,10 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		tx:                            tx,
 		deleteUserStmt:                q.deleteUserStmt,
 		getDeletedUsersStmt:           q.getDeletedUsersStmt,
+		getExerciseHRZonesStmt:        q.getExerciseHRZonesStmt,
+		getExerciseSamplesStmt:        q.getExerciseSamplesStmt,
+		getExerciseSectionsStmt:       q.getExerciseSectionsStmt,
+		getExercisesByUserStmt:        q.getExercisesByUserStmt,
 		getUserStmt:                   q.getUserStmt,
 		insertActivityZoneStmt:        q.insertActivityZoneStmt,
 		insertExerciseStmt:            q.insertExerciseStmt,

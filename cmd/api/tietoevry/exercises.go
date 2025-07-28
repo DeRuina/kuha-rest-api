@@ -4,7 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
+	"github.com/DeRuina/KUHA-REST-API/docs/swagger"
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
 	tietoevrysqlc "github.com/DeRuina/KUHA-REST-API/internal/db/tietoevry"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/cache"
@@ -94,6 +96,10 @@ type TietoevryExerciseUpsertInput struct {
 
 type TietoevryExercisesBulkInput struct {
 	Exercises []TietoevryExerciseUpsertInput `json:"exercises" validate:"required,dive"`
+}
+
+type TietoevryExerciseParams struct {
+	UserID string `form:"user_id" validate:"required,uuid4"`
 }
 
 // InsertExercise godoc
@@ -291,4 +297,145 @@ func (h *TietoevryExerciseHandler) InsertExercisesBulk(w http.ResponseWriter, r 
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+// GetExercises godoc
+//
+//	@Summary		Get exercises by user ID
+//	@Description	Get all exercises (HR_Zones, Samples, Sections) for a specific user
+//	@Tags			Tietoevry - Exercise
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id	query		string	true	"User ID (UUID)"
+//	@Success		200		{object}	swagger.TietoevryExerciseResponse
+//	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		403		{object}	swagger.ForbiddenResponse
+//	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Security		BearerAuth
+//	@Router			/tietoevry/exercises [get]
+func (h *TietoevryExerciseHandler) GetExercises(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	if err := utils.ValidateParams(r, []string{"user_id"}); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	params := TietoevryExerciseParams{
+		UserID: r.URL.Query().Get("user_id"),
+	}
+
+	if err := utils.GetValidator().Struct(params); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	userID, err := utils.ParseUUID(params.UserID)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	exercises, err := h.store.GetExercisesByUser(r.Context(), userID)
+	if err != nil {
+		utils.InternalServerError(w, r, err)
+		return
+	}
+
+	if len(exercises) == 0 {
+		utils.WriteJSON(w, http.StatusOK, map[string]any{
+			"exercises": []swagger.TietoevryExerciseUpsertInput{},
+		})
+		return
+	}
+
+	var output []swagger.TietoevryExerciseUpsertInput
+	for _, ex := range exercises {
+		hrZones, _ := h.store.GetExerciseHRZones(r.Context(), ex.ID)
+		samples, _ := h.store.GetExerciseSamples(r.Context(), ex.ID)
+		sections, _ := h.store.GetExerciseSections(r.Context(), ex.ID)
+
+		out := swagger.TietoevryExerciseUpsertInput{
+			ID:                ex.ID.String(),
+			CreatedAt:         ex.CreatedAt.Format(time.RFC3339),
+			UpdatedAt:         ex.UpdatedAt.Format(time.RFC3339),
+			UserID:            ex.UserID.String(),
+			StartTime:         ex.StartTime.Format(time.RFC3339),
+			Duration:          utils.ConvertNanosToDuration(ex.Duration),
+			Comment:           utils.StringPtrOrNil(ex.Comment),
+			SportType:         utils.StringPtrOrNil(ex.SportType),
+			DetailedSportType: utils.StringPtrOrNil(ex.DetailedSportType),
+			Distance:          utils.Float64PtrOrNil(ex.Distance),
+			AvgHeartRate:      utils.Float64PtrOrNil(ex.AvgHeartRate),
+			MaxHeartRate:      utils.Float64PtrOrNil(ex.MaxHeartRate),
+			Trimp:             utils.Float64PtrOrNil(ex.Trimp),
+			SprintCount:       utils.Int32PtrOrNil(ex.SprintCount),
+			AvgSpeed:          utils.Float64PtrOrNil(ex.AvgSpeed),
+			MaxSpeed:          utils.Float64PtrOrNil(ex.MaxSpeed),
+			Source:            ex.Source,
+			Status:            utils.StringPtrOrNil(ex.Status),
+			Calories:          utils.Int32PtrOrNil(ex.Calories),
+			TrainingLoad:      utils.Int32PtrOrNil(ex.TrainingLoad),
+			RawID:             utils.StringPtrOrNil(ex.RawID),
+			Feeling:           utils.Int32PtrOrNil(ex.Feeling),
+			Recovery:          utils.Int32PtrOrNil(ex.Recovery),
+			RPE:               utils.Int32PtrOrNil(ex.Rpe),
+			RawData:           utils.RawMessagePtrOrNil(ex.RawData),
+		}
+
+		// HR Zones
+		for _, z := range hrZones {
+			out.HRZones = append(out.HRZones, swagger.HRZone{
+				ExerciseID:    z.ExerciseID.String(),
+				ZoneIndex:     z.ZoneIndex,
+				SecondsInZone: z.SecondsInZone,
+				LowerLimit:    z.LowerLimit,
+				UpperLimit:    z.UpperLimit,
+				CreatedAt:     z.CreatedAt.Format(time.RFC3339),
+				UpdatedAt:     z.UpdatedAt.Format(time.RFC3339),
+			})
+		}
+
+		// Samples
+		for _, s := range samples {
+			out.Samples = append(out.Samples, swagger.Sample{
+				ID:            s.ID.String(),
+				UserID:        s.UserID.String(),
+				ExerciseID:    s.ExerciseID.String(),
+				SampleType:    s.SampleType,
+				RecordingRate: s.RecordingRate,
+				Samples:       s.Samples,
+				Source:        s.Source,
+			})
+		}
+
+		// Sections
+		for _, sec := range sections {
+			out.Sections = append(out.Sections, swagger.Section{
+				ID:          sec.ID.String(),
+				UserID:      sec.UserID.String(),
+				ExerciseID:  sec.ExerciseID.String(),
+				CreatedAt:   sec.CreatedAt.Format(time.RFC3339),
+				UpdatedAt:   sec.UpdatedAt.Format(time.RFC3339),
+				StartTime:   sec.StartTime.Format(time.RFC3339),
+				EndTime:     sec.EndTime.Format(time.RFC3339),
+				SectionType: utils.StringPtrOrNil(sec.SectionType),
+				Name:        utils.StringPtrOrNil(sec.Name),
+				Comment:     utils.StringPtrOrNil(sec.Comment),
+				Source:      sec.Source,
+				RawID:       utils.StringPtrOrNil(sec.RawID),
+				RawData:     utils.RawMessagePtrOrNil(sec.RawData),
+			})
+		}
+
+		output = append(output, out)
+	}
+
+	// Response
+	utils.WriteJSON(w, http.StatusOK, map[string]any{
+		"exercises": output,
+	})
 }

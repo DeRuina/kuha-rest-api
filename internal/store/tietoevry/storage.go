@@ -21,6 +21,10 @@ type Users interface {
 type Exercises interface {
 	ValidateUsersExist(ctx context.Context, userIDs []uuid.UUID) error
 	InsertExercisesBulk(ctx context.Context, exercises []ExercisePayload) error
+	GetExercisesByUser(ctx context.Context, userID uuid.UUID) ([]tietoevrysqlc.Exercise, error)
+	GetExerciseHRZones(ctx context.Context, id uuid.UUID) ([]tietoevrysqlc.ExerciseHrZone, error)
+	GetExerciseSamples(ctx context.Context, id uuid.UUID) ([]tietoevrysqlc.ExerciseSample, error)
+	GetExerciseSections(ctx context.Context, id uuid.UUID) ([]tietoevrysqlc.ExerciseSection, error)
 }
 
 type Symptoms interface {

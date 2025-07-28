@@ -153,6 +153,7 @@ func (app *api) mount() http.Handler {
 
 				// Exercise routes
 				r.Post("/exercises", exerciseHandler.InsertExercisesBulk)
+				r.Get("/exercises", exerciseHandler.GetExercises)
 
 				// Symptom routes
 				r.Post("/symptoms", symptomHandler.InsertSymptomsBulk)

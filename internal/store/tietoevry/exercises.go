@@ -125,3 +125,21 @@ func (s *ExercisesStore) InsertExercisesBulk(ctx context.Context, exercises []Ex
 	// Commit the transaction if all exercises succeeded
 	return tx.Commit()
 }
+
+func (s *ExercisesStore) GetExercisesByUser(ctx context.Context, userID uuid.UUID) ([]tietoevrysqlc.Exercise, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+	return tietoevrysqlc.New(s.db).GetExercisesByUser(ctx, userID)
+}
+
+func (s *ExercisesStore) GetExerciseHRZones(ctx context.Context, id uuid.UUID) ([]tietoevrysqlc.ExerciseHrZone, error) {
+	return tietoevrysqlc.New(s.db).GetExerciseHRZones(ctx, id)
+}
+
+func (s *ExercisesStore) GetExerciseSamples(ctx context.Context, id uuid.UUID) ([]tietoevrysqlc.ExerciseSample, error) {
+	return tietoevrysqlc.New(s.db).GetExerciseSamples(ctx, id)
+}
+
+func (s *ExercisesStore) GetExerciseSections(ctx context.Context, id uuid.UUID) ([]tietoevrysqlc.ExerciseSection, error) {
+	return tietoevrysqlc.New(s.db).GetExerciseSections(ctx, id)
+}

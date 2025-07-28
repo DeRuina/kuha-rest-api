@@ -1052,6 +1052,11 @@ definitions:
           $ref: '#/definitions/swagger.TietoevryDeletedUser'
         type: array
     type: object
+  swagger.TietoevryExerciseResponse:
+    properties:
+      exercises:
+        $ref: '#/definitions/swagger.TietoevryExerciseUpsertInput'
+    type: object
   swagger.TietoevryExerciseUpsertInput:
     properties:
       avg_heart_rate:
@@ -1777,6 +1782,41 @@ paths:
       tags:
       - Tietoevry - User
   /tietoevry/exercises:
+    get:
+      consumes:
+      - application/json
+      description: Get all exercises (HR_Zones, Samples, Sections) for a specific
+        user
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.TietoevryExerciseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get exercises by user ID
+      tags:
+      - Tietoevry - Exercise
     post:
       consumes:
       - application/json

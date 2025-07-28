@@ -354,6 +354,59 @@ const docTemplate = `{
             }
         },
         "/tietoevry/exercises": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get all exercises (HR_Zones, Samples, Sections) for a specific user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tietoevry - Exercise"
+                ],
+                "summary": "Get exercises by user ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID (UUID)",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.TietoevryExerciseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -5188,6 +5241,14 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/swagger.TietoevryDeletedUser"
                     }
+                }
+            }
+        },
+        "swagger.TietoevryExerciseResponse": {
+            "type": "object",
+            "properties": {
+                "exercises": {
+                    "$ref": "#/definitions/swagger.TietoevryExerciseUpsertInput"
                 }
             }
         },

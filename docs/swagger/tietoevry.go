@@ -36,19 +36,19 @@ type Sample struct {
 }
 
 type Section struct {
-	ID          string `json:"id" example:"1a2b3c4d-0000-0000-0000-111122223333"`
-	UserID      string `json:"user_id" example:"7cffe6e0-3f28-43b6-b511-d836d3a9f7b5"`
-	ExerciseID  string `json:"exercise_id" example:"2d4f6aee-b62c-408e-85e1-07bd78f383a7"`
-	CreatedAt   string `json:"created_at" example:"2024-07-21T08:00:00Z"`
-	UpdatedAt   string `json:"updated_at" example:"2024-07-21T08:05:00Z"`
-	StartTime   string `json:"start_time" example:"2024-07-21T08:10:00Z"`
-	EndTime     string `json:"end_time" example:"2024-07-21T08:30:00Z"`
-	SectionType string `json:"section_type" example:"warmup"`
-	Name        string `json:"name" example:"Warm-up"`
-	Comment     string `json:"comment" example:"Felt great"`
-	Source      string `json:"source" example:"polar"`
-	RawID       string `json:"raw_id" example:"abc-123"`
-	RawData     string `json:"raw_data" example:"{\"extra\":\"data\"}"`
+	ID          string  `json:"id" example:"1a2b3c4d-0000-0000-0000-111122223333"`
+	UserID      string  `json:"user_id" example:"7cffe6e0-3f28-43b6-b511-d836d3a9f7b5"`
+	ExerciseID  string  `json:"exercise_id" example:"2d4f6aee-b62c-408e-85e1-07bd78f383a7"`
+	CreatedAt   string  `json:"created_at" example:"2024-07-21T08:00:00Z"`
+	UpdatedAt   string  `json:"updated_at" example:"2024-07-21T08:05:00Z"`
+	StartTime   string  `json:"start_time" example:"2024-07-21T08:10:00Z"`
+	EndTime     string  `json:"end_time" example:"2024-07-21T08:30:00Z"`
+	SectionType *string `json:"section_type" example:"warmup"`
+	Name        *string `json:"name" example:"Warm-up"`
+	Comment     *string `json:"comment" example:"Felt great"`
+	Source      string  `json:"source" example:"polar"`
+	RawID       *string `json:"raw_id" example:"abc-123"`
+	RawData     *string `json:"raw_data" example:"{\"extra\":\"data\"}"`
 }
 
 type TietoevryExerciseUpsertInput struct {
@@ -212,4 +212,8 @@ type TietoevryDeletedUser struct {
 
 type TietoevryDeletedUsersResponse struct {
 	DeletedUsers []TietoevryDeletedUser `json:"deleted_users"`
+}
+
+type TietoevryExerciseResponse struct {
+	Exercise TietoevryExerciseUpsertInput `json:"exercises"`
 }

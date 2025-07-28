@@ -155,3 +155,22 @@ WHERE users.id = $1;
 SELECT id, user_id, sportti_id, deleted_at
 FROM deleted_users_log
 ORDER BY deleted_at DESC;
+
+-- name: GetExercisesByUser :many
+SELECT * FROM exercises
+WHERE user_id = $1
+ORDER BY start_time DESC;
+
+-- name: GetExerciseHRZones :many
+SELECT * FROM exercise_hr_zones
+WHERE exercise_id = $1
+ORDER BY zone_index;
+
+-- name: GetExerciseSamples :many
+SELECT * FROM exercise_samples
+WHERE exercise_id = $1;
+
+-- name: GetExerciseSections :many
+SELECT * FROM exercise_sections
+WHERE exercise_id = $1
+ORDER BY start_time;

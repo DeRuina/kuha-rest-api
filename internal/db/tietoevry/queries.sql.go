@@ -63,6 +63,177 @@ func (q *Queries) GetDeletedUsers(ctx context.Context) ([]DeletedUsersLog, error
 	return items, nil
 }
 
+const getExerciseHRZones = `-- name: GetExerciseHRZones :many
+SELECT exercise_id, zone_index, seconds_in_zone, lower_limit, upper_limit, created_at, updated_at FROM exercise_hr_zones
+WHERE exercise_id = $1
+ORDER BY zone_index
+`
+
+func (q *Queries) GetExerciseHRZones(ctx context.Context, exerciseID uuid.UUID) ([]ExerciseHrZone, error) {
+	rows, err := q.query(ctx, q.getExerciseHRZonesStmt, getExerciseHRZones, exerciseID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ExerciseHrZone
+	for rows.Next() {
+		var i ExerciseHrZone
+		if err := rows.Scan(
+			&i.ExerciseID,
+			&i.ZoneIndex,
+			&i.SecondsInZone,
+			&i.LowerLimit,
+			&i.UpperLimit,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getExerciseSamples = `-- name: GetExerciseSamples :many
+SELECT id, user_id, exercise_id, sample_type, recording_rate, samples, source FROM exercise_samples
+WHERE exercise_id = $1
+`
+
+func (q *Queries) GetExerciseSamples(ctx context.Context, exerciseID uuid.UUID) ([]ExerciseSample, error) {
+	rows, err := q.query(ctx, q.getExerciseSamplesStmt, getExerciseSamples, exerciseID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ExerciseSample
+	for rows.Next() {
+		var i ExerciseSample
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.ExerciseID,
+			&i.SampleType,
+			&i.RecordingRate,
+			pq.Array(&i.Samples),
+			&i.Source,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getExerciseSections = `-- name: GetExerciseSections :many
+SELECT id, user_id, exercise_id, created_at, updated_at, start_time, end_time, section_type, name, comment, source, raw_id, raw_data FROM exercise_sections
+WHERE exercise_id = $1
+ORDER BY start_time
+`
+
+func (q *Queries) GetExerciseSections(ctx context.Context, exerciseID uuid.UUID) ([]ExerciseSection, error) {
+	rows, err := q.query(ctx, q.getExerciseSectionsStmt, getExerciseSections, exerciseID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ExerciseSection
+	for rows.Next() {
+		var i ExerciseSection
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.ExerciseID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.StartTime,
+			&i.EndTime,
+			&i.SectionType,
+			&i.Name,
+			&i.Comment,
+			&i.Source,
+			&i.RawID,
+			&i.RawData,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getExercisesByUser = `-- name: GetExercisesByUser :many
+SELECT id, created_at, updated_at, user_id, start_time, duration, comment, sport_type, detailed_sport_type, distance, avg_heart_rate, max_heart_rate, trimp, sprint_count, avg_speed, max_speed, source, status, calories, training_load, raw_id, raw_data, feeling, recovery, rpe FROM exercises
+WHERE user_id = $1
+ORDER BY start_time DESC
+`
+
+func (q *Queries) GetExercisesByUser(ctx context.Context, userID uuid.UUID) ([]Exercise, error) {
+	rows, err := q.query(ctx, q.getExercisesByUserStmt, getExercisesByUser, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Exercise
+	for rows.Next() {
+		var i Exercise
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.UserID,
+			&i.StartTime,
+			&i.Duration,
+			&i.Comment,
+			&i.SportType,
+			&i.DetailedSportType,
+			&i.Distance,
+			&i.AvgHeartRate,
+			&i.MaxHeartRate,
+			&i.Trimp,
+			&i.SprintCount,
+			&i.AvgSpeed,
+			&i.MaxSpeed,
+			&i.Source,
+			&i.Status,
+			&i.Calories,
+			&i.TrainingLoad,
+			&i.RawID,
+			&i.RawData,
+			&i.Feeling,
+			&i.Recovery,
+			&i.Rpe,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getUser = `-- name: GetUser :one
 SELECT id, sportti_id, profile_gender, profile_birthdate, profile_weight, profile_height, profile_resting_heart_rate, profile_maximum_heart_rate, profile_aerobic_threshold, profile_anaerobic_threshold, profile_vo2max FROM users WHERE id = $1
 `

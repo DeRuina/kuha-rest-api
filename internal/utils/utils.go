@@ -269,3 +269,36 @@ func ParseDurationToNanos(durationStr string) (int64, error) {
 	timeDuration := isoDuration.ToDuration()
 	return int64(timeDuration), nil
 }
+
+// ConvertNanosToDuration converts nanoseconds to ISO 8601 duration string
+func ConvertNanosToDuration(nanos int64) string {
+	duration := time.Duration(nanos)
+
+	// Convert to hours, minutes, seconds
+	hours := int(duration.Hours())
+	minutes := int(duration.Minutes()) % 60
+	seconds := int(duration.Seconds()) % 60
+
+	// Build ISO 8601 string
+	result := "PT"
+	if hours > 0 {
+		result += fmt.Sprintf("%dH", hours)
+	}
+	if minutes > 0 {
+		result += fmt.Sprintf("%dM", minutes)
+	}
+	if seconds > 0 || (hours == 0 && minutes == 0) {
+		result += fmt.Sprintf("%dS", seconds)
+	}
+
+	return result
+}
+
+// RawMessagePtrOrNil converts pqtype.NullRawMessage to *string
+func RawMessagePtrOrNil(rm pqtype.NullRawMessage) *string {
+	if rm.Valid && len(rm.RawMessage) > 0 {
+		str := string(rm.RawMessage)
+		return &str
+	}
+	return nil
+}

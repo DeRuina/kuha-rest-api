@@ -328,7 +328,7 @@ type InsertExerciseParams struct {
 	UpdatedAt         time.Time
 	UserID            uuid.UUID
 	StartTime         time.Time
-	Duration          int64
+	Duration          string
 	Comment           sql.NullString
 	SportType         sql.NullString
 	DetailedSportType sql.NullString

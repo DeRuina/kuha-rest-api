@@ -46,7 +46,7 @@ create table exercises
         references users
             on delete cascade,
     start_time          timestamp with time zone not null,
-    duration            interval                 not null,
+    duration            text                     not null,
     comment             text,
     sport_type          text,
     detailed_sport_type text,

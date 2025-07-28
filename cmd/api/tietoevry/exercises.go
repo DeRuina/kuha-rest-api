@@ -1,7 +1,6 @@
 package tietoevryapi
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -181,16 +180,6 @@ func (h *TietoevryExerciseHandler) InsertExercisesBulk(w http.ResponseWriter, r 
 			return
 		}
 
-		durationNanos, err := utils.ParseDurationToNanos(exercise.Duration)
-		if err != nil {
-			if errors.Is(err, utils.ErrInvalidDuration) || errors.Is(err, utils.ErrDurationRequired) {
-				utils.BadRequestResponse(w, r, err)
-				return
-			}
-			utils.InternalServerError(w, r, err)
-			return
-		}
-
 		rawData := utils.ParseRawJSON(exercise.RawData)
 
 		arg := tietoevrysqlc.InsertExerciseParams{
@@ -199,7 +188,7 @@ func (h *TietoevryExerciseHandler) InsertExercisesBulk(w http.ResponseWriter, r 
 			UpdatedAt:         updatedAt,
 			UserID:            userID,
 			StartTime:         startTime,
-			Duration:          durationNanos,
+			Duration:          exercise.Duration,
 			Comment:           utils.NullStringPtr(exercise.Comment),
 			SportType:         utils.NullStringPtr(exercise.SportType),
 			DetailedSportType: utils.NullStringPtr(exercise.DetailedSportType),
@@ -364,7 +353,7 @@ func (h *TietoevryExerciseHandler) GetExercises(w http.ResponseWriter, r *http.R
 			UpdatedAt:         ex.UpdatedAt.Format(time.RFC3339),
 			UserID:            ex.UserID.String(),
 			StartTime:         ex.StartTime.Format(time.RFC3339),
-			Duration:          utils.ConvertNanosToDuration(ex.Duration),
+			Duration:          ex.Duration,
 			Comment:           utils.StringPtrOrNil(ex.Comment),
 			SportType:         utils.StringPtrOrNil(ex.SportType),
 			DetailedSportType: utils.StringPtrOrNil(ex.DetailedSportType),

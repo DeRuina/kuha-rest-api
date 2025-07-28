@@ -1334,6 +1334,11 @@ definitions:
     - updated_at
     - user_id
     type: object
+  swagger.TietoevrySymptomResponse:
+    properties:
+      symptoms:
+        $ref: '#/definitions/swagger.TietoevrySymptomInput'
+    type: object
   swagger.TietoevrySymptomsBulkInput:
     properties:
       symptoms:
@@ -1931,6 +1936,40 @@ paths:
       tags:
       - Tietoevry - Questionnaires
   /tietoevry/symptoms:
+    get:
+      consumes:
+      - application/json
+      description: Get all symptoms for a specific user
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.TietoevrySymptomResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get symptoms by user ID
+      tags:
+      - Tietoevry - Symptoms
     post:
       consumes:
       - application/json

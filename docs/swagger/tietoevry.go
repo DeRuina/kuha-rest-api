@@ -217,3 +217,7 @@ type TietoevryDeletedUsersResponse struct {
 type TietoevryExerciseResponse struct {
 	Exercise TietoevryExerciseUpsertInput `json:"exercises"`
 }
+
+type TietoevrySymptomResponse struct {
+	Symptom TietoevrySymptomInput `json:"symptoms"`
+}

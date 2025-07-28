@@ -91,3 +91,10 @@ func (s *SymptomsStore) InsertSymptomsBulk(ctx context.Context, symptoms []tieto
 
 	return tx.Commit()
 }
+
+func (s *SymptomsStore) GetSymptomsByUser(ctx context.Context, userID uuid.UUID) ([]tietoevrysqlc.Symptom, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	return tietoevrysqlc.New(s.db).GetSymptomsByUser(ctx, userID)
+}

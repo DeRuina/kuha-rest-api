@@ -174,3 +174,8 @@ WHERE exercise_id = $1;
 SELECT * FROM exercise_sections
 WHERE exercise_id = $1
 ORDER BY start_time;
+
+-- name: GetSymptomsByUser :many
+SELECT * FROM symptoms
+WHERE user_id = $1
+ORDER BY date DESC, created_at DESC;

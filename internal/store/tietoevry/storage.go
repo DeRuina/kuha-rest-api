@@ -30,6 +30,7 @@ type Exercises interface {
 type Symptoms interface {
 	ValidateUsersExist(ctx context.Context, userIDs []uuid.UUID) error
 	InsertSymptomsBulk(ctx context.Context, symptoms []tietoevrysqlc.InsertSymptomParams) error
+	GetSymptomsByUser(ctx context.Context, userID uuid.UUID) ([]tietoevrysqlc.Symptom, error)
 }
 
 type Measurements interface {

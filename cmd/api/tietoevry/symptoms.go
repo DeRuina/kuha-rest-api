@@ -3,7 +3,9 @@ package tietoevryapi
 import (
 	"fmt"
 	"net/http"
+	"time"
 
+	"github.com/DeRuina/KUHA-REST-API/docs/swagger"
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
 	tietoevrysqlc "github.com/DeRuina/KUHA-REST-API/internal/db/tietoevry"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/cache"
@@ -161,4 +163,89 @@ func (h *TietoevrySymptomHandler) InsertSymptomsBulk(w http.ResponseWriter, r *h
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+type TietoevrySymptomParams struct {
+	UserID string `form:"user_id" validate:"required,uuid4"`
+}
+
+// GetSymptoms godoc
+//
+//	@Summary		Get symptoms by user ID
+//	@Description	Get all symptoms for a specific user
+//	@Tags			Tietoevry - Symptoms
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id	query		string	true	"User ID (UUID)"
+//	@Success		200		{object}	swagger.TietoevrySymptomResponse
+//	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		403		{object}	swagger.ForbiddenResponse
+//	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Security		BearerAuth
+//	@Router			/tietoevry/symptoms [get]
+func (h *TietoevrySymptomHandler) GetSymptoms(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	if err := utils.ValidateParams(r, []string{"user_id"}); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	params := TietoevrySymptomParams{
+		UserID: r.URL.Query().Get("user_id"),
+	}
+
+	if err := utils.GetValidator().Struct(params); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	userID, err := utils.ParseUUID(params.UserID)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	symptoms, err := h.store.GetSymptomsByUser(r.Context(), userID)
+	if err != nil {
+		utils.InternalServerError(w, r, err)
+		return
+	}
+
+	if len(symptoms) == 0 {
+		utils.WriteJSON(w, http.StatusOK, map[string]any{
+			"symptoms": []swagger.TietoevrySymptomInput{},
+		})
+		return
+	}
+
+	var output []swagger.TietoevrySymptomInput
+	for _, symptom := range symptoms {
+		out := swagger.TietoevrySymptomInput{
+			ID:             symptom.ID.String(),
+			UserID:         symptom.UserID.String(),
+			Date:           symptom.Date.Format("2006-01-02"),
+			Symptom:        symptom.Symptom,
+			Severity:       symptom.Severity,
+			Comment:        utils.StringPtrOrNil(symptom.Comment),
+			Source:         symptom.Source,
+			CreatedAt:      symptom.CreatedAt.Format(time.RFC3339),
+			UpdatedAt:      symptom.UpdatedAt.Format(time.RFC3339),
+			RawID:          utils.StringPtrOrNil(symptom.RawID),
+			OriginalID:     utils.UUIDPtrToStringPtr(symptom.OriginalID),
+			Recovered:      utils.BoolPtrOrNil(symptom.Recovered),
+			PainIndex:      utils.Int32PtrOrNil(symptom.PainIndex),
+			Side:           utils.StringPtrOrNil(symptom.Side),
+			Category:       utils.StringPtrOrNil(symptom.Category),
+			AdditionalData: utils.RawMessagePtrOrNil(symptom.AdditionalData),
+		}
+		output = append(output, out)
+	}
+
+	utils.WriteJSON(w, http.StatusOK, map[string]any{
+		"symptoms": output,
+	})
 }

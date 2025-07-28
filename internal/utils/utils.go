@@ -261,3 +261,20 @@ func RawMessagePtrOrNil(rm pqtype.NullRawMessage) *string {
 	}
 	return nil
 }
+
+// UUIDPtrToStringPtr converts uuid.NullUUID to *string
+func UUIDPtrToStringPtr(u uuid.NullUUID) *string {
+	if u.Valid {
+		str := u.UUID.String()
+		return &str
+	}
+	return nil
+}
+
+// BoolPtrOrNil converts sql.NullBool to *bool
+func BoolPtrOrNil(b sql.NullBool) *bool {
+	if b.Valid {
+		return &b.Bool
+	}
+	return nil
+}

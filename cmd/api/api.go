@@ -157,6 +157,7 @@ func (app *api) mount() http.Handler {
 
 				// Symptom routes
 				r.Post("/symptoms", symptomHandler.InsertSymptomsBulk)
+				r.Get("/symptoms", symptomHandler.GetSymptoms)
 
 				// Measurement routes
 				r.Post("/measurements", measurementHandler.InsertMeasurementsBulk)

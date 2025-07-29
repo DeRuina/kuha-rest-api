@@ -278,3 +278,8 @@ func BoolPtrOrNil(b sql.NullBool) *bool {
 	}
 	return nil
 }
+
+// RawMessageToString converts json.RawMessage to string (for non-nullable fields)
+func RawMessageToString(rm json.RawMessage) string {
+	return string(rm)
+}

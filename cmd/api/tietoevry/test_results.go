@@ -3,7 +3,9 @@ package tietoevryapi
 import (
 	"fmt"
 	"net/http"
+	"time"
 
+	"github.com/DeRuina/KUHA-REST-API/docs/swagger"
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
 	tietoevrysqlc "github.com/DeRuina/KUHA-REST-API/internal/db/tietoevry"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/cache"
@@ -181,4 +183,91 @@ func (h *TietoevryTestResultHandler) InsertTestResultsBulk(w http.ResponseWriter
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+type TietoevryTestResultParams struct {
+	UserID string `form:"user_id" validate:"required,uuid4"`
+}
+
+// GetTestResults godoc
+//
+//	@Summary		Get test results by user ID
+//	@Description	Get all test results for a specific user
+//	@Tags			Tietoevry - TestResults
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id	query		string	true	"User ID (UUID)"
+//	@Success		200		{object}	swagger.TietoevryTestResultResponse
+//	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		403		{object}	swagger.ForbiddenResponse
+//	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Security		BearerAuth
+//	@Router			/tietoevry/test-results [get]
+func (h *TietoevryTestResultHandler) GetTestResults(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	if err := utils.ValidateParams(r, []string{"user_id"}); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	params := TietoevryTestResultParams{
+		UserID: r.URL.Query().Get("user_id"),
+	}
+
+	if err := utils.GetValidator().Struct(params); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	userID, err := utils.ParseUUID(params.UserID)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	testResults, err := h.store.GetTestResultsByUser(r.Context(), userID)
+	if err != nil {
+		utils.InternalServerError(w, r, err)
+		return
+	}
+
+	if len(testResults) == 0 {
+		utils.WriteJSON(w, http.StatusOK, map[string]any{
+			"test_results": []swagger.TietoevryTestResultInput{},
+		})
+		return
+	}
+
+	var output []swagger.TietoevryTestResultInput
+	for _, testResult := range testResults {
+		out := swagger.TietoevryTestResultInput{
+			ID:                          testResult.ID.String(),
+			UserID:                      testResult.UserID.String(),
+			TypeID:                      testResult.TypeID.String(),
+			TypeType:                    utils.StringPtrOrNil(testResult.TypeType),
+			TypeResultType:              testResult.TypeResultType,
+			TypeName:                    utils.StringPtrOrNil(testResult.TypeName),
+			Timestamp:                   testResult.Timestamp.Format(time.RFC3339),
+			Name:                        utils.StringPtrOrNil(testResult.Name),
+			Comment:                     utils.StringPtrOrNil(testResult.Comment),
+			Data:                        utils.RawMessageToString(testResult.Data),
+			CreatedAt:                   testResult.CreatedAt.Format(time.RFC3339),
+			UpdatedAt:                   testResult.UpdatedAt.Format(time.RFC3339),
+			TestEventID:                 utils.UUIDPtrToStringPtr(testResult.TestEventID),
+			TestEventName:               utils.StringPtrOrNil(testResult.TestEventName),
+			TestEventDate:               utils.FormatDatePtr(testResult.TestEventDate),
+			TestEventTemplateTestID:     utils.UUIDPtrToStringPtr(testResult.TestEventTemplateTestID),
+			TestEventTemplateTestName:   utils.StringPtrOrNil(testResult.TestEventTemplateTestName),
+			TestEventTemplateTestLimits: utils.RawMessagePtrOrNil(testResult.TestEventTemplateTestLimits),
+		}
+		output = append(output, out)
+	}
+
+	utils.WriteJSON(w, http.StatusOK, map[string]any{
+		"test_results": output,
+	})
 }

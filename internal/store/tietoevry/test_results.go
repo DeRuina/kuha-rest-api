@@ -91,3 +91,11 @@ func (s *TestResultsStore) InsertTestResultsBulk(ctx context.Context, results []
 
 	return tx.Commit()
 }
+
+func (s *TestResultsStore) GetTestResultsByUser(ctx context.Context, userID uuid.UUID) ([]tietoevrysqlc.TestResult, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := tietoevrysqlc.New(s.db)
+	return q.GetTestResultsByUser(ctx, userID)
+}

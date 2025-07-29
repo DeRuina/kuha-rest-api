@@ -165,6 +165,7 @@ func (app *api) mount() http.Handler {
 
 				// Test Result routes
 				r.Post("/test-results", testResultHandler.InsertTestResultsBulk)
+				r.Get("/test-results", testResultHandler.GetTestResults)
 
 				// Questionnaire routes
 				r.Post("/questionnaires", questionnaireHandler.InsertQuestionnaireAnswersBulk)

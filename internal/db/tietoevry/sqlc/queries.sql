@@ -184,3 +184,8 @@ ORDER BY date DESC, created_at DESC;
 SELECT * FROM measurements
 WHERE user_id = $1
 ORDER BY date DESC, created_at DESC;
+
+-- name: GetTestResultsByUser :many
+SELECT * FROM test_results
+WHERE user_id = $1
+ORDER BY timestamp DESC, created_at DESC;

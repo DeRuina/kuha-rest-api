@@ -42,6 +42,7 @@ type Measurements interface {
 type TestResults interface {
 	ValidateUsersExist(ctx context.Context, userIDs []uuid.UUID) error
 	InsertTestResultsBulk(ctx context.Context, results []tietoevrysqlc.InsertTestResultParams) error
+	GetTestResultsByUser(ctx context.Context, userID uuid.UUID) ([]tietoevrysqlc.TestResult, error)
 }
 
 type Questionnaires interface {

@@ -1410,6 +1410,11 @@ definitions:
         example: 7cffe6e0-3f28-43b6-b511-d836d3a9f7b5
         type: string
     type: object
+  swagger.TietoevryTestResultResponse:
+    properties:
+      test_results:
+        $ref: '#/definitions/swagger.TietoevryTestResultInput'
+    type: object
   swagger.TietoevryTestResultsBulkInput:
     properties:
       test_results:
@@ -2047,6 +2052,40 @@ paths:
       tags:
       - Tietoevry - Symptoms
   /tietoevry/test-results:
+    get:
+      consumes:
+      - application/json
+      description: Get all test results for a specific user
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.TietoevryTestResultResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get test results by user ID
+      tags:
+      - Tietoevry - TestResults
     post:
       consumes:
       - application/json

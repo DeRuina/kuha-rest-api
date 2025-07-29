@@ -48,6 +48,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getSymptomsByUserStmt, err = db.PrepareContext(ctx, getSymptomsByUser); err != nil {
 		return nil, fmt.Errorf("error preparing query GetSymptomsByUser: %w", err)
 	}
+	if q.getTestResultsByUserStmt, err = db.PrepareContext(ctx, getTestResultsByUser); err != nil {
+		return nil, fmt.Errorf("error preparing query GetTestResultsByUser: %w", err)
+	}
 	if q.getUserStmt, err = db.PrepareContext(ctx, getUser); err != nil {
 		return nil, fmt.Errorf("error preparing query GetUser: %w", err)
 	}
@@ -127,6 +130,11 @@ func (q *Queries) Close() error {
 	if q.getSymptomsByUserStmt != nil {
 		if cerr := q.getSymptomsByUserStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getSymptomsByUserStmt: %w", cerr)
+		}
+	}
+	if q.getTestResultsByUserStmt != nil {
+		if cerr := q.getTestResultsByUserStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getTestResultsByUserStmt: %w", cerr)
 		}
 	}
 	if q.getUserStmt != nil {
@@ -236,6 +244,7 @@ type Queries struct {
 	getExercisesByUserStmt        *sql.Stmt
 	getMeasurementsByUserStmt     *sql.Stmt
 	getSymptomsByUserStmt         *sql.Stmt
+	getTestResultsByUserStmt      *sql.Stmt
 	getUserStmt                   *sql.Stmt
 	insertActivityZoneStmt        *sql.Stmt
 	insertExerciseStmt            *sql.Stmt
@@ -262,6 +271,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		getExercisesByUserStmt:        q.getExercisesByUserStmt,
 		getMeasurementsByUserStmt:     q.getMeasurementsByUserStmt,
 		getSymptomsByUserStmt:         q.getSymptomsByUserStmt,
+		getTestResultsByUserStmt:      q.getTestResultsByUserStmt,
 		getUserStmt:                   q.getUserStmt,
 		insertActivityZoneStmt:        q.insertActivityZoneStmt,
 		insertExerciseStmt:            q.insertExerciseStmt,

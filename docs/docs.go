@@ -753,6 +753,59 @@ const docTemplate = `{
             }
         },
         "/tietoevry/test-results": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get all test results for a specific user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tietoevry - TestResults"
+                ],
+                "summary": "Get test results by user ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID (UUID)",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.TietoevryTestResultResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -5841,6 +5894,14 @@ const docTemplate = `{
                 "user_id": {
                     "type": "string",
                     "example": "7cffe6e0-3f28-43b6-b511-d836d3a9f7b5"
+                }
+            }
+        },
+        "swagger.TietoevryTestResultResponse": {
+            "type": "object",
+            "properties": {
+                "test_results": {
+                    "$ref": "#/definitions/swagger.TietoevryTestResultInput"
                 }
             }
         },

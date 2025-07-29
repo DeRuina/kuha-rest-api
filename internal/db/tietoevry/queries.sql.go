@@ -324,6 +324,54 @@ func (q *Queries) GetSymptomsByUser(ctx context.Context, userID uuid.UUID) ([]Sy
 	return items, nil
 }
 
+const getTestResultsByUser = `-- name: GetTestResultsByUser :many
+SELECT id, user_id, type_id, type_type, type_result_type, type_name, timestamp, name, comment, data, created_at, updated_at, test_event_id, test_event_name, test_event_date, test_event_template_test_id, test_event_template_test_name, test_event_template_test_limits FROM test_results
+WHERE user_id = $1
+ORDER BY timestamp DESC, created_at DESC
+`
+
+func (q *Queries) GetTestResultsByUser(ctx context.Context, userID uuid.UUID) ([]TestResult, error) {
+	rows, err := q.query(ctx, q.getTestResultsByUserStmt, getTestResultsByUser, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []TestResult
+	for rows.Next() {
+		var i TestResult
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.TypeID,
+			&i.TypeType,
+			&i.TypeResultType,
+			&i.TypeName,
+			&i.Timestamp,
+			&i.Name,
+			&i.Comment,
+			&i.Data,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.TestEventID,
+			&i.TestEventName,
+			&i.TestEventDate,
+			&i.TestEventTemplateTestID,
+			&i.TestEventTemplateTestName,
+			&i.TestEventTemplateTestLimits,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getUser = `-- name: GetUser :one
 SELECT id, sportti_id, profile_gender, profile_birthdate, profile_weight, profile_height, profile_resting_heart_rate, profile_maximum_heart_rate, profile_aerobic_threshold, profile_anaerobic_threshold, profile_vo2max FROM users WHERE id = $1
 `

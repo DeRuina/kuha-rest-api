@@ -865,7 +865,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Tietoevry - TestResults"
+                    "Tietoevry - Test_Results"
                 ],
                 "summary": "Get test results by user ID",
                 "parameters": [
@@ -918,7 +918,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Tietoevry - TestResults"
+                    "Tietoevry - Test_Results"
                 ],
                 "summary": "Insert test results (bulk)",
                 "parameters": [

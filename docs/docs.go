@@ -873,7 +873,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tietoevry - TestResults"
+                    "Tietoevry - Test_Results"
                 ],
                 "summary": "Get test results by user ID",
                 "parameters": [
@@ -926,7 +926,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tietoevry - TestResults"
+                    "Tietoevry - Test_Results"
                 ],
                 "summary": "Insert test results (bulk)",
                 "parameters": [

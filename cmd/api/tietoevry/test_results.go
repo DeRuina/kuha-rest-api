@@ -52,7 +52,7 @@ type TietoevryTestResultsBulkInput struct {
 //
 //	@Summary		Insert test results (bulk)
 //	@Description	Insert multiple test results for users (idempotent)
-//	@Tags			Tietoevry - TestResults
+//	@Tags			Tietoevry - Test_Results
 //	@Accept			json
 //	@Produce		json
 //	@Param			test_results	body	swagger.TietoevryTestResultsBulkInput	true	"Test result data"
@@ -193,7 +193,7 @@ type TietoevryTestResultParams struct {
 //
 //	@Summary		Get test results by user ID
 //	@Description	Get all test results for a specific user
-//	@Tags			Tietoevry - TestResults
+//	@Tags			Tietoevry - Test_Results
 //	@Accept			json
 //	@Produce		json
 //	@Param			user_id	query		string	true	"User ID (UUID)"

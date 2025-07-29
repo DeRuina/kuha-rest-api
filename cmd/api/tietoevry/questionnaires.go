@@ -3,7 +3,9 @@ package tietoevryapi
 import (
 	"fmt"
 	"net/http"
+	"time"
 
+	"github.com/DeRuina/KUHA-REST-API/docs/swagger"
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
 	tietoevrysqlc "github.com/DeRuina/KUHA-REST-API/internal/db/tietoevry"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/cache"
@@ -160,4 +162,90 @@ func (h *TietoevryQuestionnaireHandler) InsertQuestionnaireAnswersBulk(w http.Re
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+type TietoevryQuestionnaireParams struct {
+	UserID string `form:"user_id" validate:"required,uuid4"`
+}
+
+// GetQuestionnaires godoc
+//
+//	@Summary		Get questionnaires by user ID
+//	@Description	Get all questionnaire answers for a specific user
+//	@Tags			Tietoevry - Questionnaires
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id	query		string	true	"User ID (UUID)"
+//	@Success		200		{object}	swagger.TietoevryQuestionnaireAnswerResponse
+//	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		403		{object}	swagger.ForbiddenResponse
+//	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Security		BearerAuth
+//	@Router			/tietoevry/questionnaires [get]
+func (h *TietoevryQuestionnaireHandler) GetQuestionnaires(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	if err := utils.ValidateParams(r, []string{"user_id"}); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	params := TietoevryQuestionnaireParams{
+		UserID: r.URL.Query().Get("user_id"),
+	}
+
+	if err := utils.GetValidator().Struct(params); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	userID, err := utils.ParseUUID(params.UserID)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	questionnaires, err := h.store.GetQuestionnairesByUser(r.Context(), userID)
+	if err != nil {
+		utils.InternalServerError(w, r, err)
+		return
+	}
+
+	if len(questionnaires) == 0 {
+		utils.WriteJSON(w, http.StatusOK, map[string]any{
+			"questionnaires": []swagger.TietoevryQuestionnaireAnswerInput{},
+		})
+		return
+	}
+
+	var output []swagger.TietoevryQuestionnaireAnswerInput
+	for _, questionnaire := range questionnaires {
+		out := swagger.TietoevryQuestionnaireAnswerInput{
+			UserID:                  questionnaire.UserID.String(),
+			QuestionnaireInstanceID: questionnaire.QuestionnaireInstanceID.String(),
+			QuestionnaireNameFi:     utils.StringPtrOrNil(questionnaire.QuestionnaireNameFi),
+			QuestionnaireNameEn:     utils.StringPtrOrNil(questionnaire.QuestionnaireNameEn),
+			QuestionnaireKey:        questionnaire.QuestionnaireKey,
+			QuestionID:              questionnaire.QuestionID.String(),
+			QuestionLabelFi:         utils.StringPtrOrNil(questionnaire.QuestionLabelFi),
+			QuestionLabelEn:         utils.StringPtrOrNil(questionnaire.QuestionLabelEn),
+			QuestionType:            questionnaire.QuestionType,
+			OptionID:                utils.UUIDPtrToStringPtr(questionnaire.OptionID),
+			OptionValue:             utils.Int32PtrOrNil(questionnaire.OptionValue),
+			OptionLabelFi:           utils.StringPtrOrNil(questionnaire.OptionLabelFi),
+			OptionLabelEn:           utils.StringPtrOrNil(questionnaire.OptionLabelEn),
+			FreeText:                utils.StringPtrOrNil(questionnaire.FreeText),
+			CreatedAt:               questionnaire.CreatedAt.Format(time.RFC3339),
+			UpdatedAt:               questionnaire.UpdatedAt.Format(time.RFC3339),
+			Value:                   utils.RawMessagePtrOrNil(questionnaire.Value),
+		}
+		output = append(output, out)
+	}
+
+	utils.WriteJSON(w, http.StatusOK, map[string]any{
+		"questionnaires": output,
+	})
 }

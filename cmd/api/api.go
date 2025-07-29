@@ -169,6 +169,7 @@ func (app *api) mount() http.Handler {
 
 				// Questionnaire routes
 				r.Post("/questionnaires", questionnaireHandler.InsertQuestionnaireAnswersBulk)
+				r.Get("/questionnaires", questionnaireHandler.GetQuestionnaires)
 
 				// Activity Zone routes
 				r.Post("/activity-zones", activityZoneHandler.InsertActivityZonesBulk)

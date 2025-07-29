@@ -572,6 +572,59 @@
             }
         },
         "/tietoevry/questionnaires": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get all questionnaire answers for a specific user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tietoevry - Questionnaires"
+                ],
+                "summary": "Get questionnaires by user ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID (UUID)",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.TietoevryQuestionnaireAnswerResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -5694,6 +5747,14 @@
                 "value": {
                     "type": "string",
                     "example": "{\"scale\": 4, \"note\": \"slightly tired\"}"
+                }
+            }
+        },
+        "swagger.TietoevryQuestionnaireAnswerResponse": {
+            "type": "object",
+            "properties": {
+                "questionnaires": {
+                    "$ref": "#/definitions/swagger.TietoevryQuestionnaireAnswerInput"
                 }
             }
         },

@@ -278,6 +278,53 @@ func (q *Queries) GetMeasurementsByUser(ctx context.Context, userID uuid.UUID) (
 	return items, nil
 }
 
+const getQuestionnairesByUser = `-- name: GetQuestionnairesByUser :many
+SELECT user_id, questionnaire_instance_id, questionnaire_name_fi, questionnaire_name_en, questionnaire_key, question_id, question_label_fi, question_label_en, question_type, option_id, option_value, option_label_fi, option_label_en, free_text, created_at, updated_at, value FROM question_answers
+WHERE user_id = $1
+ORDER BY created_at DESC
+`
+
+func (q *Queries) GetQuestionnairesByUser(ctx context.Context, userID uuid.UUID) ([]QuestionAnswer, error) {
+	rows, err := q.query(ctx, q.getQuestionnairesByUserStmt, getQuestionnairesByUser, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []QuestionAnswer
+	for rows.Next() {
+		var i QuestionAnswer
+		if err := rows.Scan(
+			&i.UserID,
+			&i.QuestionnaireInstanceID,
+			&i.QuestionnaireNameFi,
+			&i.QuestionnaireNameEn,
+			&i.QuestionnaireKey,
+			&i.QuestionID,
+			&i.QuestionLabelFi,
+			&i.QuestionLabelEn,
+			&i.QuestionType,
+			&i.OptionID,
+			&i.OptionValue,
+			&i.OptionLabelFi,
+			&i.OptionLabelEn,
+			&i.FreeText,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Value,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getSymptomsByUser = `-- name: GetSymptomsByUser :many
 SELECT id, user_id, date, symptom, severity, comment, source, created_at, updated_at, raw_id, original_id, recovered, pain_index, side, category, additional_data FROM symptoms
 WHERE user_id = $1

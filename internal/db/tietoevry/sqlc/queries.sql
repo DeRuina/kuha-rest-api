@@ -189,3 +189,8 @@ ORDER BY date DESC, created_at DESC;
 SELECT * FROM test_results
 WHERE user_id = $1
 ORDER BY timestamp DESC, created_at DESC;
+
+-- name: GetQuestionnairesByUser :many
+SELECT * FROM question_answers
+WHERE user_id = $1
+ORDER BY created_at DESC;

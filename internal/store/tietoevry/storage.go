@@ -48,6 +48,7 @@ type TestResults interface {
 type Questionnaires interface {
 	ValidateUsersExist(ctx context.Context, userIDs []uuid.UUID) error
 	InsertQuestionnaireAnswersBulk(ctx context.Context, answers []tietoevrysqlc.InsertQuestionnaireAnswerParams) error
+	GetQuestionnairesByUser(ctx context.Context, userID uuid.UUID) ([]tietoevrysqlc.QuestionAnswer, error)
 }
 
 type ActivityZones interface {

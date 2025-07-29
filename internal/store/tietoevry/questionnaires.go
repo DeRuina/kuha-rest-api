@@ -91,3 +91,11 @@ func (s *QuestionnairesStore) InsertQuestionnaireAnswersBulk(ctx context.Context
 
 	return tx.Commit()
 }
+
+func (s *QuestionnairesStore) GetQuestionnairesByUser(ctx context.Context, userID uuid.UUID) ([]tietoevrysqlc.QuestionAnswer, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := tietoevrysqlc.New(s.db)
+	return q.GetQuestionnairesByUser(ctx, userID)
+}

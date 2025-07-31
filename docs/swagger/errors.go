@@ -55,3 +55,12 @@ type ConflictResponse struct {
 type ConflictError struct {
 	Error1 string `json:"error" example:"record already exists"`
 }
+
+// 503 - Service Unavailable
+type ServiceUnavailableResponse struct {
+	Errors []ServiceUnavailableError `json:"errors"`
+}
+
+type ServiceUnavailableError struct {
+	Error1 string `json:"error" example:"database is unavailable"`
+}

@@ -4543,10 +4543,6 @@ const docTemplate = `{
                     "type": "string",
                     "example": "development"
                 },
-                "goroutines": {
-                    "type": "integer",
-                    "example": 21
-                },
                 "redis": {
                     "type": "string",
                     "example": "ok"

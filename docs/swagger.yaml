@@ -382,9 +382,6 @@ definitions:
       env:
         example: development
         type: string
-      goroutines:
-        example: 21
-        type: integer
       redis:
         example: ok
         type: string

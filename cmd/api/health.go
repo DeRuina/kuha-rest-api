@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"net/http"
-	"runtime"
 	"time"
 
 	"github.com/DeRuina/KUHA-REST-API/internal/utils"
@@ -30,83 +29,47 @@ func (app *api) healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 		"version": version,
 	}
 
-	statusCode := http.StatusOK
 	status := "ok"
+	statusCode := http.StatusOK
 
-	//  Redis Check
-	if app.cacheStorage != nil {
-		if err := app.cacheStorage.Ping(ctx); err != nil {
-			data["redis"] = "unreachable"
-			status = "fail"
-			statusCode = http.StatusInternalServerError
+	// Redis check
+	if app.config.redisCfg.enabled {
+		if app.cacheStorage == nil || app.cacheStorage.Ping(ctx) != nil {
+			data["redis"] = "down"
 		} else {
 			data["redis"] = "ok"
 		}
 	} else {
-		data["redis"] = "disabled"
+		data["redis"] = "down"
 	}
 
-	// DB Checks
-	if err := app.store.FIS.Ping(ctx); err != nil {
-		data["db_fis"] = "unreachable"
-		status = "fail"
-		statusCode = http.StatusInternalServerError
-	} else {
-		data["db_fis"] = "ok"
+	// Helper function for DB checks
+	checkDB := func(name string, db interface{ Ping(context.Context) error }) {
+		if db == nil {
+			data[name] = "down"
+			return
+		}
+		if err := db.Ping(ctx); err != nil {
+			data[name] = "down"
+			return
+		}
+		data[name] = "ok"
 	}
 
-	if err := app.store.UTV.Ping(ctx); err != nil {
-		data["db_utv"] = "unreachable"
-		status = "fail"
-		statusCode = http.StatusInternalServerError
-	} else {
-		data["db_utv"] = "ok"
-	}
+	// Check each DB safely
+	checkDB("db_fis", app.store.FIS)
+	checkDB("db_utv", app.store.UTV)
+	checkDB("db_auth", app.store.Auth)
+	checkDB("db_tietoevry", app.store.Tietoevry)
+	checkDB("db_kamk", app.store.KAMK)
+	checkDB("db_klab", app.store.KLAB)
+	checkDB("db_archinisis", app.store.ARCHINISIS)
 
-	if err := app.store.Auth.Ping(ctx); err != nil {
-		data["db_auth"] = "unreachable"
-		status = "fail"
-		statusCode = http.StatusInternalServerError
-	} else {
-		data["db_auth"] = "ok"
-	}
-
-	if err := app.store.Tietoevry.Ping(ctx); err != nil {
-		data["db_tietoevry"] = "unreachable"
-		status = "fail"
-		statusCode = http.StatusInternalServerError
-	} else {
-		data["db_tietoevry"] = "ok"
-	}
-
-	if err := app.store.KAMK.Ping(ctx); err != nil {
-		data["db_kamk"] = "unreachable"
-		status = "fail"
-		statusCode = http.StatusInternalServerError
-	} else {
-		data["db_kamk"] = "ok"
-	}
-
-	if err := app.store.KLAB.Ping(ctx); err != nil {
-		data["db_klab"] = "unreachable"
-		status = "fail"
-		statusCode = http.StatusInternalServerError
-	} else {
-		data["db_klab"] = "ok"
-	}
-
-	if err := app.store.ARCHINISIS.Ping(ctx); err != nil {
-		data["db_archinisis"] = "unreachable"
-		status = "fail"
-		statusCode = http.StatusInternalServerError
-	} else {
-		data["db_archinisis"] = "ok"
-	}
-
+	// Add uptime and goroutine info
 	data["uptime_seconds"] = int64(time.Since(startTime).Seconds())
-	data["goroutines"] = runtime.NumGoroutine()
-
 	data["api"] = status
+
+	statusCode = http.StatusOK
 
 	if err := utils.WriteJSON(w, statusCode, data); err != nil {
 		utils.InternalServerError(w, r, err)

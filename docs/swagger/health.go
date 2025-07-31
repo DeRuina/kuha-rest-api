@@ -11,7 +11,6 @@ type HealthStatusResponse struct {
 	DBTietoevry   string `json:"db_tietoevry" example:"ok"`
 	DBUTV         string `json:"db_utv" example:"ok"`
 	Env           string `json:"env" example:"development"`
-	Goroutines    int    `json:"goroutines" example:"21"`
 	Redis         string `json:"redis" example:"ok"`
 	UptimeSeconds int64  `json:"uptime_seconds" example:"149039"`
 	Version       string `json:"version" example:"1.2.1"`

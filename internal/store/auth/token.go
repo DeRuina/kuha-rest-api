@@ -20,6 +20,9 @@ type Tokens struct {
 }
 
 func (a *AuthStorage) IssueToken(ctx context.Context, clientTokenRaw, ip, userAgent string) (*Tokens, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	hashed := sha256.Sum256([]byte(clientTokenRaw))
 	clientToken := hex.EncodeToString(hashed[:])
 

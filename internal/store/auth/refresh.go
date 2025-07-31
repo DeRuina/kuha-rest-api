@@ -13,6 +13,9 @@ import (
 )
 
 func (a *AuthStorage) RefreshToken(ctx context.Context, refreshToken, ip, userAgent string) (string, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
 	revoked, err := a.queries.IsRevokedRefreshToken(ctx, refreshToken)
 	if err != nil {
 		return "", err

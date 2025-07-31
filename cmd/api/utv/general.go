@@ -92,8 +92,10 @@ func NewGeneralDataHandler(
 //	@Success		200		{array}	swagger.LatestDataResponse	"Latest Data"
 //	@Success		204		"No Content: No data found"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/latest [get]
 func (h *GeneralDataHandler) GetLatestData(w http.ResponseWriter, r *http.Request) {
@@ -203,9 +205,11 @@ func (h *GeneralDataHandler) GetLatestData(w http.ResponseWriter, r *http.Reques
 //	@Success		200			{array}	swagger.LatestDataResponse	"List of data entries across devices"
 //	@Success		204			"No Content: No data available"
 //	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		401			{object}	swagger.UnauthorizedResponse
 //	@Failure		403			{object}	swagger.ForbiddenResponse
 //	@Failure		422			{object}	swagger.InvalidDateRange
 //	@Failure		500			{object}	swagger.InternalServerErrorResponse
+//	@Failure		503			{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/all [get]
 func (h *GeneralDataHandler) GetAllByType(w http.ResponseWriter, r *http.Request) {
@@ -316,8 +320,10 @@ type DisconnectParams struct {
 //	@Param			source	query	string	true	"Source device to disconnect (one of: 'polar', 'oura', 'suunto', 'garmin', 'klab')"
 //	@Success		200		"Successfully disconnected"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/disconnect [delete]
 func (h *GeneralDataHandler) Disconnect(w http.ResponseWriter, r *http.Request) {
@@ -387,8 +393,10 @@ type TokensForUpdateParams struct {
 //	@Success		200		{array}	swagger.PolarTokenInput	"List of tokens needing update"
 //	@Success		204		"No Content: No tokens found"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/tokens4update [get]
 func (h *GeneralDataHandler) GetTokensForUpdate(w http.ResponseWriter, r *http.Request) {
@@ -493,8 +501,10 @@ type DataForUpdateParams struct {
 //	@Success		200		{array}	swagger.PolarTokenInput	"List of tokens needing data update"
 //	@Success		204		"No Content: No data found"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/data4update [get]
 func (h *GeneralDataHandler) GetDataForUpdate(w http.ResponseWriter, r *http.Request) {

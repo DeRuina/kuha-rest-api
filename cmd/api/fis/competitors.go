@@ -36,8 +36,10 @@ func NewCompetitorsHandler(store fis.Competitors, cache *cache.Storage) *Competi
 //	@Param			sector	query		string						true	"Sector Code (JP, NK, CC)"
 //	@Success		200		{object}	swagger.AthleteListResponse	"List of athletes"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401 	{object}	swagger.UnauthorizedResponse
 //	@Failure		403 	{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503 	{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/fis/athlete [get]
 func (h *CompetitorsHandler) GetAthletesBySector(w http.ResponseWriter, r *http.Request) {
@@ -101,8 +103,10 @@ func (h *CompetitorsHandler) GetAthletesBySector(w http.ResponseWriter, r *http.
 //	@Param			sector	query		string					true	"Sector Code (JP, NK, CC)"
 //	@Success		200		{object}	swagger.NationsResponse	"List of nations"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401 	{object}	swagger.UnauthorizedResponse
 //	@Failure		403 	{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503 	{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/fis/nation [get]
 func (h *CompetitorsHandler) GetNationsBySector(w http.ResponseWriter, r *http.Request) {

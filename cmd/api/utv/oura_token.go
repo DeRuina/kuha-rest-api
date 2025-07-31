@@ -34,8 +34,10 @@ type OuraStatusParams struct {
 //	@Param			user_id	query		string	true	"User ID (UUID)"
 //	@Success		200		{object}	swagger.OuraStatusResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/oura/status [get]
 func (h *OuraTokenHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
@@ -91,8 +93,10 @@ type OuraTokenInput struct {
 //	@Param			body	body	swagger.OuraTokenInput	true	"Oura token input"
 //	@Success		201		"Created"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/oura/token [post]
 func (h *OuraTokenHandler) UpsertToken(w http.ResponseWriter, r *http.Request) {
@@ -140,8 +144,10 @@ type GetTokenByOuraIDParams struct {
 //	@Param			oura-id	query		string	true	"Oura ID"
 //	@Success		200		{object}	swagger.OuraTokenByIDResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/oura/token-by-id [get]
 func (h *OuraTokenHandler) GetTokenByOuraID(w http.ResponseWriter, r *http.Request) {

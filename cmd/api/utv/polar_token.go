@@ -34,8 +34,10 @@ type GetStatusParams struct {
 //	@Param			user_id	query		string	true	"User ID (UUID)"
 //	@Success		200		{object}	swagger.PolarStatusResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/polar/status [get]
 func (h *PolarTokenHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
@@ -91,8 +93,10 @@ type PolarTokenInput struct {
 //	@Param			body	body	swagger.PolarTokenInput	true	"Polar token input"
 //	@Success		201		"Created"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/polar/token [post]
 func (h *PolarTokenHandler) UpsertToken(w http.ResponseWriter, r *http.Request) {
@@ -140,8 +144,10 @@ type GetTokenByPolarIDParams struct {
 //	@Param			polar-id	query		string	true	"Polar x_user_id"
 //	@Success		200			{object}	swagger.PolarTokenByIDResponse
 //	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		401			{object}	swagger.UnauthorizedResponse
 //	@Failure		403			{object}	swagger.ForbiddenResponse
 //	@Failure		500			{object}	swagger.InternalServerErrorResponse
+//	@Failure		503			{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/polar/token-by-id [get]
 func (h *PolarTokenHandler) GetTokenByPolarID(w http.ResponseWriter, r *http.Request) {

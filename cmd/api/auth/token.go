@@ -28,6 +28,7 @@ type TokenResponse struct {
 //	@Failure		400				{object}	swagger.ValidationErrorResponse
 //	@Failure		401				{object}	swagger.UnauthorizedResponse
 //	@Failure		500				{object}	swagger.InternalServerErrorResponse
+//	@Failure		503				{object}	swagger.ServiceUnavailableResponse
 //	@Router			/auth/token [post]
 func (h *AuthHandler) IssueTokens(w http.ResponseWriter, r *http.Request) {
 	var req TokenRequest

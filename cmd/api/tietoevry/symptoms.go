@@ -28,20 +28,20 @@ func NewTietoevrySymptomHandler(store tietoevry.Symptoms, cache *cache.Storage) 
 type TietoevrySymptomInput struct {
 	ID             string  `json:"id" validate:"required,uuid4"`
 	UserID         string  `json:"user_id" validate:"required,uuid4"`
-	Date           string  `json:"date" validate:"required"` // ISO 8601 date
+	Date           string  `json:"date" validate:"required"`
 	Symptom        string  `json:"symptom" validate:"required"`
 	Severity       int32   `json:"severity" validate:"required"`
 	Comment        *string `json:"comment"`
 	Source         string  `json:"source" validate:"required"`
-	CreatedAt      string  `json:"created_at" validate:"required"` // ISO 8601 datetime
-	UpdatedAt      string  `json:"updated_at" validate:"required"` // ISO 8601 datetime
+	CreatedAt      string  `json:"created_at" validate:"required"`
+	UpdatedAt      string  `json:"updated_at" validate:"required"`
 	RawID          *string `json:"raw_id"`
 	OriginalID     *string `json:"original_id"`
 	Recovered      *bool   `json:"recovered"`
 	PainIndex      *int32  `json:"pain_index"`
 	Side           *string `json:"side"`
 	Category       *string `json:"category"`
-	AdditionalData *string `json:"additional_data"` // JSON as string
+	AdditionalData *string `json:"additional_data"`
 }
 
 type TietoevrySymptomsBulkInput struct {
@@ -58,9 +58,11 @@ type TietoevrySymptomsBulkInput struct {
 //	@Param			symptoms	body	swagger.TietoevrySymptomsBulkInput	true	"Symptom data"
 //	@Success		201			"Symptoms processed successfully (idempotent operation)"
 //	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		401			{object}	swagger.UnauthorizedResponse
 //	@Failure		403			{object}	swagger.ForbiddenResponse
 //	@Failure		409			{object}	swagger.ConflictResponse
 //	@Failure		500			{object}	swagger.InternalServerErrorResponse
+//	@Failure		503			{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/symptoms [post]
 func (h *TietoevrySymptomHandler) InsertSymptomsBulk(w http.ResponseWriter, r *http.Request) {
@@ -179,8 +181,10 @@ type TietoevrySymptomParams struct {
 //	@Param			user_id	query		string	true	"User ID (UUID)"
 //	@Success		200		{object}	swagger.TietoevrySymptomResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/symptoms [get]
 func (h *TietoevrySymptomHandler) GetSymptoms(w http.ResponseWriter, r *http.Request) {

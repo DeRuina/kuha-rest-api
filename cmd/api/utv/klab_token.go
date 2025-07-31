@@ -34,8 +34,10 @@ type KlabStatusParams struct {
 //	@Param			user_id	query		string	true	"User ID (UUID)"
 //	@Success		200		{object}	swagger.KlabStatusResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/klab/status [get]
 func (h *KlabTokenHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
@@ -90,8 +92,10 @@ type KlabTokenInput struct {
 //	@Param			body	body	swagger.KlabTokenInput	true	"Klab token input"
 //	@Success		201		"Created"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/klab/token [post]
 func (h *KlabTokenHandler) UpsertToken(w http.ResponseWriter, r *http.Request) {

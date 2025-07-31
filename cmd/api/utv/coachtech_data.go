@@ -35,8 +35,10 @@ type CoachtechStatusParams struct {
 //	@Param			user_id	query		string	true	"User ID (UUID)"
 //	@Success		200		{object}	swagger.CoachtechStatusResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/coachtech/status [get]
 func (h *CoachtechDataHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
@@ -93,8 +95,10 @@ type CoachtechDataParams struct {
 //	@Success		200
 //	@Success		204	"No Content"
 //	@Failure		400	{object}	swagger.ValidationErrorResponse
+//	@Failure		401	{object}	swagger.UnauthorizedResponse
 //	@Failure		403	{object}	swagger.ForbiddenResponse
 //	@Failure		500	{object}	swagger.InternalServerErrorResponse
+//	@Failure		503	{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/coachtech/data [get]
 func (h *CoachtechDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
@@ -187,8 +191,10 @@ type CoachtechInsertInput struct {
 //	@Param			body	body	swagger.CoachtechInsertInput	true	"Coachtech data input"
 //	@Success		201		"Created"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/coachtech/insert [post]
 func (h *CoachtechDataHandler) Insert(w http.ResponseWriter, r *http.Request) {

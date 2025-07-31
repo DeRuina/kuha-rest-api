@@ -58,9 +58,11 @@ type TietoevryTestResultsBulkInput struct {
 //	@Param			test_results	body	swagger.TietoevryTestResultsBulkInput	true	"Test result data"
 //	@Success		201				"Test results processed successfully"
 //	@Failure		400				{object}	swagger.ValidationErrorResponse
+//	@Failure		401				{object}	swagger.UnauthorizedResponse
 //	@Failure		403				{object}	swagger.ForbiddenResponse
 //	@Failure		409				{object}	swagger.ConflictResponse
 //	@Failure		500				{object}	swagger.InternalServerErrorResponse
+//	@Failure		503				{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/test-results [post]
 func (h *TietoevryTestResultHandler) InsertTestResultsBulk(w http.ResponseWriter, r *http.Request) {
@@ -199,8 +201,10 @@ type TietoevryTestResultParams struct {
 //	@Param			user_id	query		string	true	"User ID (UUID)"
 //	@Success		200		{object}	swagger.TietoevryTestResultResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/test-results [get]
 func (h *TietoevryTestResultHandler) GetTestResults(w http.ResponseWriter, r *http.Request) {

@@ -800,6 +800,19 @@ definitions:
         example: 7cffe6e0-3f28-43b6-b511-d836d3a9f7b5
         type: string
     type: object
+  swagger.ServiceUnavailableError:
+    properties:
+      error:
+        example: database is unavailable
+        type: string
+    type: object
+  swagger.ServiceUnavailableResponse:
+    properties:
+      errors:
+        items:
+          $ref: '#/definitions/swagger.ServiceUnavailableError'
+        type: array
+    type: object
   swagger.SleepData:
     properties:
       average_heart_rate:
@@ -1618,6 +1631,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       summary: Issue a new JWT token
       tags:
       - Auth
@@ -1652,6 +1669,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       summary: Issue JWT and Refresh token
       tags:
       - Auth
@@ -1677,6 +1698,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -1685,6 +1710,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get athletes by sector
@@ -1712,6 +1741,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -1720,6 +1753,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get nations by sector
@@ -1764,6 +1801,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -1772,6 +1813,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get activity zones by user ID
@@ -1797,6 +1842,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -1809,6 +1858,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Insert activity zones (bulk)
@@ -1824,6 +1877,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/swagger.TietoevryDeletedUsersResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -1832,6 +1889,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: List deleted users
@@ -1860,6 +1921,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -1868,6 +1933,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get exercises by user ID
@@ -1893,6 +1962,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -1905,6 +1978,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Insert exercise (bulk)
@@ -1932,6 +2009,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -1940,6 +2021,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get measurements by user ID
@@ -1965,6 +2050,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -1977,6 +2066,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Insert measurements (bulk)
@@ -2004,6 +2097,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2012,6 +2109,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get questionnaires by user ID
@@ -2037,6 +2138,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2049,6 +2154,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Insert questionnaire answers (bulk)
@@ -2076,6 +2185,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2084,6 +2197,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get symptoms by user ID
@@ -2109,6 +2226,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2121,6 +2242,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Insert symptoms (bulk)
@@ -2148,6 +2273,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2156,6 +2285,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get test results by user ID
@@ -2181,6 +2314,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2193,6 +2330,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Insert test results (bulk)
@@ -2220,6 +2361,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2228,6 +2373,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Delete a user
@@ -2254,6 +2403,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2266,6 +2419,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get user by ID
@@ -2291,6 +2448,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2299,6 +2460,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Upsert user
@@ -2344,6 +2509,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2356,6 +2525,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get all data by type
@@ -2391,6 +2564,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2399,6 +2576,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get Coachtech data
@@ -2425,6 +2606,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2433,6 +2618,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Insert Coachtech data
@@ -2460,6 +2649,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2468,6 +2661,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Check Coachtech data availability
@@ -2505,6 +2702,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2513,6 +2714,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get data for update
@@ -2545,6 +2750,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2553,6 +2762,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Disconnect a wearable device
@@ -2580,6 +2793,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2588,6 +2805,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Delete all Garmin data for a user
@@ -2626,6 +2847,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2634,6 +2859,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get available data
@@ -2660,6 +2889,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2668,6 +2901,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Post Garmin data
@@ -2706,6 +2943,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2718,6 +2959,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get available dates
@@ -2746,6 +2991,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2754,6 +3003,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Check Garmin connection & data status
@@ -2780,6 +3033,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2788,6 +3045,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Save or update Garmin token
@@ -2815,6 +3076,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2823,6 +3088,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Check if Garmin token exists
@@ -2858,6 +3127,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2866,6 +3139,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get available types
@@ -2893,6 +3170,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2901,6 +3182,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get user_id by Garmin access token
@@ -2928,6 +3213,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2936,6 +3225,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Check Klab connection
@@ -2962,6 +3255,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -2970,6 +3267,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Upsert Klab token
@@ -3015,6 +3316,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3023,6 +3328,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get latest data by type
@@ -3050,6 +3359,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3058,6 +3371,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Delete all Oura data for a user
@@ -3096,6 +3413,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3104,6 +3425,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get available data
@@ -3130,6 +3455,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3138,6 +3467,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Post Oura data
@@ -3176,6 +3509,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3188,6 +3525,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get available dates
@@ -3216,6 +3557,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3224,6 +3569,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Check Oura connection & data status
@@ -3250,6 +3599,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3258,6 +3611,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Save or update Oura token
@@ -3286,6 +3643,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3294,6 +3655,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get Oura token by Oura ID
@@ -3329,6 +3694,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3337,6 +3706,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get available types
@@ -3364,6 +3737,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3372,6 +3749,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Delete all Polar data for a user
@@ -3410,6 +3791,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3418,6 +3803,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get available data
@@ -3444,6 +3833,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3452,6 +3845,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Post Polar data
@@ -3490,6 +3887,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3502,6 +3903,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get available dates
@@ -3530,6 +3935,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3538,6 +3947,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Check Polar connection & data status
@@ -3564,6 +3977,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3572,6 +3989,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Save or update Polar token
@@ -3599,6 +4020,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3607,6 +4032,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get user token by Polar ID
@@ -3642,6 +4071,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3650,6 +4083,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get available types
@@ -3677,6 +4114,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3685,6 +4126,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Delete all Suunto data for a user
@@ -3723,6 +4168,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3731,6 +4180,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get available data
@@ -3757,6 +4210,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3765,6 +4222,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Post Suunto data
@@ -3803,6 +4264,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3815,6 +4280,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get available dates
@@ -3843,6 +4312,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3851,6 +4324,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Check Suunto connection & data status
@@ -3877,6 +4354,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3885,6 +4366,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Save or update Suunto token
@@ -3912,6 +4397,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3920,6 +4409,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get Suunto token by username
@@ -3955,6 +4448,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -3963,6 +4460,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get available types
@@ -4000,6 +4501,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -4008,6 +4513,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get tokens for update
@@ -4033,6 +4542,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -4041,6 +4554,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Delete a user
@@ -4067,6 +4584,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -4079,6 +4600,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get user
@@ -4109,6 +4634,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -4117,6 +4646,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Save or update user
@@ -4144,6 +4677,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
         "403":
           description: Forbidden
           schema:
@@ -4156,6 +4693,10 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get UTV user ID by sport ID

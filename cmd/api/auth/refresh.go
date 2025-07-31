@@ -27,6 +27,7 @@ type RefreshResponse struct {
 //	@Failure		400				{object}	swagger.ValidationErrorResponse
 //	@Failure		401				{object}	swagger.UnauthorizedResponse
 //	@Failure		500				{object}	swagger.InternalServerErrorResponse
+//	@Failure		503				{object}	swagger.ServiceUnavailableResponse
 //	@Router			/auth/refresh [post]
 func (h *AuthHandler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 	var req RefreshRequest

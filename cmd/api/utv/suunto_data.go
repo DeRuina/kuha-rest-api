@@ -69,9 +69,11 @@ func NewSuuntoDataHandler(store utv.SuuntoData, cache *cache.Storage) *SuuntoDat
 //	@Success		200			{object}	swagger.DatesResponse	"List of available dates"
 //	@Success		204			"No Content: No available dates found"
 //	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		401			{object}	swagger.UnauthorizedResponse
 //	@Failure		403			{object}	swagger.ForbiddenResponse
 //	@Failure		422			{object}	swagger.InvalidDateRange
 //	@Failure		500			{object}	swagger.InternalServerErrorResponse
+//	@Failure		503			{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/suunto/dates [get]
 func (h *SuuntoDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
@@ -143,8 +145,10 @@ func (h *SuuntoDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 //	@Success		200		{object}	swagger.SuuntoTypesResponse	"List of available types"
 //	@Success		204		"No Content: No available types found"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/suunto/types [get]
 func (h *SuuntoDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
@@ -212,8 +216,10 @@ func (h *SuuntoDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 //	@Success		200		{object}	swagger.SuuntoDataResponse	"Data"
 //	@Success		204		"No Content: No data found"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/suunto/data [get]
 func (h *SuuntoDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
@@ -283,8 +289,10 @@ func (h *SuuntoDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 //	@Param			body	body	swagger.SuuntoPostDataInput	true	"suunto data input"
 //	@Success		201		"Created: Data successfully stored (no content in response body)"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/suunto/data [post]
 func (h *SuuntoDataHandler) InsertData(w http.ResponseWriter, r *http.Request) {
@@ -336,8 +344,10 @@ func (h *SuuntoDataHandler) InsertData(w http.ResponseWriter, r *http.Request) {
 // @Success		200		"Deleted: Data successfully removed"
 // @Success		204		"No Content: No matching data"
 // @Failure		400		{object} swagger.ValidationErrorResponse
+// @Failure		401		{object} swagger.UnauthorizedResponse
 // @Failure		403		{object} swagger.ForbiddenResponse
 // @Failure		500		{object} swagger.InternalServerErrorResponse
+// @Failure		503		{object} swagger.ServiceUnavailableResponse
 // @Security		BearerAuth
 // @Router			/utv/suunto/data [delete]
 func (h *SuuntoDataHandler) DeleteAllData(w http.ResponseWriter, r *http.Request) {

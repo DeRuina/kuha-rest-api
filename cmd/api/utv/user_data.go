@@ -45,9 +45,11 @@ type UserDataInput struct {
 //	@Param			user_id	query		string	true	"User ID (UUID)"
 //	@Success		200		{object}	swagger.UserDataResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		404		{object}	swagger.NotFoundResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/user [get]
 func (h *UserDataHandler) GetUserData(w http.ResponseWriter, r *http.Request) {
@@ -105,8 +107,10 @@ type UserDataUpsertInput struct {
 //	@Param			body	body	swagger.UserDataInput	true	"User data input"
 //	@Success		201		"Created"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/user [post]
 func (h *UserDataHandler) UpsertUserData(w http.ResponseWriter, r *http.Request) {
@@ -162,8 +166,10 @@ func (h *UserDataHandler) UpsertUserData(w http.ResponseWriter, r *http.Request)
 //	@Param			user_id	query	string	true	"User ID (UUID)"
 //	@Success		200
 //	@Failure		400	{object}	swagger.ValidationErrorResponse
+//	@Failure		401	{object}	swagger.UnauthorizedResponse
 //	@Failure		403	{object}	swagger.ForbiddenResponse
 //	@Failure		500	{object}	swagger.InternalServerErrorResponse
+//	@Failure		503	{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/user [delete]
 func (h *UserDataHandler) DeleteUserData(w http.ResponseWriter, r *http.Request) {
@@ -209,9 +215,11 @@ func (h *UserDataHandler) DeleteUserData(w http.ResponseWriter, r *http.Request)
 //	@Param			sport_id	query		string	true	"Sport ID"
 //	@Success		200			{object}	swagger.UserIDResponse
 //	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		401			{object}	swagger.UnauthorizedResponse
 //	@Failure		403			{object}	swagger.ForbiddenResponse
 //	@Failure		404			{object}	swagger.NotFoundResponse
 //	@Failure		500			{object}	swagger.InternalServerErrorResponse
+//	@Failure		503			{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/user-id-by-sport-id [get]
 func (h *UserDataHandler) GetUserIDBySportID(w http.ResponseWriter, r *http.Request) {

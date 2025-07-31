@@ -34,8 +34,10 @@ type SuuntoStatusParams struct {
 //	@Param			user_id	query		string	true	"User ID (UUID)"
 //	@Success		200		{object}	swagger.SuuntoStatusResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/suunto/status [get]
 func (h *SuuntoTokenHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
@@ -91,8 +93,10 @@ type SuuntoTokenInput struct {
 //	@Param			body	body	swagger.SuuntoTokenInput	true	"Suunto token input"
 //	@Success		201		"Created"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/suunto/token [post]
 func (h *SuuntoTokenHandler) UpsertToken(w http.ResponseWriter, r *http.Request) {
@@ -140,8 +144,10 @@ type GetTokenByUsernameParams struct {
 //	@Param			username	query		string	true	"Suunto username"
 //	@Success		200			{object}	swagger.SuuntoTokenByUsernameResponse
 //	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		401			{object}	swagger.UnauthorizedResponse
 //	@Failure		403			{object}	swagger.ForbiddenResponse
 //	@Failure		500			{object}	swagger.InternalServerErrorResponse
+//	@Failure		503			{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/suunto/token-by-username [get]
 func (h *SuuntoTokenHandler) GetTokenByUsername(w http.ResponseWriter, r *http.Request) {

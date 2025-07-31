@@ -56,9 +56,11 @@ type TietoevryMeasurementsBulkInput struct {
 //	@Param			measurements	body	swagger.TietoevryMeasurementsBulkInput	true	"Measurement data"
 //	@Success		201				"Measurements processed successfully"
 //	@Failure		400				{object}	swagger.ValidationErrorResponse
+//	@Failure		401				{object}	swagger.UnauthorizedResponse
 //	@Failure		403				{object}	swagger.ForbiddenResponse
 //	@Failure		409				{object}	swagger.ConflictResponse
 //	@Failure		500				{object}	swagger.InternalServerErrorResponse
+//	@Failure		503				{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/measurements [post]
 func (h *TietoevryMeasurementHandler) InsertMeasurementsBulk(w http.ResponseWriter, r *http.Request) {
@@ -163,8 +165,10 @@ type TietoevryMeasurementParams struct {
 //	@Param			user_id	query		string	true	"User ID (UUID)"
 //	@Success		200		{object}	swagger.TietoevryMeasurementResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/measurements [get]
 func (h *TietoevryMeasurementHandler) GetMeasurements(w http.ResponseWriter, r *http.Request) {

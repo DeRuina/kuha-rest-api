@@ -52,9 +52,11 @@ type TietoevryActivityZonesBulkInput struct {
 //	@Param			activity_zones	body	swagger.TietoevryActivityZonesBulkInput	true	"Activity zone summaries"
 //	@Success		201				"Activity zones processed successfully (idempotent operation)"
 //	@Failure		400				{object}	swagger.ValidationErrorResponse
+//	@Failure		401				{object}	swagger.UnauthorizedResponse
 //	@Failure		403				{object}	swagger.ForbiddenResponse
 //	@Failure		409				{object}	swagger.ConflictResponse
 //	@Failure		500				{object}	swagger.InternalServerErrorResponse
+//	@Failure		503				{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/activity-zones [post]
 func (h *TietoevryActivityZoneHandler) InsertActivityZonesBulk(w http.ResponseWriter, r *http.Request) {
@@ -156,8 +158,10 @@ type TietoevryActivityZoneParams struct {
 //	@Param			user_id	query		string	true	"User ID (UUID)"
 //	@Success		200		{object}	swagger.TietoevryActivityZoneResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/activity-zones [get]
 func (h *TietoevryActivityZoneHandler) GetActivityZones(w http.ResponseWriter, r *http.Request) {

@@ -69,9 +69,11 @@ func NewPolarDataHandler(store utv.PolarData, cache *cache.Storage) *PolarDataHa
 //	@Success		200			{object}	swagger.DatesResponse	"List of available dates"
 //	@Success		204			"No Content: No available dates found"
 //	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		401			{object}	swagger.UnauthorizedResponse
 //	@Failure		403			{object}	swagger.ForbiddenResponse
 //	@Failure		422			{object}	swagger.InvalidDateRange
 //	@Failure		500			{object}	swagger.InternalServerErrorResponse
+//	@Failure		503			{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/polar/dates [get]
 func (h *PolarDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
@@ -145,8 +147,10 @@ func (h *PolarDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 //	@Success		200		{object}	swagger.PolarTypesResponse	"List of available types"
 //	@Success		204		"No Content: No available types found"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/polar/types [get]
 func (h *PolarDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
@@ -214,8 +218,10 @@ func (h *PolarDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 //	@Success		200		{object}	swagger.PolarDataResponse	"Data"
 //	@Success		204		"No Content: No data found"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/polar/data [get]
 func (h *PolarDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
@@ -285,8 +291,10 @@ func (h *PolarDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 //	@Param			body	body	swagger.PolarPostDataInput	true	"Polar data input"
 //	@Success		201		"Created: Data successfully stored (no content in response body)"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/polar/data [post]
 func (h *PolarDataHandler) InsertData(w http.ResponseWriter, r *http.Request) {
@@ -338,8 +346,10 @@ func (h *PolarDataHandler) InsertData(w http.ResponseWriter, r *http.Request) {
 // @Success		200		"Deleted: Data successfully removed"
 // @Success		204		"No Content: No matching data"
 // @Failure		400		{object} swagger.ValidationErrorResponse
+// @Failure		401		{object} swagger.UnauthorizedResponse
 // @Failure		403		{object} swagger.ForbiddenResponse
 // @Failure		500		{object} swagger.InternalServerErrorResponse
+// @Failure		503		{object} swagger.ServiceUnavailableResponse
 // @Security		BearerAuth
 // @Router			/utv/polar/data [delete]
 func (h *PolarDataHandler) DeleteAllData(w http.ResponseWriter, r *http.Request) {

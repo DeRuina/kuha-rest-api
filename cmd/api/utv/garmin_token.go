@@ -34,8 +34,10 @@ type GarminStatusParams struct {
 //	@Param			user_id	query		string	true	"User ID (UUID)"
 //	@Success		200		{object}	swagger.GarminStatusResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/garmin/status [get]
 func (h *GarminTokenHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
@@ -91,8 +93,10 @@ type GarminTokenInput struct {
 //	@Param			body	body	swagger.GarminTokenInput	true	"Garmin token input"
 //	@Success		201		"Created"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/garmin/token [post]
 func (h *GarminTokenHandler) UpsertToken(w http.ResponseWriter, r *http.Request) {
@@ -140,8 +144,10 @@ type GarminTokenByAccessTokenParams struct {
 //	@Param			token	query		string	true	"Garmin access token"
 //	@Success		200		{object}	swagger.GarminUserIDResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/garmin/user-id-by-token [get]
 func (h *GarminTokenHandler) GetUserIDByToken(w http.ResponseWriter, r *http.Request) {
@@ -185,8 +191,10 @@ func (h *GarminTokenHandler) GetUserIDByToken(w http.ResponseWriter, r *http.Req
 //	@Param			token	query		string	true	"Garmin access token"
 //	@Success		200		{object}	swagger.GarminTokenExistsResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/garmin/token-exists [get]
 func (h *GarminTokenHandler) TokenExists(w http.ResponseWriter, r *http.Request) {

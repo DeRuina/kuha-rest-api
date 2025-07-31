@@ -57,9 +57,11 @@ type TietoevryQuestionnaireAnswersBulkInput struct {
 //	@Param			questionnaires	body	swagger.TietoevryQuestionnaireAnswersBulkInput	true	"Questionnaire answers"
 //	@Success		201				"Questionnaire answers processed successfully"
 //	@Failure		400				{object}	swagger.ValidationErrorResponse
+//	@Failure		401				{object}	swagger.UnauthorizedResponse
 //	@Failure		403				{object}	swagger.ForbiddenResponse
 //	@Failure		409				{object}	swagger.ConflictResponse
 //	@Failure		500				{object}	swagger.InternalServerErrorResponse
+//	@Failure		503				{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/questionnaires [post]
 func (h *TietoevryQuestionnaireHandler) InsertQuestionnaireAnswersBulk(w http.ResponseWriter, r *http.Request) {
@@ -178,8 +180,10 @@ type TietoevryQuestionnaireParams struct {
 //	@Param			user_id	query		string	true	"User ID (UUID)"
 //	@Success		200		{object}	swagger.TietoevryQuestionnaireAnswerResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/questionnaires [get]
 func (h *TietoevryQuestionnaireHandler) GetQuestionnaires(w http.ResponseWriter, r *http.Request) {

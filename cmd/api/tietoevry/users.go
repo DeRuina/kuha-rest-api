@@ -29,7 +29,7 @@ type TietoevryUserUpsertInput struct {
 	ID                        string   `json:"id" validate:"required,uuid4"`
 	SporttiID                 int32    `json:"sportti_id" validate:"required"`
 	ProfileGender             *string  `json:"profile_gender"`
-	ProfileBirthdate          *string  `json:"profile_birthdate"` // ISO 8601 string
+	ProfileBirthdate          *string  `json:"profile_birthdate"`
 	ProfileWeight             *float64 `json:"profile_weight"`
 	ProfileHeight             *float64 `json:"profile_height"`
 	ProfileRestingHeartRate   *int32   `json:"profile_resting_heart_rate"`
@@ -53,8 +53,10 @@ type TietoevryUserDeleteParams struct {
 //	@Param			user	body	swagger.TietoevryUserUpsertInput	true	"User data"
 //	@Success		201		"created"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/users [post]
 func (h *TietoevryUserHandler) UpsertUser(w http.ResponseWriter, r *http.Request) {
@@ -119,8 +121,10 @@ func (h *TietoevryUserHandler) UpsertUser(w http.ResponseWriter, r *http.Request
 //	@Success		200 "User deleted successfully"
 //	@Success		204 "No content, user not found"
 //	@Failure		400	{object}	swagger.ValidationErrorResponse
+//	@Failure		401	{object}	swagger.UnauthorizedResponse
 //	@Failure		403	{object}	swagger.ForbiddenResponse
 //	@Failure		500	{object}	swagger.InternalServerErrorResponse
+//	@Failure		503	{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/users [delete]
 func (h *TietoevryUserHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
@@ -174,9 +178,11 @@ func (h *TietoevryUserHandler) DeleteUser(w http.ResponseWriter, r *http.Request
 //	@Param			id	query		string	true	"User ID (UUID)"
 //	@Success		200	{object}	swagger.TietoevryUserResponse
 //	@Failure		400	{object}	swagger.ValidationErrorResponse
+//	@Failure		401	{object}	swagger.UnauthorizedResponse
 //	@Failure		403	{object}	swagger.ForbiddenResponse
 //	@Failure		404	{object}	swagger.NotFoundResponse
 //	@Failure		500	{object}	swagger.InternalServerErrorResponse
+//	@Failure		503	{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/users [get]
 func (h *TietoevryUserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
@@ -242,8 +248,10 @@ func (h *TietoevryUserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 //	@Tags			Tietoevry - User
 //	@Produce		json
 //	@Success		200	{object}	swagger.TietoevryDeletedUsersResponse
+//	@Failure		401 {object}	swagger.UnauthorizedResponse
 //	@Failure		403	{object}	swagger.ForbiddenResponse
 //	@Failure		500	{object}	swagger.InternalServerErrorResponse
+//	@Failure		503	{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/deleted-users [get]
 func (h *TietoevryUserHandler) GetDeletedUsers(w http.ResponseWriter, r *http.Request) {

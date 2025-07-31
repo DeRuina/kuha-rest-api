@@ -111,9 +111,11 @@ type TietoevryExerciseParams struct {
 //	@Param			exercise	body	swagger.TietoevryExercisesBulkInput	true	"Exercise data"
 //	@Success		201			"Exercises processed successfully (idempotent operation)"
 //	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		401			{object}	swagger.UnauthorizedResponse
 //	@Failure		403			{object}	swagger.ForbiddenResponse
 //	@Failure		409			{object}	swagger.ConflictResponse
 //	@Failure		500			{object}	swagger.InternalServerErrorResponse
+//	@Failure		503			{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/exercises [post]
 func (h *TietoevryExerciseHandler) InsertExercisesBulk(w http.ResponseWriter, r *http.Request) {
@@ -298,8 +300,10 @@ func (h *TietoevryExerciseHandler) InsertExercisesBulk(w http.ResponseWriter, r 
 //	@Param			user_id	query		string	true	"User ID (UUID)"
 //	@Success		200		{object}	swagger.TietoevryExerciseResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/tietoevry/exercises [get]
 func (h *TietoevryExerciseHandler) GetExercises(w http.ResponseWriter, r *http.Request) {

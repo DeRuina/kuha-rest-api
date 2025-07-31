@@ -64,9 +64,11 @@ func NewGarminDataHandler(store utv.GarminData, cache *cache.Storage) *GarminDat
 //	@Success		200			{object}	swagger.DatesResponse	"List of available dates"
 //	@Success		204			"No Content: No available dates found"
 //	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		401			{object}	swagger.UnauthorizedResponse
 //	@Failure		403			{object}	swagger.ForbiddenResponse
 //	@Failure		422			{object}	swagger.InvalidDateRange
 //	@Failure		500			{object}	swagger.InternalServerErrorResponse
+//	@Failure		503			{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/garmin/dates [get]
 func (h *GarminDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
@@ -139,8 +141,10 @@ func (h *GarminDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 // @Success		200		{object}	swagger.GarminTypesResponse	"List of available types"
 // @Success		204		"No Content: No available types found"
 // @Failure		400		{object}	swagger.ValidationErrorResponse
+// @Failure		401		{object}	swagger.UnauthorizedResponse
 // @Failure		403		{object}	swagger.ForbiddenResponse
 // @Failure		500		{object}	swagger.InternalServerErrorResponse
+// @Failure		503		{object}	swagger.ServiceUnavailableResponse
 // @Security		BearerAuth
 // @Router			/utv/garmin/types [get]
 func (h *GarminDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
@@ -208,8 +212,10 @@ func (h *GarminDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 // @Success		200		{object}	swagger.GarminDataResponse	"Data"
 // @Success		204		"No Content: No data found"
 // @Failure		400		{object}	swagger.ValidationErrorResponse
+// @Failure		401		{object}	swagger.UnauthorizedResponse
 // @Failure		403		{object}	swagger.ForbiddenResponse
 // @Failure		500		{object}	swagger.InternalServerErrorResponse
+// @Failure		503		{object}	swagger.ServiceUnavailableResponse
 // @Security		BearerAuth
 // @Router			/utv/garmin/data [get]
 func (h *GarminDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
@@ -279,8 +285,10 @@ func (h *GarminDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 //	@Param			body	body	swagger.GarminPostDataInput	true	"Garmin data input"
 //	@Success		201		"Created: Data successfully stored (no content in response body)"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/garmin/data [post]
 func (h *GarminDataHandler) InsertData(w http.ResponseWriter, r *http.Request) {
@@ -332,8 +340,10 @@ func (h *GarminDataHandler) InsertData(w http.ResponseWriter, r *http.Request) {
 // @Success		200		"Deleted: Data successfully removed"
 // @Success		204		"No Content: No matching data"
 // @Failure		400		{object} swagger.ValidationErrorResponse
+// @Failure		401		{object} swagger.UnauthorizedResponse
 // @Failure		403		{object} swagger.ForbiddenResponse
 // @Failure		500		{object} swagger.InternalServerErrorResponse
+// @Failure		503		{object} swagger.ServiceUnavailableResponse
 // @Security		BearerAuth
 // @Router			/utv/garmin/data [delete]
 func (h *GarminDataHandler) DeleteAllData(w http.ResponseWriter, r *http.Request) {

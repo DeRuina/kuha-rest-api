@@ -69,9 +69,11 @@ func NewOuraDataHandler(store utv.OuraData, cache *cache.Storage) *OuraDataHandl
 //	@Success		200			{object}	swagger.DatesResponse	"List of available dates"
 //	@Success		204			"No Content: No available dates found"
 //	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		401			{object}	swagger.UnauthorizedResponse
 //	@Failure		403			{object}	swagger.ForbiddenResponse
 //	@Failure		422			{object}	swagger.InvalidDateRange
 //	@Failure		500			{object}	swagger.InternalServerErrorResponse
+//	@Failure		503			{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/oura/dates [get]
 func (h *OuraDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
@@ -144,8 +146,10 @@ func (h *OuraDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 // @Success		200		{object}	swagger.OuraTypesResponse	"List of available types"
 // @Success		204		"No Content: No available types found"
 // @Failure		400		{object}	swagger.ValidationErrorResponse
+// @Failure		401		{object}	swagger.UnauthorizedResponse
 // @Failure		403		{object}	swagger.ForbiddenResponse
 // @Failure		500		{object}	swagger.InternalServerErrorResponse
+// @Failure		503		{object}	swagger.ServiceUnavailableResponse
 // @Security		BearerAuth
 // @Router			/utv/oura/types [get]
 func (h *OuraDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
@@ -213,8 +217,10 @@ func (h *OuraDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 // @Success		200		{object}	swagger.OuraDataResponse	"Data"
 // @Success		204		"No Content: No data found"
 // @Failure		400		{object}	swagger.ValidationErrorResponse
+// @Failure		401		{object}	swagger.UnauthorizedResponse
 // @Failure		403		{object}	swagger.ForbiddenResponse
 // @Failure		500		{object}	swagger.InternalServerErrorResponse
+// @Failure		503		{object}	swagger.ServiceUnavailableResponse
 // @Security		BearerAuth
 // @Router			/utv/oura/data [get]
 func (h *OuraDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
@@ -284,8 +290,10 @@ func (h *OuraDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 //	@Param			body	body	swagger.OuraPostDataInput	true	"Oura data input"
 //	@Success		201		"Created: Data successfully stored (no content in response body)"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
 //	@Failure		403		{object}	swagger.ForbiddenResponse
 //	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/utv/oura/data [post]
 func (h *OuraDataHandler) InsertData(w http.ResponseWriter, r *http.Request) {
@@ -337,8 +345,10 @@ func (h *OuraDataHandler) InsertData(w http.ResponseWriter, r *http.Request) {
 // @Success		200		"Deleted: Data successfully removed"
 // @Success		204		"No Content: No matching data"
 // @Failure		400		{object} swagger.ValidationErrorResponse
+// @Failure		401		{object} swagger.UnauthorizedResponse
 // @Failure		403		{object} swagger.ForbiddenResponse
 // @Failure		500		{object} swagger.InternalServerErrorResponse
+// @Failure		503		{object} swagger.ServiceUnavailableResponse
 // @Security		BearerAuth
 // @Router			/utv/oura/data [delete]
 func (h *OuraDataHandler) DeleteAllData(w http.ResponseWriter, r *http.Request) {

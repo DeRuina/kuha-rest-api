@@ -88,7 +88,7 @@ func NewGeneralDataHandler(
 //	@Param			user_id	query	string						true	"User ID (UUID)"
 //	@Param			type	query	string						true	"Data type (e.g., 'sleep', 'activity')"
 //	@Param			device	query	string						false	"Device type (one of: 'garmin', 'oura', 'polar', 'suunto')"
-//	@Param			limit	query	int							false	"Limit the number of results (default: 5, max: 100)"
+//	@Param			limit	query	int							false	"Limit the number of results (default: 1, max: 100)"
 //	@Success		200		{array}	swagger.LatestDataResponse	"Latest Data"
 //	@Success		204		"No Content: No data found"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
@@ -122,7 +122,7 @@ func (h *GeneralDataHandler) GetLatestData(w http.ResponseWriter, r *http.Reques
 		}
 	}
 	if params.Limit == 0 {
-		params.Limit = 5 // default
+		params.Limit = 1 // default
 	}
 
 	if err := utils.GetValidator().Struct(params); err != nil {

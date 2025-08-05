@@ -2644,7 +2644,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "description": "Limit the number of results (default: 5, max: 100)",
+                        "description": "Limit the number of results (default: 1, max: 100)",
                         "name": "limit",
                         "in": "query"
                     }

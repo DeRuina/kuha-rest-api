@@ -416,3 +416,24 @@ type CoachtechInsertInput struct {
 	TestID      string        `json:"test_id" example:"endurance_test_1"`
 	Data        CoachtechData `json:"data"`
 }
+type DeviceInfoConnectedWithData struct {
+	Connected  bool `json:"connected" example:"true"`
+	DataExists bool `json:"data_exists" example:"true"`
+}
+
+type DeviceInfoConnectedNoData struct {
+	Connected  bool `json:"connected" example:"true"`
+	DataExists bool `json:"data_exists" example:"false"`
+}
+
+type DeviceInfoNotConnectedNoData struct {
+	Connected  bool `json:"connected" example:"false"`
+	DataExists bool `json:"data_exists" example:"false"`
+}
+
+type DeviceStatusResponse struct {
+	Garmin DeviceInfoConnectedWithData  `json:"garmin"`
+	Oura   DeviceInfoConnectedNoData    `json:"oura"`
+	Polar  DeviceInfoNotConnectedNoData `json:"polar"`
+	Suunto DeviceInfoConnectedWithData  `json:"suunto"`
+}

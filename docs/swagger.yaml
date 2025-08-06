@@ -132,6 +132,44 @@ definitions:
           $ref: '#/definitions/swagger.SleepSample'
         type: array
     type: object
+  swagger.DeviceInfoConnectedNoData:
+    properties:
+      connected:
+        example: true
+        type: boolean
+      data_exists:
+        example: false
+        type: boolean
+    type: object
+  swagger.DeviceInfoConnectedWithData:
+    properties:
+      connected:
+        example: true
+        type: boolean
+      data_exists:
+        example: true
+        type: boolean
+    type: object
+  swagger.DeviceInfoNotConnectedNoData:
+    properties:
+      connected:
+        example: false
+        type: boolean
+      data_exists:
+        example: false
+        type: boolean
+    type: object
+  swagger.DeviceStatusResponse:
+    properties:
+      garmin:
+        $ref: '#/definitions/swagger.DeviceInfoConnectedWithData'
+      oura:
+        $ref: '#/definitions/swagger.DeviceInfoConnectedNoData'
+      polar:
+        $ref: '#/definitions/swagger.DeviceInfoNotConnectedNoData'
+      suunto:
+        $ref: '#/definitions/swagger.DeviceInfoConnectedWithData'
+    type: object
   swagger.ForbiddenError:
     properties:
       error:
@@ -4709,6 +4747,50 @@ paths:
       security:
       - BearerAuth: []
       summary: Get UTV user ID by sport ID
+      tags:
+      - UTV - User
+  /utv/user-linked-devices:
+    get:
+      consumes:
+      - application/json
+      description: Returns the status of linked devices for a user and if they include
+        data.
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.DeviceStatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Get linked devices for a user
       tags:
       - UTV - User
 securityDefinitions:

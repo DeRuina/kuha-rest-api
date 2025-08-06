@@ -4796,6 +4796,73 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/utv/user-linked-devices": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns the status of linked devices for a user and if they include data.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UTV - User"
+                ],
+                "summary": "Get linked devices for a user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID (UUID)",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.DeviceStatusResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -4991,6 +5058,62 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/swagger.SleepSample"
                     }
+                }
+            }
+        },
+        "swagger.DeviceInfoConnectedNoData": {
+            "type": "object",
+            "properties": {
+                "connected": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "data_exists": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "swagger.DeviceInfoConnectedWithData": {
+            "type": "object",
+            "properties": {
+                "connected": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "data_exists": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "swagger.DeviceInfoNotConnectedNoData": {
+            "type": "object",
+            "properties": {
+                "connected": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "data_exists": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "swagger.DeviceStatusResponse": {
+            "type": "object",
+            "properties": {
+                "garmin": {
+                    "$ref": "#/definitions/swagger.DeviceInfoConnectedWithData"
+                },
+                "oura": {
+                    "$ref": "#/definitions/swagger.DeviceInfoConnectedNoData"
+                },
+                "polar": {
+                    "$ref": "#/definitions/swagger.DeviceInfoNotConnectedNoData"
+                },
+                "suunto": {
+                    "$ref": "#/definitions/swagger.DeviceInfoConnectedWithData"
                 }
             }
         },

@@ -257,3 +257,53 @@ func (h *UserDataHandler) GetUserIDBySportID(w http.ResponseWriter, r *http.Requ
 		"user_id": userID.String(),
 	})
 }
+
+// GetLinkedDevices godoc
+//
+//	@Summary		Get linked devices for a user
+//	@Description	Returns the status of linked devices for a user and if they include data.
+//	@Tags			UTV - User
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id	query		string	true	"User ID (UUID)"
+//	@Success		200		{object}	swagger.DeviceStatusResponse
+//	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
+//	@Failure		403		{object}	swagger.ForbiddenResponse
+//	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
+//	@Security		BearerAuth
+//	@Router			/utv/user-linked-devices [get]
+func (h *UserDataHandler) GetLinkedDevices(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	if err := utils.ValidateParams(r, []string{"user_id"}); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	params := UserIDParam{
+		UserID: r.URL.Query().Get("user_id"),
+	}
+	if err := utils.GetValidator().Struct(params); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	userID, err := utils.ParseUUID(params.UserID)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	status, err := h.store.GetUserDeviceStatus(r.Context(), userID)
+	if err != nil {
+		utils.InternalServerError(w, r, err)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, status)
+}

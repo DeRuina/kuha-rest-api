@@ -125,6 +125,7 @@ type UserData interface {
 	UpsertUserData(ctx context.Context, userID uuid.UUID, data json.RawMessage) error
 	DeleteUserData(ctx context.Context, userID uuid.UUID) error
 	GetUserIDBySportID(ctx context.Context, sportID string) (uuid.UUID, error)
+	GetUserDeviceStatus(ctx context.Context, userID uuid.UUID) (DeviceStatus, error)
 }
 
 // UTVStorage struct to hold table-specific storage

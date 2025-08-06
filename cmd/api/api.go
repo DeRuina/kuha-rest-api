@@ -241,6 +241,7 @@ func (app *api) mount() http.Handler {
 					r.Post("/user", userDataHandler.UpsertUserData)
 					r.Delete("/user", userDataHandler.DeleteUserData)
 					r.Get("/user-id-by-sport-id", userDataHandler.GetUserIDBySportID)
+					r.Get("/user-linked-devices", userDataHandler.GetLinkedDevices)
 
 					// Klab routes
 					r.Route("/klab", func(r chi.Router) {

@@ -191,7 +191,7 @@ func (app *api) mount() http.Handler {
 			if app.store.KLAB != nil {
 				r.Route("/klab", func(r chi.Router) {
 					userDataHandler := klabapi.NewUserDataHandler(app.store.KLAB.Users(), app.cacheStorage)
-					r.Get("/customers", userDataHandler.GetCustomers)
+					r.Get("/sport-ids", userDataHandler.GetSporttiIDs)
 				})
 			} else {
 				logger.Logger.Warn("klab routes disabled: database not connected")

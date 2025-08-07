@@ -1828,7 +1828,7 @@ paths:
       summary: Healthcheck
       tags:
       - Health
-  /klab/customers:
+  /klab/sport-ids:
     get:
       consumes:
       - application/json

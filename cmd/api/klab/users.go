@@ -32,8 +32,8 @@ func NewUserDataHandler(store klab.Users, cache *cache.Storage) *UserDataHandler
 //	@Failure		500	{object}	swagger.InternalServerErrorResponse
 //	@Failure		503	{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
-//	@Router			/klab/customers [get]
-func (h *UserDataHandler) GetCustomers(w http.ResponseWriter, r *http.Request) {
+//	@Router			/klab/sport-ids [get]
+func (h *UserDataHandler) GetSporttiIDs(w http.ResponseWriter, r *http.Request) {
 	if !authz.Authorize(r) {
 		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
 		return

@@ -292,7 +292,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/klab/customers": {
+        "/klab/sport-ids": {
             "get": {
                 "security": [
                     {

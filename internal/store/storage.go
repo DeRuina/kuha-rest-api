@@ -59,6 +59,7 @@ type KAMK interface {
 type Klab interface {
 	Ping(ctx context.Context) error
 	Users() klab.Users
+	Data() klab.Data
 }
 
 type Archinisis interface {

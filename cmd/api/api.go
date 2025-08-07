@@ -24,6 +24,7 @@ import (
 	"github.com/go-chi/cors"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 
+	archapi "github.com/DeRuina/KUHA-REST-API/cmd/api/archinisis"
 	authapi "github.com/DeRuina/KUHA-REST-API/cmd/api/auth"
 	fisapi "github.com/DeRuina/KUHA-REST-API/cmd/api/fis"
 	klabapi "github.com/DeRuina/KUHA-REST-API/cmd/api/klab"
@@ -183,6 +184,21 @@ func (app *api) mount() http.Handler {
 				r.Route("/tietoevry", func(r chi.Router) {
 					r.Handle("/*", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 						utils.ServiceUnavailableDBResponse(w, r, "Tietoevry")
+					}))
+				})
+			}
+
+			// Archinisis routes
+			if app.store.ARCHINISIS != nil {
+				r.Route("/archinisis", func(r chi.Router) {
+					userDataHandler := archapi.NewUserDataHandler(app.store.ARCHINISIS.Users(), app.cacheStorage)
+					r.Get("/sport-ids", userDataHandler.GetSporttiIDs)
+				})
+			} else {
+				logger.Logger.Warn("archinisis routes disabled: database not connected")
+				r.Route("/archinisis", func(r chi.Router) {
+					r.Handle("/*", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+						utils.ServiceUnavailableDBResponse(w, r, "archinisis")
 					}))
 				})
 			}

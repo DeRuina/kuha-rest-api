@@ -64,6 +64,7 @@ type Klab interface {
 
 type Archinisis interface {
 	Ping(ctx context.Context) error
+	Users() archinisis.Users
 }
 
 // Storage struct for multiple databases

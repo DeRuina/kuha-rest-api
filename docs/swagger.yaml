@@ -1543,6 +1543,17 @@ definitions:
         example: invalid date range
         type: string
     type: object
+  swagger.UserDataArchinisisResponse:
+    properties:
+      sportti_ids:
+        example:
+        - "12345"
+        - "67890"
+        - "54321"
+        items:
+          type: string
+        type: array
+    type: object
   swagger.UserDataDetails:
     properties:
       contact_info:
@@ -1649,6 +1660,39 @@ info:
   termsOfService: https://csc.fi/en/security-privacy-data-policy-and-open-source-policy/privacy/
   title: KUHA REST API
 paths:
+  /archinisis/sport-ids:
+    get:
+      consumes:
+      - application/json
+      description: Returns a list of all Sportti IDs
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.UserDataArchinisisResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all Sportti IDs
+      tags:
+      - ARCHINISIS - User
   /auth/refresh:
     post:
       consumes:
@@ -1858,7 +1902,7 @@ paths:
             $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
-      summary: Get customers
+      summary: Get all Sportti IDs
       tags:
       - KLAB - User
   /tietoevry/activity-zones:

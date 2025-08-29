@@ -148,6 +148,7 @@ func (app *api) mount() http.Handler {
 			// Tietoevry routes
 			if app.store.Tietoevry != nil {
 				r.Route("/tietoevry", func(r chi.Router) {
+					// Register handlers
 					userHandler := tietoevryapi.NewTietoevryUserHandler(app.store.Tietoevry.Users(), app.cacheStorage)
 					exerciseHandler := tietoevryapi.NewTietoevryExerciseHandler(app.store.Tietoevry.Exercises(), app.cacheStorage)
 					symptomHandler := tietoevryapi.NewTietoevrySymptomHandler(app.store.Tietoevry.Symptoms(), app.cacheStorage)
@@ -156,26 +157,33 @@ func (app *api) mount() http.Handler {
 					questionnaireHandler := tietoevryapi.NewTietoevryQuestionnaireHandler(app.store.Tietoevry.Questionnaires(), app.cacheStorage)
 					activityZoneHandler := tietoevryapi.NewTietoevryActivityZoneHandler(app.store.Tietoevry.ActivityZones(), app.cacheStorage)
 
+					// user routes
 					r.Post("/users", userHandler.UpsertUser)
 					r.Delete("/users", userHandler.DeleteUser)
 					r.Get("/users", userHandler.GetUser)
 					r.Get("/deleted-users", userHandler.GetDeletedUsers)
 
+					// exercise routes
 					r.Post("/exercises", exerciseHandler.InsertExercisesBulk)
 					r.Get("/exercises", exerciseHandler.GetExercises)
 
+					// symptom routes
 					r.Post("/symptoms", symptomHandler.InsertSymptomsBulk)
 					r.Get("/symptoms", symptomHandler.GetSymptoms)
 
+					// measurement routes
 					r.Post("/measurements", measurementHandler.InsertMeasurementsBulk)
 					r.Get("/measurements", measurementHandler.GetMeasurements)
 
+					// test result routes
 					r.Post("/test-results", testResultHandler.InsertTestResultsBulk)
 					r.Get("/test-results", testResultHandler.GetTestResults)
 
+					// questionnaire routes
 					r.Post("/questionnaires", questionnaireHandler.InsertQuestionnaireAnswersBulk)
 					r.Get("/questionnaires", questionnaireHandler.GetQuestionnaires)
 
+					// activity zone routes
 					r.Post("/activity-zones", activityZoneHandler.InsertActivityZonesBulk)
 					r.Get("/activity-zones", activityZoneHandler.GetActivityZones)
 				})
@@ -191,7 +199,10 @@ func (app *api) mount() http.Handler {
 			// Archinisis routes
 			if app.store.ARCHINISIS != nil {
 				r.Route("/archinisis", func(r chi.Router) {
+					// Register handlers
 					userDataHandler := archapi.NewUserDataHandler(app.store.ARCHINISIS.Users(), app.cacheStorage)
+
+					// user routes
 					r.Get("/sport-ids", userDataHandler.GetSporttiIDs)
 				})
 			} else {
@@ -206,9 +217,16 @@ func (app *api) mount() http.Handler {
 			// KLAB routes
 			if app.store.KLAB != nil {
 				r.Route("/klab", func(r chi.Router) {
+					// Register handlers
 					userDataHandler := klabapi.NewUserDataHandler(app.store.KLAB.Users(), app.cacheStorage)
+					klabDataHandler := klabapi.NewKlabDataHandler(app.store.KLAB.Data(), app.cacheStorage)
+
+					// user routes
 					r.Get("/sport-ids", userDataHandler.GetSporttiIDs)
 					r.Get("/user", userDataHandler.GetUser)
+
+					// data routes
+					r.Post("/data", klabDataHandler.InsertKlabDataBulk)
 				})
 			} else {
 				logger.Logger.Warn("klab routes disabled: database not connected")
@@ -222,7 +240,10 @@ func (app *api) mount() http.Handler {
 			// FIS routes
 			if app.store.FIS != nil {
 				r.Route("/fis", func(r chi.Router) {
+					// Register handlers
 					competitorsHandler := fisapi.NewCompetitorsHandler(app.store.FIS.Competitors(), app.cacheStorage)
+
+					// competitor routes
 					r.Get("/athlete", competitorsHandler.GetAthletesBySector)
 					r.Get("/nation", competitorsHandler.GetNationsBySector)
 				})

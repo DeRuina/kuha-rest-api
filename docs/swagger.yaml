@@ -462,129 +462,1163 @@ definitions:
           $ref: '#/definitions/swagger.UnprocessableEntityError'
         type: array
     type: object
+  swagger.KlabCustomer:
+    properties:
+      DOB:
+        description: YYYY-MM-DD
+        example: "1992-08-15"
+        type: string
+      FirstName:
+        example: Mikael
+        type: string
+      LastName:
+        example: Järvinen
+        type: string
+      SEX:
+        example: 1
+        type: integer
+      add1:
+        example: 1
+        type: integer
+      add10:
+        example: Field 10
+        type: string
+      add20:
+        example: Field 20
+        type: string
+      addinfo:
+        example: Elite cross-country skier
+        type: string
+      address:
+        example: Tulliportinkatu 12, Kuopio
+        type: string
+      allow_anonymous_data:
+        example: true
+        type: boolean
+      allow_to_cloud:
+        example: 1
+        type: integer
+      allow_to_save:
+        example: 1
+        type: integer
+      allow_to_sprintai:
+        example: 1
+        type: integer
+      athlete:
+        example: 1
+        type: integer
+      company:
+        example: Kuopio Sports Institute
+        type: string
+      created_by:
+        example: 1001
+        type: integer
+      created_date:
+        description: RFC3339
+        example: "2024-08-15T14:22:00Z"
+        type: string
+      date_modified:
+        example: 1693478400
+        type: number
+      deleted:
+        description: smallint
+        example: 0
+        type: integer
+      dob_day:
+        example: 15
+        type: integer
+      dob_month:
+        example: 8
+        type: integer
+      dob_year:
+        example: 1992
+        type: integer
+      education:
+        example: Bachelor
+        type: string
+      email:
+        example: mikael.jarvinen@example.com
+        type: string
+      faxno:
+        type: string
+      flag2:
+        example: 0
+        type: integer
+      height_cm:
+        example: 178.2
+        type: number
+      idCustomer:
+        example: 7842
+        type: integer
+      idGroups:
+        example: 1205
+        type: integer
+      idsport:
+        example: 42
+        type: integer
+      locked:
+        description: smallint
+        example: 0
+        type: integer
+      medication:
+        example: None
+        type: string
+      mod_by:
+        example: 1001
+        type: integer
+      mod_date:
+        description: RFC3339
+        example: "2024-08-29T10:30:00Z"
+        type: string
+      modded:
+        description: smallint
+        example: 0
+        type: integer
+      occupation:
+        example: Athlete
+        type: string
+      password:
+        example: securepass123
+        type: string
+      phone_home:
+        example: +358-17-1234567
+        type: string
+      phone_mobile:
+        example: +358-40-1234567
+        type: string
+      phone_work:
+        example: +358-17-7654321
+        type: string
+      pid_number:
+        example: 150892-123A
+        type: string
+      readonly:
+        example: 0
+        type: integer
+      recom_testlevel:
+        example: 3
+        type: integer
+      sportti_id:
+        example: "7842"
+        type: string
+      stat_sent:
+        description: YYYY-MM-DD
+        example: "2024-08-20"
+        type: string
+      team_name:
+        example: Finnish National Ski Team
+        type: string
+      tosprintai_from:
+        description: YYYY-MM-DD
+        example: "2024-08-01"
+        type: string
+      updatemode:
+        example: 1
+        type: integer
+      username:
+        example: mjarvinen
+        type: string
+      warnings:
+        example: 0
+        type: integer
+      weight_kg:
+        example: 72.5
+        type: number
+    type: object
   swagger.KlabCustomerResponse:
     properties:
       add1:
+        example: 1
         type: integer
       add10:
+        example: Field 10
         type: string
       add20:
+        example: Field 20
         type: string
       addinfo:
+        example: Elite cross-country skier
         type: string
       address:
+        example: Tulliportinkatu 12, Kuopio
         type: string
       allow_anonymous_data:
+        example: true
         type: boolean
       allow_to_cloud:
+        example: 1
         type: integer
       allow_to_save:
+        example: 1
         type: integer
       allow_to_sprintai:
+        example: 1
         type: integer
       athlete:
+        example: 1
         type: integer
       company:
+        example: Kuopio Sports Institute
         type: string
       created_by:
+        example: 1001
         type: integer
       created_date:
         description: timestamp (RFC3339)
+        example: "2024-08-15T14:22:00Z"
         type: string
       date_modified:
         description: double precision
+        example: 1693478400
         type: number
       deleted:
         description: smallint -> int32 in JSON
+        example: 0
         type: integer
       dob:
         description: date (YYYY-MM-DD)
-        example: "1999-05-19"
+        example: "1992-08-15"
         type: string
       dob_day:
-        example: 9
+        example: 15
         type: integer
       dob_month:
-        example: 5
+        example: 8
         type: integer
       dob_year:
-        example: 1999
+        example: 1992
         type: integer
       education:
+        example: Bachelor
         type: string
       email:
+        example: mikael.jarvinen@example.com
         type: string
       faxno:
         type: string
       firstname:
-        example: name
+        example: Mikael
         type: string
       flag2:
+        example: 0
         type: integer
       height_cm:
+        example: 178.2
         type: number
       idcustomer:
-        example: 5233
+        example: 7842
         type: integer
       idgroups:
-        example: 2340
+        example: 1205
         type: integer
       idsport:
+        example: 42
         type: integer
       lastname:
-        example: lastname
+        example: Järvinen
         type: string
       locked:
         description: smallint -> int32
+        example: 0
         type: integer
       medication:
+        example: None
         type: string
       mod_by:
+        example: 1001
         type: integer
       mod_date:
         description: timestamp (RFC3339)
+        example: "2024-08-29T10:30:00Z"
         type: string
       modded:
         description: smallint -> int32 in JSON
+        example: 0
         type: integer
       occupation:
+        example: Athlete
         type: string
       password:
+        example: securepass123
         type: string
       phone_home:
+        example: +358-17-1234567
         type: string
       phone_mobile:
+        example: +358-40-1234567
         type: string
       phone_work:
+        example: +358-17-7654321
         type: string
       pid_number:
+        example: 150892-123A
         type: string
       readonly:
+        example: 0
         type: integer
       recom_testlevel:
+        example: 3
         type: integer
       sex:
-        example: 0
+        example: 1
         type: integer
       sportti_id:
         description: varchar(64)
+        example: "7842"
         type: string
       stat_sent:
         description: date (YYYY-MM-DD)
+        example: "2024-08-20"
         type: string
       team_name:
+        example: Finnish National Ski Team
         type: string
       tosprintai_from:
         description: date (YYYY-MM-DD)
+        example: "2024-08-01"
         type: string
       updatemode:
+        example: 1
         type: integer
       username:
+        example: mjarvinen
         type: string
       warnings:
+        example: 0
         type: integer
       weight_kg:
+        example: 72.5
         type: number
+    type: object
+  swagger.KlabDataBulkDoc:
+    properties:
+      "7842":
+        $ref: '#/definitions/swagger.KlabDataBundle'
+    type: object
+  swagger.KlabDataBundle:
+    properties:
+      customer:
+        items:
+          $ref: '#/definitions/swagger.KlabCustomer'
+        type: array
+      dirrawdata:
+        items:
+          $ref: '#/definitions/swagger.KlabDirRawData'
+        type: array
+      dirreport:
+        items:
+          $ref: '#/definitions/swagger.KlabDirReport'
+        type: array
+      dirresults:
+        items:
+          $ref: '#/definitions/swagger.KlabDirResults'
+        type: array
+      dirtest:
+        items:
+          $ref: '#/definitions/swagger.KlabDirTest'
+        type: array
+      dirteststeps:
+        items:
+          $ref: '#/definitions/swagger.KlabDirTestStep'
+        type: array
+      measurement_list:
+        items:
+          $ref: '#/definitions/swagger.KlabMeasurement'
+        type: array
+    type: object
+  swagger.KlabDataResponse:
+    properties:
+      customer_id:
+        example: 7842
+        type: integer
+      dirrawdata:
+        items:
+          $ref: '#/definitions/swagger.KlabDirRawData'
+        type: array
+      dirreport:
+        items:
+          $ref: '#/definitions/swagger.KlabDirReport'
+        type: array
+      dirresults:
+        items:
+          $ref: '#/definitions/swagger.KlabDirResults'
+        type: array
+      dirtest:
+        items:
+          $ref: '#/definitions/swagger.KlabDirTest'
+        type: array
+      dirteststeps:
+        items:
+          $ref: '#/definitions/swagger.KlabDirTestStep'
+        type: array
+      measurements:
+        items:
+          $ref: '#/definitions/swagger.KlabMeasurement'
+        type: array
+    type: object
+  swagger.KlabDirRawData:
+    properties:
+      columndata:
+        example: Time;HR;VO2;VO2kg;VCO2
+        type: string
+      created_by:
+        example: 1001
+        type: integer
+      created_date:
+        description: RFC3339
+        example: "2024-08-29T10:30:00Z"
+        type: string
+      deleted:
+        description: smallint
+        example: 0
+        type: integer
+      idDirRawData:
+        example: 444856
+        type: integer
+      idMeasurement:
+        example: 888423
+        type: integer
+      info:
+        example: VO2 Max Raw Data
+        type: string
+      mod_by:
+        example: 1001
+        type: integer
+      mod_date:
+        description: RFC3339
+        example: "2024-08-29T10:30:00Z"
+        type: string
+      modded:
+        description: smallint
+        example: 0
+        type: integer
+      rawdata:
+        example: 180;95;1250;17200;1020
+        type: string
+      unitsdata:
+        example: s;bpm;ml/min;ml/kg/min;ml/min
+        type: string
+    type: object
+  swagger.KlabDirReport:
+    properties:
+      created_by:
+        example: 1001
+        type: integer
+      created_date:
+        description: RFC3339
+        example: "2024-08-29T10:30:00Z"
+        type: string
+      deleted:
+        description: smallint
+        example: 0
+        type: integer
+      iddirreport:
+        example: 555852
+        type: integer
+      idmeasurement:
+        example: 888423
+        type: integer
+      librec_name:
+        example: VO2Max_Template
+        type: string
+      mod_by:
+        example: 1001
+        type: integer
+      mod_date:
+        description: RFC3339
+        example: "2024-08-29T10:30:00Z"
+        type: string
+      modded:
+        description: smallint
+        example: 0
+        type: integer
+      page_instructions:
+        example: otsake=Training\r\nlabel_vo2max=VO2 Max
+        type: string
+      template_rec:
+        example: 1
+        type: integer
+    type: object
+  swagger.KlabDirResults:
+    properties:
+      created_by:
+        example: 1001
+        type: integer
+      created_date:
+        description: RFC3339
+        example: "2024-08-29T10:30:00Z"
+        type: string
+      deleted:
+        description: smallint
+        example: 0
+        type: integer
+      iddirresults:
+        example: 333421
+        type: integer
+      idmeasurement:
+        example: 888423
+        type: integer
+      lac_aerk_add1:
+        type: number
+      lac_aerk_add2:
+        type: number
+      lac_aerk_add3:
+        type: number
+      lac_aerk_angle:
+        example: 0
+        type: number
+      lac_aerk_hr:
+        example: 175
+        type: number
+      lac_aerk_lac:
+        example: 4
+        type: number
+      lac_aerk_p:
+        example: 245.8
+        type: number
+      lac_aerk_pace:
+        example: 0
+        type: number
+      lac_aerk_pkg:
+        example: 3.39
+        type: number
+      lac_aerk_speed:
+        example: 0
+        type: number
+      lac_aerk_vo2:
+        example: 58.8
+        type: number
+      lac_aerk_vo2mlkgmin:
+        example: 58.8
+        type: number
+      lac_aerk_vo2mlmin:
+        example: 4263
+        type: number
+      lac_aerk_vo2pr:
+        example: 85.8
+        type: number
+      lac_ank_add1:
+        type: number
+      lac_ank_add2:
+        type: number
+      lac_ank_add3:
+        type: number
+      lac_ank_angle:
+        example: 0
+        type: number
+      lac_ank_hr:
+        example: 150
+        type: number
+      lac_ank_lac:
+        example: 2
+        type: number
+      lac_ank_p:
+        example: 185.5
+        type: number
+      lac_ank_pace:
+        example: 0
+        type: number
+      lac_ank_pkg:
+        example: 2.56
+        type: number
+      lac_ank_speed:
+        example: 0
+        type: number
+      lac_ank_vo2:
+        example: 45.2
+        type: number
+      lac_ank_vo2mlkgmin:
+        example: 45.2
+        type: number
+      lac_ank_vo2mlmin:
+        example: 3277
+        type: number
+      lac_ank_vo2pr:
+        example: 66
+        type: number
+      max_add1:
+        type: number
+      max_add2:
+        type: number
+      max_add3:
+        type: number
+      max_angle:
+        example: 0
+        type: number
+      max_hr:
+        example: 192
+        type: number
+      max_lac:
+        example: 8.9
+        type: number
+      max_p:
+        example: 375
+        type: number
+      max_pace:
+        example: 0
+        type: number
+      max_pkg:
+        example: 5.17
+        type: number
+      max_speed:
+        example: 0
+        type: number
+      max_vo2:
+        example: 68.5
+        type: number
+      max_vo2mlkgmin:
+        example: 68.5
+        type: number
+      max_vo2mlmin:
+        example: 4965.25
+        type: number
+      mod_by:
+        example: 1001
+        type: integer
+      mod_date:
+        description: RFC3339
+        example: "2024-08-29T10:30:00Z"
+        type: string
+      modded:
+        description: smallint
+        example: 0
+        type: integer
+      vent_aerk_add1:
+        type: number
+      vent_aerk_add2:
+        type: number
+      vent_aerk_add3:
+        type: number
+      vent_aerk_angle:
+        example: 0
+        type: number
+      vent_aerk_hr:
+        example: 177
+        type: number
+      vent_aerk_lac:
+        example: 4.2
+        type: number
+      vent_aerk_p:
+        example: 250.1
+        type: number
+      vent_aerk_pace:
+        example: 0
+        type: number
+      vent_aerk_pkg:
+        example: 3.45
+        type: number
+      vent_aerk_speed:
+        example: 0
+        type: number
+      vent_aerk_vo2:
+        example: 59.5
+        type: number
+      vent_aerk_vo2mlkgmin:
+        example: 59.5
+        type: number
+      vent_aerk_vo2mlmin:
+        example: 4313.75
+        type: number
+      vent_aerk_vo2pr:
+        example: 86.9
+        type: number
+      vent_ank_add1:
+        type: number
+      vent_ank_add2:
+        type: number
+      vent_ank_add3:
+        type: number
+      vent_ank_angle:
+        example: 0
+        type: number
+      vent_ank_hr:
+        example: 152
+        type: number
+      vent_ank_lac:
+        example: 2.1
+        type: number
+      vent_ank_p:
+        example: 190.2
+        type: number
+      vent_ank_pace:
+        example: 0
+        type: number
+      vent_ank_pkg:
+        example: 2.62
+        type: number
+      vent_ank_speed:
+        example: 0
+        type: number
+      vent_ank_vo2:
+        example: 46.1
+        type: number
+      vent_ank_vo2mlkgmin:
+        example: 46.1
+        type: number
+      vent_ank_vo2mlmin:
+        example: 3342.25
+        type: number
+      vent_ank_vo2pr:
+        example: 67.3
+        type: number
+    type: object
+  swagger.KlabDirTest:
+    properties:
+      MeasCols:
+        example: col2measindex=1\r\ncol2name=VO2
+        type: string
+      air_humid:
+        example: 45.2
+        type: number
+      air_press:
+        example: 1013.2
+        type: number
+      air_press_unit:
+        example: 1
+        type: integer
+      air_temp:
+        example: 21.5
+        type: number
+      bmi:
+        example: 22.8
+        type: number
+      created_by:
+        example: 1001
+        type: integer
+      created_date:
+        description: RFC3339
+        example: "2024-08-29T10:30:00Z"
+        type: string
+      deleted:
+        description: smallint
+        example: 0
+        type: integer
+      fat_equip:
+        example: Calipers
+        type: string
+      fat_p1:
+        example: 2.1
+        type: number
+      fat_p2:
+        example: 2.3
+        type: number
+      fat_p3:
+        example: 2
+        type: number
+      fat_p4:
+        example: 2.1
+        type: number
+      fat_pr:
+        example: 8.5
+        type: number
+      fat_style:
+        example: 1
+        type: integer
+      fev1:
+        example: 4.92
+        type: number
+      fvc:
+        example: 5.85
+        type: number
+      heightcm:
+        example: 178.2
+        type: number
+      idDirTest:
+        example: 777456
+        type: integer
+      idMeasurement:
+        example: 888423
+        type: integer
+      lt1_calc_x:
+        example: 186.1
+        type: number
+      lt1_calc_y:
+        example: 2.82
+        type: number
+      lt1_x:
+        example: 185.5
+        type: number
+      lt1_y:
+        example: 2.8
+        type: number
+      lt2_calc_x:
+        example: 246.3
+        type: number
+      lt2_calc_y:
+        example: 4.18
+        type: number
+      lt2_x:
+        example: 245.8
+        type: number
+      lt2_y:
+        example: 4.2
+        type: number
+      mod_by:
+        example: 1001
+        type: integer
+      mod_date:
+        description: RFC3339
+        example: "2024-08-29T10:30:00Z"
+        type: string
+      modded:
+        description: smallint
+        example: 0
+        type: integer
+      norawdata:
+        description: smallint
+        example: 0
+        type: integer
+      protocolmodel:
+        description: smallint
+        example: 1
+        type: integer
+      protocolxval:
+        description: smallint
+        example: 1
+        type: integer
+      settingslist:
+        example: protocol=inc;start=100
+        type: string
+      steptime:
+        example: 180
+        type: integer
+      testprotocol:
+        example: Incremental
+        type: string
+      testtype:
+        description: smallint
+        example: 1
+        type: integer
+      vt1_x:
+        example: 190.2
+        type: number
+      vt1_y:
+        example: 42.5
+        type: number
+      vt2_x:
+        example: 250.1
+        type: number
+      vt2_y:
+        example: 58.9
+        type: number
+      w_rest:
+        description: smallint
+        example: 50
+        type: integer
+      weightkg:
+        example: 72.5
+        type: number
+    type: object
+  swagger.KlabDirTestStep:
+    properties:
+      ana_time:
+        example: 0
+        type: integer
+      angle:
+        example: 0
+        type: number
+      bf:
+        example: 18.5
+        type: number
+      bp_dia:
+        example: 80
+        type: number
+      bp_sys:
+        example: 120
+        type: number
+      calc_end:
+        example: 180
+        type: integer
+      calc_start:
+        example: 60
+        type: integer
+      comments:
+        example: Rest phase
+        type: string
+      created_by:
+        example: 1001
+        type: integer
+      created_date:
+        description: RFC3339
+        example: "2024-08-29T10:30:00Z"
+        type: string
+      deleted:
+        description: smallint
+        example: 0
+        type: integer
+      duration:
+        example: 180
+        type: number
+      eco:
+        example: 4.2
+        type: number
+      ee_ae:
+        example: 5.8
+        type: number
+      elev:
+        example: 100
+        type: number
+      feco2:
+        example: 3.2
+        type: number
+      feo2:
+        example: 17.8
+        type: number
+      fico2:
+        example: 0.04
+        type: number
+      fio2:
+        example: 20.93
+        type: number
+      hr:
+        example: 95
+        type: number
+      iddirteststeps:
+        example: 666621
+        type: integer
+      idmeasurement:
+        example: 888423
+        type: integer
+      la:
+        example: 1.2
+        type: number
+      la_vo2:
+        example: 0.96
+        type: number
+      mod_by:
+        example: 1001
+        type: integer
+      mod_date:
+        description: RFC3339
+        example: "2024-08-29T10:30:00Z"
+        type: string
+      modded:
+        description: smallint
+        example: 0
+        type: integer
+      o2pulse:
+        example: 13.2
+        type: number
+      o2sa:
+        example: 98.5
+        type: number
+      own1:
+        type: number
+      own2:
+        type: number
+      own3:
+        type: number
+      own4:
+        type: number
+      own5:
+        type: number
+      own6:
+        type: number
+      own7:
+        type: number
+      own8:
+        type: number
+      own9:
+        type: number
+      own10:
+        type: number
+      p:
+        example: 100
+        type: number
+      pace:
+        example: 0
+        type: number
+      petco2:
+        example: 38.2
+        type: number
+      peto2:
+        example: 102.5
+        type: number
+      re:
+        example: 0.82
+        type: number
+      rer:
+        example: 0.82
+        type: number
+      rpe:
+        example: 6
+        type: number
+      speed:
+        example: 0
+        type: number
+      step_is_30max:
+        example: 0
+        type: integer
+      step_is_60max:
+        example: 0
+        type: integer
+      step_is_last:
+        example: 0
+        type: integer
+      step_is_rec:
+        example: 0
+        type: integer
+      step_is_rest:
+        example: 1
+        type: integer
+      stepno:
+        example: 0
+        type: integer
+      t_ex:
+        example: 175.2
+        type: number
+      t_tot:
+        example: 180
+        type: number
+      tco2:
+        example: 1.02
+        type: number
+      timestart:
+        example: 0
+        type: number
+      timestop:
+        example: 180
+        type: number
+      to2:
+        example: 0.85
+        type: number
+      tv:
+        example: 1.74
+        type: number
+      va:
+        example: 28.1
+        type: number
+      vco2:
+        example: 1.02
+        type: number
+      vde:
+        example: 28.5
+        type: number
+      vde_tv:
+        example: 16.4
+        type: number
+      ve:
+        example: 32.1
+        type: number
+      ve_stpd:
+        example: 30.8
+        type: number
+      veco2:
+        example: 31.2
+        type: number
+      veo2:
+        example: 25.6
+        type: number
+      vo2:
+        example: 1.25
+        type: number
+      vo2_30s:
+        example: 17.1
+        type: number
+      vo2_pr:
+        example: 25.2
+        type: number
+      vo2calc:
+        example: 12.5
+        type: number
+      vo2kg:
+        example: 17.2
+        type: number
+      wkg:
+        example: 1.38
+        type: number
+    type: object
+  swagger.KlabMeasurement:
+    properties:
+      MeasName:
+        example: VO2 Max Test
+        type: string
+      cbcharts:
+        example: chart_1
+        type: string
+      cbcomments:
+        example: Good performance
+        type: string
+      created_by:
+        example: 1001
+        type: integer
+      created_date:
+        description: RFC3339
+        example: "2024-08-29T10:30:00Z"
+        type: string
+      deleted:
+        description: smallint
+        example: 0
+        type: integer
+      do_day:
+        example: 29
+        type: integer
+      do_hour:
+        example: 10
+        type: integer
+      do_min:
+        example: 30
+        type: integer
+      do_month:
+        example: 8
+        type: integer
+      do_year:
+        example: 2024
+        type: integer
+      groupnotes:
+        example: Group Alpha
+        type: string
+      idCustomer:
+        example: 7842
+        type: integer
+      idMeasurement:
+        example: 888423
+        type: integer
+      idpatterndef:
+        example: pattern_vo2
+        type: string
+      info:
+        example: Pre-season assessment
+        type: string
+      keywords:
+        example: VO2max, endurance
+        type: string
+      meastype:
+        example: 1
+        type: integer
+      measurements:
+        example: Standard protocol
+        type: string
+      mod_by:
+        example: 1001
+        type: integer
+      mod_date:
+        description: RFC3339
+        example: "2024-08-29T10:30:00Z"
+        type: string
+      modded:
+        description: smallint
+        example: 0
+        type: integer
+      modder_name:
+        example: Dr. Korhonen
+        type: string
+      sent_to_sprintai:
+        description: RFC3339
+        example: "2024-08-29T11:45:00Z"
+        type: string
+      sessionno:
+        example: 1
+        type: integer
+      tableName:
+        example: dirtest
+        type: string
+      test_location:
+        example: Lab A
+        type: string
+      tester_name:
+        example: Dr. Korhonen
+        type: string
     type: object
   swagger.KlabStatusResponse:
     properties:
@@ -2003,6 +3037,96 @@ paths:
       summary: Healthcheck
       tags:
       - Health
+  /klab/data:
+    get:
+      consumes:
+      - application/json
+      description: Returns measurement_list + all child tables for the given customer
+        (no customer row)
+      parameters:
+      - description: Customer ID (integer)
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.KlabDataResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Get kLab data by customer ID
+      tags:
+      - KLAB - Data
+    post:
+      consumes:
+      - application/json
+      description: Insert a full k-Lab bundle for a single customer. The JSON root
+        object key must be the customer id.
+      parameters:
+      - description: klab data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.KlabDataBulkDoc'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Data processed successfully
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Insert k-Lab data (one customer per request)
+      tags:
+      - KLAB - Data
   /klab/sport-ids:
     get:
       consumes:

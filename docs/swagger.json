@@ -336,6 +336,143 @@
                 }
             }
         },
+        "/klab/data": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns measurement_list + all child tables for the given customer (no customer row)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "KLAB - Data"
+                ],
+                "summary": "Get kLab data by customer ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer ID (integer)",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.KlabDataResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.NotFoundResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Insert a full k-Lab bundle for a single customer. The JSON root object key must be the customer id.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "KLAB - Data"
+                ],
+                "summary": "Insert k-Lab data (one customer per request)",
+                "parameters": [
+                    {
+                        "description": "klab data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/swagger.KlabDataBulkDoc"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Data processed successfully"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/klab/sport-ids": {
             "get": {
                 "security": [
@@ -5701,180 +5838,1560 @@
                 }
             }
         },
+        "swagger.KlabCustomer": {
+            "type": "object",
+            "properties": {
+                "DOB": {
+                    "description": "YYYY-MM-DD",
+                    "type": "string",
+                    "example": "1992-08-15"
+                },
+                "FirstName": {
+                    "type": "string",
+                    "example": "Mikael"
+                },
+                "LastName": {
+                    "type": "string",
+                    "example": "Järvinen"
+                },
+                "SEX": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "add1": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "add10": {
+                    "type": "string",
+                    "example": "Field 10"
+                },
+                "add20": {
+                    "type": "string",
+                    "example": "Field 20"
+                },
+                "addinfo": {
+                    "type": "string",
+                    "example": "Elite cross-country skier"
+                },
+                "address": {
+                    "type": "string",
+                    "example": "Tulliportinkatu 12, Kuopio"
+                },
+                "allow_anonymous_data": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "allow_to_cloud": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "allow_to_save": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "allow_to_sprintai": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "athlete": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "company": {
+                    "type": "string",
+                    "example": "Kuopio Sports Institute"
+                },
+                "created_by": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "created_date": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2024-08-15T14:22:00Z"
+                },
+                "date_modified": {
+                    "type": "number",
+                    "example": 1693478400
+                },
+                "deleted": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "dob_day": {
+                    "type": "integer",
+                    "example": 15
+                },
+                "dob_month": {
+                    "type": "integer",
+                    "example": 8
+                },
+                "dob_year": {
+                    "type": "integer",
+                    "example": 1992
+                },
+                "education": {
+                    "type": "string",
+                    "example": "Bachelor"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "mikael.jarvinen@example.com"
+                },
+                "faxno": {
+                    "type": "string"
+                },
+                "flag2": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "height_cm": {
+                    "type": "number",
+                    "example": 178.2
+                },
+                "idCustomer": {
+                    "type": "integer",
+                    "example": 7842
+                },
+                "idGroups": {
+                    "type": "integer",
+                    "example": 1205
+                },
+                "idsport": {
+                    "type": "integer",
+                    "example": 42
+                },
+                "locked": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "medication": {
+                    "type": "string",
+                    "example": "None"
+                },
+                "mod_by": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "mod_date": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2024-08-29T10:30:00Z"
+                },
+                "modded": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "occupation": {
+                    "type": "string",
+                    "example": "Athlete"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "securepass123"
+                },
+                "phone_home": {
+                    "type": "string",
+                    "example": "+358-17-1234567"
+                },
+                "phone_mobile": {
+                    "type": "string",
+                    "example": "+358-40-1234567"
+                },
+                "phone_work": {
+                    "type": "string",
+                    "example": "+358-17-7654321"
+                },
+                "pid_number": {
+                    "type": "string",
+                    "example": "150892-123A"
+                },
+                "readonly": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "recom_testlevel": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "sportti_id": {
+                    "type": "string",
+                    "example": "7842"
+                },
+                "stat_sent": {
+                    "description": "YYYY-MM-DD",
+                    "type": "string",
+                    "example": "2024-08-20"
+                },
+                "team_name": {
+                    "type": "string",
+                    "example": "Finnish National Ski Team"
+                },
+                "tosprintai_from": {
+                    "description": "YYYY-MM-DD",
+                    "type": "string",
+                    "example": "2024-08-01"
+                },
+                "updatemode": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "username": {
+                    "type": "string",
+                    "example": "mjarvinen"
+                },
+                "warnings": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "weight_kg": {
+                    "type": "number",
+                    "example": 72.5
+                }
+            }
+        },
         "swagger.KlabCustomerResponse": {
             "type": "object",
             "properties": {
                 "add1": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "add10": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Field 10"
                 },
                 "add20": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Field 20"
                 },
                 "addinfo": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Elite cross-country skier"
                 },
                 "address": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Tulliportinkatu 12, Kuopio"
                 },
                 "allow_anonymous_data": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": true
                 },
                 "allow_to_cloud": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "allow_to_save": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "allow_to_sprintai": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "athlete": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "company": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Kuopio Sports Institute"
                 },
                 "created_by": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1001
                 },
                 "created_date": {
                     "description": "timestamp (RFC3339)",
-                    "type": "string"
+                    "type": "string",
+                    "example": "2024-08-15T14:22:00Z"
                 },
                 "date_modified": {
                     "description": "double precision",
-                    "type": "number"
+                    "type": "number",
+                    "example": 1693478400
                 },
                 "deleted": {
                     "description": "smallint -\u003e int32 in JSON",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 0
                 },
                 "dob": {
                     "description": "date (YYYY-MM-DD)",
                     "type": "string",
-                    "example": "1999-05-19"
+                    "example": "1992-08-15"
                 },
                 "dob_day": {
                     "type": "integer",
-                    "example": 9
+                    "example": 15
                 },
                 "dob_month": {
                     "type": "integer",
-                    "example": 5
+                    "example": 8
                 },
                 "dob_year": {
                     "type": "integer",
-                    "example": 1999
+                    "example": 1992
                 },
                 "education": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Bachelor"
                 },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "mikael.jarvinen@example.com"
                 },
                 "faxno": {
                     "type": "string"
                 },
                 "firstname": {
                     "type": "string",
-                    "example": "name"
+                    "example": "Mikael"
                 },
                 "flag2": {
-                    "type": "integer"
-                },
-                "height_cm": {
-                    "type": "number"
-                },
-                "idcustomer": {
-                    "type": "integer",
-                    "example": 5233
-                },
-                "idgroups": {
-                    "type": "integer",
-                    "example": 2340
-                },
-                "idsport": {
-                    "type": "integer"
-                },
-                "lastname": {
-                    "type": "string",
-                    "example": "lastname"
-                },
-                "locked": {
-                    "description": "smallint -\u003e int32",
-                    "type": "integer"
-                },
-                "medication": {
-                    "type": "string"
-                },
-                "mod_by": {
-                    "type": "integer"
-                },
-                "mod_date": {
-                    "description": "timestamp (RFC3339)",
-                    "type": "string"
-                },
-                "modded": {
-                    "description": "smallint -\u003e int32 in JSON",
-                    "type": "integer"
-                },
-                "occupation": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "phone_home": {
-                    "type": "string"
-                },
-                "phone_mobile": {
-                    "type": "string"
-                },
-                "phone_work": {
-                    "type": "string"
-                },
-                "pid_number": {
-                    "type": "string"
-                },
-                "readonly": {
-                    "type": "integer"
-                },
-                "recom_testlevel": {
-                    "type": "integer"
-                },
-                "sex": {
                     "type": "integer",
                     "example": 0
                 },
+                "height_cm": {
+                    "type": "number",
+                    "example": 178.2
+                },
+                "idcustomer": {
+                    "type": "integer",
+                    "example": 7842
+                },
+                "idgroups": {
+                    "type": "integer",
+                    "example": 1205
+                },
+                "idsport": {
+                    "type": "integer",
+                    "example": 42
+                },
+                "lastname": {
+                    "type": "string",
+                    "example": "Järvinen"
+                },
+                "locked": {
+                    "description": "smallint -\u003e int32",
+                    "type": "integer",
+                    "example": 0
+                },
+                "medication": {
+                    "type": "string",
+                    "example": "None"
+                },
+                "mod_by": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "mod_date": {
+                    "description": "timestamp (RFC3339)",
+                    "type": "string",
+                    "example": "2024-08-29T10:30:00Z"
+                },
+                "modded": {
+                    "description": "smallint -\u003e int32 in JSON",
+                    "type": "integer",
+                    "example": 0
+                },
+                "occupation": {
+                    "type": "string",
+                    "example": "Athlete"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "securepass123"
+                },
+                "phone_home": {
+                    "type": "string",
+                    "example": "+358-17-1234567"
+                },
+                "phone_mobile": {
+                    "type": "string",
+                    "example": "+358-40-1234567"
+                },
+                "phone_work": {
+                    "type": "string",
+                    "example": "+358-17-7654321"
+                },
+                "pid_number": {
+                    "type": "string",
+                    "example": "150892-123A"
+                },
+                "readonly": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "recom_testlevel": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "sex": {
+                    "type": "integer",
+                    "example": 1
+                },
                 "sportti_id": {
                     "description": "varchar(64)",
-                    "type": "string"
+                    "type": "string",
+                    "example": "7842"
                 },
                 "stat_sent": {
                     "description": "date (YYYY-MM-DD)",
-                    "type": "string"
+                    "type": "string",
+                    "example": "2024-08-20"
                 },
                 "team_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Finnish National Ski Team"
                 },
                 "tosprintai_from": {
                     "description": "date (YYYY-MM-DD)",
-                    "type": "string"
+                    "type": "string",
+                    "example": "2024-08-01"
                 },
                 "updatemode": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "username": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "mjarvinen"
                 },
                 "warnings": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 0
                 },
                 "weight_kg": {
+                    "type": "number",
+                    "example": 72.5
+                }
+            }
+        },
+        "swagger.KlabDataBulkDoc": {
+            "type": "object",
+            "properties": {
+                "7842": {
+                    "$ref": "#/definitions/swagger.KlabDataBundle"
+                }
+            }
+        },
+        "swagger.KlabDataBundle": {
+            "type": "object",
+            "properties": {
+                "customer": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.KlabCustomer"
+                    }
+                },
+                "dirrawdata": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.KlabDirRawData"
+                    }
+                },
+                "dirreport": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.KlabDirReport"
+                    }
+                },
+                "dirresults": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.KlabDirResults"
+                    }
+                },
+                "dirtest": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.KlabDirTest"
+                    }
+                },
+                "dirteststeps": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.KlabDirTestStep"
+                    }
+                },
+                "measurement_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.KlabMeasurement"
+                    }
+                }
+            }
+        },
+        "swagger.KlabDataResponse": {
+            "type": "object",
+            "properties": {
+                "customer_id": {
+                    "type": "integer",
+                    "example": 7842
+                },
+                "dirrawdata": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.KlabDirRawData"
+                    }
+                },
+                "dirreport": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.KlabDirReport"
+                    }
+                },
+                "dirresults": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.KlabDirResults"
+                    }
+                },
+                "dirtest": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.KlabDirTest"
+                    }
+                },
+                "dirteststeps": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.KlabDirTestStep"
+                    }
+                },
+                "measurements": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.KlabMeasurement"
+                    }
+                }
+            }
+        },
+        "swagger.KlabDirRawData": {
+            "type": "object",
+            "properties": {
+                "columndata": {
+                    "type": "string",
+                    "example": "Time;HR;VO2;VO2kg;VCO2"
+                },
+                "created_by": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "created_date": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2024-08-29T10:30:00Z"
+                },
+                "deleted": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "idDirRawData": {
+                    "type": "integer",
+                    "example": 444856
+                },
+                "idMeasurement": {
+                    "type": "integer",
+                    "example": 888423
+                },
+                "info": {
+                    "type": "string",
+                    "example": "VO2 Max Raw Data"
+                },
+                "mod_by": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "mod_date": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2024-08-29T10:30:00Z"
+                },
+                "modded": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "rawdata": {
+                    "type": "string",
+                    "example": "180;95;1250;17200;1020"
+                },
+                "unitsdata": {
+                    "type": "string",
+                    "example": "s;bpm;ml/min;ml/kg/min;ml/min"
+                }
+            }
+        },
+        "swagger.KlabDirReport": {
+            "type": "object",
+            "properties": {
+                "created_by": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "created_date": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2024-08-29T10:30:00Z"
+                },
+                "deleted": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "iddirreport": {
+                    "type": "integer",
+                    "example": 555852
+                },
+                "idmeasurement": {
+                    "type": "integer",
+                    "example": 888423
+                },
+                "librec_name": {
+                    "type": "string",
+                    "example": "VO2Max_Template"
+                },
+                "mod_by": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "mod_date": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2024-08-29T10:30:00Z"
+                },
+                "modded": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "page_instructions": {
+                    "type": "string",
+                    "example": "otsake=Training\\r\\nlabel_vo2max=VO2 Max"
+                },
+                "template_rec": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "swagger.KlabDirResults": {
+            "type": "object",
+            "properties": {
+                "created_by": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "created_date": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2024-08-29T10:30:00Z"
+                },
+                "deleted": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "iddirresults": {
+                    "type": "integer",
+                    "example": 333421
+                },
+                "idmeasurement": {
+                    "type": "integer",
+                    "example": 888423
+                },
+                "lac_aerk_add1": {
                     "type": "number"
+                },
+                "lac_aerk_add2": {
+                    "type": "number"
+                },
+                "lac_aerk_add3": {
+                    "type": "number"
+                },
+                "lac_aerk_angle": {
+                    "type": "number",
+                    "example": 0
+                },
+                "lac_aerk_hr": {
+                    "type": "number",
+                    "example": 175
+                },
+                "lac_aerk_lac": {
+                    "type": "number",
+                    "example": 4
+                },
+                "lac_aerk_p": {
+                    "type": "number",
+                    "example": 245.8
+                },
+                "lac_aerk_pace": {
+                    "type": "number",
+                    "example": 0
+                },
+                "lac_aerk_pkg": {
+                    "type": "number",
+                    "example": 3.39
+                },
+                "lac_aerk_speed": {
+                    "type": "number",
+                    "example": 0
+                },
+                "lac_aerk_vo2": {
+                    "type": "number",
+                    "example": 58.8
+                },
+                "lac_aerk_vo2mlkgmin": {
+                    "type": "number",
+                    "example": 58.8
+                },
+                "lac_aerk_vo2mlmin": {
+                    "type": "number",
+                    "example": 4263
+                },
+                "lac_aerk_vo2pr": {
+                    "type": "number",
+                    "example": 85.8
+                },
+                "lac_ank_add1": {
+                    "type": "number"
+                },
+                "lac_ank_add2": {
+                    "type": "number"
+                },
+                "lac_ank_add3": {
+                    "type": "number"
+                },
+                "lac_ank_angle": {
+                    "type": "number",
+                    "example": 0
+                },
+                "lac_ank_hr": {
+                    "type": "number",
+                    "example": 150
+                },
+                "lac_ank_lac": {
+                    "type": "number",
+                    "example": 2
+                },
+                "lac_ank_p": {
+                    "type": "number",
+                    "example": 185.5
+                },
+                "lac_ank_pace": {
+                    "type": "number",
+                    "example": 0
+                },
+                "lac_ank_pkg": {
+                    "type": "number",
+                    "example": 2.56
+                },
+                "lac_ank_speed": {
+                    "type": "number",
+                    "example": 0
+                },
+                "lac_ank_vo2": {
+                    "type": "number",
+                    "example": 45.2
+                },
+                "lac_ank_vo2mlkgmin": {
+                    "type": "number",
+                    "example": 45.2
+                },
+                "lac_ank_vo2mlmin": {
+                    "type": "number",
+                    "example": 3277
+                },
+                "lac_ank_vo2pr": {
+                    "type": "number",
+                    "example": 66
+                },
+                "max_add1": {
+                    "type": "number"
+                },
+                "max_add2": {
+                    "type": "number"
+                },
+                "max_add3": {
+                    "type": "number"
+                },
+                "max_angle": {
+                    "type": "number",
+                    "example": 0
+                },
+                "max_hr": {
+                    "type": "number",
+                    "example": 192
+                },
+                "max_lac": {
+                    "type": "number",
+                    "example": 8.9
+                },
+                "max_p": {
+                    "type": "number",
+                    "example": 375
+                },
+                "max_pace": {
+                    "type": "number",
+                    "example": 0
+                },
+                "max_pkg": {
+                    "type": "number",
+                    "example": 5.17
+                },
+                "max_speed": {
+                    "type": "number",
+                    "example": 0
+                },
+                "max_vo2": {
+                    "type": "number",
+                    "example": 68.5
+                },
+                "max_vo2mlkgmin": {
+                    "type": "number",
+                    "example": 68.5
+                },
+                "max_vo2mlmin": {
+                    "type": "number",
+                    "example": 4965.25
+                },
+                "mod_by": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "mod_date": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2024-08-29T10:30:00Z"
+                },
+                "modded": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "vent_aerk_add1": {
+                    "type": "number"
+                },
+                "vent_aerk_add2": {
+                    "type": "number"
+                },
+                "vent_aerk_add3": {
+                    "type": "number"
+                },
+                "vent_aerk_angle": {
+                    "type": "number",
+                    "example": 0
+                },
+                "vent_aerk_hr": {
+                    "type": "number",
+                    "example": 177
+                },
+                "vent_aerk_lac": {
+                    "type": "number",
+                    "example": 4.2
+                },
+                "vent_aerk_p": {
+                    "type": "number",
+                    "example": 250.1
+                },
+                "vent_aerk_pace": {
+                    "type": "number",
+                    "example": 0
+                },
+                "vent_aerk_pkg": {
+                    "type": "number",
+                    "example": 3.45
+                },
+                "vent_aerk_speed": {
+                    "type": "number",
+                    "example": 0
+                },
+                "vent_aerk_vo2": {
+                    "type": "number",
+                    "example": 59.5
+                },
+                "vent_aerk_vo2mlkgmin": {
+                    "type": "number",
+                    "example": 59.5
+                },
+                "vent_aerk_vo2mlmin": {
+                    "type": "number",
+                    "example": 4313.75
+                },
+                "vent_aerk_vo2pr": {
+                    "type": "number",
+                    "example": 86.9
+                },
+                "vent_ank_add1": {
+                    "type": "number"
+                },
+                "vent_ank_add2": {
+                    "type": "number"
+                },
+                "vent_ank_add3": {
+                    "type": "number"
+                },
+                "vent_ank_angle": {
+                    "type": "number",
+                    "example": 0
+                },
+                "vent_ank_hr": {
+                    "type": "number",
+                    "example": 152
+                },
+                "vent_ank_lac": {
+                    "type": "number",
+                    "example": 2.1
+                },
+                "vent_ank_p": {
+                    "type": "number",
+                    "example": 190.2
+                },
+                "vent_ank_pace": {
+                    "type": "number",
+                    "example": 0
+                },
+                "vent_ank_pkg": {
+                    "type": "number",
+                    "example": 2.62
+                },
+                "vent_ank_speed": {
+                    "type": "number",
+                    "example": 0
+                },
+                "vent_ank_vo2": {
+                    "type": "number",
+                    "example": 46.1
+                },
+                "vent_ank_vo2mlkgmin": {
+                    "type": "number",
+                    "example": 46.1
+                },
+                "vent_ank_vo2mlmin": {
+                    "type": "number",
+                    "example": 3342.25
+                },
+                "vent_ank_vo2pr": {
+                    "type": "number",
+                    "example": 67.3
+                }
+            }
+        },
+        "swagger.KlabDirTest": {
+            "type": "object",
+            "properties": {
+                "MeasCols": {
+                    "type": "string",
+                    "example": "col2measindex=1\\r\\ncol2name=VO2"
+                },
+                "air_humid": {
+                    "type": "number",
+                    "example": 45.2
+                },
+                "air_press": {
+                    "type": "number",
+                    "example": 1013.2
+                },
+                "air_press_unit": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "air_temp": {
+                    "type": "number",
+                    "example": 21.5
+                },
+                "bmi": {
+                    "type": "number",
+                    "example": 22.8
+                },
+                "created_by": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "created_date": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2024-08-29T10:30:00Z"
+                },
+                "deleted": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "fat_equip": {
+                    "type": "string",
+                    "example": "Calipers"
+                },
+                "fat_p1": {
+                    "type": "number",
+                    "example": 2.1
+                },
+                "fat_p2": {
+                    "type": "number",
+                    "example": 2.3
+                },
+                "fat_p3": {
+                    "type": "number",
+                    "example": 2
+                },
+                "fat_p4": {
+                    "type": "number",
+                    "example": 2.1
+                },
+                "fat_pr": {
+                    "type": "number",
+                    "example": 8.5
+                },
+                "fat_style": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "fev1": {
+                    "type": "number",
+                    "example": 4.92
+                },
+                "fvc": {
+                    "type": "number",
+                    "example": 5.85
+                },
+                "heightcm": {
+                    "type": "number",
+                    "example": 178.2
+                },
+                "idDirTest": {
+                    "type": "integer",
+                    "example": 777456
+                },
+                "idMeasurement": {
+                    "type": "integer",
+                    "example": 888423
+                },
+                "lt1_calc_x": {
+                    "type": "number",
+                    "example": 186.1
+                },
+                "lt1_calc_y": {
+                    "type": "number",
+                    "example": 2.82
+                },
+                "lt1_x": {
+                    "type": "number",
+                    "example": 185.5
+                },
+                "lt1_y": {
+                    "type": "number",
+                    "example": 2.8
+                },
+                "lt2_calc_x": {
+                    "type": "number",
+                    "example": 246.3
+                },
+                "lt2_calc_y": {
+                    "type": "number",
+                    "example": 4.18
+                },
+                "lt2_x": {
+                    "type": "number",
+                    "example": 245.8
+                },
+                "lt2_y": {
+                    "type": "number",
+                    "example": 4.2
+                },
+                "mod_by": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "mod_date": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2024-08-29T10:30:00Z"
+                },
+                "modded": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "norawdata": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "protocolmodel": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 1
+                },
+                "protocolxval": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 1
+                },
+                "settingslist": {
+                    "type": "string",
+                    "example": "protocol=inc;start=100"
+                },
+                "steptime": {
+                    "type": "integer",
+                    "example": 180
+                },
+                "testprotocol": {
+                    "type": "string",
+                    "example": "Incremental"
+                },
+                "testtype": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 1
+                },
+                "vt1_x": {
+                    "type": "number",
+                    "example": 190.2
+                },
+                "vt1_y": {
+                    "type": "number",
+                    "example": 42.5
+                },
+                "vt2_x": {
+                    "type": "number",
+                    "example": 250.1
+                },
+                "vt2_y": {
+                    "type": "number",
+                    "example": 58.9
+                },
+                "w_rest": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 50
+                },
+                "weightkg": {
+                    "type": "number",
+                    "example": 72.5
+                }
+            }
+        },
+        "swagger.KlabDirTestStep": {
+            "type": "object",
+            "properties": {
+                "ana_time": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "angle": {
+                    "type": "number",
+                    "example": 0
+                },
+                "bf": {
+                    "type": "number",
+                    "example": 18.5
+                },
+                "bp_dia": {
+                    "type": "number",
+                    "example": 80
+                },
+                "bp_sys": {
+                    "type": "number",
+                    "example": 120
+                },
+                "calc_end": {
+                    "type": "integer",
+                    "example": 180
+                },
+                "calc_start": {
+                    "type": "integer",
+                    "example": 60
+                },
+                "comments": {
+                    "type": "string",
+                    "example": "Rest phase"
+                },
+                "created_by": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "created_date": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2024-08-29T10:30:00Z"
+                },
+                "deleted": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "duration": {
+                    "type": "number",
+                    "example": 180
+                },
+                "eco": {
+                    "type": "number",
+                    "example": 4.2
+                },
+                "ee_ae": {
+                    "type": "number",
+                    "example": 5.8
+                },
+                "elev": {
+                    "type": "number",
+                    "example": 100
+                },
+                "feco2": {
+                    "type": "number",
+                    "example": 3.2
+                },
+                "feo2": {
+                    "type": "number",
+                    "example": 17.8
+                },
+                "fico2": {
+                    "type": "number",
+                    "example": 0.04
+                },
+                "fio2": {
+                    "type": "number",
+                    "example": 20.93
+                },
+                "hr": {
+                    "type": "number",
+                    "example": 95
+                },
+                "iddirteststeps": {
+                    "type": "integer",
+                    "example": 666621
+                },
+                "idmeasurement": {
+                    "type": "integer",
+                    "example": 888423
+                },
+                "la": {
+                    "type": "number",
+                    "example": 1.2
+                },
+                "la_vo2": {
+                    "type": "number",
+                    "example": 0.96
+                },
+                "mod_by": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "mod_date": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2024-08-29T10:30:00Z"
+                },
+                "modded": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "o2pulse": {
+                    "type": "number",
+                    "example": 13.2
+                },
+                "o2sa": {
+                    "type": "number",
+                    "example": 98.5
+                },
+                "own1": {
+                    "type": "number"
+                },
+                "own10": {
+                    "type": "number"
+                },
+                "own2": {
+                    "type": "number"
+                },
+                "own3": {
+                    "type": "number"
+                },
+                "own4": {
+                    "type": "number"
+                },
+                "own5": {
+                    "type": "number"
+                },
+                "own6": {
+                    "type": "number"
+                },
+                "own7": {
+                    "type": "number"
+                },
+                "own8": {
+                    "type": "number"
+                },
+                "own9": {
+                    "type": "number"
+                },
+                "p": {
+                    "type": "number",
+                    "example": 100
+                },
+                "pace": {
+                    "type": "number",
+                    "example": 0
+                },
+                "petco2": {
+                    "type": "number",
+                    "example": 38.2
+                },
+                "peto2": {
+                    "type": "number",
+                    "example": 102.5
+                },
+                "re": {
+                    "type": "number",
+                    "example": 0.82
+                },
+                "rer": {
+                    "type": "number",
+                    "example": 0.82
+                },
+                "rpe": {
+                    "type": "number",
+                    "example": 6
+                },
+                "speed": {
+                    "type": "number",
+                    "example": 0
+                },
+                "step_is_30max": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "step_is_60max": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "step_is_last": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "step_is_rec": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "step_is_rest": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "stepno": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "t_ex": {
+                    "type": "number",
+                    "example": 175.2
+                },
+                "t_tot": {
+                    "type": "number",
+                    "example": 180
+                },
+                "tco2": {
+                    "type": "number",
+                    "example": 1.02
+                },
+                "timestart": {
+                    "type": "number",
+                    "example": 0
+                },
+                "timestop": {
+                    "type": "number",
+                    "example": 180
+                },
+                "to2": {
+                    "type": "number",
+                    "example": 0.85
+                },
+                "tv": {
+                    "type": "number",
+                    "example": 1.74
+                },
+                "va": {
+                    "type": "number",
+                    "example": 28.1
+                },
+                "vco2": {
+                    "type": "number",
+                    "example": 1.02
+                },
+                "vde": {
+                    "type": "number",
+                    "example": 28.5
+                },
+                "vde_tv": {
+                    "type": "number",
+                    "example": 16.4
+                },
+                "ve": {
+                    "type": "number",
+                    "example": 32.1
+                },
+                "ve_stpd": {
+                    "type": "number",
+                    "example": 30.8
+                },
+                "veco2": {
+                    "type": "number",
+                    "example": 31.2
+                },
+                "veo2": {
+                    "type": "number",
+                    "example": 25.6
+                },
+                "vo2": {
+                    "type": "number",
+                    "example": 1.25
+                },
+                "vo2_30s": {
+                    "type": "number",
+                    "example": 17.1
+                },
+                "vo2_pr": {
+                    "type": "number",
+                    "example": 25.2
+                },
+                "vo2calc": {
+                    "type": "number",
+                    "example": 12.5
+                },
+                "vo2kg": {
+                    "type": "number",
+                    "example": 17.2
+                },
+                "wkg": {
+                    "type": "number",
+                    "example": 1.38
+                }
+            }
+        },
+        "swagger.KlabMeasurement": {
+            "type": "object",
+            "properties": {
+                "MeasName": {
+                    "type": "string",
+                    "example": "VO2 Max Test"
+                },
+                "cbcharts": {
+                    "type": "string",
+                    "example": "chart_1"
+                },
+                "cbcomments": {
+                    "type": "string",
+                    "example": "Good performance"
+                },
+                "created_by": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "created_date": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2024-08-29T10:30:00Z"
+                },
+                "deleted": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "do_day": {
+                    "type": "integer",
+                    "example": 29
+                },
+                "do_hour": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "do_min": {
+                    "type": "integer",
+                    "example": 30
+                },
+                "do_month": {
+                    "type": "integer",
+                    "example": 8
+                },
+                "do_year": {
+                    "type": "integer",
+                    "example": 2024
+                },
+                "groupnotes": {
+                    "type": "string",
+                    "example": "Group Alpha"
+                },
+                "idCustomer": {
+                    "type": "integer",
+                    "example": 7842
+                },
+                "idMeasurement": {
+                    "type": "integer",
+                    "example": 888423
+                },
+                "idpatterndef": {
+                    "type": "string",
+                    "example": "pattern_vo2"
+                },
+                "info": {
+                    "type": "string",
+                    "example": "Pre-season assessment"
+                },
+                "keywords": {
+                    "type": "string",
+                    "example": "VO2max, endurance"
+                },
+                "meastype": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "measurements": {
+                    "type": "string",
+                    "example": "Standard protocol"
+                },
+                "mod_by": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "mod_date": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2024-08-29T10:30:00Z"
+                },
+                "modded": {
+                    "description": "smallint",
+                    "type": "integer",
+                    "example": 0
+                },
+                "modder_name": {
+                    "type": "string",
+                    "example": "Dr. Korhonen"
+                },
+                "sent_to_sprintai": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2024-08-29T11:45:00Z"
+                },
+                "sessionno": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "tableName": {
+                    "type": "string",
+                    "example": "dirtest"
+                },
+                "test_location": {
+                    "type": "string",
+                    "example": "Lab A"
+                },
+                "tester_name": {
+                    "type": "string",
+                    "example": "Dr. Korhonen"
                 }
             }
         },

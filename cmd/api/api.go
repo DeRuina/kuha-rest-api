@@ -227,6 +227,7 @@ func (app *api) mount() http.Handler {
 
 					// data routes
 					r.Post("/data", klabDataHandler.InsertKlabDataBulk)
+					r.Get("/data", klabDataHandler.GetKlabData)
 				})
 			} else {
 				logger.Logger.Warn("klab routes disabled: database not connected")

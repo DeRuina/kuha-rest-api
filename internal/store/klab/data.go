@@ -89,7 +89,7 @@ func (s *DataStore) InsertKlabDataBulk(ctx context.Context, payloads []KlabDataP
 	return tx.Commit()
 }
 
-func (s *DataStore) GetDataByCustomerIDNoCustomer(ctx context.Context, idcustomer int32) (*KlabDataNoCustomer, error) {
+func (s *DataStore) GetDataByCustomerIDNoCustomer(ctx context.Context, idcustomer int32) (*KlabDataNoCustomerResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, DataTimeout)
 	defer cancel()
 
@@ -133,13 +133,44 @@ func (s *DataStore) GetDataByCustomerIDNoCustomer(ctx context.Context, idcustome
 		}
 	}
 
-	return &KlabDataNoCustomer{
+	// Convert to clean response structs
+	cleanMeasurements := make([]KlabMeasurementResponse, len(meas))
+	for i, m := range meas {
+		cleanMeasurements[i] = convertMeasurement(m)
+	}
+
+	cleanTests := make([]KlabDirTestResponse, len(tests))
+	for i, t := range tests {
+		cleanTests[i] = convertDirTest(t)
+	}
+
+	cleanSteps := make([]KlabDirTestStepResponse, len(steps))
+	for i, s := range steps {
+		cleanSteps[i] = convertDirTestStep(s)
+	}
+
+	cleanReports := make([]KlabDirReportResponse, len(reps))
+	for i, r := range reps {
+		cleanReports[i] = convertDirReport(r)
+	}
+
+	cleanRawData := make([]KlabDirRawDataResponse, len(raws))
+	for i, r := range raws {
+		cleanRawData[i] = convertDirRawData(r)
+	}
+
+	cleanResults := make([]KlabDirResultsResponse, len(results))
+	for i, r := range results {
+		cleanResults[i] = convertDirResults(r)
+	}
+
+	return &KlabDataNoCustomerResponse{
 		CustomerID:   idcustomer,
-		Measurements: meas,
-		DirTests:     tests,
-		DirTestSteps: steps,
-		DirReports:   reps,
-		DirRawData:   raws,
-		DirResults:   results,
+		Measurements: cleanMeasurements,
+		DirTests:     cleanTests,
+		DirTestSteps: cleanSteps,
+		DirReports:   cleanReports,
+		DirRawData:   cleanRawData,
+		DirResults:   cleanResults,
 	}, nil
 }

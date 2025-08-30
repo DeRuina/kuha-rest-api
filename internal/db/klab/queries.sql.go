@@ -107,6 +107,7 @@ const getDirRawDataByMeasurementIDs = `-- name: GetDirRawDataByMeasurementIDs :m
 SELECT iddirrawdata, idmeasurement, rawdata, columndata, info, unitsdata, created_by, mod_by, mod_date, deleted, created_date, modded
 FROM dirrawdata
 WHERE idmeasurement = ANY($1::int[])
+ORDER BY idmeasurement
 `
 
 func (q *Queries) GetDirRawDataByMeasurementIDs(ctx context.Context, dollar_1 []int32) ([]Dirrawdatum, error) {
@@ -149,6 +150,7 @@ const getDirReportsByMeasurementIDs = `-- name: GetDirReportsByMeasurementIDs :m
 SELECT iddirreport, page_instructions, idmeasurement, template_rec, librec_name, created_by, mod_by, mod_date, deleted, created_date, modded
 FROM dirreport
 WHERE idmeasurement = ANY($1::int[])
+ORDER BY idmeasurement
 `
 
 func (q *Queries) GetDirReportsByMeasurementIDs(ctx context.Context, dollar_1 []int32) ([]Dirreport, error) {
@@ -190,6 +192,7 @@ const getDirResultsByMeasurementIDs = `-- name: GetDirResultsByMeasurementIDs :m
 SELECT iddirresults, idmeasurement, max_vo2mlkgmin, max_vo2mlmin, max_vo2, max_hr, max_speed, max_pace, max_p, max_pkg, max_angle, max_lac, max_add1, max_add2, max_add3, lac_ank_vo2mlkgmin, lac_ank_vo2mlmin, lac_ank_vo2, lac_ank_vo2pr, lac_ank_hr, lac_ank_speed, lac_ank_pace, lac_ank_p, lac_ank_pkg, lac_ank_angle, lac_ank_lac, lac_ank_add1, lac_ank_add2, lac_ank_add3, lac_aerk_vo2mlkgmin, lac_aerk_vo2mlmin, lac_aerk_vo2, lac_aerk_vo2pr, lac_aerk_hr, lac_aerk_speed, lac_aerk_pace, lac_aerk_p, lac_aerk_pkg, lac_aerk_angle, lac_aerk_lac, lac_aerk_add1, lac_aerk_add2, lac_aerk_add3, vent_ank_vo2mlkgmin, vent_ank_vo2mlmin, vent_ank_vo2, vent_ank_vo2pr, vent_ank_hr, vent_ank_speed, vent_ank_pace, vent_ank_p, vent_ank_pkg, vent_ank_angle, vent_ank_lac, vent_ank_add1, vent_ank_add2, vent_ank_add3, vent_aerk_vo2mlkgmin, vent_aerk_vo2mlmin, vent_aerk_vo2, vent_aerk_vo2pr, vent_aerk_hr, vent_aerk_speed, vent_aerk_pace, vent_aerk_p, vent_aerk_pkg, vent_aerk_angle, vent_aerk_lac, vent_aerk_add1, vent_aerk_add2, vent_aerk_add3, created_by, mod_by, mod_date, deleted, created_date, modded
 FROM dirresults
 WHERE idmeasurement = ANY($1::int[])
+ORDER BY idmeasurement
 `
 
 func (q *Queries) GetDirResultsByMeasurementIDs(ctx context.Context, dollar_1 []int32) ([]Dirresult, error) {
@@ -402,6 +405,7 @@ const getDirTestsByMeasurementIDs = `-- name: GetDirTestsByMeasurementIDs :many
 SELECT iddirtest, idmeasurement, meascols, weightkg, heightcm, bmi, fat_pr, fat_p1, fat_p2, fat_p3, fat_p4, fat_style, fat_equip, fvc, fev1, air_press, air_temp, air_humid, testprotocol, air_press_unit, settingslist, lt1_x, lt1_y, lt2_x, lt2_y, vt1_x, vt2_x, vt1_y, vt2_y, lt1_calc_x, lt1_calc_y, lt2_calc_x, lt2_calc_y, protocolmodel, testtype, protocolxval, steptime, w_rest, created_by, mod_by, mod_date, deleted, created_date, modded, norawdata
 FROM dirtest
 WHERE idmeasurement = ANY($1::int[])
+ORDER BY idmeasurement
 `
 
 func (q *Queries) GetDirTestsByMeasurementIDs(ctx context.Context, dollar_1 []int32) ([]Dirtest, error) {

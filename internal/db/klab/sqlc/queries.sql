@@ -214,7 +214,9 @@ ORDER BY idmeasurement;
 -- name: GetDirTestsByMeasurementIDs :many
 SELECT *
 FROM dirtest
-WHERE idmeasurement = ANY($1::int[]);
+WHERE idmeasurement = ANY($1::int[])
+ORDER BY idmeasurement;
+
 
 -- name: GetDirTestStepsByMeasurementIDs :many
 SELECT *
@@ -225,14 +227,19 @@ ORDER BY idmeasurement, stepno;
 -- name: GetDirReportsByMeasurementIDs :many
 SELECT *
 FROM dirreport
-WHERE idmeasurement = ANY($1::int[]);
+WHERE idmeasurement = ANY($1::int[])
+ORDER BY idmeasurement;
+
 
 -- name: GetDirRawDataByMeasurementIDs :many
 SELECT *
 FROM dirrawdata
-WHERE idmeasurement = ANY($1::int[]);
+WHERE idmeasurement = ANY($1::int[])
+ORDER BY idmeasurement;
+
 
 -- name: GetDirResultsByMeasurementIDs :many
 SELECT *
 FROM dirresults
-WHERE idmeasurement = ANY($1::int[]);
+WHERE idmeasurement = ANY($1::int[])
+ORDER BY idmeasurement;

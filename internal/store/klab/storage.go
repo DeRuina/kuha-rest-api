@@ -18,7 +18,7 @@ type Users interface {
 
 type Data interface {
 	InsertKlabDataBulk(ctx context.Context, payloads []KlabDataPayload) error
-	GetDataByCustomerIDNoCustomer(ctx context.Context, idcustomer int32) (*KlabDataNoCustomer, error)
+	GetDataByCustomerIDNoCustomer(ctx context.Context, idcustomer int32) (*KlabDataNoCustomerResponse, error)
 }
 
 // kLABStorage

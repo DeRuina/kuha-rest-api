@@ -32,10 +32,10 @@ type KlabDataBundleInput struct {
 	DirResults      []KlabDirResultsInput  `json:"dirresults"       validate:"omitempty,dive"`
 }
 
-// InsertKlabDataBulk godoc
+// UpsertKlabDataBulk godoc
 //
-//	@Summary		Insert k-Lab data (one customer per request)
-//	@Description	Insert a full k-Lab bundle for a single customer. The JSON root object key must be the customer id.
+//	@Summary		Upsert k-Lab data (one customer per request)
+//	@Description	Upsert a full k-Lab bundle for a single customer. The JSON root object key must be the customer id.
 //	@Tags			KLAB - Data
 //	@Accept			json
 //	@Produce		json

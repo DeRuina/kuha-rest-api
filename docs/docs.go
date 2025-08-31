@@ -422,7 +422,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Insert a full k-Lab bundle for a single customer. The JSON root object key must be the customer id.",
+                "description": "Upsert a full k-Lab bundle for a single customer. The JSON root object key must be the customer id.",
                 "consumes": [
                     "application/json"
                 ],
@@ -432,7 +432,7 @@ const docTemplate = `{
                 "tags": [
                     "KLAB - Data"
                 ],
-                "summary": "Insert k-Lab data (one customer per request)",
+                "summary": "Upsert k-Lab data (one customer per request)",
                 "parameters": [
                     {
                         "description": "klab data",

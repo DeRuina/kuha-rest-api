@@ -3088,7 +3088,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Insert a full k-Lab bundle for a single customer. The JSON root
+      description: Upsert a full k-Lab bundle for a single customer. The JSON root
         object key must be the customer id.
       parameters:
       - description: klab data
@@ -3124,7 +3124,7 @@ paths:
             $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
-      summary: Insert k-Lab data (one customer per request)
+      summary: Upsert k-Lab data (one customer per request)
       tags:
       - KLAB - Data
   /klab/sport-ids:

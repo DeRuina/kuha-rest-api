@@ -29,8 +29,10 @@ func goTypeToFriendlyType(goType string) string {
 }
 
 func ReadJSON(w http.ResponseWriter, r *http.Request, data any) error {
-	const maxBytes = 50 * 1024 * 1024 // 50 MB
-	r.Body = http.MaxBytesReader(w, r.Body, int64(maxBytes))
+	if r.Header.Get("X-Was-Gzipped") != "true" {
+		maxBytes := int64(50 * 1024 * 1024) // 50MB for regular content only
+		r.Body = http.MaxBytesReader(w, r.Body, maxBytes)
+	}
 
 	decoder := json.NewDecoder(r.Body)
 	decoder.DisallowUnknownFields()

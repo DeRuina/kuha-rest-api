@@ -1,8 +1,10 @@
 package main
 
 import (
+	"compress/gzip"
 	"encoding/base64"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 
@@ -140,4 +142,29 @@ func (app *api) RateLimiterMiddleware(next http.Handler) http.Handler {
 
 		next.ServeHTTP(w, r)
 	})
+}
+
+func GzipDecompressionMiddleware() func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.Header.Get("Content-Encoding") == "gzip" {
+				gzipReader, err := gzip.NewReader(r.Body)
+				if err != nil {
+					utils.BadRequestResponse(w, r, fmt.Errorf("failed to create gzip reader: %w", err))
+					return
+				}
+				defer gzipReader.Close()
+
+				maxDecompressedSize := int64(200 * 1024 * 1024) // 200MB
+				limitedReader := io.LimitReader(gzipReader, maxDecompressedSize)
+
+				r.Body = io.NopCloser(limitedReader)
+
+				r.Header.Del("Content-Encoding")
+				r.Header.Set("X-Was-Gzipped", "true")
+			}
+
+			next.ServeHTTP(w, r)
+		})
+	}
 }

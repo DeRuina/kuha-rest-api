@@ -164,27 +164,27 @@ func (app *api) mount() http.Handler {
 					r.Get("/deleted-users", userHandler.GetDeletedUsers)
 
 					// exercise routes
-					r.Post("/exercises", exerciseHandler.InsertExercisesBulk)
+					r.With(GzipDecompressionMiddleware()).Post("/exercises", exerciseHandler.InsertExercisesBulk)
 					r.Get("/exercises", exerciseHandler.GetExercises)
 
 					// symptom routes
-					r.Post("/symptoms", symptomHandler.InsertSymptomsBulk)
+					r.With(GzipDecompressionMiddleware()).Post("/symptoms", symptomHandler.InsertSymptomsBulk)
 					r.Get("/symptoms", symptomHandler.GetSymptoms)
 
 					// measurement routes
-					r.Post("/measurements", measurementHandler.InsertMeasurementsBulk)
+					r.With(GzipDecompressionMiddleware()).Post("/measurements", measurementHandler.InsertMeasurementsBulk)
 					r.Get("/measurements", measurementHandler.GetMeasurements)
 
 					// test result routes
-					r.Post("/test-results", testResultHandler.InsertTestResultsBulk)
+					r.With(GzipDecompressionMiddleware()).Post("/test-results", testResultHandler.InsertTestResultsBulk)
 					r.Get("/test-results", testResultHandler.GetTestResults)
 
 					// questionnaire routes
-					r.Post("/questionnaires", questionnaireHandler.InsertQuestionnaireAnswersBulk)
+					r.With(GzipDecompressionMiddleware()).Post("/questionnaires", questionnaireHandler.InsertQuestionnaireAnswersBulk)
 					r.Get("/questionnaires", questionnaireHandler.GetQuestionnaires)
 
 					// activity zone routes
-					r.Post("/activity-zones", activityZoneHandler.InsertActivityZonesBulk)
+					r.With(GzipDecompressionMiddleware()).Post("/activity-zones", activityZoneHandler.InsertActivityZonesBulk)
 					r.Get("/activity-zones", activityZoneHandler.GetActivityZones)
 				})
 			} else {

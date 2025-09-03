@@ -3476,7 +3476,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Oura ID",
-                        "name": "oura-id",
+                        "name": "oura_id",
                         "in": "query",
                         "required": true
                     }
@@ -4053,7 +4053,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Polar x_user_id",
-                        "name": "polar-id",
+                        "name": "polar_id",
                         "in": "query",
                         "required": true
                     }

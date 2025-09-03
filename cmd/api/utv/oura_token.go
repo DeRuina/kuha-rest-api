@@ -131,7 +131,7 @@ func (h *OuraTokenHandler) UpsertToken(w http.ResponseWriter, r *http.Request) {
 }
 
 type GetTokenByOuraIDParams struct {
-	OuraID string `form:"oura-id" validate:"required"`
+	OuraID string `form:"oura_id" validate:"required"`
 }
 
 // GetTokenByOuraID godoc
@@ -141,7 +141,7 @@ type GetTokenByOuraIDParams struct {
 //	@Tags			UTV - Oura
 //	@Accept			json
 //	@Produce		json
-//	@Param			oura-id	query		string	true	"Oura ID"
+//	@Param			oura_id	query		string	true	"Oura ID"
 //	@Success		200		{object}	swagger.OuraTokenByIDResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
 //	@Failure		401		{object}	swagger.UnauthorizedResponse
@@ -156,14 +156,14 @@ func (h *OuraTokenHandler) GetTokenByOuraID(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	err := utils.ValidateParams(r, []string{"oura-id"})
+	err := utils.ValidateParams(r, []string{"oura_id"})
 	if err != nil {
 		utils.BadRequestResponse(w, r, err)
 		return
 	}
 
 	params := GetTokenByOuraIDParams{
-		OuraID: r.URL.Query().Get("oura-id"),
+		OuraID: r.URL.Query().Get("oura_id"),
 	}
 	if err := utils.GetValidator().Struct(params); err != nil {
 		utils.BadRequestResponse(w, r, err)

@@ -131,7 +131,7 @@ func (h *PolarTokenHandler) UpsertToken(w http.ResponseWriter, r *http.Request) 
 }
 
 type GetTokenByPolarIDParams struct {
-	PolarID string `form:"polar-id" validate:"required"`
+	PolarID string `form:"polar_id" validate:"required"`
 }
 
 // GetTokenByPolarID godoc
@@ -141,7 +141,7 @@ type GetTokenByPolarIDParams struct {
 //	@Tags			UTV - Polar
 //	@Accept			json
 //	@Produce		json
-//	@Param			polar-id	query		string	true	"Polar x_user_id"
+//	@Param			polar_id	query		string	true	"Polar x_user_id"
 //	@Success		200			{object}	swagger.PolarTokenByIDResponse
 //	@Failure		400			{object}	swagger.ValidationErrorResponse
 //	@Failure		401			{object}	swagger.UnauthorizedResponse
@@ -156,14 +156,14 @@ func (h *PolarTokenHandler) GetTokenByPolarID(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	err := utils.ValidateParams(r, []string{"polar-id"})
+	err := utils.ValidateParams(r, []string{"polar_id"})
 	if err != nil {
 		utils.BadRequestResponse(w, r, err)
 		return
 	}
 
 	params := GetTokenByPolarIDParams{
-		PolarID: r.URL.Query().Get("polar-id"),
+		PolarID: r.URL.Query().Get("polar_id"),
 	}
 	if err := utils.GetValidator().Struct(params); err != nil {
 		utils.BadRequestResponse(w, r, err)

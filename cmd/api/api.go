@@ -201,9 +201,14 @@ func (app *api) mount() http.Handler {
 				r.Route("/archinisis", func(r chi.Router) {
 					// Register handlers
 					userDataHandler := archapi.NewUserDataHandler(app.store.ARCHINISIS.Users(), app.cacheStorage)
+					dataHandler := archapi.NewDataHandler(app.store.ARCHINISIS.Data(), app.cacheStorage)
 
 					// user routes
 					r.Get("/sport-ids", userDataHandler.GetSporttiIDs)
+
+					// data routes
+					r.Get("/race-report/sessions", dataHandler.GetRaceReportSessions)
+					r.Get("/race-report", dataHandler.GetRaceReportHTML)
 				})
 			} else {
 				logger.Logger.Warn("archinisis routes disabled: database not connected")

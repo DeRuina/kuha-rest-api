@@ -1929,6 +1929,17 @@ definitions:
           type: string
         type: array
     type: object
+  swagger.RaceReportSessionsResponse:
+    properties:
+      race_report:
+        example:
+        - 101
+        - 102
+        - 103
+        items:
+          type: integer
+        type: array
+    type: object
   swagger.Sample:
     properties:
       exercise_id:
@@ -2825,6 +2836,100 @@ info:
   termsOfService: https://csc.fi/en/security-privacy-data-policy-and-open-source-policy/privacy/
   title: KUHA REST API
 paths:
+  /archinisis/race-report:
+    get:
+      consumes:
+      - application/json
+      description: Returns the raw HTML race report for a (sportti_id, session_id).
+        Content-Type is text/html.
+      parameters:
+      - description: Sportti ID
+        in: query
+        name: sportti_id
+        required: true
+        type: string
+      - description: Session ID
+        in: query
+        name: session_id
+        required: true
+        type: string
+      produces:
+      - text/html
+      responses:
+        "200":
+          description: <!DOCTYPE html><html><head><title>Race Report</title></head><body><h1>HTML
+            RACE REPORT</h1><p>full report returned in html DOCTYPE</p></body></html>
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a specific race report (HTML)
+      tags:
+      - ARCHINISIS - Data
+  /archinisis/race-report/sessions:
+    get:
+      consumes:
+      - application/json
+      description: Returns all session_id values that have race reports for the given
+        sportti_id
+      parameters:
+      - description: Sportti ID
+        in: query
+        name: sportti_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.RaceReportSessionsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: List race-report session IDs for a Sportti ID
+      tags:
+      - ARCHINISIS - Data
   /archinisis/sport-ids:
     get:
       consumes:
@@ -3044,7 +3149,7 @@ paths:
       description: Returns measurement_list + all child tables for the given customer
         (no customer row)
       parameters:
-      - description: Customer ID (integer)
+      - description: Customer ID
         in: query
         name: id
         required: true

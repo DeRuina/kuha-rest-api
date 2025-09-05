@@ -17,7 +17,8 @@ import (
 var (
 
 	//General
-	ErrQueryTimeOut = errors.New("database query timed out")
+	ErrQueryTimeOut        = errors.New("database query timed out")
+	ErrRequestBodyTooLarge = errors.New("request body is too large")
 
 	//ErrMissing
 	ErrMissingUserID                  = errors.New("user_id is required")
@@ -240,6 +241,13 @@ func InternalServerError(w http.ResponseWriter, r *http.Request, err error) {
 
 // 400 Bad Request
 func BadRequestResponse(w http.ResponseWriter, r *http.Request, err error) {
+	if err != nil && strings.Contains(err.Error(), "request body too large") {
+		logError(r, "Request body too large", err, http.StatusRequestEntityTooLarge)
+		status := http.StatusRequestEntityTooLarge
+		WriteJSONError(w, status, map[string]string{"error": ErrRequestBodyTooLarge.Error()})
+		return
+	}
+
 	logError(r, "Bad request error", err, http.StatusBadRequest)
 
 	// Handle validator validation errors

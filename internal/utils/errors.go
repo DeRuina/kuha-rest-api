@@ -52,6 +52,7 @@ var (
 	ErrMissingQuestionnaireKey        = errors.New("questionnaire_key is required")
 	ErrMissingQuestionID              = errors.New("question_id is required")
 	ErrMissingQuestionType            = errors.New("question_type is required")
+	ErrMissingSessionID               = errors.New("session_id is required")
 
 	//ErrInvalid
 	ErrInvalidUUID         = errors.New("invalid UUID")
@@ -148,6 +149,8 @@ func FormatValidationErrors(err error) map[string]string {
 				errors["question_id"] = ErrMissingQuestionID.Error()
 			case "QuestionType":
 				errors["question_type"] = ErrMissingQuestionType.Error()
+			case "SessionID":
+				errors["session_id"] = ErrMissingSessionID.Error()
 			default:
 				errors[field] = ErrMissingGeneral.Error()
 			}
@@ -187,6 +190,8 @@ func FormatValidationErrors(err error) map[string]string {
 			switch field {
 			case "SportID":
 				errors["sport_id"] = ErrInvalidSportID.Error()
+			case "SporttiID":
+				errors["sportti_id"] = ErrInvalidSportID.Error()
 			case "ID":
 				errors["id"] = ErrInvalidIDNumeric.Error()
 			default:

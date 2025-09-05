@@ -165,7 +165,7 @@ func (h *KlabDataHandler) InsertKlabDataBulk(w http.ResponseWriter, r *http.Requ
 //	@Tags			KLAB - Data
 //	@Accept			json
 //	@Produce		json
-//	@Param			id	query		string	true	"Customer ID (integer)"
+//	@Param			id	query		string	true	"Customer ID"
 //	@Success		200	{object}	swagger.KlabDataResponse
 //	@Failure		400	{object}	swagger.ValidationErrorResponse
 //	@Failure		401	{object}	swagger.UnauthorizedResponse

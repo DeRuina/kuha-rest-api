@@ -27,3 +27,11 @@ func (s *UsersStore) GetCustomerByID(ctx context.Context, idcustomer int32) (kla
 	queries := klabsqlc.New(s.db)
 	return queries.GetCustomerByID(ctx, idcustomer)
 }
+
+func (s *UsersStore) GetCustomerIDBySporttiID(ctx context.Context, sporttiID string) (int32, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := klabsqlc.New(s.db)
+	return q.GetCustomerIDBySporttiID(ctx, sql.NullString{String: sporttiID, Valid: true})
+}

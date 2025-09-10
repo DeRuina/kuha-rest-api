@@ -14,6 +14,7 @@ const DataTimeout = 30 * time.Second
 type Users interface {
 	GetAllSporttiIDs(ctx context.Context) ([]string, error)
 	GetCustomerByID(ctx context.Context, idcustomer int32) (klabsqlc.Customer, error)
+	GetCustomerIDBySporttiID(ctx context.Context, sporttiID string) (int32, error)
 }
 
 type Data interface {

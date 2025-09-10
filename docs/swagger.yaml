@@ -3269,9 +3269,9 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieve a single KLAB customer by idcustomer
+      description: Retrieve a single KLAB customer by sportti_id
       parameters:
-      - description: Customer ID (idcustomer)
+      - description: Sportti ID
         in: query
         name: id
         required: true
@@ -3309,7 +3309,7 @@ paths:
             $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
-      summary: Get customer by ID
+      summary: Get customer by Sportti ID
       tags:
       - KLAB - User
   /tietoevry/activity-zones:

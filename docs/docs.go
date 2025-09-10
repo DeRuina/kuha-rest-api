@@ -681,7 +681,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Retrieve a single KLAB customer by idcustomer",
+                "description": "Retrieve a single KLAB customer by sportti_id",
                 "consumes": [
                     "application/json"
                 ],
@@ -691,11 +691,11 @@ const docTemplate = `{
                 "tags": [
                     "KLAB - User"
                 ],
-                "summary": "Get customer by ID",
+                "summary": "Get customer by Sportti ID",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Customer ID (idcustomer)",
+                        "description": "Sportti ID",
                         "name": "id",
                         "in": "query",
                         "required": true

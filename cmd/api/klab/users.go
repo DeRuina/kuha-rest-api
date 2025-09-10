@@ -59,12 +59,12 @@ func (h *UserDataHandler) GetSporttiIDs(w http.ResponseWriter, r *http.Request) 
 
 // GetUser godoc
 //
-//	@Summary		Get customer by ID
-//	@Description	Retrieve a single KLAB customer by idcustomer
+//	@Summary		Get customer by Sportti ID
+//	@Description	Retrieve a single KLAB customer by sportti_id
 //	@Tags			KLAB - User
 //	@Accept			json
 //	@Produce		json
-//	@Param			id	query		integer	true	"Customer ID (idcustomer)"
+//	@Param			id	query		integer	true	"Sportti ID"
 //	@Success		200	{object}	swagger.UserKlabResponse
 //	@Failure		400	{object}	swagger.ValidationErrorResponse
 //	@Failure		401	{object}	swagger.UnauthorizedResponse
@@ -94,13 +94,23 @@ func (h *UserDataHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := utils.ParsePositiveInt32(params.ID)
+	sporttiID, err := utils.ParseSporttiID(params.ID)
 	if err != nil {
 		utils.BadRequestResponse(w, r, err)
 		return
 	}
 
-	row, err := h.store.GetCustomerByID(r.Context(), id)
+	idcustomer, err := h.store.GetCustomerIDBySporttiID(r.Context(), sporttiID)
+	if errors.Is(err, sql.ErrNoRows) {
+		utils.NotFoundResponse(w, r, err)
+		return
+	}
+	if err != nil {
+		utils.InternalServerError(w, r, err)
+		return
+	}
+
+	row, err := h.store.GetCustomerByID(r.Context(), idcustomer)
 	if errors.Is(err, sql.ErrNoRows) {
 		utils.NotFoundResponse(w, r, err)
 		return

@@ -26,6 +26,18 @@ definitions:
       refresh_token:
         type: string
     type: object
+  swagger.ArchRaceReportUpsertRequest:
+    properties:
+      race_report:
+        example: <!DOCTYPE html><html><head><title>Race</title></head><body><h1>Report</h1></body></html>
+        type: string
+      session_id:
+        example: 1842
+        type: integer
+      sportti_id:
+        example: "27578816"
+        type: string
+    type: object
   swagger.Athlete:
     properties:
       first_name:
@@ -2881,9 +2893,54 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
       summary: Get a specific race report (HTML)
+      tags:
+      - ARCHINISIS - Data
+    post:
+      consumes:
+      - application/json
+      description: Inserts or updates a race report for (sportti_id, session_id).
+      parameters:
+      - description: race report
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.ArchRaceReportUpsertRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Data processed successfully
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Upsert a race report (HTML)
       tags:
       - ARCHINISIS - Data
   /archinisis/race-report/sessions:

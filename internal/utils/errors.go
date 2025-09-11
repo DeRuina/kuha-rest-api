@@ -53,6 +53,7 @@ var (
 	ErrMissingQuestionID              = errors.New("question_id is required")
 	ErrMissingQuestionType            = errors.New("question_type is required")
 	ErrMissingSessionID               = errors.New("session_id is required")
+	ErrMissingRaceReport              = errors.New("race_report is required")
 
 	//ErrInvalid
 	ErrInvalidUUID         = errors.New("invalid UUID")
@@ -151,6 +152,8 @@ func FormatValidationErrors(err error) map[string]string {
 				errors["question_type"] = ErrMissingQuestionType.Error()
 			case "SessionID":
 				errors["session_id"] = ErrMissingSessionID.Error()
+			case "RaceReport":
+				errors["race_report"] = ErrMissingRaceReport.Error()
 			default:
 				errors[field] = ErrMissingGeneral.Error()
 			}

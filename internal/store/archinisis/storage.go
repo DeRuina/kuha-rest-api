@@ -4,6 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"time"
+
+	archsqlc "github.com/DeRuina/KUHA-REST-API/internal/db/archinisis"
 )
 
 const DataTimeout = 30 * time.Second
@@ -16,6 +18,7 @@ type Users interface {
 type Data interface {
 	GetRaceReportSessions(ctx context.Context, sporttiID string) ([]int32, error)
 	GetRaceReport(ctx context.Context, sporttiID string, sessionID int32) (string, error)
+	UpsertRaceReport(ctx context.Context, p archsqlc.UpsertRaceReportParams) error
 }
 
 // ArchinisisStorage

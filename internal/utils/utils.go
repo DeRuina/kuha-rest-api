@@ -331,3 +331,8 @@ func ParseSporttiID(s string) (string, error) {
 	}
 	return s, nil
 }
+
+// Converts an int32 value to sql.NullInt32 with Valid=true
+func NullInt32(v int32) sql.NullInt32 {
+	return sql.NullInt32{Int32: v, Valid: true}
+}

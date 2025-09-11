@@ -86,6 +86,76 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/swagger.InternalServerErrorResponse"
                         }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Inserts or updates a race report for (sportti_id, session_id).",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ARCHINISIS - Data"
+                ],
+                "summary": "Upsert a race report (HTML)",
+                "parameters": [
+                    {
+                        "description": "race report",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ArchRaceReportUpsertRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Data processed successfully"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
                     }
                 }
             }
@@ -5359,6 +5429,23 @@ const docTemplate = `{
                 },
                 "refresh_token": {
                     "type": "string"
+                }
+            }
+        },
+        "swagger.ArchRaceReportUpsertRequest": {
+            "type": "object",
+            "properties": {
+                "race_report": {
+                    "type": "string",
+                    "example": "\u003c!DOCTYPE html\u003e\u003chtml\u003e\u003chead\u003e\u003ctitle\u003eRace\u003c/title\u003e\u003c/head\u003e\u003cbody\u003e\u003ch1\u003eReport\u003c/h1\u003e\u003c/body\u003e\u003c/html\u003e"
+                },
+                "session_id": {
+                    "type": "integer",
+                    "example": 1842
+                },
+                "sportti_id": {
+                    "type": "string",
+                    "example": "27578816"
                 }
             }
         },

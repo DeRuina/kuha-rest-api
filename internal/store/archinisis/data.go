@@ -50,3 +50,11 @@ func (s *DataStore) GetRaceReport(ctx context.Context, sporttiID string, session
 	}
 	return res.String, nil
 }
+
+func (s *DataStore) UpsertRaceReport(ctx context.Context, p archsqlc.UpsertRaceReportParams) error {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := archsqlc.New(s.db)
+	return q.UpsertRaceReport(ctx, p)
+}

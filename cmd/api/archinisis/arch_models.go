@@ -8,7 +8,7 @@ import (
 )
 
 type ArchDataUpsertInput struct {
-	NationalID   string                 `json:"national_id"    validate:"required"`
+	NationalID   string                 `json:"national_id"    validate:"required,numeric"`
 	FirstName    *string                `json:"first_name"     validate:"omitempty"`
 	LastName     *string                `json:"last_name"      validate:"omitempty"`
 	Initials     *string                `json:"initials"       validate:"omitempty"`

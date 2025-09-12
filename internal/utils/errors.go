@@ -54,6 +54,8 @@ var (
 	ErrMissingQuestionType            = errors.New("question_type is required")
 	ErrMissingSessionID               = errors.New("session_id is required")
 	ErrMissingRaceReport              = errors.New("race_report is required")
+	ErrMissingMeasurementGroupID      = errors.New("measurement_group_id is required")
+	ErrMissingNationalID              = errors.New("national_id is required")
 
 	//ErrInvalid
 	ErrInvalidUUID         = errors.New("invalid UUID")
@@ -154,6 +156,10 @@ func FormatValidationErrors(err error) map[string]string {
 				errors["session_id"] = ErrMissingSessionID.Error()
 			case "RaceReport":
 				errors["race_report"] = ErrMissingRaceReport.Error()
+			case "MeasurementGroupID":
+				errors["measurement_group_id"] = ErrMissingMeasurementGroupID.Error()
+			case "NationalID":
+				errors["national_id"] = ErrMissingNationalID.Error()
 			default:
 				errors[field] = ErrMissingGeneral.Error()
 			}
@@ -197,6 +203,8 @@ func FormatValidationErrors(err error) map[string]string {
 				errors["sportti_id"] = ErrInvalidSportID.Error()
 			case "ID":
 				errors["id"] = ErrInvalidIDNumeric.Error()
+			case "NationalID":
+				errors["national_id"] = ErrInvalidIDNumeric.Error()
 			default:
 				errors[field] = ErrInvalidnumericValue.Error()
 			}

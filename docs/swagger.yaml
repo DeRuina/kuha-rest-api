@@ -627,8 +627,8 @@ definitions:
         example: Tulliportinkatu 12, Kuopio
         type: string
       allow_anonymous_data:
-        example: true
-        type: boolean
+        example: "0"
+        type: string
       allow_to_cloud:
         example: 1
         type: integer
@@ -777,8 +777,8 @@ definitions:
         example: Tulliportinkatu 12, Kuopio
         type: string
       allow_anonymous_data:
-        example: true
-        type: boolean
+        example: "0"
+        type: string
       allow_to_cloud:
         example: 1
         type: integer

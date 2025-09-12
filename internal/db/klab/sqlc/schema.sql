@@ -71,7 +71,7 @@ CREATE TABLE public.customer (
     deleted smallint,
     created_date timestamp without time zone,
     modded smallint,
-    allow_anonymous_data boolean DEFAULT false,
+    allow_anonymous_data character varying(45),
     locked smallint,
     allow_to_sprintai integer,
     tosprintai_from date,

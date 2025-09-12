@@ -6420,8 +6420,8 @@ const docTemplate = `{
                     "example": "Tulliportinkatu 12, Kuopio"
                 },
                 "allow_anonymous_data": {
-                    "type": "boolean",
-                    "example": true
+                    "type": "string",
+                    "example": "0"
                 },
                 "allow_to_cloud": {
                     "type": "integer",
@@ -6619,8 +6619,8 @@ const docTemplate = `{
                     "example": "Tulliportinkatu 12, Kuopio"
                 },
                 "allow_anonymous_data": {
-                    "type": "boolean",
-                    "example": true
+                    "type": "string",
+                    "example": "0"
                 },
                 "allow_to_cloud": {
                     "type": "integer",

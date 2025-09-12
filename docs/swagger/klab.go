@@ -51,7 +51,7 @@ type KlabCustomerResponse struct {
 	Deleted            *int32   `json:"deleted,omitempty" example:"0"`                         // smallint -> int32 in JSON
 	CreatedDate        *string  `json:"created_date,omitempty" example:"2024-08-15T14:22:00Z"` // timestamp (RFC3339)
 	Modded             *int32   `json:"modded,omitempty" example:"0"`                          // smallint -> int32 in JSON
-	AllowAnonymousData *bool    `json:"allow_anonymous_data,omitempty" example:"true"`
+	AllowAnonymousData *string  `json:"allow_anonymous_data,omitempty" example:"0"`
 	Locked             *int32   `json:"locked,omitempty" example:"0"` // smallint -> int32
 	AllowToSprintai    *int32   `json:"allow_to_sprintai,omitempty" example:"1"`
 	TosprintaiFrom     *string  `json:"tosprintai_from,omitempty" example:"2024-08-01"` // date (YYYY-MM-DD)
@@ -109,7 +109,7 @@ type KlabCustomer struct {
 	Deleted            *int32   `json:"deleted,omitempty" example:"0"`                         // smallint
 	CreatedDate        *string  `json:"created_date,omitempty" example:"2024-08-15T14:22:00Z"` // RFC3339
 	Modded             *int32   `json:"modded,omitempty" example:"0"`                          // smallint
-	AllowAnonymousData *bool    `json:"allow_anonymous_data,omitempty" example:"true"`
+	AllowAnonymousData *string  `json:"allow_anonymous_data,omitempty" example:"0"`
 	Locked             *int32   `json:"locked,omitempty" example:"0"` // smallint
 	AllowToSprintai    *int32   `json:"allow_to_sprintai,omitempty" example:"1"`
 	TosprintaiFrom     *string  `json:"tosprintai_from,omitempty" example:"2024-08-01"` // YYYY-MM-DD

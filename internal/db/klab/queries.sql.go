@@ -1583,7 +1583,7 @@ type UpsertCustomerParams struct {
 	Deleted            sql.NullInt16
 	CreatedDate        sql.NullTime
 	Modded             sql.NullInt16
-	AllowAnonymousData sql.NullBool
+	AllowAnonymousData sql.NullString
 	Locked             sql.NullInt16
 	AllowToSprintai    sql.NullInt32
 	TosprintaiFrom     sql.NullTime

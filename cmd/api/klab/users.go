@@ -166,7 +166,7 @@ func (h *UserDataHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 		Deleted:            utils.Int16AsInt32PtrOrNil(row.Deleted),
 		CreatedDate:        utils.FormatTimestampPtr(row.CreatedDate),
 		Modded:             utils.Int16AsInt32PtrOrNil(row.Modded),
-		AllowAnonymousData: utils.BoolPtrOrNil(row.AllowAnonymousData),
+		AllowAnonymousData: utils.StringPtrOrNil(row.AllowAnonymousData),
 		Locked:             utils.Int16AsInt32PtrOrNil(row.Locked),
 		AllowToSprintai:    utils.Int32PtrOrNil(row.AllowToSprintai),
 		TosprintaiFrom:     utils.FormatDatePtr(row.TosprintaiFrom),

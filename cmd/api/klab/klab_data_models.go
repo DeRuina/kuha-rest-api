@@ -54,7 +54,7 @@ type KlabCustomerInput struct {
 	Deleted            *int32   `json:"deleted"`
 	CreatedDate        *string  `json:"created_date"`
 	Modded             *int32   `json:"modded"`
-	AllowAnonymousData *bool    `json:"allow_anonymous_data"`
+	AllowAnonymousData *string  `json:"allow_anonymous_data" validate:"omitempty,oneof=0 1"`
 	Locked             *int32   `json:"locked"`
 	AllowToSprintai    *int32   `json:"allow_to_sprintai"`
 	TosprintaiFrom     *string  `json:"tosprintai_from"`
@@ -412,7 +412,7 @@ func mapCustomerToParams(in KlabCustomerInput, sporttiID string) (klabsqlc.Upser
 		Deleted:            utils.NullInt16FromInt32Ptr(in.Deleted),
 		CreatedDate:        utils.NullTimePtr(createdDate),
 		Modded:             utils.NullInt16FromInt32Ptr(in.Modded),
-		AllowAnonymousData: utils.NullBoolPtr(in.AllowAnonymousData),
+		AllowAnonymousData: utils.NullStringPtr(in.AllowAnonymousData),
 		Locked:             utils.NullInt16FromInt32Ptr(in.Locked),
 		AllowToSprintai:    utils.NullInt32Ptr(in.AllowToSprintai),
 		TosprintaiFrom:     utils.NullTimePtr(toSprintFrom),

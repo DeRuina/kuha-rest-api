@@ -4681,7 +4681,7 @@ paths:
         required: true
         type: string
       - description: 'Source device to disconnect (one of: ''polar'', ''oura'', ''suunto'',
-          ''garmin'', ''klab'')'
+          ''garmin'', ''klab'', ''archinisis'')'
         in: query
         name: source
         required: true

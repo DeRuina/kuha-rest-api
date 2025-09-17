@@ -2590,7 +2590,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "Source device to disconnect (one of: 'polar', 'oura', 'suunto', 'garmin', 'klab')",
+                        "description": "Source device to disconnect (one of: 'polar', 'oura', 'suunto', 'garmin', 'klab', 'archinisis')",
                         "name": "source",
                         "in": "query",
                         "required": true

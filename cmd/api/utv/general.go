@@ -34,16 +34,17 @@ type AllByTypeInput struct {
 
 // store and cache interfaces
 type GeneralDataHandler struct {
-	oura        utv.OuraData
-	polar       utv.PolarData
-	suunto      utv.SuuntoData
-	garmin      utv.GarminData
-	ouraToken   utv.OuraToken
-	polarToken  utv.PolarToken
-	suuntoToken utv.SuuntoToken
-	garminToken utv.GarminToken
-	klabToken   utv.KlabToken
-	cache       *cache.Storage
+	oura            utv.OuraData
+	polar           utv.PolarData
+	suunto          utv.SuuntoData
+	garmin          utv.GarminData
+	ouraToken       utv.OuraToken
+	polarToken      utv.PolarToken
+	suuntoToken     utv.SuuntoToken
+	garminToken     utv.GarminToken
+	klabToken       utv.KlabToken
+	archinisisToken utv.ArchinisisToken
+	cache           *cache.Storage
 }
 
 // response structs
@@ -64,19 +65,21 @@ func NewGeneralDataHandler(
 	suuntoToken utv.SuuntoToken,
 	garminToken utv.GarminToken,
 	klabToken utv.KlabToken,
+	archinisisToken utv.ArchinisisToken,
 	cache *cache.Storage,
 ) *GeneralDataHandler {
 	return &GeneralDataHandler{
-		oura:        oura,
-		polar:       polar,
-		suunto:      suunto,
-		garmin:      garmin,
-		ouraToken:   ouraToken,
-		polarToken:  polarToken,
-		suuntoToken: suuntoToken,
-		garminToken: garminToken,
-		klabToken:   klabToken,
-		cache:       cache,
+		oura:            oura,
+		polar:           polar,
+		suunto:          suunto,
+		garmin:          garmin,
+		ouraToken:       ouraToken,
+		polarToken:      polarToken,
+		suuntoToken:     suuntoToken,
+		garminToken:     garminToken,
+		klabToken:       klabToken,
+		archinisisToken: archinisisToken,
+		cache:           cache,
 	}
 }
 
@@ -335,7 +338,7 @@ func (h *GeneralDataHandler) GetAllByType(w http.ResponseWriter, r *http.Request
 
 type DisconnectParams struct {
 	UserID string `form:"user_id" validate:"required,uuid4"`
-	Source string `form:"source" validate:"required,oneof=polar oura suunto garmin klab"`
+	Source string `form:"source" validate:"required,oneof=polar oura suunto garmin klab archinisis"`
 }
 
 // Disconnect godoc
@@ -346,7 +349,7 @@ type DisconnectParams struct {
 //	@Accept			json
 //	@Produce		json
 //	@Param			user_id	query	string	true	"User ID (UUID)"
-//	@Param			source	query	string	true	"Source device to disconnect (one of: 'polar', 'oura', 'suunto', 'garmin', 'klab')"
+//	@Param			source	query	string	true	"Source device to disconnect (one of: 'polar', 'oura', 'suunto', 'garmin', 'klab', 'archinisis')"
 //	@Success		200		"Successfully disconnected"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
 //	@Failure		401		{object}	swagger.UnauthorizedResponse
@@ -395,6 +398,8 @@ func (h *GeneralDataHandler) Disconnect(w http.ResponseWriter, r *http.Request) 
 		delErr = h.garminToken.DeleteToken(r.Context(), userID)
 	case "klab":
 		delErr = h.klabToken.DeleteToken(r.Context(), userID)
+	case "archinisis":
+		delErr = h.archinisisToken.DeleteToken(r.Context(), userID)
 	}
 
 	if delErr != nil {

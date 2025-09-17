@@ -278,6 +278,7 @@ func (app *api) mount() http.Handler {
 						app.store.UTV.SuuntoToken(),
 						app.store.UTV.GarminToken(),
 						app.store.UTV.KlabToken(),
+						app.store.UTV.ArchinisisToken(),
 						app.cacheStorage,
 					)
 					ouraHandler := utvapi.NewOuraDataHandler(app.store.UTV.Oura(), app.cacheStorage)

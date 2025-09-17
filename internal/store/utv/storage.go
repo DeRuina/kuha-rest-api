@@ -109,6 +109,7 @@ type KlabToken interface {
 	GetStatus(ctx context.Context, userID uuid.UUID) (bool, error)
 	UpsertToken(ctx context.Context, userID uuid.UUID, data json.RawMessage) error
 	DeleteToken(ctx context.Context, userID uuid.UUID) error
+	GetSportIDs(ctx context.Context) ([]string, error)
 }
 
 // ArchinisisToken interface
@@ -116,6 +117,7 @@ type ArchinisisToken interface {
 	GetStatus(ctx context.Context, userID uuid.UUID) (bool, error)
 	UpsertToken(ctx context.Context, userID uuid.UUID, data json.RawMessage) error
 	DeleteToken(ctx context.Context, userID uuid.UUID) error
+	GetSportIDs(ctx context.Context) ([]string, error)
 }
 
 // CoachtechData interface

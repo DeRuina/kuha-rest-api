@@ -313,12 +313,14 @@ func (app *api) mount() http.Handler {
 					r.Route("/klab", func(r chi.Router) {
 						r.Get("/status", klabTokenHandler.GetStatus)
 						r.Post("/token", klabTokenHandler.UpsertToken)
+						r.Get("/sport_ids", klabTokenHandler.GetSportIDs)
 					})
 
 					// Archinisis routes
 					r.Route("/archinisis", func(r chi.Router) {
 						r.Get("/status", archinisisTokenHandler.GetStatus)
 						r.Post("/token", archinisisTokenHandler.UpsertToken)
+						r.Get("/sport_ids", archinisisTokenHandler.GetSportIDs)
 					})
 
 					// Coachtech routes

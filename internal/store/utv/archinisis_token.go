@@ -40,3 +40,11 @@ func (s *ArchinisisTokenStore) DeleteToken(ctx context.Context, userID uuid.UUID
 	queries := utvsqlc.New(s.db)
 	return queries.DeleteArchinisisToken(ctx, userID)
 }
+
+func (s *ArchinisisTokenStore) GetSportIDs(ctx context.Context) ([]string, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := utvsqlc.New(s.db)
+	return q.GetArchinisisSportIDs(ctx)
+}

@@ -40,3 +40,11 @@ func (s *KlabTokenStore) DeleteToken(ctx context.Context, userID uuid.UUID) erro
 	queries := utvsqlc.New(s.db)
 	return queries.DeleteKlabToken(ctx, userID)
 }
+
+func (s *KlabTokenStore) GetSportIDs(ctx context.Context) ([]string, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := utvsqlc.New(s.db)
+	return q.GetKlabSportIDs(ctx)
+}

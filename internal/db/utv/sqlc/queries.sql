@@ -624,3 +624,17 @@ ON CONFLICT (user_id) DO UPDATE SET data = $2;
 
 -- name: DeleteArchinisisToken :exec
 DELETE FROM archinisis_tokens WHERE user_id = $1;
+
+-- name: GetKlabSportIDs :many
+SELECT DISTINCT (data->>'sport_id')::text AS sport_id
+FROM klab_tokens
+WHERE data ? 'sport_id' AND (data->>'sport_id') <> ''
+ORDER BY sport_id;
+
+-- name: GetArchinisisSportIDs :many
+SELECT DISTINCT (data->>'sport_id')::text AS sport_id
+FROM archinisis_tokens
+WHERE data ? 'sport_id' AND (data->>'sport_id') <> ''
+ORDER BY sport_id;
+
+

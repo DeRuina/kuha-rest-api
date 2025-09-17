@@ -99,6 +99,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getAppDataStmt, err = db.PrepareContext(ctx, getAppData); err != nil {
 		return nil, fmt.Errorf("error preparing query GetAppData: %w", err)
 	}
+	if q.getArchinisisSportIDsStmt, err = db.PrepareContext(ctx, getArchinisisSportIDs); err != nil {
+		return nil, fmt.Errorf("error preparing query GetArchinisisSportIDs: %w", err)
+	}
 	if q.getArchinisisStatusStmt, err = db.PrepareContext(ctx, getArchinisisStatus); err != nil {
 		return nil, fmt.Errorf("error preparing query GetArchinisisStatus: %w", err)
 	}
@@ -149,6 +152,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.getGarminUserIDByTokenStmt, err = db.PrepareContext(ctx, getGarminUserIDByToken); err != nil {
 		return nil, fmt.Errorf("error preparing query GetGarminUserIDByToken: %w", err)
+	}
+	if q.getKlabSportIDsStmt, err = db.PrepareContext(ctx, getKlabSportIDs); err != nil {
+		return nil, fmt.Errorf("error preparing query GetKlabSportIDs: %w", err)
 	}
 	if q.getKlabStatusStmt, err = db.PrepareContext(ctx, getKlabStatus); err != nil {
 		return nil, fmt.Errorf("error preparing query GetKlabStatus: %w", err)
@@ -454,6 +460,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing getAppDataStmt: %w", cerr)
 		}
 	}
+	if q.getArchinisisSportIDsStmt != nil {
+		if cerr := q.getArchinisisSportIDsStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getArchinisisSportIDsStmt: %w", cerr)
+		}
+	}
 	if q.getArchinisisStatusStmt != nil {
 		if cerr := q.getArchinisisStatusStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getArchinisisStatusStmt: %w", cerr)
@@ -537,6 +548,11 @@ func (q *Queries) Close() error {
 	if q.getGarminUserIDByTokenStmt != nil {
 		if cerr := q.getGarminUserIDByTokenStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getGarminUserIDByTokenStmt: %w", cerr)
+		}
+	}
+	if q.getKlabSportIDsStmt != nil {
+		if cerr := q.getKlabSportIDsStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getKlabSportIDsStmt: %w", cerr)
 		}
 	}
 	if q.getKlabStatusStmt != nil {
@@ -893,6 +909,7 @@ type Queries struct {
 	getAllDataForDateSuuntoStmt       *sql.Stmt
 	getAllDataTypesStmt               *sql.Stmt
 	getAppDataStmt                    *sql.Stmt
+	getArchinisisSportIDsStmt         *sql.Stmt
 	getArchinisisStatusStmt           *sql.Stmt
 	getCoachtechDataStmt              *sql.Stmt
 	getCoachtechStatusStmt            *sql.Stmt
@@ -910,6 +927,7 @@ type Queries struct {
 	getGarminStatusStmt               *sql.Stmt
 	getGarminTokensForUpdateStmt      *sql.Stmt
 	getGarminUserIDByTokenStmt        *sql.Stmt
+	getKlabSportIDsStmt               *sql.Stmt
 	getKlabStatusStmt                 *sql.Stmt
 	getLatestGarminDataByTypeStmt     *sql.Stmt
 	getLatestOuraDataByTypeStmt       *sql.Stmt
@@ -999,6 +1017,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		getAllDataForDateSuuntoStmt:       q.getAllDataForDateSuuntoStmt,
 		getAllDataTypesStmt:               q.getAllDataTypesStmt,
 		getAppDataStmt:                    q.getAppDataStmt,
+		getArchinisisSportIDsStmt:         q.getArchinisisSportIDsStmt,
 		getArchinisisStatusStmt:           q.getArchinisisStatusStmt,
 		getCoachtechDataStmt:              q.getCoachtechDataStmt,
 		getCoachtechStatusStmt:            q.getCoachtechStatusStmt,
@@ -1016,6 +1035,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		getGarminStatusStmt:               q.getGarminStatusStmt,
 		getGarminTokensForUpdateStmt:      q.getGarminTokensForUpdateStmt,
 		getGarminUserIDByTokenStmt:        q.getGarminUserIDByTokenStmt,
+		getKlabSportIDsStmt:               q.getKlabSportIDsStmt,
 		getKlabStatusStmt:                 q.getKlabStatusStmt,
 		getLatestGarminDataByTypeStmt:     q.getLatestGarminDataByTypeStmt,
 		getLatestOuraDataByTypeStmt:       q.getLatestOuraDataByTypeStmt,

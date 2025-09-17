@@ -128,3 +128,31 @@ func (h *ArchinisisTokenHandler) UpsertToken(w http.ResponseWriter, r *http.Requ
 
 	w.WriteHeader(http.StatusCreated)
 }
+
+// GetSportIDs godoc
+//
+//	@Summary		List Archinisis sport IDs
+//	@Description	Returns distinct sport_id values from Archinisis tokens
+//	@Tags			UTV - Archinisis
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	swagger.SportIDsResponse
+//	@Failure		400	{object}	swagger.ValidationErrorResponse
+//	@Failure		401	{object}	swagger.UnauthorizedResponse
+//	@Failure		403	{object}	swagger.ForbiddenResponse
+//	@Failure		500	{object}	swagger.InternalServerErrorResponse
+//	@Failure		503	{object}	swagger.ServiceUnavailableResponse
+//	@Security		BearerAuth
+//	@Router			/utv/archinisis/sport_ids [get]
+func (h *ArchinisisTokenHandler) GetSportIDs(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+	ids, err := h.store.GetSportIDs(r.Context())
+	if err != nil {
+		utils.InternalServerError(w, r, err)
+		return
+	}
+	utils.WriteJSON(w, http.StatusOK, map[string][]string{"sportti_ids": ids})
+}

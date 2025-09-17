@@ -466,3 +466,7 @@ type SourceCacheItem struct {
 	Source string   `json:"source" example:"garmin"`
 	Data   []string `json:"data" example:"hr,steps"`
 }
+
+type SportIDsResponse struct {
+	SporttiIDs []string `json:"sportti_ids" example:"12345,67890,54321"`
+}

@@ -2453,3 +2453,63 @@ func (q *Queries) UpsertArchinisisToken(ctx context.Context, arg UpsertArchinisi
 	_, err := q.exec(ctx, q.upsertArchinisisTokenStmt, upsertArchinisisToken, arg.UserID, arg.Data)
 	return err
 }
+
+const getKlabSportIDs = `-- name: GetKlabSportIDs :many
+SELECT DISTINCT (data->>'sport_id')::text AS sport_id
+FROM klab_tokens
+WHERE data ? 'sport_id' AND (data->>'sport_id') <> ''
+ORDER BY sport_id
+`
+
+func (q *Queries) GetKlabSportIDs(ctx context.Context) ([]string, error) {
+	rows, err := q.query(ctx, q.getKlabSportIDsStmt, getKlabSportIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []string
+	for rows.Next() {
+		var sport_id string
+		if err := rows.Scan(&sport_id); err != nil {
+			return nil, err
+		}
+		items = append(items, sport_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getArchinisisSportIDs = `-- name: GetArchinisisSportIDs :many
+SELECT DISTINCT (data->>'sport_id')::text AS sport_id
+FROM archinisis_tokens
+WHERE data ? 'sport_id' AND (data->>'sport_id') <> ''
+ORDER BY sport_id
+`
+
+func (q *Queries) GetArchinisisSportIDs(ctx context.Context) ([]string, error) {
+	rows, err := q.query(ctx, q.getArchinisisSportIDsStmt, getArchinisisSportIDs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []string
+	for rows.Next() {
+		var sport_id string
+		if err := rows.Scan(&sport_id); err != nil {
+			return nil, err
+		}
+		items = append(items, sport_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

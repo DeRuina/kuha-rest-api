@@ -2242,6 +2242,17 @@ definitions:
         example: garmin
         type: string
     type: object
+  swagger.SportIDsResponse:
+    properties:
+      sportti_ids:
+        example:
+        - "12345"
+        - "67890"
+        - "54321"
+        items:
+          type: string
+        type: array
+    type: object
   swagger.SuuntoData:
     properties:
       workout:
@@ -4394,6 +4405,43 @@ paths:
       summary: Get all data by type
       tags:
       - UTV - General
+  /utv/archinisis/sport_ids:
+    get:
+      consumes:
+      - application/json
+      description: Returns distinct sport_id values from Archinisis tokens
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.SportIDsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: List Archinisis sport IDs
+      tags:
+      - UTV - Archinisis
   /utv/archinisis/status:
     get:
       consumes:
@@ -5136,6 +5184,43 @@ paths:
       summary: Get user_id by Garmin access token
       tags:
       - UTV - Garmin
+  /utv/klab/sport_ids:
+    get:
+      consumes:
+      - application/json
+      description: Returns distinct sport_id values from Klab tokens
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.SportIDsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: List Klab sport IDs
+      tags:
+      - UTV - Klab
   /utv/klab/status:
     get:
       consumes:

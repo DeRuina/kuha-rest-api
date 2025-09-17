@@ -47,10 +47,10 @@ type KlabCustomerResponse struct {
 	RecomTestlevel     *int32   `json:"recom_testlevel,omitempty" example:"3"`
 	CreatedBy          *int64   `json:"created_by,omitempty" example:"1001"`
 	ModBy              *int64   `json:"mod_by,omitempty" example:"1001"`
-	ModDate            *string  `json:"mod_date,omitempty" example:"2024-08-29T10:30:00Z"`     // timestamp (RFC3339)
-	Deleted            *int32   `json:"deleted,omitempty" example:"0"`                         // smallint -> int32 in JSON
-	CreatedDate        *string  `json:"created_date,omitempty" example:"2024-08-15T14:22:00Z"` // timestamp (RFC3339)
-	Modded             *int32   `json:"modded,omitempty" example:"0"`                          // smallint -> int32 in JSON
+	ModDate            *string  `json:"mod_date,omitempty" example:"2024-08-29T10:30:00"`     // timestamp (RFC3339)
+	Deleted            *int32   `json:"deleted,omitempty" example:"0"`                        // smallint -> int32 in JSON
+	CreatedDate        *string  `json:"created_date,omitempty" example:"2024-08-15T14:22:00"` // timestamp (RFC3339)
+	Modded             *int32   `json:"modded,omitempty" example:"0"`                         // smallint -> int32 in JSON
 	AllowAnonymousData *string  `json:"allow_anonymous_data,omitempty" example:"0"`
 	Locked             *int32   `json:"locked,omitempty" example:"0"` // smallint -> int32
 	AllowToSprintai    *int32   `json:"allow_to_sprintai,omitempty" example:"1"`
@@ -105,10 +105,10 @@ type KlabCustomer struct {
 	RecomTestlevel     *int32   `json:"recom_testlevel,omitempty" example:"3"`
 	CreatedBy          *int64   `json:"created_by,omitempty" example:"1001"`
 	ModBy              *int64   `json:"mod_by,omitempty" example:"1001"`
-	ModDate            *string  `json:"mod_date,omitempty" example:"2024-08-29T10:30:00Z"`     // RFC3339
-	Deleted            *int32   `json:"deleted,omitempty" example:"0"`                         // smallint
-	CreatedDate        *string  `json:"created_date,omitempty" example:"2024-08-15T14:22:00Z"` // RFC3339
-	Modded             *int32   `json:"modded,omitempty" example:"0"`                          // smallint
+	ModDate            *string  `json:"mod_date,omitempty" example:"2024-08-29T10:30:00"`     // RFC3339
+	Deleted            *int32   `json:"deleted,omitempty" example:"0"`                        // smallint
+	CreatedDate        *string  `json:"created_date,omitempty" example:"2024-08-15T14:22:00"` // RFC3339
+	Modded             *int32   `json:"modded,omitempty" example:"0"`                         // smallint
 	AllowAnonymousData *string  `json:"allow_anonymous_data,omitempty" example:"0"`
 	Locked             *int32   `json:"locked,omitempty" example:"0"` // smallint
 	AllowToSprintai    *int32   `json:"allow_to_sprintai,omitempty" example:"1"`
@@ -136,16 +136,16 @@ type KlabMeasurement struct {
 	CbComments     *string `json:"cbcomments,omitempty" example:"Good performance"`
 	CreatedBy      *int64  `json:"created_by,omitempty" example:"1001"`
 	ModBy          *int64  `json:"mod_by,omitempty" example:"1001"`
-	ModDate        *string `json:"mod_date,omitempty" example:"2024-08-29T10:30:00Z"`     // RFC3339
-	Deleted        *int32  `json:"deleted,omitempty" example:"0"`                         // smallint
-	CreatedDate    *string `json:"created_date,omitempty" example:"2024-08-29T10:30:00Z"` // RFC3339
-	Modded         *int32  `json:"modded,omitempty" example:"0"`                          // smallint
+	ModDate        *string `json:"mod_date,omitempty" example:"2024-08-29T10:30:00"`     // RFC3339
+	Deleted        *int32  `json:"deleted,omitempty" example:"0"`                        // smallint
+	CreatedDate    *string `json:"created_date,omitempty" example:"2024-08-29T10:30:00"` // RFC3339
+	Modded         *int32  `json:"modded,omitempty" example:"0"`                         // smallint
 	TestLocation   *string `json:"test_location,omitempty" example:"Lab A"`
 	Keywords       *string `json:"keywords,omitempty" example:"VO2max, endurance"`
 	TesterName     *string `json:"tester_name,omitempty" example:"Dr. Korhonen"`
 	ModderName     *string `json:"modder_name,omitempty" example:"Dr. Korhonen"`
 	MeasType       *int32  `json:"meastype,omitempty" example:"1"`
-	SentToSprintAI *string `json:"sent_to_sprintai,omitempty" example:"2024-08-29T11:45:00Z"` // RFC3339
+	SentToSprintAI *string `json:"sent_to_sprintai,omitempty" example:"2024-08-29T11:45:00"` // RFC3339
 }
 
 type KlabDirTest struct {
@@ -189,11 +189,11 @@ type KlabDirTest struct {
 	WRest         *int32   `json:"w_rest,omitempty" example:"50"` // smallint
 	CreatedBy     *int64   `json:"created_by,omitempty" example:"1001"`
 	ModBy         *int64   `json:"mod_by,omitempty" example:"1001"`
-	ModDate       *string  `json:"mod_date,omitempty" example:"2024-08-29T10:30:00Z"`     // RFC3339
-	Deleted       *int32   `json:"deleted,omitempty" example:"0"`                         // smallint
-	CreatedDate   *string  `json:"created_date,omitempty" example:"2024-08-29T10:30:00Z"` // RFC3339
-	Modded        *int32   `json:"modded,omitempty" example:"0"`                          // smallint
-	NoRawData     *int32   `json:"norawdata,omitempty" example:"0"`                       // smallint
+	ModDate       *string  `json:"mod_date,omitempty" example:"2024-08-29T10:30:00"`     // RFC3339
+	Deleted       *int32   `json:"deleted,omitempty" example:"0"`                        // smallint
+	CreatedDate   *string  `json:"created_date,omitempty" example:"2024-08-29T10:30:00"` // RFC3339
+	Modded        *int32   `json:"modded,omitempty" example:"0"`                         // smallint
+	NoRawData     *int32   `json:"norawdata,omitempty" example:"0"`                      // smallint
 }
 
 type KlabDirTestStep struct {
@@ -261,9 +261,9 @@ type KlabDirTestStep struct {
 	Deleted        *int32   `json:"deleted,omitempty" example:"0"` // smallint
 	CreatedBy      *int64   `json:"created_by,omitempty" example:"1001"`
 	ModBy          *int64   `json:"mod_by,omitempty" example:"1001"`
-	ModDate        *string  `json:"mod_date,omitempty" example:"2024-08-29T10:30:00Z"`     // RFC3339
-	CreatedDate    *string  `json:"created_date,omitempty" example:"2024-08-29T10:30:00Z"` // RFC3339
-	Modded         *int32   `json:"modded,omitempty" example:"0"`                          // smallint
+	ModDate        *string  `json:"mod_date,omitempty" example:"2024-08-29T10:30:00"`     // RFC3339
+	CreatedDate    *string  `json:"created_date,omitempty" example:"2024-08-29T10:30:00"` // RFC3339
+	Modded         *int32   `json:"modded,omitempty" example:"0"`                         // smallint
 	Own6           *float64 `json:"own6,omitempty"`
 	Own7           *float64 `json:"own7,omitempty"`
 	Own8           *float64 `json:"own8,omitempty"`
@@ -281,10 +281,10 @@ type KlabDirReport struct {
 	LibrecName    *string `json:"librec_name,omitempty" example:"VO2Max_Template"`
 	CreatedBy     *int64  `json:"created_by,omitempty" example:"1001"`
 	ModBy         *int64  `json:"mod_by,omitempty" example:"1001"`
-	ModDate       *string `json:"mod_date,omitempty" example:"2024-08-29T10:30:00Z"`     // RFC3339
-	Deleted       *int32  `json:"deleted,omitempty" example:"0"`                         // smallint
-	CreatedDate   *string `json:"created_date,omitempty" example:"2024-08-29T10:30:00Z"` // RFC3339
-	Modded        *int32  `json:"modded,omitempty" example:"0"`                          // smallint
+	ModDate       *string `json:"mod_date,omitempty" example:"2024-08-29T10:30:00"`     // RFC3339
+	Deleted       *int32  `json:"deleted,omitempty" example:"0"`                        // smallint
+	CreatedDate   *string `json:"created_date,omitempty" example:"2024-08-29T10:30:00"` // RFC3339
+	Modded        *int32  `json:"modded,omitempty" example:"0"`                         // smallint
 }
 
 type KlabDirRawData struct {
@@ -296,10 +296,10 @@ type KlabDirRawData struct {
 	UnitsData     *string `json:"unitsdata,omitempty" example:"s;bpm;ml/min;ml/kg/min;ml/min"`
 	CreatedBy     *int64  `json:"created_by,omitempty" example:"1001"`
 	ModBy         *int64  `json:"mod_by,omitempty" example:"1001"`
-	ModDate       *string `json:"mod_date,omitempty" example:"2024-08-29T10:30:00Z"`     // RFC3339
-	Deleted       *int32  `json:"deleted,omitempty" example:"0"`                         // smallint
-	CreatedDate   *string `json:"created_date,omitempty" example:"2024-08-29T10:30:00Z"` // RFC3339
-	Modded        *int32  `json:"modded,omitempty" example:"0"`                          // smallint
+	ModDate       *string `json:"mod_date,omitempty" example:"2024-08-29T10:30:00"`     // RFC3339
+	Deleted       *int32  `json:"deleted,omitempty" example:"0"`                        // smallint
+	CreatedDate   *string `json:"created_date,omitempty" example:"2024-08-29T10:30:00"` // RFC3339
+	Modded        *int32  `json:"modded,omitempty" example:"0"`                         // smallint
 }
 
 type KlabDirResults struct {
@@ -376,10 +376,10 @@ type KlabDirResults struct {
 	VentAerkAdd3       *float64 `json:"vent_aerk_add3,omitempty"`
 	CreatedBy          *int64   `json:"created_by,omitempty" example:"1001"`
 	ModBy              *int64   `json:"mod_by,omitempty" example:"1001"`
-	ModDate            *string  `json:"mod_date,omitempty" example:"2024-08-29T10:30:00Z"`     // RFC3339
-	Deleted            *int32   `json:"deleted,omitempty" example:"0"`                         // smallint
-	CreatedDate        *string  `json:"created_date,omitempty" example:"2024-08-29T10:30:00Z"` // RFC3339
-	Modded             *int32   `json:"modded,omitempty" example:"0"`                          // smallint
+	ModDate            *string  `json:"mod_date,omitempty" example:"2024-08-29T10:30:00"`     // RFC3339
+	Deleted            *int32   `json:"deleted,omitempty" example:"0"`                        // smallint
+	CreatedDate        *string  `json:"created_date,omitempty" example:"2024-08-29T10:30:00"` // RFC3339
+	Modded             *int32   `json:"modded,omitempty" example:"0"`                         // smallint
 }
 
 type KlabDataResponse struct {

@@ -60,7 +60,7 @@ var (
 	//ErrInvalid
 	ErrInvalidUUID         = errors.New("invalid UUID")
 	ErrInvalidDate         = errors.New("invalid date: ensure the format is YYYY-MM-DD and values are realistic")
-	ErrInvalidTimeStamp    = errors.New("invalid timestamp: ensure the format is RFC3339 (e.g., 2023-10-01T15:04:05Z)")
+	ErrInvalidTimeStamp    = errors.New("invalid timestamp: expected RFC3339. Examples: 2025-01-15T13:11:02Z, 2025-01-15T13:11:02+02:00, or 2025-01-15T13:11:02 (UTC assumed). Fractional seconds allowed")
 	ErrInvalidParameter    = errors.New("invalid parameter provided")
 	ErrInvalidDateRange    = errors.New("invalid date range")
 	ErrInvalidChoice       = errors.New("invalid choice: must be one of the allowed values")

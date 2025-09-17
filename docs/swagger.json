@@ -6572,7 +6572,7 @@
                 "created_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-15T14:22:00Z"
+                    "example": "2024-08-15T14:22:00"
                 },
                 "date_modified": {
                     "type": "number",
@@ -6642,7 +6642,7 @@
                 "mod_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint",
@@ -6771,7 +6771,7 @@
                 "created_date": {
                     "description": "timestamp (RFC3339)",
                     "type": "string",
-                    "example": "2024-08-15T14:22:00Z"
+                    "example": "2024-08-15T14:22:00"
                 },
                 "date_modified": {
                     "description": "double precision",
@@ -6855,7 +6855,7 @@
                 "mod_date": {
                     "description": "timestamp (RFC3339)",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint -\u003e int32 in JSON",
@@ -7049,7 +7049,7 @@
                 "created_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "deleted": {
                     "description": "smallint",
@@ -7075,7 +7075,7 @@
                 "mod_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint",
@@ -7102,7 +7102,7 @@
                 "created_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "deleted": {
                     "description": "smallint",
@@ -7128,7 +7128,7 @@
                 "mod_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint",
@@ -7155,7 +7155,7 @@
                 "created_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "deleted": {
                     "description": "smallint",
@@ -7332,7 +7332,7 @@
                 "mod_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint",
@@ -7481,7 +7481,7 @@
                 "created_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "deleted": {
                     "description": "smallint",
@@ -7575,7 +7575,7 @@
                 "mod_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint",
@@ -7683,7 +7683,7 @@
                 "created_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "deleted": {
                     "description": "smallint",
@@ -7749,7 +7749,7 @@
                 "mod_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint",
@@ -7958,7 +7958,7 @@
                 "created_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "deleted": {
                     "description": "smallint",
@@ -8024,7 +8024,7 @@
                 "mod_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint",
@@ -8038,7 +8038,7 @@
                 "sent_to_sprintai": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T11:45:00Z"
+                    "example": "2024-08-29T11:45:00"
                 },
                 "sessionno": {
                     "type": "integer",

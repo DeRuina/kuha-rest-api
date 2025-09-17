@@ -165,16 +165,46 @@ func ParseTimestamp(value string) (time.Time, error) {
 	return t, nil
 }
 
-// ParseTimestampPtr parses a *string RFC3339 timestamp or returns nil
+// ParseTimestampPtr parses a pointer to a timestamp string in various formats
 func ParseTimestampPtr(value *string) (*time.Time, error) {
-	if value == nil || *value == "" {
+	if value == nil {
 		return nil, nil
 	}
-	t, err := time.Parse(time.RFC3339, *value)
-	if err != nil {
-		return nil, ErrInvalidTimeStamp
+	s := strings.TrimSpace(*value)
+	if s == "" {
+		return nil, nil
 	}
-	return &t, nil
+
+	// allow lowercase 'z'
+	if strings.HasSuffix(s, "z") {
+		s = s[:len(s)-1] + "Z"
+	}
+
+	// RFC3339 (with or without fractional seconds)
+	if t, err := time.Parse(time.RFC3339Nano, s); err == nil {
+		u := t.UTC()
+		return &u, nil
+	}
+	if t, err := time.Parse(time.RFC3339, s); err == nil {
+		u := t.UTC()
+		return &u, nil
+	}
+
+	// No timezone -> assume UTC
+	// (T or space separator; with/without fractional seconds)
+	for _, layout := range []string{
+		"2006-01-02T15:04:05.999999999",
+		"2006-01-02T15:04:05",
+		"2006-01-02 15:04:05.999999999",
+		"2006-01-02 15:04:05",
+	} {
+		if t, err := time.ParseInLocation(layout, s, time.UTC); err == nil {
+			u := t.UTC()
+			return &u, nil
+		}
+	}
+
+	return nil, ErrInvalidTimeStamp
 }
 
 // ParseRawJSON converts a string pointer to pqtype.NullRawMessage

@@ -649,7 +649,7 @@ definitions:
         type: integer
       created_date:
         description: RFC3339
-        example: "2024-08-15T14:22:00Z"
+        example: 2024-08-15T14:22:00
         type: string
       date_modified:
         example: 1693478400
@@ -702,7 +702,7 @@ definitions:
         type: integer
       mod_date:
         description: RFC3339
-        example: "2024-08-29T10:30:00Z"
+        example: 2024-08-29T10:30:00
         type: string
       modded:
         description: smallint
@@ -799,7 +799,7 @@ definitions:
         type: integer
       created_date:
         description: timestamp (RFC3339)
-        example: "2024-08-15T14:22:00Z"
+        example: 2024-08-15T14:22:00
         type: string
       date_modified:
         description: double precision
@@ -863,7 +863,7 @@ definitions:
         type: integer
       mod_date:
         description: timestamp (RFC3339)
-        example: "2024-08-29T10:30:00Z"
+        example: 2024-08-29T10:30:00
         type: string
       modded:
         description: smallint -> int32 in JSON
@@ -1000,7 +1000,7 @@ definitions:
         type: integer
       created_date:
         description: RFC3339
-        example: "2024-08-29T10:30:00Z"
+        example: 2024-08-29T10:30:00
         type: string
       deleted:
         description: smallint
@@ -1020,7 +1020,7 @@ definitions:
         type: integer
       mod_date:
         description: RFC3339
-        example: "2024-08-29T10:30:00Z"
+        example: 2024-08-29T10:30:00
         type: string
       modded:
         description: smallint
@@ -1040,7 +1040,7 @@ definitions:
         type: integer
       created_date:
         description: RFC3339
-        example: "2024-08-29T10:30:00Z"
+        example: 2024-08-29T10:30:00
         type: string
       deleted:
         description: smallint
@@ -1060,7 +1060,7 @@ definitions:
         type: integer
       mod_date:
         description: RFC3339
-        example: "2024-08-29T10:30:00Z"
+        example: 2024-08-29T10:30:00
         type: string
       modded:
         description: smallint
@@ -1080,7 +1080,7 @@ definitions:
         type: integer
       created_date:
         description: RFC3339
-        example: "2024-08-29T10:30:00Z"
+        example: 2024-08-29T10:30:00
         type: string
       deleted:
         description: smallint
@@ -1211,7 +1211,7 @@ definitions:
         type: integer
       mod_date:
         description: RFC3339
-        example: "2024-08-29T10:30:00Z"
+        example: 2024-08-29T10:30:00
         type: string
       modded:
         description: smallint
@@ -1321,7 +1321,7 @@ definitions:
         type: integer
       created_date:
         description: RFC3339
-        example: "2024-08-29T10:30:00Z"
+        example: 2024-08-29T10:30:00
         type: string
       deleted:
         description: smallint
@@ -1392,7 +1392,7 @@ definitions:
         type: integer
       mod_date:
         description: RFC3339
-        example: "2024-08-29T10:30:00Z"
+        example: 2024-08-29T10:30:00
         type: string
       modded:
         description: smallint
@@ -1474,7 +1474,7 @@ definitions:
         type: integer
       created_date:
         description: RFC3339
-        example: "2024-08-29T10:30:00Z"
+        example: 2024-08-29T10:30:00
         type: string
       deleted:
         description: smallint
@@ -1524,7 +1524,7 @@ definitions:
         type: integer
       mod_date:
         description: RFC3339
-        example: "2024-08-29T10:30:00Z"
+        example: 2024-08-29T10:30:00
         type: string
       modded:
         description: smallint
@@ -1678,7 +1678,7 @@ definitions:
         type: integer
       created_date:
         description: RFC3339
-        example: "2024-08-29T10:30:00Z"
+        example: 2024-08-29T10:30:00
         type: string
       deleted:
         description: smallint
@@ -1728,7 +1728,7 @@ definitions:
         type: integer
       mod_date:
         description: RFC3339
-        example: "2024-08-29T10:30:00Z"
+        example: 2024-08-29T10:30:00
         type: string
       modded:
         description: smallint
@@ -1739,7 +1739,7 @@ definitions:
         type: string
       sent_to_sprintai:
         description: RFC3339
-        example: "2024-08-29T11:45:00Z"
+        example: 2024-08-29T11:45:00
         type: string
       sessionno:
         example: 1

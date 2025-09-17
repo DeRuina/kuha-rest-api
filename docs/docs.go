@@ -6580,7 +6580,7 @@ const docTemplate = `{
                 "created_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-15T14:22:00Z"
+                    "example": "2024-08-15T14:22:00"
                 },
                 "date_modified": {
                     "type": "number",
@@ -6650,7 +6650,7 @@ const docTemplate = `{
                 "mod_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint",
@@ -6779,7 +6779,7 @@ const docTemplate = `{
                 "created_date": {
                     "description": "timestamp (RFC3339)",
                     "type": "string",
-                    "example": "2024-08-15T14:22:00Z"
+                    "example": "2024-08-15T14:22:00"
                 },
                 "date_modified": {
                     "description": "double precision",
@@ -6863,7 +6863,7 @@ const docTemplate = `{
                 "mod_date": {
                     "description": "timestamp (RFC3339)",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint -\u003e int32 in JSON",
@@ -7057,7 +7057,7 @@ const docTemplate = `{
                 "created_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "deleted": {
                     "description": "smallint",
@@ -7083,7 +7083,7 @@ const docTemplate = `{
                 "mod_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint",
@@ -7110,7 +7110,7 @@ const docTemplate = `{
                 "created_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "deleted": {
                     "description": "smallint",
@@ -7136,7 +7136,7 @@ const docTemplate = `{
                 "mod_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint",
@@ -7163,7 +7163,7 @@ const docTemplate = `{
                 "created_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "deleted": {
                     "description": "smallint",
@@ -7340,7 +7340,7 @@ const docTemplate = `{
                 "mod_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint",
@@ -7489,7 +7489,7 @@ const docTemplate = `{
                 "created_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "deleted": {
                     "description": "smallint",
@@ -7583,7 +7583,7 @@ const docTemplate = `{
                 "mod_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint",
@@ -7691,7 +7691,7 @@ const docTemplate = `{
                 "created_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "deleted": {
                     "description": "smallint",
@@ -7757,7 +7757,7 @@ const docTemplate = `{
                 "mod_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint",
@@ -7966,7 +7966,7 @@ const docTemplate = `{
                 "created_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "deleted": {
                     "description": "smallint",
@@ -8032,7 +8032,7 @@ const docTemplate = `{
                 "mod_date": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T10:30:00Z"
+                    "example": "2024-08-29T10:30:00"
                 },
                 "modded": {
                     "description": "smallint",
@@ -8046,7 +8046,7 @@ const docTemplate = `{
                 "sent_to_sprintai": {
                     "description": "RFC3339",
                     "type": "string",
-                    "example": "2024-08-29T11:45:00Z"
+                    "example": "2024-08-29T11:45:00"
                 },
                 "sessionno": {
                     "type": "integer",

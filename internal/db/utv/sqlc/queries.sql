@@ -608,9 +608,19 @@ SELECT data
 FROM source_cache
 WHERE source = $1;
 
-
 -- name: UpsertSourceCache :exec
 INSERT INTO source_cache (source, data)
 VALUES ($1, $2::jsonb)
 ON CONFLICT (source)
 DO UPDATE SET data = EXCLUDED.data;
+
+-- name: GetArchinisisStatus :one
+SELECT EXISTS(SELECT 1 FROM archinisis_tokens WHERE user_id = $1) AS connected;
+
+-- name: UpsertArchinisisToken :exec
+INSERT INTO archinisis_tokens (user_id, data)
+VALUES ($1, $2)
+ON CONFLICT (user_id) DO UPDATE SET data = $2;
+
+-- name: DeleteArchinisisToken :exec
+DELETE FROM archinisis_tokens WHERE user_id = $1;

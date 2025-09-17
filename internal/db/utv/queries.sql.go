@@ -2417,3 +2417,39 @@ func (q *Queries) UpsertSourceCache(ctx context.Context, arg UpsertSourceCachePa
 	_, err := q.exec(ctx, q.upsertSourceCacheStmt, upsertSourceCache, arg.Source, arg.Column2)
 	return err
 }
+
+const deleteArchinisisToken = `-- name: DeleteArchinisisToken :exec
+DELETE FROM archinisis_tokens WHERE user_id = $1
+`
+
+func (q *Queries) DeleteArchinisisToken(ctx context.Context, userID uuid.UUID) error {
+	_, err := q.exec(ctx, q.deleteArchinisisTokenStmt, deleteArchinisisToken, userID)
+	return err
+}
+
+const getArchinisisStatus = `-- name: GetArchinisisStatus :one
+SELECT EXISTS(SELECT 1 FROM archinisis_tokens WHERE user_id = $1) AS connected
+`
+
+func (q *Queries) GetArchinisisStatus(ctx context.Context, userID uuid.UUID) (bool, error) {
+	row := q.queryRow(ctx, q.getArchinisisStatusStmt, getArchinisisStatus, userID)
+	var connected bool
+	err := row.Scan(&connected)
+	return connected, err
+}
+
+const upsertArchinisisToken = `-- name: UpsertArchinisisToken :exec
+INSERT INTO archinisis_tokens (user_id, data)
+VALUES ($1, $2)
+ON CONFLICT (user_id) DO UPDATE SET data = $2
+`
+
+type UpsertArchinisisTokenParams struct {
+	UserID uuid.UUID
+	Data   json.RawMessage
+}
+
+func (q *Queries) UpsertArchinisisToken(ctx context.Context, arg UpsertArchinisisTokenParams) error {
+	_, err := q.exec(ctx, q.upsertArchinisisTokenStmt, upsertArchinisisToken, arg.UserID, arg.Data)
+	return err
+}

@@ -51,6 +51,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.deleteAllSuuntoDataStmt, err = db.PrepareContext(ctx, deleteAllSuuntoData); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteAllSuuntoData: %w", err)
 	}
+	if q.deleteArchinisisTokenStmt, err = db.PrepareContext(ctx, deleteArchinisisToken); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteArchinisisToken: %w", err)
+	}
 	if q.deleteGarminTokenStmt, err = db.PrepareContext(ctx, deleteGarminToken); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteGarminToken: %w", err)
 	}
@@ -95,6 +98,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.getAppDataStmt, err = db.PrepareContext(ctx, getAppData); err != nil {
 		return nil, fmt.Errorf("error preparing query GetAppData: %w", err)
+	}
+	if q.getArchinisisStatusStmt, err = db.PrepareContext(ctx, getArchinisisStatus); err != nil {
+		return nil, fmt.Errorf("error preparing query GetArchinisisStatus: %w", err)
 	}
 	if q.getCoachtechDataStmt, err = db.PrepareContext(ctx, getCoachtechData); err != nil {
 		return nil, fmt.Errorf("error preparing query GetCoachtechData: %w", err)
@@ -294,6 +300,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.toggleNotificationExpirationStmt, err = db.PrepareContext(ctx, toggleNotificationExpiration); err != nil {
 		return nil, fmt.Errorf("error preparing query ToggleNotificationExpiration: %w", err)
 	}
+	if q.upsertArchinisisTokenStmt, err = db.PrepareContext(ctx, upsertArchinisisToken); err != nil {
+		return nil, fmt.Errorf("error preparing query UpsertArchinisisToken: %w", err)
+	}
 	if q.upsertGarminTokenStmt, err = db.PrepareContext(ctx, upsertGarminToken); err != nil {
 		return nil, fmt.Errorf("error preparing query UpsertGarminToken: %w", err)
 	}
@@ -363,6 +372,11 @@ func (q *Queries) Close() error {
 	if q.deleteAllSuuntoDataStmt != nil {
 		if cerr := q.deleteAllSuuntoDataStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing deleteAllSuuntoDataStmt: %w", cerr)
+		}
+	}
+	if q.deleteArchinisisTokenStmt != nil {
+		if cerr := q.deleteArchinisisTokenStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteArchinisisTokenStmt: %w", cerr)
 		}
 	}
 	if q.deleteGarminTokenStmt != nil {
@@ -438,6 +452,11 @@ func (q *Queries) Close() error {
 	if q.getAppDataStmt != nil {
 		if cerr := q.getAppDataStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getAppDataStmt: %w", cerr)
+		}
+	}
+	if q.getArchinisisStatusStmt != nil {
+		if cerr := q.getArchinisisStatusStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getArchinisisStatusStmt: %w", cerr)
 		}
 	}
 	if q.getCoachtechDataStmt != nil {
@@ -770,6 +789,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing toggleNotificationExpirationStmt: %w", cerr)
 		}
 	}
+	if q.upsertArchinisisTokenStmt != nil {
+		if cerr := q.upsertArchinisisTokenStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing upsertArchinisisTokenStmt: %w", cerr)
+		}
+	}
 	if q.upsertGarminTokenStmt != nil {
 		if cerr := q.upsertGarminTokenStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing upsertGarminTokenStmt: %w", cerr)
@@ -853,6 +877,7 @@ type Queries struct {
 	deleteAllOuraDataStmt             *sql.Stmt
 	deleteAllPolarDataStmt            *sql.Stmt
 	deleteAllSuuntoDataStmt           *sql.Stmt
+	deleteArchinisisTokenStmt         *sql.Stmt
 	deleteGarminTokenStmt             *sql.Stmt
 	deleteGroupStmt                   *sql.Stmt
 	deleteKlabTokenStmt               *sql.Stmt
@@ -868,6 +893,7 @@ type Queries struct {
 	getAllDataForDateSuuntoStmt       *sql.Stmt
 	getAllDataTypesStmt               *sql.Stmt
 	getAppDataStmt                    *sql.Stmt
+	getArchinisisStatusStmt           *sql.Stmt
 	getCoachtechDataStmt              *sql.Stmt
 	getCoachtechStatusStmt            *sql.Stmt
 	getDataByTypeGarminStmt           *sql.Stmt
@@ -934,6 +960,7 @@ type Queries struct {
 	setPersonalInformationStmt        *sql.Stmt
 	setResourceMetadataStmt           *sql.Stmt
 	toggleNotificationExpirationStmt  *sql.Stmt
+	upsertArchinisisTokenStmt         *sql.Stmt
 	upsertGarminTokenStmt             *sql.Stmt
 	upsertKlabTokenStmt               *sql.Stmt
 	upsertOuraTokenStmt               *sql.Stmt
@@ -956,6 +983,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		deleteAllOuraDataStmt:             q.deleteAllOuraDataStmt,
 		deleteAllPolarDataStmt:            q.deleteAllPolarDataStmt,
 		deleteAllSuuntoDataStmt:           q.deleteAllSuuntoDataStmt,
+		deleteArchinisisTokenStmt:         q.deleteArchinisisTokenStmt,
 		deleteGarminTokenStmt:             q.deleteGarminTokenStmt,
 		deleteGroupStmt:                   q.deleteGroupStmt,
 		deleteKlabTokenStmt:               q.deleteKlabTokenStmt,
@@ -971,6 +999,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		getAllDataForDateSuuntoStmt:       q.getAllDataForDateSuuntoStmt,
 		getAllDataTypesStmt:               q.getAllDataTypesStmt,
 		getAppDataStmt:                    q.getAppDataStmt,
+		getArchinisisStatusStmt:           q.getArchinisisStatusStmt,
 		getCoachtechDataStmt:              q.getCoachtechDataStmt,
 		getCoachtechStatusStmt:            q.getCoachtechStatusStmt,
 		getDataByTypeGarminStmt:           q.getDataByTypeGarminStmt,
@@ -1037,6 +1066,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		setPersonalInformationStmt:        q.setPersonalInformationStmt,
 		setResourceMetadataStmt:           q.setResourceMetadataStmt,
 		toggleNotificationExpirationStmt:  q.toggleNotificationExpirationStmt,
+		upsertArchinisisTokenStmt:         q.upsertArchinisisTokenStmt,
 		upsertGarminTokenStmt:             q.upsertGarminTokenStmt,
 		upsertKlabTokenStmt:               q.upsertKlabTokenStmt,
 		upsertOuraTokenStmt:               q.upsertOuraTokenStmt,

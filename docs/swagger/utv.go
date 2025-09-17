@@ -348,7 +348,16 @@ type KlabStatusResponse struct {
 	Connected bool `json:"connected" example:"true"`
 }
 
+type ArchinisisStatusResponse struct {
+	Connected bool `json:"connected" example:"true"`
+}
+
 type KlabTokenDetails struct {
+	SportID      int    `json:"sport_id" example:"51678043"`
+	SuomisportID string `json:"suomisport_id" example:"138538"`
+}
+
+type ArchinisisTokenDetails struct {
 	SportID      int    `json:"sport_id" example:"51678043"`
 	SuomisportID string `json:"suomisport_id" example:"138538"`
 }
@@ -356,6 +365,11 @@ type KlabTokenDetails struct {
 type KlabTokenInput struct {
 	UserID  string           `json:"user_id" example:"208e2ffb-ac68-4980-a8b6-b7e0136e4172"`
 	Details KlabTokenDetails `json:"details"`
+}
+
+type ArchinisisTokenInput struct {
+	UserID  string                 `json:"user_id" example:"208e2ffb-ac68-4980-a8b6-b7e0136e4172"`
+	Details ArchinisisTokenDetails `json:"details"`
 }
 
 type UserDataDetails struct {

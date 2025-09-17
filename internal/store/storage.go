@@ -34,6 +34,7 @@ type UTV interface {
 	Coachtech() utv.CoachtechData
 	UserData() utv.UserData
 	SourceCache() utv.SourceCache
+	ArchinisisToken() utv.ArchinisisToken
 }
 
 type Auth interface {

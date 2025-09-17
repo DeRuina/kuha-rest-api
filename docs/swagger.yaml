@@ -160,6 +160,29 @@ definitions:
         example: "27578816"
         type: string
     type: object
+  swagger.ArchinisisStatusResponse:
+    properties:
+      connected:
+        example: true
+        type: boolean
+    type: object
+  swagger.ArchinisisTokenDetails:
+    properties:
+      sport_id:
+        example: 51678043
+        type: integer
+      suomisport_id:
+        example: "138538"
+        type: string
+    type: object
+  swagger.ArchinisisTokenInput:
+    properties:
+      details:
+        $ref: '#/definitions/swagger.ArchinisisTokenDetails'
+      user_id:
+        example: 208e2ffb-ac68-4980-a8b6-b7e0136e4172
+        type: string
+    type: object
   swagger.Athlete:
     properties:
       first_name:
@@ -4371,6 +4394,91 @@ paths:
       summary: Get all data by type
       tags:
       - UTV - General
+  /utv/archinisis/status:
+    get:
+      consumes:
+      - application/json
+      description: Returns whether a user has connected their Archinisis account
+      parameters:
+      - description: User ID (UUID)
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.ArchinisisStatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Check Archinisis connection
+      tags:
+      - UTV - Archinisis
+  /utv/archinisis/token:
+    post:
+      consumes:
+      - application/json
+      description: Upserts a Archinisis token for a user
+      parameters:
+      - description: Archinisis token input
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.ArchinisisTokenInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Upsert Archinisis token
+      tags:
+      - UTV - Archinisis
   /utv/coachtech/data:
     get:
       consumes:

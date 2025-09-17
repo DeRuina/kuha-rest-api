@@ -113,3 +113,8 @@ CREATE TABLE klab_tokens (
   user_id UUID PRIMARY KEY,
   data JSONB NOT NULL
 );
+
+CREATE TABLE archinisis_tokens (
+  user_id UUID PRIMARY KEY,
+  data JSONB NOT NULL
+);

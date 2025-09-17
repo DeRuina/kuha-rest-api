@@ -111,6 +111,13 @@ type KlabToken interface {
 	DeleteToken(ctx context.Context, userID uuid.UUID) error
 }
 
+// ArchinisisToken interface
+type ArchinisisToken interface {
+	GetStatus(ctx context.Context, userID uuid.UUID) (bool, error)
+	UpsertToken(ctx context.Context, userID uuid.UUID, data json.RawMessage) error
+	DeleteToken(ctx context.Context, userID uuid.UUID) error
+}
+
 // CoachtechData interface
 type CoachtechData interface {
 	GetStatus(ctx context.Context, userID uuid.UUID) (bool, error)
@@ -136,19 +143,20 @@ type SourceCache interface {
 
 // UTVStorage struct to hold table-specific storage
 type UTVStorage struct {
-	db          *sql.DB
-	oura        OuraData
-	polar       PolarData
-	suunto      SuuntoData
-	garmin      GarminData
-	polarToken  PolarToken
-	garminToken GarminToken
-	suuntoToken SuuntoToken
-	ouraToken   OuraToken
-	klabToken   KlabToken
-	coachtech   CoachtechData
-	userData    UserData
-	sourceCache SourceCache
+	db              *sql.DB
+	oura            OuraData
+	polar           PolarData
+	suunto          SuuntoData
+	garmin          GarminData
+	polarToken      PolarToken
+	garminToken     GarminToken
+	suuntoToken     SuuntoToken
+	ouraToken       OuraToken
+	klabToken       KlabToken
+	archinisisToken ArchinisisToken
+	coachtech       CoachtechData
+	userData        UserData
+	sourceCache     SourceCache
 }
 
 // Ping method
@@ -205,21 +213,26 @@ func (s *UTVStorage) SourceCache() SourceCache {
 	return s.sourceCache
 }
 
+func (s *UTVStorage) ArchinisisToken() ArchinisisToken {
+	return s.archinisisToken
+}
+
 // Storage for UTV database tables
 func NewUTVStorage(db *sql.DB) *UTVStorage {
 	return &UTVStorage{
-		db:          db,
-		oura:        &OuraDataStore{db: db},
-		polar:       &PolarDataStore{db: db},
-		suunto:      &SuuntoDataStore{db: db},
-		garmin:      &GarminDataStore{db: db},
-		polarToken:  &PolarTokenStore{db: db},
-		garminToken: &GarminTokenStore{db: db},
-		suuntoToken: &SuuntoTokenStore{db: db},
-		ouraToken:   &OuraTokenStore{db: db},
-		klabToken:   &KlabTokenStore{db: db},
-		coachtech:   &CoachtechDataStore{db: db},
-		userData:    &UserDataStore{db: db},
-		sourceCache: &SourceCacheStore{db: db},
+		db:              db,
+		oura:            &OuraDataStore{db: db},
+		polar:           &PolarDataStore{db: db},
+		suunto:          &SuuntoDataStore{db: db},
+		garmin:          &GarminDataStore{db: db},
+		polarToken:      &PolarTokenStore{db: db},
+		garminToken:     &GarminTokenStore{db: db},
+		suuntoToken:     &SuuntoTokenStore{db: db},
+		ouraToken:       &OuraTokenStore{db: db},
+		klabToken:       &KlabTokenStore{db: db},
+		archinisisToken: &ArchinisisTokenStore{db: db},
+		coachtech:       &CoachtechDataStore{db: db},
+		userData:        &UserDataStore{db: db},
+		sourceCache:     &SourceCacheStore{db: db},
 	}
 }

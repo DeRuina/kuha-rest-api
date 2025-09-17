@@ -292,6 +292,7 @@ func (app *api) mount() http.Handler {
 					userDataHandler := utvapi.NewUserDataHandler(app.store.UTV.UserData(), app.cacheStorage)
 					coachtechHandler := utvapi.NewCoachtechDataHandler(app.store.UTV.Coachtech(), app.cacheStorage)
 					sourceCacheHandler := utvapi.NewSourceCacheHandler(app.store.UTV.SourceCache(), app.cacheStorage)
+					archinisisTokenHandler := utvapi.NewArchinisisTokenHandler(app.store.UTV.ArchinisisToken(), app.cacheStorage)
 
 					// General routes
 					r.Get("/latest", generalHandler.GetLatestData)
@@ -311,6 +312,12 @@ func (app *api) mount() http.Handler {
 					r.Route("/klab", func(r chi.Router) {
 						r.Get("/status", klabTokenHandler.GetStatus)
 						r.Post("/token", klabTokenHandler.UpsertToken)
+					})
+
+					// Archinisis routes
+					r.Route("/archinisis", func(r chi.Router) {
+						r.Get("/status", archinisisTokenHandler.GetStatus)
+						r.Post("/token", archinisisTokenHandler.UpsertToken)
 					})
 
 					// Coachtech routes

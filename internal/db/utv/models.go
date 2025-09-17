@@ -17,6 +17,11 @@ type AppDatum struct {
 	Data      json.RawMessage
 }
 
+type ArchinisisToken struct {
+	UserID uuid.UUID
+	Data   json.RawMessage
+}
+
 type CoachtechDatum struct {
 	CoachtechID int32
 	SummaryDate time.Time

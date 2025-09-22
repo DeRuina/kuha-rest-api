@@ -7,14 +7,14 @@ var RoleLimits = map[string]struct {
 	Window time.Duration
 }{
 	"admin":      {Limit: 5000, Window: time.Minute},
-	"fis":        {Limit: 100, Window: time.Minute},
-	"utv":        {Limit: 500, Window: time.Minute},
-	"kamk":       {Limit: 500, Window: time.Minute},
-	"klab":       {Limit: 100, Window: time.Minute},
+	"fis":        {Limit: 1000, Window: time.Minute},
+	"utv":        {Limit: 3000, Window: time.Minute},
+	"kamk":       {Limit: 1000, Window: time.Minute},
+	"klab":       {Limit: 1000, Window: time.Minute},
 	"tietoevry":  {Limit: 5000, Window: time.Minute},
-	"coachtech":  {Limit: 100, Window: time.Minute},
-	"archinisis": {Limit: 100, Window: time.Minute},
-	"default":    {Limit: 100, Window: time.Minute},
+	"coachtech":  {Limit: 1000, Window: time.Minute},
+	"archinisis": {Limit: 1000, Window: time.Minute},
+	"default":    {Limit: 500, Window: time.Minute},
 }
 
 func GetLimitForRole(role string) (int, time.Duration) {

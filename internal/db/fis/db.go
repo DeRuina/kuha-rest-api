@@ -24,6 +24,30 @@ func New(db DBTX) *Queries {
 func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	q := Queries{db: db}
 	var err error
+	if q.deleteCompetitorByIDStmt, err = db.PrepareContext(ctx, deleteCompetitorByID); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteCompetitorByID: %w", err)
+	}
+	if q.deleteRaceCCByIDStmt, err = db.PrepareContext(ctx, deleteRaceCCByID); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteRaceCCByID: %w", err)
+	}
+	if q.deleteRaceJPByIDStmt, err = db.PrepareContext(ctx, deleteRaceJPByID); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteRaceJPByID: %w", err)
+	}
+	if q.deleteRaceNKByIDStmt, err = db.PrepareContext(ctx, deleteRaceNKByID); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteRaceNKByID: %w", err)
+	}
+	if q.deleteResultCCByRecIDStmt, err = db.PrepareContext(ctx, deleteResultCCByRecID); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteResultCCByRecID: %w", err)
+	}
+	if q.deleteResultJPByRecIDStmt, err = db.PrepareContext(ctx, deleteResultJPByRecID); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteResultJPByRecID: %w", err)
+	}
+	if q.deleteResultNKByRecIDStmt, err = db.PrepareContext(ctx, deleteResultNKByRecID); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteResultNKByRecID: %w", err)
+	}
+	if q.getAthleteResultsCCStmt, err = db.PrepareContext(ctx, getAthleteResultsCC); err != nil {
+		return nil, fmt.Errorf("error preparing query GetAthleteResultsCC: %w", err)
+	}
 	if q.getAthleteResultsJPStmt, err = db.PrepareContext(ctx, getAthleteResultsJP); err != nil {
 		return nil, fmt.Errorf("error preparing query GetAthleteResultsJP: %w", err)
 	}
@@ -33,6 +57,9 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getAthletesBySectorStmt, err = db.PrepareContext(ctx, getAthletesBySector); err != nil {
 		return nil, fmt.Errorf("error preparing query GetAthletesBySector: %w", err)
 	}
+	if q.getCompetitorIDByFiscodeCCStmt, err = db.PrepareContext(ctx, getCompetitorIDByFiscodeCC); err != nil {
+		return nil, fmt.Errorf("error preparing query GetCompetitorIDByFiscodeCC: %w", err)
+	}
 	if q.getCompetitorIDByFiscodeJPStmt, err = db.PrepareContext(ctx, getCompetitorIDByFiscodeJP); err != nil {
 		return nil, fmt.Errorf("error preparing query GetCompetitorIDByFiscodeJP: %w", err)
 	}
@@ -41,6 +68,36 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	}
 	if q.getCompetitorIDsByGenderAndNationJPStmt, err = db.PrepareContext(ctx, getCompetitorIDsByGenderAndNationJP); err != nil {
 		return nil, fmt.Errorf("error preparing query GetCompetitorIDsByGenderAndNationJP: %w", err)
+	}
+	if q.getCrossCountryCategoriesStmt, err = db.PrepareContext(ctx, getCrossCountryCategories); err != nil {
+		return nil, fmt.Errorf("error preparing query GetCrossCountryCategories: %w", err)
+	}
+	if q.getCrossCountryDisciplinesStmt, err = db.PrepareContext(ctx, getCrossCountryDisciplines); err != nil {
+		return nil, fmt.Errorf("error preparing query GetCrossCountryDisciplines: %w", err)
+	}
+	if q.getCrossCountrySeasonsStmt, err = db.PrepareContext(ctx, getCrossCountrySeasons); err != nil {
+		return nil, fmt.Errorf("error preparing query GetCrossCountrySeasons: %w", err)
+	}
+	if q.getLastRowCompetitorStmt, err = db.PrepareContext(ctx, getLastRowCompetitor); err != nil {
+		return nil, fmt.Errorf("error preparing query GetLastRowCompetitor: %w", err)
+	}
+	if q.getLastRowRaceCCStmt, err = db.PrepareContext(ctx, getLastRowRaceCC); err != nil {
+		return nil, fmt.Errorf("error preparing query GetLastRowRaceCC: %w", err)
+	}
+	if q.getLastRowRaceJPStmt, err = db.PrepareContext(ctx, getLastRowRaceJP); err != nil {
+		return nil, fmt.Errorf("error preparing query GetLastRowRaceJP: %w", err)
+	}
+	if q.getLastRowRaceNKStmt, err = db.PrepareContext(ctx, getLastRowRaceNK); err != nil {
+		return nil, fmt.Errorf("error preparing query GetLastRowRaceNK: %w", err)
+	}
+	if q.getLastRowResultCCStmt, err = db.PrepareContext(ctx, getLastRowResultCC); err != nil {
+		return nil, fmt.Errorf("error preparing query GetLastRowResultCC: %w", err)
+	}
+	if q.getLastRowResultJPStmt, err = db.PrepareContext(ctx, getLastRowResultJP); err != nil {
+		return nil, fmt.Errorf("error preparing query GetLastRowResultJP: %w", err)
+	}
+	if q.getLastRowResultNKStmt, err = db.PrepareContext(ctx, getLastRowResultNK); err != nil {
+		return nil, fmt.Errorf("error preparing query GetLastRowResultNK: %w", err)
 	}
 	if q.getNationsBySectorStmt, err = db.PrepareContext(ctx, getNationsBySector); err != nil {
 		return nil, fmt.Errorf("error preparing query GetNationsBySector: %w", err)
@@ -54,11 +111,23 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getNordicCombinedSeasonsStmt, err = db.PrepareContext(ctx, getNordicCombinedSeasons); err != nil {
 		return nil, fmt.Errorf("error preparing query GetNordicCombinedSeasons: %w", err)
 	}
+	if q.getRaceResultsCCByRaceIDStmt, err = db.PrepareContext(ctx, getRaceResultsCCByRaceID); err != nil {
+		return nil, fmt.Errorf("error preparing query GetRaceResultsCCByRaceID: %w", err)
+	}
 	if q.getRaceResultsJPByRaceIDStmt, err = db.PrepareContext(ctx, getRaceResultsJPByRaceID); err != nil {
 		return nil, fmt.Errorf("error preparing query GetRaceResultsJPByRaceID: %w", err)
 	}
 	if q.getRaceResultsNKByRaceIDStmt, err = db.PrepareContext(ctx, getRaceResultsNKByRaceID); err != nil {
 		return nil, fmt.Errorf("error preparing query GetRaceResultsNKByRaceID: %w", err)
+	}
+	if q.getRacesCCStmt, err = db.PrepareContext(ctx, getRacesCC); err != nil {
+		return nil, fmt.Errorf("error preparing query GetRacesCC: %w", err)
+	}
+	if q.getRacesJPStmt, err = db.PrepareContext(ctx, getRacesJP); err != nil {
+		return nil, fmt.Errorf("error preparing query GetRacesJP: %w", err)
+	}
+	if q.getRacesNKStmt, err = db.PrepareContext(ctx, getRacesNK); err != nil {
+		return nil, fmt.Errorf("error preparing query GetRacesNK: %w", err)
 	}
 	if q.getResultsByCompetitorsJPStmt, err = db.PrepareContext(ctx, getResultsByCompetitorsJP); err != nil {
 		return nil, fmt.Errorf("error preparing query GetResultsByCompetitorsJP: %w", err)
@@ -72,11 +141,93 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getSkiJumpingSeasonsStmt, err = db.PrepareContext(ctx, getSkiJumpingSeasons); err != nil {
 		return nil, fmt.Errorf("error preparing query GetSkiJumpingSeasons: %w", err)
 	}
+	if q.insertCompetitorStmt, err = db.PrepareContext(ctx, insertCompetitor); err != nil {
+		return nil, fmt.Errorf("error preparing query InsertCompetitor: %w", err)
+	}
+	if q.insertRaceCCStmt, err = db.PrepareContext(ctx, insertRaceCC); err != nil {
+		return nil, fmt.Errorf("error preparing query InsertRaceCC: %w", err)
+	}
+	if q.insertRaceJPStmt, err = db.PrepareContext(ctx, insertRaceJP); err != nil {
+		return nil, fmt.Errorf("error preparing query InsertRaceJP: %w", err)
+	}
+	if q.insertRaceNKStmt, err = db.PrepareContext(ctx, insertRaceNK); err != nil {
+		return nil, fmt.Errorf("error preparing query InsertRaceNK: %w", err)
+	}
+	if q.insertResultCCStmt, err = db.PrepareContext(ctx, insertResultCC); err != nil {
+		return nil, fmt.Errorf("error preparing query InsertResultCC: %w", err)
+	}
+	if q.insertResultJPStmt, err = db.PrepareContext(ctx, insertResultJP); err != nil {
+		return nil, fmt.Errorf("error preparing query InsertResultJP: %w", err)
+	}
+	if q.insertResultNKStmt, err = db.PrepareContext(ctx, insertResultNK); err != nil {
+		return nil, fmt.Errorf("error preparing query InsertResultNK: %w", err)
+	}
+	if q.updateCompetitorByIDStmt, err = db.PrepareContext(ctx, updateCompetitorByID); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateCompetitorByID: %w", err)
+	}
+	if q.updateRaceCCByIDStmt, err = db.PrepareContext(ctx, updateRaceCCByID); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateRaceCCByID: %w", err)
+	}
+	if q.updateRaceJPByIDStmt, err = db.PrepareContext(ctx, updateRaceJPByID); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateRaceJPByID: %w", err)
+	}
+	if q.updateRaceNKByIDStmt, err = db.PrepareContext(ctx, updateRaceNKByID); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateRaceNKByID: %w", err)
+	}
+	if q.updateResultCCByRecIDStmt, err = db.PrepareContext(ctx, updateResultCCByRecID); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateResultCCByRecID: %w", err)
+	}
+	if q.updateResultJPByRecIDStmt, err = db.PrepareContext(ctx, updateResultJPByRecID); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateResultJPByRecID: %w", err)
+	}
+	if q.updateResultNKByRecIDStmt, err = db.PrepareContext(ctx, updateResultNKByRecID); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateResultNKByRecID: %w", err)
+	}
 	return &q, nil
 }
 
 func (q *Queries) Close() error {
 	var err error
+	if q.deleteCompetitorByIDStmt != nil {
+		if cerr := q.deleteCompetitorByIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteCompetitorByIDStmt: %w", cerr)
+		}
+	}
+	if q.deleteRaceCCByIDStmt != nil {
+		if cerr := q.deleteRaceCCByIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteRaceCCByIDStmt: %w", cerr)
+		}
+	}
+	if q.deleteRaceJPByIDStmt != nil {
+		if cerr := q.deleteRaceJPByIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteRaceJPByIDStmt: %w", cerr)
+		}
+	}
+	if q.deleteRaceNKByIDStmt != nil {
+		if cerr := q.deleteRaceNKByIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteRaceNKByIDStmt: %w", cerr)
+		}
+	}
+	if q.deleteResultCCByRecIDStmt != nil {
+		if cerr := q.deleteResultCCByRecIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteResultCCByRecIDStmt: %w", cerr)
+		}
+	}
+	if q.deleteResultJPByRecIDStmt != nil {
+		if cerr := q.deleteResultJPByRecIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteResultJPByRecIDStmt: %w", cerr)
+		}
+	}
+	if q.deleteResultNKByRecIDStmt != nil {
+		if cerr := q.deleteResultNKByRecIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteResultNKByRecIDStmt: %w", cerr)
+		}
+	}
+	if q.getAthleteResultsCCStmt != nil {
+		if cerr := q.getAthleteResultsCCStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getAthleteResultsCCStmt: %w", cerr)
+		}
+	}
 	if q.getAthleteResultsJPStmt != nil {
 		if cerr := q.getAthleteResultsJPStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getAthleteResultsJPStmt: %w", cerr)
@@ -92,6 +243,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing getAthletesBySectorStmt: %w", cerr)
 		}
 	}
+	if q.getCompetitorIDByFiscodeCCStmt != nil {
+		if cerr := q.getCompetitorIDByFiscodeCCStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getCompetitorIDByFiscodeCCStmt: %w", cerr)
+		}
+	}
 	if q.getCompetitorIDByFiscodeJPStmt != nil {
 		if cerr := q.getCompetitorIDByFiscodeJPStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getCompetitorIDByFiscodeJPStmt: %w", cerr)
@@ -105,6 +261,56 @@ func (q *Queries) Close() error {
 	if q.getCompetitorIDsByGenderAndNationJPStmt != nil {
 		if cerr := q.getCompetitorIDsByGenderAndNationJPStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getCompetitorIDsByGenderAndNationJPStmt: %w", cerr)
+		}
+	}
+	if q.getCrossCountryCategoriesStmt != nil {
+		if cerr := q.getCrossCountryCategoriesStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getCrossCountryCategoriesStmt: %w", cerr)
+		}
+	}
+	if q.getCrossCountryDisciplinesStmt != nil {
+		if cerr := q.getCrossCountryDisciplinesStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getCrossCountryDisciplinesStmt: %w", cerr)
+		}
+	}
+	if q.getCrossCountrySeasonsStmt != nil {
+		if cerr := q.getCrossCountrySeasonsStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getCrossCountrySeasonsStmt: %w", cerr)
+		}
+	}
+	if q.getLastRowCompetitorStmt != nil {
+		if cerr := q.getLastRowCompetitorStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getLastRowCompetitorStmt: %w", cerr)
+		}
+	}
+	if q.getLastRowRaceCCStmt != nil {
+		if cerr := q.getLastRowRaceCCStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getLastRowRaceCCStmt: %w", cerr)
+		}
+	}
+	if q.getLastRowRaceJPStmt != nil {
+		if cerr := q.getLastRowRaceJPStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getLastRowRaceJPStmt: %w", cerr)
+		}
+	}
+	if q.getLastRowRaceNKStmt != nil {
+		if cerr := q.getLastRowRaceNKStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getLastRowRaceNKStmt: %w", cerr)
+		}
+	}
+	if q.getLastRowResultCCStmt != nil {
+		if cerr := q.getLastRowResultCCStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getLastRowResultCCStmt: %w", cerr)
+		}
+	}
+	if q.getLastRowResultJPStmt != nil {
+		if cerr := q.getLastRowResultJPStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getLastRowResultJPStmt: %w", cerr)
+		}
+	}
+	if q.getLastRowResultNKStmt != nil {
+		if cerr := q.getLastRowResultNKStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getLastRowResultNKStmt: %w", cerr)
 		}
 	}
 	if q.getNationsBySectorStmt != nil {
@@ -127,6 +333,11 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing getNordicCombinedSeasonsStmt: %w", cerr)
 		}
 	}
+	if q.getRaceResultsCCByRaceIDStmt != nil {
+		if cerr := q.getRaceResultsCCByRaceIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getRaceResultsCCByRaceIDStmt: %w", cerr)
+		}
+	}
 	if q.getRaceResultsJPByRaceIDStmt != nil {
 		if cerr := q.getRaceResultsJPByRaceIDStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getRaceResultsJPByRaceIDStmt: %w", cerr)
@@ -135,6 +346,21 @@ func (q *Queries) Close() error {
 	if q.getRaceResultsNKByRaceIDStmt != nil {
 		if cerr := q.getRaceResultsNKByRaceIDStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getRaceResultsNKByRaceIDStmt: %w", cerr)
+		}
+	}
+	if q.getRacesCCStmt != nil {
+		if cerr := q.getRacesCCStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getRacesCCStmt: %w", cerr)
+		}
+	}
+	if q.getRacesJPStmt != nil {
+		if cerr := q.getRacesJPStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getRacesJPStmt: %w", cerr)
+		}
+	}
+	if q.getRacesNKStmt != nil {
+		if cerr := q.getRacesNKStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getRacesNKStmt: %w", cerr)
 		}
 	}
 	if q.getResultsByCompetitorsJPStmt != nil {
@@ -155,6 +381,76 @@ func (q *Queries) Close() error {
 	if q.getSkiJumpingSeasonsStmt != nil {
 		if cerr := q.getSkiJumpingSeasonsStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getSkiJumpingSeasonsStmt: %w", cerr)
+		}
+	}
+	if q.insertCompetitorStmt != nil {
+		if cerr := q.insertCompetitorStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing insertCompetitorStmt: %w", cerr)
+		}
+	}
+	if q.insertRaceCCStmt != nil {
+		if cerr := q.insertRaceCCStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing insertRaceCCStmt: %w", cerr)
+		}
+	}
+	if q.insertRaceJPStmt != nil {
+		if cerr := q.insertRaceJPStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing insertRaceJPStmt: %w", cerr)
+		}
+	}
+	if q.insertRaceNKStmt != nil {
+		if cerr := q.insertRaceNKStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing insertRaceNKStmt: %w", cerr)
+		}
+	}
+	if q.insertResultCCStmt != nil {
+		if cerr := q.insertResultCCStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing insertResultCCStmt: %w", cerr)
+		}
+	}
+	if q.insertResultJPStmt != nil {
+		if cerr := q.insertResultJPStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing insertResultJPStmt: %w", cerr)
+		}
+	}
+	if q.insertResultNKStmt != nil {
+		if cerr := q.insertResultNKStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing insertResultNKStmt: %w", cerr)
+		}
+	}
+	if q.updateCompetitorByIDStmt != nil {
+		if cerr := q.updateCompetitorByIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateCompetitorByIDStmt: %w", cerr)
+		}
+	}
+	if q.updateRaceCCByIDStmt != nil {
+		if cerr := q.updateRaceCCByIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateRaceCCByIDStmt: %w", cerr)
+		}
+	}
+	if q.updateRaceJPByIDStmt != nil {
+		if cerr := q.updateRaceJPByIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateRaceJPByIDStmt: %w", cerr)
+		}
+	}
+	if q.updateRaceNKByIDStmt != nil {
+		if cerr := q.updateRaceNKByIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateRaceNKByIDStmt: %w", cerr)
+		}
+	}
+	if q.updateResultCCByRecIDStmt != nil {
+		if cerr := q.updateResultCCByRecIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateResultCCByRecIDStmt: %w", cerr)
+		}
+	}
+	if q.updateResultJPByRecIDStmt != nil {
+		if cerr := q.updateResultJPByRecIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateResultJPByRecIDStmt: %w", cerr)
+		}
+	}
+	if q.updateResultNKByRecIDStmt != nil {
+		if cerr := q.updateResultNKByRecIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateResultNKByRecIDStmt: %w", cerr)
 		}
 	}
 	return err
@@ -196,43 +492,117 @@ func (q *Queries) queryRow(ctx context.Context, stmt *sql.Stmt, query string, ar
 type Queries struct {
 	db                                      DBTX
 	tx                                      *sql.Tx
+	deleteCompetitorByIDStmt                *sql.Stmt
+	deleteRaceCCByIDStmt                    *sql.Stmt
+	deleteRaceJPByIDStmt                    *sql.Stmt
+	deleteRaceNKByIDStmt                    *sql.Stmt
+	deleteResultCCByRecIDStmt               *sql.Stmt
+	deleteResultJPByRecIDStmt               *sql.Stmt
+	deleteResultNKByRecIDStmt               *sql.Stmt
+	getAthleteResultsCCStmt                 *sql.Stmt
 	getAthleteResultsJPStmt                 *sql.Stmt
 	getAthleteResultsNKStmt                 *sql.Stmt
 	getAthletesBySectorStmt                 *sql.Stmt
+	getCompetitorIDByFiscodeCCStmt          *sql.Stmt
 	getCompetitorIDByFiscodeJPStmt          *sql.Stmt
 	getCompetitorIDByFiscodeNKStmt          *sql.Stmt
 	getCompetitorIDsByGenderAndNationJPStmt *sql.Stmt
+	getCrossCountryCategoriesStmt           *sql.Stmt
+	getCrossCountryDisciplinesStmt          *sql.Stmt
+	getCrossCountrySeasonsStmt              *sql.Stmt
+	getLastRowCompetitorStmt                *sql.Stmt
+	getLastRowRaceCCStmt                    *sql.Stmt
+	getLastRowRaceJPStmt                    *sql.Stmt
+	getLastRowRaceNKStmt                    *sql.Stmt
+	getLastRowResultCCStmt                  *sql.Stmt
+	getLastRowResultJPStmt                  *sql.Stmt
+	getLastRowResultNKStmt                  *sql.Stmt
 	getNationsBySectorStmt                  *sql.Stmt
 	getNordicCombinedCategoriesStmt         *sql.Stmt
 	getNordicCombinedDisciplinesStmt        *sql.Stmt
 	getNordicCombinedSeasonsStmt            *sql.Stmt
+	getRaceResultsCCByRaceIDStmt            *sql.Stmt
 	getRaceResultsJPByRaceIDStmt            *sql.Stmt
 	getRaceResultsNKByRaceIDStmt            *sql.Stmt
+	getRacesCCStmt                          *sql.Stmt
+	getRacesJPStmt                          *sql.Stmt
+	getRacesNKStmt                          *sql.Stmt
 	getResultsByCompetitorsJPStmt           *sql.Stmt
 	getSkiJumpingCategoriesStmt             *sql.Stmt
 	getSkiJumpingDisciplinesStmt            *sql.Stmt
 	getSkiJumpingSeasonsStmt                *sql.Stmt
+	insertCompetitorStmt                    *sql.Stmt
+	insertRaceCCStmt                        *sql.Stmt
+	insertRaceJPStmt                        *sql.Stmt
+	insertRaceNKStmt                        *sql.Stmt
+	insertResultCCStmt                      *sql.Stmt
+	insertResultJPStmt                      *sql.Stmt
+	insertResultNKStmt                      *sql.Stmt
+	updateCompetitorByIDStmt                *sql.Stmt
+	updateRaceCCByIDStmt                    *sql.Stmt
+	updateRaceJPByIDStmt                    *sql.Stmt
+	updateRaceNKByIDStmt                    *sql.Stmt
+	updateResultCCByRecIDStmt               *sql.Stmt
+	updateResultJPByRecIDStmt               *sql.Stmt
+	updateResultNKByRecIDStmt               *sql.Stmt
 }
 
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 	return &Queries{
 		db:                                      tx,
 		tx:                                      tx,
+		deleteCompetitorByIDStmt:                q.deleteCompetitorByIDStmt,
+		deleteRaceCCByIDStmt:                    q.deleteRaceCCByIDStmt,
+		deleteRaceJPByIDStmt:                    q.deleteRaceJPByIDStmt,
+		deleteRaceNKByIDStmt:                    q.deleteRaceNKByIDStmt,
+		deleteResultCCByRecIDStmt:               q.deleteResultCCByRecIDStmt,
+		deleteResultJPByRecIDStmt:               q.deleteResultJPByRecIDStmt,
+		deleteResultNKByRecIDStmt:               q.deleteResultNKByRecIDStmt,
+		getAthleteResultsCCStmt:                 q.getAthleteResultsCCStmt,
 		getAthleteResultsJPStmt:                 q.getAthleteResultsJPStmt,
 		getAthleteResultsNKStmt:                 q.getAthleteResultsNKStmt,
 		getAthletesBySectorStmt:                 q.getAthletesBySectorStmt,
+		getCompetitorIDByFiscodeCCStmt:          q.getCompetitorIDByFiscodeCCStmt,
 		getCompetitorIDByFiscodeJPStmt:          q.getCompetitorIDByFiscodeJPStmt,
 		getCompetitorIDByFiscodeNKStmt:          q.getCompetitorIDByFiscodeNKStmt,
 		getCompetitorIDsByGenderAndNationJPStmt: q.getCompetitorIDsByGenderAndNationJPStmt,
+		getCrossCountryCategoriesStmt:           q.getCrossCountryCategoriesStmt,
+		getCrossCountryDisciplinesStmt:          q.getCrossCountryDisciplinesStmt,
+		getCrossCountrySeasonsStmt:              q.getCrossCountrySeasonsStmt,
+		getLastRowCompetitorStmt:                q.getLastRowCompetitorStmt,
+		getLastRowRaceCCStmt:                    q.getLastRowRaceCCStmt,
+		getLastRowRaceJPStmt:                    q.getLastRowRaceJPStmt,
+		getLastRowRaceNKStmt:                    q.getLastRowRaceNKStmt,
+		getLastRowResultCCStmt:                  q.getLastRowResultCCStmt,
+		getLastRowResultJPStmt:                  q.getLastRowResultJPStmt,
+		getLastRowResultNKStmt:                  q.getLastRowResultNKStmt,
 		getNationsBySectorStmt:                  q.getNationsBySectorStmt,
 		getNordicCombinedCategoriesStmt:         q.getNordicCombinedCategoriesStmt,
 		getNordicCombinedDisciplinesStmt:        q.getNordicCombinedDisciplinesStmt,
 		getNordicCombinedSeasonsStmt:            q.getNordicCombinedSeasonsStmt,
+		getRaceResultsCCByRaceIDStmt:            q.getRaceResultsCCByRaceIDStmt,
 		getRaceResultsJPByRaceIDStmt:            q.getRaceResultsJPByRaceIDStmt,
 		getRaceResultsNKByRaceIDStmt:            q.getRaceResultsNKByRaceIDStmt,
+		getRacesCCStmt:                          q.getRacesCCStmt,
+		getRacesJPStmt:                          q.getRacesJPStmt,
+		getRacesNKStmt:                          q.getRacesNKStmt,
 		getResultsByCompetitorsJPStmt:           q.getResultsByCompetitorsJPStmt,
 		getSkiJumpingCategoriesStmt:             q.getSkiJumpingCategoriesStmt,
 		getSkiJumpingDisciplinesStmt:            q.getSkiJumpingDisciplinesStmt,
 		getSkiJumpingSeasonsStmt:                q.getSkiJumpingSeasonsStmt,
+		insertCompetitorStmt:                    q.insertCompetitorStmt,
+		insertRaceCCStmt:                        q.insertRaceCCStmt,
+		insertRaceJPStmt:                        q.insertRaceJPStmt,
+		insertRaceNKStmt:                        q.insertRaceNKStmt,
+		insertResultCCStmt:                      q.insertResultCCStmt,
+		insertResultJPStmt:                      q.insertResultJPStmt,
+		insertResultNKStmt:                      q.insertResultNKStmt,
+		updateCompetitorByIDStmt:                q.updateCompetitorByIDStmt,
+		updateRaceCCByIDStmt:                    q.updateRaceCCByIDStmt,
+		updateRaceJPByIDStmt:                    q.updateRaceJPByIDStmt,
+		updateRaceNKByIDStmt:                    q.updateRaceNKByIDStmt,
+		updateResultCCByRecIDStmt:               q.updateResultCCByRecIDStmt,
+		updateResultJPByRecIDStmt:               q.updateResultJPByRecIDStmt,
+		updateResultNKByRecIDStmt:               q.updateResultNKByRecIDStmt,
 	}
 }

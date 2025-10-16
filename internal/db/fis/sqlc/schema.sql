@@ -1,6 +1,28 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 17.0 (Debian 17.0-1.pgdg110+1)
+-- Dumped by pg_dump version 18.0 (Ubuntu 18.0-1.pgdg24.04+3)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
 
 --
--- Name: a_competitor; Type: TABLE; Schema: public; Owner: fislocal
+-- Name: a_competitor; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.a_competitor (
@@ -42,12 +64,112 @@ CREATE TABLE public.a_competitor (
     data character varying(1000),
     lastupdateby character varying(255),
     disciplines character varying(1000),
+    lastupdate timestamp without time zone,
+    deletedat character varying(255),
+    categorycode character varying(255),
+    classname character varying(255),
+    classcode character varying(255)
+);
+
+
+--
+-- Name: a_racecc; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.a_racecc (
+    raceid integer,
+    eventid integer,
+    seasoncode integer,
+    racecodex integer,
+    disciplineid character varying(255),
+    disciplinecode character varying(255),
+    catcode character varying(255),
+    catcode2 character varying(255),
+    catcode3 character varying(255),
+    catcode4 character varying(255),
+    gender character varying(255),
+    racedate date,
+    starteventdate date,
+    description character varying(255),
+    place character varying(255),
+    nationcode character varying(10),
+    td1id integer,
+    td1name character varying(255),
+    td1nation character varying(255),
+    td1code integer,
+    td2id integer,
+    td2name character varying(255),
+    td2nation character varying(255),
+    td2code integer,
+    calstatuscode character varying(255),
+    procstatuscode character varying(255),
+    receiveddate date,
+    pursuit character varying(255),
+    masse character varying(255),
+    relay character varying(255),
+    distance character varying(255),
+    hill character varying(255),
+    style character varying(255),
+    qualif character varying(255),
+    finale character varying(255),
+    homol character varying(255),
+    webcomment character varying(255),
+    displaystatus character varying(255),
+    fisinterncomment character varying(255),
+    published integer,
+    validforfispoints integer,
+    usedfislist character varying(255),
+    tolist character varying(255),
+    discforlistcode character varying(255),
+    calculatedpenalty character varying(255),
+    appliedpenalty character varying(255),
+    appliedscala character varying(255),
+    penscafixed character varying(255),
+    version integer,
+    nationraceid integer,
+    provraceid integer,
+    msql7evid integer,
+    mssql7id integer,
+    results integer,
+    pdf integer,
+    topbanner character varying(255),
+    bottombanner character varying(255),
+    toplogo character varying(255),
+    bottomlogo character varying(255),
+    gallery character varying(255),
+    indi integer,
+    team integer,
+    tabcount integer,
+    columncount integer,
+    level character varying(255),
+    hloc1 character varying(255),
+    hloc2 character varying(255),
+    hloc3 character varying(255),
+    hcet1 character varying(255),
+    hcet2 character varying(255),
+    hcet3 character varying(255),
+    live integer,
+    livestatus1 character varying(255),
+    livestatus2 character varying(255),
+    livestatus3 character varying(255),
+    liveinfo1 character varying(255),
+    liveinfo2 character varying(255),
+    liveinfo3 character varying(255),
+    passwd character varying(255),
+    timinglogo character varying(255),
+    validdate date,
+    noepr integer,
+    tddoc integer,
+    timingreport integer,
+    special_cup_points integer,
+    skip_wcsl integer,
+    validforowg integer,
     lastupdate timestamp without time zone
 );
 
 
 --
--- Name: a_racejp; Type: TABLE; Schema: public; Owner: fislocal
+-- Name: a_racejp; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.a_racejp (
@@ -137,12 +259,13 @@ CREATE TABLE public.a_racejp (
     timingreport integer,
     special_cup_points integer,
     skip_wcsl integer,
-    lastupdate timestamp without time zone
+    lastupdate timestamp without time zone,
+    validforowg character varying(255)
 );
 
 
 --
--- Name: a_racenk; Type: TABLE; Schema: public; Owner: fislocal
+-- Name: a_racenk; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.a_racenk (
@@ -236,8 +359,46 @@ CREATE TABLE public.a_racenk (
     lastupdate timestamp without time zone
 );
 
+
 --
--- Name: a_resultjp; Type: TABLE; Schema: public; Owner: fislocal
+-- Name: a_resultcc; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.a_resultcc (
+    recid integer,
+    raceid integer,
+    competitorid integer,
+    status character varying(255),
+    reason character varying(255),
+    "position" numeric(10,5),
+    pf integer,
+    status2 character varying(255),
+    bib numeric(10,5),
+    bibcolor character varying(255),
+    fiscode integer,
+    competitorname character varying(255),
+    nationcode character varying(255),
+    stage character varying(255),
+    level character varying(255),
+    heat character varying(255),
+    timer1 character varying(255),
+    timer2 character varying(255),
+    timer3 character varying(255),
+    timetot character varying(255),
+    valid numeric(10,5),
+    racepoints numeric(10,5),
+    cuppoints numeric(10,5),
+    bonustime character varying(255),
+    bonuscuppoints character varying(255),
+    version character varying(255),
+    rg1 character varying(255),
+    rg2 character varying(255),
+    lastupdate timestamp without time zone
+);
+
+
+--
+-- Name: a_resultjp; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.a_resultjp (
@@ -259,76 +420,77 @@ CREATE TABLE public.a_resultjp (
     j3r1 character varying(255),
     j4r1 character varying(255),
     j5r1 character varying(255),
-    speedr1 numeric(10,5),
+    speedr1 character varying(255),
     distr1 character varying(255),
-    disptsr1 numeric(10,5),
-    judptsr1 numeric(10,5),
+    disptsr1 character varying(255),
+    judptsr1 character varying(255),
     totrun1 character varying(255),
-    posr1 integer,
+    posr1 character varying(255),
     statusr1 character varying(255),
     j1r2 character varying(255),
     j2r2 character varying(255),
     j3r2 character varying(255),
     j4r2 character varying(255),
     j5r2 character varying(255),
-    speedr2 numeric(10,5),
+    speedr2 character varying(255),
     distr2 character varying(255),
-    disptsr2 numeric(10,5),
-    judptsr2 numeric(10,5),
+    disptsr2 character varying(255),
+    judptsr2 character varying(255),
     totrun2 character varying(255),
-    posr2 integer,
+    posr2 character varying(255),
     statusr2 character varying(255),
     j1r3 character varying(255),
     j2r3 character varying(255),
     j3r3 character varying(255),
     j4r3 character varying(255),
     j5r3 character varying(255),
-    speedr3 numeric(10,5),
+    speedr3 character varying(255),
     distr3 character varying(255),
-    disptsr3 numeric(10,5),
-    judptsr3 numeric(10,5),
+    disptsr3 character varying(255),
+    judptsr3 character varying(255),
     totrun3 character varying(255),
-    posr3 integer,
+    posr3 character varying(255),
     statusr3 character varying(255),
     j1r4 character varying(255),
     j2r4 character varying(255),
     j3r4 character varying(255),
     j4r4 character varying(255),
     j5r4 character varying(255),
-    speedr4 numeric(10,5),
+    speedr4 character varying(255),
     distr4 character varying(255),
-    disptsr4 numeric(10,5),
-    judptsr4 numeric(10,5),
-    gater1 integer,
-    gater2 integer,
-    gater3 integer,
-    gater4 integer,
-    gateptsr1 numeric(10,5),
-    gateptsr2 numeric(10,5),
-    gateptsr3 numeric(10,5),
-    gateptsr4 numeric(10,5),
-    windr1 numeric(10,5),
-    windr2 numeric(10,5),
-    windr3 numeric(10,5),
-    windr4 numeric(10,5),
-    windptsr1 numeric(10,5),
-    windptsr2 numeric(10,5),
-    windptsr3 numeric(10,5),
-    windptsr4 numeric(10,5),
+    disptsr4 character varying(255),
+    judptsr4 character varying(255),
+    gater1 character varying(255),
+    gater2 character varying(255),
+    gater3 character varying(255),
+    gater4 character varying(255),
+    gateptsr1 character varying(255),
+    gateptsr2 character varying(255),
+    gateptsr3 character varying(255),
+    gateptsr4 character varying(255),
+    windr1 character varying(255),
+    windr2 character varying(255),
+    windr3 character varying(255),
+    windr4 character varying(255),
+    windptsr1 character varying(255),
+    windptsr2 character varying(255),
+    windptsr3 character varying(255),
+    windptsr4 character varying(255),
     reason character varying(255),
     totrun4 character varying(255),
-    tot numeric(10,5),
+    tot character varying(255),
     valid integer,
     racepoints numeric(10,5),
     cuppoints numeric(10,5),
     version character varying(255),
     lastupdate timestamp without time zone,
-    posr4 integer,
+    posr4 character varying(255),
     statusr4 character varying(255)
 );
 
+
 --
--- Name: a_resultnk; Type: TABLE; Schema: public; Owner: fislocal
+-- Name: a_resultnk; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.a_resultnk (
@@ -353,39 +515,39 @@ CREATE TABLE public.a_resultnk (
     j3r1 character varying(255),
     j4r1 character varying(255),
     j5r1 character varying(255),
-    speedr1 numeric(10,5),
-    distr1 numeric(10,5),
-    disptsr1 numeric(10,5),
-    judptsr1 numeric(10,5),
-    gater1 integer,
-    gateptsr1 numeric(10,5),
-    windr1 numeric(10,5),
-    windptsr1 numeric(10,5),
-    totrun1 numeric(10,5),
-    posr1 integer,
+    speedr1 character varying(255),
+    distr1 character varying(255),
+    disptsr1 character varying(255),
+    judptsr1 character varying(255),
+    gater1 character varying(255),
+    gateptsr1 character varying(255),
+    windr1 character varying(255),
+    windptsr1 character varying(255),
+    totrun1 character varying(255),
+    posr1 character varying(255),
     statusr1 character varying(255),
     j1r2 character varying(255),
     j2r2 character varying(255),
     j3r2 character varying(255),
     j4r2 character varying(255),
     j5r2 character varying(255),
-    speedr2 numeric(10,5),
+    speedr2 character varying(255),
     distr2 character varying(255),
-    disptsr2 numeric(10,5),
-    judptsr2 numeric(10,5),
-    gater2 integer,
-    gateptsr2 numeric(10,5),
-    windr2 numeric(10,5),
-    windptsr2 numeric(10,5),
+    disptsr2 character varying(255),
+    judptsr2 character varying(255),
+    gater2 character varying(255),
+    gateptsr2 character varying(255),
+    windr2 character varying(255),
+    windptsr2 character varying(255),
     totrun2 character varying(255),
-    posr2 integer,
+    posr2 character varying(255),
     statusr2 character varying(255),
-    pointsjump numeric(10,5),
+    pointsjump character varying(255),
     behindjump character varying(255),
-    posjump integer,
+    posjump character varying(255),
     timecc character varying(255),
     timeccint character varying(255),
-    poscc integer,
+    poscc character varying(255),
     starttime character varying(255),
     statuscc character varying(255),
     totbehind character varying(255),
@@ -397,3 +559,9 @@ CREATE TABLE public.a_resultnk (
     version character varying(255),
     lastupdate timestamp without time zone
 );
+
+
+--
+-- PostgreSQL database dump complete
+--
+

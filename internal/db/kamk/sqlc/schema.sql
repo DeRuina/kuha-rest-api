@@ -26,13 +26,13 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.injuries (
-    competitor_id integer,
-    injury_type integer,
+    competitor_id integer NOT NULL,
+    injury_type integer NOT NULL,
     severity integer,
     pain_level integer,
     description character varying(255),
-    date_start timestamp without time zone,
-    status integer,
+    date_start timestamp without time zone NOT NULL DEFAULT NOW(),
+    status integer NOT NULL DEFAULT 0,
     date_end timestamp without time zone,
     injury_id integer,
     meta character varying(255)
@@ -44,11 +44,11 @@ CREATE TABLE public.injuries (
 --
 
 CREATE TABLE public.querys (
-    competitor_id integer,
+    competitor_id integer NOT NULL,
     query_type integer,
     answers character varying(255),
     comment character varying(255),
-    "timestamp" timestamp without time zone,
+    "timestamp" timestamp without time zone NOT NULL,
     meta character varying(255)
 );
 

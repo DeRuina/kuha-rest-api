@@ -8,6 +8,7 @@ package kamksqlc
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 const getActiveInjuriesByUser = `-- name: GetActiveInjuriesByUser :many
@@ -28,7 +29,7 @@ WHERE competitor_id = $1
 ORDER BY date_start DESC
 `
 
-func (q *Queries) GetActiveInjuriesByUser(ctx context.Context, competitorID sql.NullInt32) ([]Injury, error) {
+func (q *Queries) GetActiveInjuriesByUser(ctx context.Context, competitorID int32) ([]Injury, error) {
 	rows, err := q.query(ctx, q.getActiveInjuriesByUserStmt, getActiveInjuriesByUser, competitorID)
 	if err != nil {
 		return nil, err
@@ -68,7 +69,7 @@ FROM public.injuries
 WHERE competitor_id = $1
 `
 
-func (q *Queries) GetMaxInjuryIDForUser(ctx context.Context, competitorID sql.NullInt32) (int32, error) {
+func (q *Queries) GetMaxInjuryIDForUser(ctx context.Context, competitorID int32) (int32, error) {
 	row := q.queryRow(ctx, q.getMaxInjuryIDForUserStmt, getMaxInjuryIDForUser, competitorID)
 	var id int32
 	err := row.Scan(&id)
@@ -88,7 +89,7 @@ WHERE competitor_id = $1
 ORDER BY "timestamp" DESC
 `
 
-func (q *Queries) GetQuestionnairesByUser(ctx context.Context, competitorID sql.NullInt32) ([]Query, error) {
+func (q *Queries) GetQuestionnairesByUser(ctx context.Context, competitorID int32) ([]Query, error) {
 	rows, err := q.query(ctx, q.getQuestionnairesByUserStmt, getQuestionnairesByUser, competitorID)
 	if err != nil {
 		return nil, err
@@ -127,8 +128,8 @@ INSERT INTO public.injuries (
 `
 
 type InsertInjuryParams struct {
-	CompetitorID sql.NullInt32
-	InjuryType   sql.NullInt32
+	CompetitorID int32
+	InjuryType   int32
 	Severity     sql.NullInt32
 	PainLevel    sql.NullInt32
 	Description  sql.NullString
@@ -158,7 +159,7 @@ INSERT INTO public.querys (
 `
 
 type InsertQuestionnaireParams struct {
-	CompetitorID sql.NullInt32
+	CompetitorID int32
 	QueryType    sql.NullInt32
 	Answers      sql.NullString
 	Comment      sql.NullString
@@ -187,10 +188,10 @@ WHERE competitor_id = $1
 `
 
 type IsQuizDoneTodayParams struct {
-	CompetitorID sql.NullInt32
+	CompetitorID int32
 	QueryType    sql.NullInt32
-	Timestamp    sql.NullTime
-	Timestamp_2  sql.NullTime
+	Timestamp    time.Time
+	Timestamp_2  time.Time
 }
 
 func (q *Queries) IsQuizDoneToday(ctx context.Context, arg IsQuizDoneTodayParams) ([]Query, error) {
@@ -238,7 +239,7 @@ WHERE injury_id = $1
 
 type MarkInjuryRecoveredByIDParams struct {
 	InjuryID     sql.NullInt32
-	CompetitorID sql.NullInt32
+	CompetitorID int32
 }
 
 func (q *Queries) MarkInjuryRecoveredByID(ctx context.Context, arg MarkInjuryRecoveredByIDParams) error {
@@ -255,8 +256,8 @@ WHERE competitor_id = $1
 `
 
 type UpdateQuestionnaireByTimestampParams struct {
-	CompetitorID sql.NullInt32
-	Timestamp    sql.NullTime
+	CompetitorID int32
+	Timestamp    time.Time
 	Answers      sql.NullString
 	Comment      sql.NullString
 }

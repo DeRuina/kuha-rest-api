@@ -6,27 +6,28 @@ package kamksqlc
 
 import (
 	"database/sql"
+	"time"
 )
 
 type Injury struct {
-	CompetitorID sql.NullInt32
-	InjuryType   sql.NullInt32
+	CompetitorID int32
+	InjuryType   int32
 	Severity     sql.NullInt32
 	PainLevel    sql.NullInt32
 	Description  sql.NullString
-	DateStart    sql.NullTime
-	Status       sql.NullInt32
+	DateStart    time.Time
+	Status       int32
 	DateEnd      sql.NullTime
 	InjuryID     sql.NullInt32
 	Meta         sql.NullString
 }
 
 type Query struct {
-	CompetitorID sql.NullInt32
+	CompetitorID int32
 	QueryType    sql.NullInt32
 	Answers      sql.NullString
 	Comment      sql.NullString
-	Timestamp    sql.NullTime
+	Timestamp    time.Time
 	Meta         sql.NullString
 }
 

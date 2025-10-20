@@ -35,3 +35,29 @@ type KamkInjuriesListResponse struct {
 type KamkMaxInjuryIDResponse struct {
 	ID int32 `json:"id" example:"3"`
 }
+
+type KamkAddQuestionnaireRequest struct {
+	UserID    string  `json:"user_id" example:"27353728"`
+	QueryType *int32  `json:"query_type,omitempty" example:"1"`
+	Answers   *string `json:"answers,omitempty" example:"{\"mood\":7,\"sleep\":8}"`
+	Comment   *string `json:"comment,omitempty" example:"Felt good this morning"`
+	Meta      *string `json:"meta,omitempty" example:"build=ios,v=2.3.1"`
+}
+
+type KamkQuestionnaireItem struct {
+	CompetitorID int32   `json:"competitor_id" example:"27353728"`
+	QueryType    *int32  `json:"query_type,omitempty" example:"1"`
+	Answers      *string `json:"answers,omitempty" example:"{\"mood\":7,\"sleep\":8}"`
+	Comment      *string `json:"comment,omitempty" example:"Felt good this morning"`
+	Timestamp    string  `json:"timestamp" example:"2025-10-20T09:30:00Z"`
+	Meta         *string `json:"meta,omitempty" example:"build=ios,v=2.3.1"`
+}
+
+type KamkQuestionnairesListResponse struct {
+	Questionnaires []KamkQuestionnaireItem `json:"questionnaires"`
+}
+
+type KamkUpdateQuestionnaireBody struct {
+	Answers string  `json:"answers" example:"{\"mood\":5,\"sleep\":6}"`
+	Comment *string `json:"comment,omitempty" example:"A bit tired today"`
+}

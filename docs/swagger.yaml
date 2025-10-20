@@ -657,6 +657,24 @@ definitions:
         example: "27353728"
         type: string
     type: object
+  swagger.KamkAddQuestionnaireRequest:
+    properties:
+      answers:
+        example: '{"mood":7,"sleep":8}'
+        type: string
+      comment:
+        example: Felt good this morning
+        type: string
+      meta:
+        example: build=ios,v=2.3.1
+        type: string
+      query_type:
+        example: 1
+        type: integer
+      user_id:
+        example: "27353728"
+        type: string
+    type: object
   swagger.KamkInjuriesListResponse:
     properties:
       injuries:
@@ -711,6 +729,43 @@ definitions:
       id:
         example: 3
         type: integer
+    type: object
+  swagger.KamkQuestionnaireItem:
+    properties:
+      answers:
+        example: '{"mood":7,"sleep":8}'
+        type: string
+      comment:
+        example: Felt good this morning
+        type: string
+      competitor_id:
+        example: 27353728
+        type: integer
+      meta:
+        example: build=ios,v=2.3.1
+        type: string
+      query_type:
+        example: 1
+        type: integer
+      timestamp:
+        example: "2025-10-20T09:30:00Z"
+        type: string
+    type: object
+  swagger.KamkQuestionnairesListResponse:
+    properties:
+      questionnaires:
+        items:
+          $ref: '#/definitions/swagger.KamkQuestionnaireItem'
+        type: array
+    type: object
+  swagger.KamkUpdateQuestionnaireBody:
+    properties:
+      answers:
+        example: '{"mood":5,"sleep":6}'
+        type: string
+      comment:
+        example: A bit tired today
+        type: string
     type: object
   swagger.KlabCustomer:
     properties:
@@ -3727,6 +3782,198 @@ paths:
       summary: Mark injury recovered
       tags:
       - KAMK - Injuries
+  /kamk/is-quiz-done:
+    get:
+      consumes:
+      - application/json
+      description: Return the quiz if it was done today
+      parameters:
+      - description: sportti_id
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Quiz type
+        in: query
+        name: quiz_type
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.KamkQuestionnairesListResponse'
+        "204":
+          description: 'No Content: no rows today'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Check if certain quiz is due for the user. Used for daily quizzes.
+      tags:
+      - KAMK - Queries
+  /kamk/questionnaire:
+    get:
+      consumes:
+      - application/json
+      description: Returns questionnaires for a competitor ordered by timestamp DESC
+      parameters:
+      - description: sportti_id
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.KamkQuestionnairesListResponse'
+        "204":
+          description: 'No Content: no rows'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: List questionnaires
+      tags:
+      - KAMK - Queries
+    post:
+      consumes:
+      - application/json
+      description: Inserts a questionnaire row for a competitor (timestamp=NOW())
+      parameters:
+      - description: Questionnaire payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.KamkAddQuestionnaireRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: "Created: \tQuery stored (no content)"
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Create questionnaire entry
+      tags:
+      - KAMK - Queries
+  /kamk/update-quiz:
+    post:
+      consumes:
+      - application/json
+      description: Updates answers/comment for the exact timestamp row for a competitor
+      parameters:
+      - description: sportti_id
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Timestamp (RFC3339)
+        in: query
+        name: timestamp
+        required: true
+        type: string
+      - description: Update payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.KamkUpdateQuestionnaireBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'OK: updated'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Update questionnaire by timestamp
+      tags:
+      - KAMK - Queries
   /klab/data:
     get:
       consumes:

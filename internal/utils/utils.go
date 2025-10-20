@@ -350,6 +350,15 @@ func ParsePositiveInt32(s string) (int32, error) {
 	return int32(v), nil
 }
 
+// utils/parse.go (or wherever ParsePositiveInt32 lives)
+func ParseNonNegativeInt32(s string) (int32, error) {
+	v, err := strconv.ParseInt(s, 10, 32)
+	if err != nil || v < 0 {
+		return 0, ErrInvalidParameter
+	}
+	return int32(v), nil
+}
+
 // ParseSporttiID trims and validates a numeric sportti_id.
 func ParseSporttiID(s string) (string, error) {
 	s = strings.TrimSpace(s)
@@ -444,4 +453,17 @@ func TimePtrOrNil(t sql.NullTime) *time.Time {
 		return &t.Time
 	}
 	return nil
+}
+
+func ParseRFC3339MinuteOrSecond(s string) (time.Time, error) {
+	// try full RFC3339 first (with seconds)
+	if t, err := time.Parse(time.RFC3339, s); err == nil {
+		return t.Truncate(time.Minute).UTC(), nil
+	}
+	// then try without seconds
+	const noSec = "2006-01-02T15:04Z07:00"
+	if t, err := time.Parse(noSec, s); err == nil {
+		return t.Truncate(time.Minute).UTC(), nil
+	}
+	return time.Time{}, ErrInvalidTimeStamp
 }

@@ -202,12 +202,19 @@ func (app *api) mount() http.Handler {
 				r.Route("/kamk", func(r chi.Router) {
 					// Register handlers
 					injuriesHandler := kamkapi.NewInjuriesHandler(app.store.KAMK.Injuries(), app.cacheStorage)
+					queriesHandler := kamkapi.NewQueriesHandler(app.store.KAMK.Queries(), app.cacheStorage)
 
 					// injury routes
 					r.Post("/injury", injuriesHandler.AddInjury)
 					r.Post("/injury-recovered", injuriesHandler.MarkRecovered)
 					r.Get("/injury", injuriesHandler.GetActive)
 					r.Get("/injury-id", injuriesHandler.GetMaxID)
+
+					// questionnaire routes
+					r.Post("/questionnaire", queriesHandler.AddQuestionnaire)
+					r.Get("/questionnaire", queriesHandler.GetQuestionnaires)
+					r.Get("/is-quiz-done", queriesHandler.IsQuizDoneToday)
+					r.Post("/update-quiz", queriesHandler.UpdateQuestionnaireByTimestamp)
 				})
 			} else {
 				logger.Logger.Warn("kamk routes disabled: database not connected")

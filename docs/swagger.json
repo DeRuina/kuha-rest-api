@@ -969,6 +969,303 @@
                 }
             }
         },
+        "/kamk/is-quiz-done": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Return the quiz if it was done today",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "KAMK - Queries"
+                ],
+                "summary": "Check if certain quiz is due for the user. Used for daily quizzes.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "sportti_id",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Quiz type",
+                        "name": "quiz_type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.KamkQuestionnairesListResponse"
+                        }
+                    },
+                    "204": {
+                        "description": "No Content: no rows today"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/kamk/questionnaire": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns questionnaires for a competitor ordered by timestamp DESC",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "KAMK - Queries"
+                ],
+                "summary": "List questionnaires",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "sportti_id",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.KamkQuestionnairesListResponse"
+                        }
+                    },
+                    "204": {
+                        "description": "No Content: no rows"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Inserts a questionnaire row for a competitor (timestamp=NOW())",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "KAMK - Queries"
+                ],
+                "summary": "Create questionnaire entry",
+                "parameters": [
+                    {
+                        "description": "Questionnaire payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/swagger.KamkAddQuestionnaireRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created: \tQuery stored (no content)"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/kamk/update-quiz": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Updates answers/comment for the exact timestamp row for a competitor",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "KAMK - Queries"
+                ],
+                "summary": "Update questionnaire by timestamp",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "sportti_id",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Timestamp (RFC3339)",
+                        "name": "timestamp",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Update payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/swagger.KamkUpdateQuestionnaireBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK: updated"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.NotFoundResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/klab/data": {
             "get": {
                 "security": [
@@ -7216,6 +7513,31 @@
                 }
             }
         },
+        "swagger.KamkAddQuestionnaireRequest": {
+            "type": "object",
+            "properties": {
+                "answers": {
+                    "type": "string",
+                    "example": "{\"mood\":7,\"sleep\":8}"
+                },
+                "comment": {
+                    "type": "string",
+                    "example": "Felt good this morning"
+                },
+                "meta": {
+                    "type": "string",
+                    "example": "build=ios,v=2.3.1"
+                },
+                "query_type": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "27353728"
+                }
+            }
+        },
         "swagger.KamkInjuriesListResponse": {
             "type": "object",
             "properties": {
@@ -7291,6 +7613,59 @@
                 "id": {
                     "type": "integer",
                     "example": 3
+                }
+            }
+        },
+        "swagger.KamkQuestionnaireItem": {
+            "type": "object",
+            "properties": {
+                "answers": {
+                    "type": "string",
+                    "example": "{\"mood\":7,\"sleep\":8}"
+                },
+                "comment": {
+                    "type": "string",
+                    "example": "Felt good this morning"
+                },
+                "competitor_id": {
+                    "type": "integer",
+                    "example": 27353728
+                },
+                "meta": {
+                    "type": "string",
+                    "example": "build=ios,v=2.3.1"
+                },
+                "query_type": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "timestamp": {
+                    "type": "string",
+                    "example": "2025-10-20T09:30:00Z"
+                }
+            }
+        },
+        "swagger.KamkQuestionnairesListResponse": {
+            "type": "object",
+            "properties": {
+                "questionnaires": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.KamkQuestionnaireItem"
+                    }
+                }
+            }
+        },
+        "swagger.KamkUpdateQuestionnaireBody": {
+            "type": "object",
+            "properties": {
+                "answers": {
+                    "type": "string",
+                    "example": "{\"mood\":5,\"sleep\":6}"
+                },
+                "comment": {
+                    "type": "string",
+                    "example": "A bit tired today"
                 }
             }
         },

@@ -3,6 +3,7 @@ package kamk
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 type Injuries interface {
@@ -12,10 +13,18 @@ type Injuries interface {
 	GetMaxInjuryID(ctx context.Context, userID string) (int32, error)
 }
 
+type Queries interface {
+	AddQuestionnaire(ctx context.Context, userID string, in QuestionnaireInput) error
+	GetQuestionnaires(ctx context.Context, userID string) ([]Questionnaire, error)
+	IsQuizDoneToday(ctx context.Context, userID string, queryType int32) ([]Questionnaire, error)
+	UpdateQuestionnaireByTimestamp(ctx context.Context, userID string, ts time.Time, answers string, comment *string) error
+}
+
 // KAMKStorage
 type KAMKStorage struct {
 	db       *sql.DB
 	injuries Injuries
+	queries  Queries
 }
 
 // Methods
@@ -27,10 +36,15 @@ func (s *KAMKStorage) Injuries() Injuries {
 	return s.injuries
 }
 
+func (s *KAMKStorage) Queries() Queries {
+	return s.queries
+}
+
 // NewKAMKStorage creates a new KAMKStorage instance
 func NewKAMKStorage(db *sql.DB) *KAMKStorage {
 	return &KAMKStorage{
 		db:       db,
 		injuries: &InjuriesStore{db: db},
+		queries:  &QueriesStore{db: db},
 	}
 }

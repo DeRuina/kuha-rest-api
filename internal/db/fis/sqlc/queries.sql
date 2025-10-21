@@ -1,7 +1,3 @@
--- ================================
--- 1) ATHLETE + NATIONS
--- ================================
-
 -- name: GetAthletesBySector :many
 SELECT Firstname, Lastname, Fiscode
 FROM A_competitor
@@ -13,12 +9,6 @@ SELECT DISTINCT NationCode
 FROM A_competitor
 WHERE SectorCode = $1
 ORDER BY NationCode ASC;
-
-
--- ================================
--- 2) SEASON / DISCIPLINE / CATEGORY CODES
--- (JP, NK existed; add CC)
--- ================================
 
 -- name: GetSkiJumpingSeasons :many
 SELECT DISTINCT SeasonCode
@@ -65,11 +55,6 @@ SELECT DISTINCT CatCode
 FROM A_raceCC
 ORDER BY CatCode ASC;
 
-
--- ================================
--- 3) ATHLETE -> COMPETITOR helpers
--- ================================
-
 -- name: GetCompetitorIDByFiscodeNK :one
 SELECT CompetitorID
 FROM A_competitor
@@ -85,11 +70,6 @@ SELECT CompetitorID
 FROM A_competitor
 WHERE Fiscode = $1 AND SectorCode = 'CC';
 
-
--- ================================
--- 4) ATHLETE RESULTS (NK/JP existed; add CC)
---     Accept many Disciplinecode, Seasoncode, Catcode
--- ================================
 
 -- name: GetAthleteResultsNK :many
 SELECT 
@@ -174,11 +154,6 @@ WHERE rCC.CompetitorID = $1
   AND ($4::text[] IS NULL OR aCC.CatCode        = ANY($4))
 ORDER BY aCC.RaceDate;
 
-
--- ================================
--- 5) RACE LISTS (accept many filters)
--- ================================
-
 -- name: GetRacesNK :many
 SELECT *
 FROM A_raceNK
@@ -203,10 +178,6 @@ WHERE ($1::int[]  IS NULL OR SeasonCode     = ANY($1))
   AND ($3::text[] IS NULL OR CatCode        = ANY($3))
 ORDER BY RaceID;
 
-
--- ================================
--- 6) RACE RESULTS (single raceid)
--- ================================
 
 -- name: GetRaceResultsNKByRaceID :many
 SELECT 
@@ -262,10 +233,6 @@ WHERE RaceID = $1
 ORDER BY RecID;
 
 
--- ==========================================================
--- 7) “BY COMPETITORS” (JP) – keep existing helper
--- ==========================================================
-
 -- name: GetCompetitorIDsByGenderAndNationJP :many
 SELECT CompetitorID
 FROM A_competitor
@@ -302,10 +269,6 @@ WHERE rJP.CompetitorID = ANY($1::int4[])
   AND ($4::text[] IS NULL OR aJP.CatCode        = ANY($4))
 ORDER BY aJP.RaceDate;
 
-
--- ================================
--- 8) ADMIN – LAST ROW
--- ================================
 
 -- name: GetLastRowCompetitor :one
 SELECT *
@@ -350,11 +313,6 @@ ORDER BY raceid DESC
 LIMIT 1;
 
 
--- ================================
--- 9) ADMIN – COMPETITOR CRUD
--- (lean column set; extend as needed)
--- ================================
-
 -- name: InsertCompetitor :exec
 INSERT INTO a_competitor (
   competitorid, personid, ipcid, type, sectorcode, fiscode,
@@ -398,12 +356,6 @@ DELETE FROM a_competitor
 WHERE competitorid = $1;
 
 
--- ================================
--- 10) ADMIN – RACE CRUD (CC / JP / NK)
---     (lean columns + dates; extend when needed)
--- ================================
-
--- CC
 -- name: InsertRaceCC :exec
 INSERT INTO a_racecc (
   raceid, eventid, seasoncode, racecodex,
@@ -441,7 +393,6 @@ WHERE raceid = $1;
 DELETE FROM a_racecc
 WHERE raceid = $1;
 
--- JP
 -- name: InsertRaceJP :exec
 INSERT INTO a_racejp (
   raceid, eventid, seasoncode, racecodex,
@@ -479,7 +430,6 @@ WHERE raceid = $1;
 DELETE FROM a_racejp
 WHERE raceid = $1;
 
--- NK
 -- name: InsertRaceNK :exec
 INSERT INTO a_racenk (
   raceid, eventid, seasoncode, racecodex,
@@ -518,12 +468,6 @@ DELETE FROM a_racenk
 WHERE raceid = $1;
 
 
--- ================================
--- 11) ADMIN – RESULT CRUD (CC / JP / NK)
---     (lean, but aligned with docs’ core fields)
--- ================================
-
--- CC
 -- name: InsertResultCC :exec
 INSERT INTO a_resultcc (
   recid, raceid, competitorid, status, reason,
@@ -577,7 +521,6 @@ WHERE recid = $1;
 DELETE FROM a_resultcc
 WHERE recid = $1;
 
--- JP
 -- name: InsertResultJP :exec
 INSERT INTO a_resultjp (
   recid, raceid, competitorid, status, status2, "position", bib,
@@ -624,7 +567,6 @@ WHERE recid = $1;
 DELETE FROM a_resultjp
 WHERE recid = $1;
 
--- NK
 -- name: InsertResultNK :exec
 INSERT INTO a_resultnk (
   recid, raceid, competitorid, status, status2, reason, "position", pf, bib, bibcolor,
@@ -642,7 +584,7 @@ INSERT INTO a_resultnk (
   $26,$27,$28,$29,$30,$31,$32,
   $33,$34,$35,$36,$37,$38,$39,$40,$41,
   $42,$43,$44,$45,$46,$47,$48,
-  $49,$50,$51,$52,$53::int,$54,$55,$56,$57,$58,$59,
+  $49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,
   $60,$61,$62,$63,$64
 );
 
@@ -654,7 +596,7 @@ UPDATE a_resultnk SET
   gater1=$26, gateptsr1=$27, windr1=$28, windptsr1=$29, totrun1=$30, posr1=$31, statusr1=$32,
   j1r2=$33, j2r2=$34, j3r2=$35, j4r2=$36, j5r2=$37, speedr2=$38, distr2=$39, disptsr2=$40, judptsr2=$41,
   gater2=$42, gateptsr2=$43, windr2=$44, windptsr2=$45, totrun2=$46, posr2=$47, statusr2=$48,
-  pointsjump=$49, behindjump=$50, posjump=$51, timecc=$52, timeccint=$53::int, poscc=$54, starttime=$55, statuscc=$56, totbehind=$57, timetot=$58, timetotint=$59,
+  pointsjump=$49, behindjump=$50, posjump=$51, timecc=$52, timeccint=$53, poscc=$54, starttime=$55, statuscc=$56, totbehind=$57, timetot=$58, timetotint=$59,
   valid=$60, racepoints=$61, cuppoints=$62, version=$63, lastupdate=$64
 WHERE recid = $1;
 

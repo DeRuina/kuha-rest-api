@@ -276,7 +276,6 @@ func (q *Queries) GetAthleteResultsJP(ctx context.Context, arg GetAthleteResults
 }
 
 const getAthleteResultsNK = `-- name: GetAthleteResultsNK :many
-
 SELECT 
     rNK.RecID,
     rNK.RaceID,
@@ -341,11 +340,6 @@ type GetAthleteResultsNKRow struct {
 	Pointsjump     sql.NullString
 }
 
-// ================================
-//  4. ATHLETE RESULTS (NK/JP existed; add CC)
-//     Accept many Disciplinecode, Seasoncode, Catcode
-//
-// ================================
 func (q *Queries) GetAthleteResultsNK(ctx context.Context, arg GetAthleteResultsNKParams) ([]GetAthleteResultsNKRow, error) {
 	rows, err := q.query(ctx, q.getAthleteResultsNKStmt, getAthleteResultsNK,
 		arg.Competitorid,
@@ -398,7 +392,6 @@ func (q *Queries) GetAthleteResultsNK(ctx context.Context, arg GetAthleteResults
 }
 
 const getAthletesBySector = `-- name: GetAthletesBySector :many
-
 SELECT Firstname, Lastname, Fiscode
 FROM A_competitor
 WHERE SectorCode = $1
@@ -411,9 +404,6 @@ type GetAthletesBySectorRow struct {
 	Fiscode   sql.NullInt32
 }
 
-// ================================
-// 1) ATHLETE + NATIONS
-// ================================
 func (q *Queries) GetAthletesBySector(ctx context.Context, sectorcode sql.NullString) ([]GetAthletesBySectorRow, error) {
 	rows, err := q.query(ctx, q.getAthletesBySectorStmt, getAthletesBySector, sectorcode)
 	if err != nil {
@@ -464,15 +454,11 @@ func (q *Queries) GetCompetitorIDByFiscodeJP(ctx context.Context, fiscode sql.Nu
 }
 
 const getCompetitorIDByFiscodeNK = `-- name: GetCompetitorIDByFiscodeNK :one
-
 SELECT CompetitorID
 FROM A_competitor
 WHERE Fiscode = $1 AND SectorCode = 'NK'
 `
 
-// ================================
-// 3) ATHLETE -> COMPETITOR helpers
-// ================================
 func (q *Queries) GetCompetitorIDByFiscodeNK(ctx context.Context, fiscode sql.NullInt32) (sql.NullInt32, error) {
 	row := q.queryRow(ctx, q.getCompetitorIDByFiscodeNKStmt, getCompetitorIDByFiscodeNK, fiscode)
 	var competitorid sql.NullInt32
@@ -481,7 +467,6 @@ func (q *Queries) GetCompetitorIDByFiscodeNK(ctx context.Context, fiscode sql.Nu
 }
 
 const getCompetitorIDsByGenderAndNationJP = `-- name: GetCompetitorIDsByGenderAndNationJP :many
-
 SELECT CompetitorID
 FROM A_competitor
 WHERE Gender = $1 AND NationCode = $2 AND SectorCode = 'JP'
@@ -492,9 +477,6 @@ type GetCompetitorIDsByGenderAndNationJPParams struct {
 	Nationcode sql.NullString
 }
 
-// ==========================================================
-// 7) “BY COMPETITORS” (JP) – keep existing helper
-// ==========================================================
 func (q *Queries) GetCompetitorIDsByGenderAndNationJP(ctx context.Context, arg GetCompetitorIDsByGenderAndNationJPParams) ([]sql.NullInt32, error) {
 	rows, err := q.query(ctx, q.getCompetitorIDsByGenderAndNationJPStmt, getCompetitorIDsByGenderAndNationJP, arg.Gender, arg.Nationcode)
 	if err != nil {
@@ -606,16 +588,12 @@ func (q *Queries) GetCrossCountrySeasons(ctx context.Context) ([]sql.NullInt32, 
 }
 
 const getLastRowCompetitor = `-- name: GetLastRowCompetitor :one
-
 SELECT competitorid, personid, ipcid, type, sectorcode, fiscode, lastname, firstname, gender, birthdate, nationcode, nationalcode, skiclub, association, status, status_old, status_by, status_date, statusnextlist, alternatenamecheck, fee, dateofcreation, createdby, injury, version, compidmssql, carving, photo, notallowed, natteam, tragroup, published, doped, team, photo_big, data, lastupdateby, disciplines, lastupdate, deletedat, categorycode, classname, classcode
 FROM a_competitor
 ORDER BY competitorid DESC
 LIMIT 1
 `
 
-// ================================
-// 8) ADMIN – LAST ROW
-// ================================
 func (q *Queries) GetLastRowCompetitor(ctx context.Context) (ACompetitor, error) {
 	row := q.queryRow(ctx, q.getLastRowCompetitorStmt, getLastRowCompetitor)
 	var i ACompetitor
@@ -1450,7 +1428,6 @@ func (q *Queries) GetRaceResultsJPByRaceID(ctx context.Context, raceid sql.NullI
 }
 
 const getRaceResultsNKByRaceID = `-- name: GetRaceResultsNKByRaceID :many
-
 SELECT 
     RecID,
     RaceID,
@@ -1486,9 +1463,6 @@ type GetRaceResultsNKByRaceIDRow struct {
 	Timetotint sql.NullInt32
 }
 
-// ================================
-// 6) RACE RESULTS (single raceid)
-// ================================
 func (q *Queries) GetRaceResultsNKByRaceID(ctx context.Context, raceid sql.NullInt32) ([]GetRaceResultsNKByRaceIDRow, error) {
 	rows, err := q.query(ctx, q.getRaceResultsNKByRaceIDStmt, getRaceResultsNKByRaceID, raceid)
 	if err != nil {
@@ -1781,7 +1755,6 @@ func (q *Queries) GetRacesJP(ctx context.Context, arg GetRacesJPParams) ([]ARace
 }
 
 const getRacesNK = `-- name: GetRacesNK :many
-
 SELECT raceid, eventid, seasoncode, racecodex, disciplineid, disciplinecode, catcode, catcode2, catcode3, catcode4, gender, racedate, starteventdate, description, place, nationcode, td1id, td1name, td1nation, td1code, td2id, td2name, td2nation, td2code, calstatuscode, procstatuscode, receiveddate, pursuit, masse, relay, distance, hill, style, qualif, finale, homol, webcomment, displaystatus, fisinterncomment, published, validforfispoints, usedfislist, tolist, discforlistcode, calculatedpenalty, appliedpenalty, appliedscala, penscafixed, version, nationraceid, provraceid, msql7evid, mssql7id, results, pdf, topbanner, bottombanner, toplogo, bottomlogo, gallery, indi, team, tabcount, columncount, level, hloc1, hloc2, hloc3, hcet1, hcet2, hcet3, live, livestatus1, livestatus2, livestatus3, liveinfo1, liveinfo2, liveinfo3, passwd, timinglogo, validdate, noepr, tddoc, timingreport, special_cup_points, skip_wcsl, validforowg, lastupdate
 FROM A_raceNK
 WHERE ($1::int[]  IS NULL OR SeasonCode     = ANY($1))
@@ -1796,9 +1769,6 @@ type GetRacesNKParams struct {
 	Column3 []string
 }
 
-// ================================
-// 5) RACE LISTS (accept many filters)
-// ================================
 func (q *Queries) GetRacesNK(ctx context.Context, arg GetRacesNKParams) ([]ARacenk, error) {
 	rows, err := q.query(ctx, q.getRacesNKStmt, getRacesNK, pq.Array(arg.Column1), pq.Array(arg.Column2), pq.Array(arg.Column3))
 	if err != nil {
@@ -2083,16 +2053,11 @@ func (q *Queries) GetSkiJumpingDisciplines(ctx context.Context) ([]sql.NullStrin
 }
 
 const getSkiJumpingSeasons = `-- name: GetSkiJumpingSeasons :many
-
 SELECT DISTINCT SeasonCode
 FROM A_raceJP
 ORDER BY SeasonCode DESC
 `
 
-// ================================
-// 2) SEASON / DISCIPLINE / CATEGORY CODES
-// (JP, NK existed; add CC)
-// ================================
 func (q *Queries) GetSkiJumpingSeasons(ctx context.Context) ([]sql.NullInt32, error) {
 	rows, err := q.query(ctx, q.getSkiJumpingSeasonsStmt, getSkiJumpingSeasons)
 	if err != nil {
@@ -2117,7 +2082,6 @@ func (q *Queries) GetSkiJumpingSeasons(ctx context.Context) ([]sql.NullInt32, er
 }
 
 const insertCompetitor = `-- name: InsertCompetitor :exec
-
 INSERT INTO a_competitor (
   competitorid, personid, ipcid, type, sectorcode, fiscode,
   lastname, firstname, gender, birthdate,
@@ -2156,10 +2120,6 @@ type InsertCompetitorParams struct {
 	Lastupdate   sql.NullTime
 }
 
-// ================================
-// 9) ADMIN – COMPETITOR CRUD
-// (lean column set; extend as needed)
-// ================================
 func (q *Queries) InsertCompetitor(ctx context.Context, arg InsertCompetitorParams) error {
 	_, err := q.exec(ctx, q.insertCompetitorStmt, insertCompetitor,
 		arg.Competitorid,
@@ -2187,7 +2147,6 @@ func (q *Queries) InsertCompetitor(ctx context.Context, arg InsertCompetitorPara
 }
 
 const insertRaceCC = `-- name: InsertRaceCC :exec
-
 INSERT INTO a_racecc (
   raceid, eventid, seasoncode, racecodex,
   disciplineid, disciplinecode, catcode, gender,
@@ -2221,12 +2180,6 @@ type InsertRaceCCParams struct {
 	Lastupdate        sql.NullTime
 }
 
-// ================================
-//  10. ADMIN – RACE CRUD (CC / JP / NK)
-//     (lean columns + dates; extend when needed)
-//
-// ================================
-// CC
 func (q *Queries) InsertRaceCC(ctx context.Context, arg InsertRaceCCParams) error {
 	_, err := q.exec(ctx, q.insertRaceCCStmt, insertRaceCC,
 		arg.Raceid,
@@ -2284,7 +2237,6 @@ type InsertRaceJPParams struct {
 	Lastupdate        sql.NullTime
 }
 
-// JP
 func (q *Queries) InsertRaceJP(ctx context.Context, arg InsertRaceJPParams) error {
 	_, err := q.exec(ctx, q.insertRaceJPStmt, insertRaceJP,
 		arg.Raceid,
@@ -2342,7 +2294,6 @@ type InsertRaceNKParams struct {
 	Lastupdate        sql.NullTime
 }
 
-// NK
 func (q *Queries) InsertRaceNK(ctx context.Context, arg InsertRaceNKParams) error {
 	_, err := q.exec(ctx, q.insertRaceNKStmt, insertRaceNK,
 		arg.Raceid,
@@ -2367,7 +2318,6 @@ func (q *Queries) InsertRaceNK(ctx context.Context, arg InsertRaceNKParams) erro
 }
 
 const insertResultCC = `-- name: InsertResultCC :exec
-
 INSERT INTO a_resultcc (
   recid, raceid, competitorid, status, reason,
   "position", pf, status2, bib, bibcolor,
@@ -2417,12 +2367,6 @@ type InsertResultCCParams struct {
 	Lastupdate     sql.NullTime
 }
 
-// ================================
-//  11. ADMIN – RESULT CRUD (CC / JP / NK)
-//     (lean, but aligned with docs’ core fields)
-//
-// ================================
-// CC
 func (q *Queries) InsertResultCC(ctx context.Context, arg InsertResultCCParams) error {
 	_, err := q.exec(ctx, q.insertResultCCStmt, insertResultCC,
 		arg.Recid,
@@ -2573,7 +2517,6 @@ type InsertResultJPParams struct {
 	Statusr4       sql.NullString
 }
 
-// JP
 func (q *Queries) InsertResultJP(ctx context.Context, arg InsertResultJPParams) error {
 	_, err := q.exec(ctx, q.insertResultJPStmt, insertResultJP,
 		arg.Recid,
@@ -2681,7 +2624,7 @@ INSERT INTO a_resultnk (
   $26,$27,$28,$29,$30,$31,$32,
   $33,$34,$35,$36,$37,$38,$39,$40,$41,
   $42,$43,$44,$45,$46,$47,$48,
-  $49,$50,$51,$52,$53::int,$54,$55,$56,$57,$58,$59,
+  $49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,
   $60,$61,$62,$63,$64
 )
 `
@@ -2739,7 +2682,7 @@ type InsertResultNKParams struct {
 	Behindjump     sql.NullString
 	Posjump        sql.NullString
 	Timecc         sql.NullString
-	Column53       int32
+	Timeccint      sql.NullString
 	Poscc          sql.NullString
 	Starttime      sql.NullString
 	Statuscc       sql.NullString
@@ -2753,7 +2696,6 @@ type InsertResultNKParams struct {
 	Lastupdate     sql.NullTime
 }
 
-// NK
 func (q *Queries) InsertResultNK(ctx context.Context, arg InsertResultNKParams) error {
 	_, err := q.exec(ctx, q.insertResultNKStmt, insertResultNK,
 		arg.Recid,
@@ -2808,7 +2750,7 @@ func (q *Queries) InsertResultNK(ctx context.Context, arg InsertResultNKParams) 
 		arg.Behindjump,
 		arg.Posjump,
 		arg.Timecc,
-		arg.Column53,
+		arg.Timeccint,
 		arg.Poscc,
 		arg.Starttime,
 		arg.Statuscc,
@@ -3390,7 +3332,7 @@ UPDATE a_resultnk SET
   gater1=$26, gateptsr1=$27, windr1=$28, windptsr1=$29, totrun1=$30, posr1=$31, statusr1=$32,
   j1r2=$33, j2r2=$34, j3r2=$35, j4r2=$36, j5r2=$37, speedr2=$38, distr2=$39, disptsr2=$40, judptsr2=$41,
   gater2=$42, gateptsr2=$43, windr2=$44, windptsr2=$45, totrun2=$46, posr2=$47, statusr2=$48,
-  pointsjump=$49, behindjump=$50, posjump=$51, timecc=$52, timeccint=$53::int, poscc=$54, starttime=$55, statuscc=$56, totbehind=$57, timetot=$58, timetotint=$59,
+  pointsjump=$49, behindjump=$50, posjump=$51, timecc=$52, timeccint=$53, poscc=$54, starttime=$55, statuscc=$56, totbehind=$57, timetot=$58, timetotint=$59,
   valid=$60, racepoints=$61, cuppoints=$62, version=$63, lastupdate=$64
 WHERE recid = $1
 `
@@ -3448,7 +3390,7 @@ type UpdateResultNKByRecIDParams struct {
 	Behindjump     sql.NullString
 	Posjump        sql.NullString
 	Timecc         sql.NullString
-	Column53       int32
+	Timeccint      sql.NullString
 	Poscc          sql.NullString
 	Starttime      sql.NullString
 	Statuscc       sql.NullString
@@ -3516,7 +3458,7 @@ func (q *Queries) UpdateResultNKByRecID(ctx context.Context, arg UpdateResultNKB
 		arg.Behindjump,
 		arg.Posjump,
 		arg.Timecc,
-		arg.Column53,
+		arg.Timeccint,
 		arg.Poscc,
 		arg.Starttime,
 		arg.Statuscc,

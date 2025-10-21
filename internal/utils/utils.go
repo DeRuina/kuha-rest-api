@@ -350,7 +350,7 @@ func ParsePositiveInt32(s string) (int32, error) {
 	return int32(v), nil
 }
 
-// utils/parse.go (or wherever ParsePositiveInt32 lives)
+// ParseNonNegativeInt32 parses a decimal string into a non-negative int32.
 func ParseNonNegativeInt32(s string) (int32, error) {
 	v, err := strconv.ParseInt(s, 10, 32)
 	if err != nil || v < 0 {

@@ -1,6 +1,7 @@
 package tietoevryapi
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -326,6 +327,14 @@ func (h *TietoevryExerciseHandler) GetExercises(w http.ResponseWriter, r *http.R
 		return
 	}
 
+	cacheKey := fmt.Sprintf("tietoevry:exercises:%s", params.UserID)
+	if h.cache != nil {
+		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
+			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
+			return
+		}
+	}
+
 	userID, err := utils.ParseUUID(params.UserID)
 	if err != nil {
 		utils.BadRequestResponse(w, r, err)
@@ -426,6 +435,8 @@ func (h *TietoevryExerciseHandler) GetExercises(w http.ResponseWriter, r *http.R
 
 		output = append(output, out)
 	}
+
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, output, 3*time.Minute)
 
 	// Response
 	utils.WriteJSON(w, http.StatusOK, map[string]any{

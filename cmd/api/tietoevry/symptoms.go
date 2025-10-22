@@ -1,6 +1,7 @@
 package tietoevryapi
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -207,6 +208,14 @@ func (h *TietoevrySymptomHandler) GetSymptoms(w http.ResponseWriter, r *http.Req
 		return
 	}
 
+	cacheKey := fmt.Sprintf("tietoevry:symptoms:%s", params.UserID)
+	if h.cache != nil {
+		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
+			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
+			return
+		}
+	}
+
 	userID, err := utils.ParseUUID(params.UserID)
 	if err != nil {
 		utils.BadRequestResponse(w, r, err)
@@ -248,6 +257,8 @@ func (h *TietoevrySymptomHandler) GetSymptoms(w http.ResponseWriter, r *http.Req
 		}
 		output = append(output, out)
 	}
+
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, output, 3*time.Minute)
 
 	utils.WriteJSON(w, http.StatusOK, map[string]any{
 		"symptoms": output,

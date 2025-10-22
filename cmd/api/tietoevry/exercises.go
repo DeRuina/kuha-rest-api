@@ -436,10 +436,7 @@ func (h *TietoevryExerciseHandler) GetExercises(w http.ResponseWriter, r *http.R
 		output = append(output, out)
 	}
 
-	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, output, 3*time.Minute)
-
-	// Response
-	utils.WriteJSON(w, http.StatusOK, map[string]any{
-		"exercises": output,
-	})
+	resp := map[string]any{"exercises": output}
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, resp, 3*time.Minute)
+	utils.WriteJSON(w, http.StatusOK, resp)
 }

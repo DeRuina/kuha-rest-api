@@ -258,9 +258,7 @@ func (h *TietoevryQuestionnaireHandler) GetQuestionnaires(w http.ResponseWriter,
 		output = append(output, out)
 	}
 
-	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, output, 3*time.Minute)
-
-	utils.WriteJSON(w, http.StatusOK, map[string]any{
-		"questionnaires": output,
-	})
+	resp := map[string]any{"questionnaires": output}
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, resp, 3*time.Minute)
+	utils.WriteJSON(w, http.StatusOK, resp)
 }

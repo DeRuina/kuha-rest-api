@@ -280,9 +280,7 @@ func (h *TietoevryTestResultHandler) GetTestResults(w http.ResponseWriter, r *ht
 		output = append(output, out)
 	}
 
-	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, output, 3*time.Minute)
-
-	utils.WriteJSON(w, http.StatusOK, map[string]any{
-		"test_results": output,
-	})
+	resp := map[string]any{"test_results": output}
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, resp, 3*time.Minute)
+	utils.WriteJSON(w, http.StatusOK, resp)
 }

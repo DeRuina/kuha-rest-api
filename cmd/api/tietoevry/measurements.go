@@ -240,9 +240,7 @@ func (h *TietoevryMeasurementHandler) GetMeasurements(w http.ResponseWriter, r *
 		output = append(output, out)
 	}
 
-	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, output, 3*time.Minute)
-
-	utils.WriteJSON(w, http.StatusOK, map[string]any{
-		"measurements": output,
-	})
+	resp := map[string]any{"measurements": output}
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, resp, 3*time.Minute)
+	utils.WriteJSON(w, http.StatusOK, resp)
 }

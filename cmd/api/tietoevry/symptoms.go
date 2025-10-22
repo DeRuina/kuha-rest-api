@@ -258,9 +258,7 @@ func (h *TietoevrySymptomHandler) GetSymptoms(w http.ResponseWriter, r *http.Req
 		output = append(output, out)
 	}
 
-	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, output, 3*time.Minute)
-
-	utils.WriteJSON(w, http.StatusOK, map[string]any{
-		"symptoms": output,
-	})
+	resp := map[string]any{"symptoms": output}
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, resp, 3*time.Minute)
+	utils.WriteJSON(w, http.StatusOK, resp)
 }

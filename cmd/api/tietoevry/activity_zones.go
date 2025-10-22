@@ -231,9 +231,7 @@ func (h *TietoevryActivityZoneHandler) GetActivityZones(w http.ResponseWriter, r
 		output = append(output, out)
 	}
 
-	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, output, 3*time.Minute)
-
-	utils.WriteJSON(w, http.StatusOK, map[string]any{
-		"activity_zones": output,
-	})
+	resp := map[string]any{"activity_zones": output}
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, resp, 3*time.Minute)
+	utils.WriteJSON(w, http.StatusOK, resp)
 }

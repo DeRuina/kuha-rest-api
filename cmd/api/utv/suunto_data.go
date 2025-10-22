@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/cache"
@@ -128,7 +127,7 @@ func (h *SuuntoDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 		"dates": dates,
 	}
 
-	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 3*time.Minute)
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, UTVCacheTTL)
 
 	utils.WriteJSON(w, http.StatusOK, response)
 }
@@ -198,7 +197,7 @@ func (h *SuuntoDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 		"types": types,
 	}
 
-	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 3*time.Minute)
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, UTVCacheTTL)
 
 	utils.WriteJSON(w, http.StatusOK, response)
 }
@@ -274,7 +273,7 @@ func (h *SuuntoDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 		"data": data,
 	}
 
-	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 3*time.Minute)
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, UTVCacheTTL)
 
 	utils.WriteJSON(w, http.StatusOK, response)
 }
@@ -329,6 +328,8 @@ func (h *SuuntoDataHandler) InsertData(w http.ResponseWriter, r *http.Request) {
 		utils.HandleDatabaseError(w, r, err)
 		return
 	}
+
+	invalidateUTVSource(r.Context(), h.cache, userID, "suunto")
 
 	w.WriteHeader(http.StatusCreated)
 }
@@ -385,6 +386,8 @@ func (h *SuuntoDataHandler) DeleteAllData(w http.ResponseWriter, r *http.Request
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
+
+	invalidateUTVSource(r.Context(), h.cache, userID, "suunto")
 
 	w.WriteHeader(http.StatusOK)
 }

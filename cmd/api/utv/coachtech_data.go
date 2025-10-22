@@ -168,7 +168,7 @@ func (h *CoachtechDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, data, 3*time.Minute)
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, data, UTVCacheTTL)
 
 	utils.WriteJSON(w, http.StatusOK, data)
 }
@@ -235,6 +235,8 @@ func (h *CoachtechDataHandler) Insert(w http.ResponseWriter, r *http.Request) {
 		utils.InternalServerError(w, r, err)
 		return
 	}
+
+	invalidateUTVCoachtech(r.Context(), h.cache, userID)
 
 	w.WriteHeader(http.StatusCreated)
 }

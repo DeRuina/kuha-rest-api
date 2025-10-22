@@ -194,7 +194,7 @@ func (h *GeneralDataHandler) GetLatestData(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, results, 3*time.Minute)
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, results, UTVCacheTTL)
 
 	utils.WriteJSON(w, http.StatusOK, results)
 }
@@ -332,7 +332,7 @@ func (h *GeneralDataHandler) GetAllByType(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, results, 3*time.Minute)
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, results, UTVCacheTTL)
 
 	utils.WriteJSON(w, http.StatusOK, results)
 }

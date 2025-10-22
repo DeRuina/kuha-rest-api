@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/cache"
@@ -124,7 +123,7 @@ func (h *GarminDataHandler) GetDates(w http.ResponseWriter, r *http.Request) {
 		"dates": dates,
 	}
 
-	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 3*time.Minute)
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, UTVCacheTTL)
 
 	utils.WriteJSON(w, http.StatusOK, response)
 }
@@ -194,7 +193,7 @@ func (h *GarminDataHandler) GetTypes(w http.ResponseWriter, r *http.Request) {
 		"types": types,
 	}
 
-	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 3*time.Minute)
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, UTVCacheTTL)
 
 	utils.WriteJSON(w, http.StatusOK, response)
 }
@@ -270,7 +269,7 @@ func (h *GarminDataHandler) GetData(w http.ResponseWriter, r *http.Request) {
 		"data": data,
 	}
 
-	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, 3*time.Minute)
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, response, UTVCacheTTL)
 
 	utils.WriteJSON(w, http.StatusOK, response)
 }
@@ -325,6 +324,8 @@ func (h *GarminDataHandler) InsertData(w http.ResponseWriter, r *http.Request) {
 		utils.HandleDatabaseError(w, r, err)
 		return
 	}
+
+	invalidateUTVSource(r.Context(), h.cache, userID, "garmin")
 
 	w.WriteHeader(http.StatusCreated)
 }
@@ -381,6 +382,8 @@ func (h *GarminDataHandler) DeleteAllData(w http.ResponseWriter, r *http.Request
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
+
+	invalidateUTVSource(r.Context(), h.cache, userID, "garmin")
 
 	w.WriteHeader(http.StatusOK)
 }

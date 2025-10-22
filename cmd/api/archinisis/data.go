@@ -2,6 +2,7 @@ package archapi
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -65,11 +66,28 @@ func (h *DataHandler) GetRaceReportSessions(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	sessionIDs, err := h.store.GetRaceReportSessions(r.Context(), q.SporttiID)
+	sid, err := utils.ParseSporttiID(q.SporttiID)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	cacheKey := fmt.Sprintf("arch:race-report:sessions:%s", sid)
+
+	if h.cache != nil {
+		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
+			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
+			return
+		}
+	}
+
+	sessionIDs, err := h.store.GetRaceReportSessions(r.Context(), sid)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
 		return
 	}
+
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, map[string]any{"race_report": sessionIDs}, ARCHCacheTTL)
 
 	utils.WriteJSON(w, http.StatusOK, map[string]any{
 		"race_report": sessionIDs,
@@ -114,13 +132,30 @@ func (h *DataHandler) GetRaceReportHTML(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	sid, err := utils.ParseSporttiID(q.SporttiID)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
 	sessionID, err := utils.ParsePositiveInt32(q.SessionID)
 	if err != nil {
 		utils.BadRequestResponse(w, r, err)
 		return
 	}
 
-	html, err := h.store.GetRaceReport(r.Context(), q.SporttiID, sessionID)
+	cacheKey := fmt.Sprintf("arch:race-report:html:%s:%d", sid, sessionID)
+
+	if h.cache != nil {
+		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			w.WriteHeader(http.StatusOK)
+			_, _ = w.Write([]byte(cached))
+			return
+		}
+	}
+
+	html, err := h.store.GetRaceReport(r.Context(), sid, sessionID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			utils.NotFoundResponse(w, r, err)
@@ -128,6 +163,10 @@ func (h *DataHandler) GetRaceReportHTML(w http.ResponseWriter, r *http.Request) 
 		}
 		utils.InternalServerError(w, r, err)
 		return
+	}
+
+	if h.cache != nil {
+		_ = h.cache.Set(r.Context(), cacheKey, html, ARCHCacheTTL)
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -190,6 +229,8 @@ func (h *DataHandler) PostRaceReport(w http.ResponseWriter, r *http.Request) {
 		utils.HandleDatabaseError(w, r, err)
 		return
 	}
+
+	invalidateArchRaceReport(r.Context(), h.cache, sid, &in.SessionID)
 
 	w.WriteHeader(http.StatusCreated)
 }
@@ -259,6 +300,8 @@ func (h *DataHandler) PostArchData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	invalidateArchData(r.Context(), h.cache, sid)
+
 	w.WriteHeader(http.StatusCreated)
 }
 
@@ -309,6 +352,14 @@ func (h *DataHandler) GetArchData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	cacheKey := fmt.Sprintf("arch:data:%s", sid)
+	if h.cache != nil {
+		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
+			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
+			return
+		}
+	}
+
 	res, err := h.store.GetDataBySporttiID(r.Context(), sid)
 	if err == sql.ErrNoRows {
 		utils.NotFoundResponse(w, r, err)
@@ -318,6 +369,8 @@ func (h *DataHandler) GetArchData(w http.ResponseWriter, r *http.Request) {
 		utils.InternalServerError(w, r, err)
 		return
 	}
+
+	cache.SetCacheJSON(r.Context(), h.cache, cacheKey, res, ARCHCacheTTL)
 
 	utils.WriteJSON(w, http.StatusOK, res)
 }

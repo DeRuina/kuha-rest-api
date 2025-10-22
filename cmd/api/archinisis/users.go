@@ -76,5 +76,7 @@ func (h *UserDataHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	invalidateArchAll(r.Context(), h.cache, parsed)
+
 	w.WriteHeader(http.StatusOK)
 }

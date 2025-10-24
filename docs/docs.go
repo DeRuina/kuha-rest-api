@@ -730,7 +730,7 @@ const docTemplate = `{
                 "summary": "List active injuries",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "Competitor sportti_id",
                         "name": "user_id",
                         "in": "query",
@@ -864,7 +864,7 @@ const docTemplate = `{
                 "summary": "Get next injury id helper",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "Competitor sportti_id",
                         "name": "user_id",
                         "in": "query",
@@ -997,7 +997,7 @@ const docTemplate = `{
                 "summary": "Check if certain quiz is due for the user. Used for daily quizzes.",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "sportti_id",
                         "name": "user_id",
                         "in": "query",
@@ -1074,7 +1074,7 @@ const docTemplate = `{
                 "summary": "List questionnaires",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "sportti_id",
                         "name": "user_id",
                         "in": "query",

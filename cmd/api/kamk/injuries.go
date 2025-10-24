@@ -23,7 +23,7 @@ func NewInjuriesHandler(store kamk.Injuries, cache *cache.Storage) *InjuriesHand
 
 // Validation structs
 type KamkAddInjuryInput struct {
-	UserID      string  `json:"user_id" validate:"required,numeric"`
+	UserID      int32   `json:"user_id" validate:"required,gt=0"`
 	InjuryType  int32   `json:"injury_type" validate:"required"`
 	Severity    *int32  `json:"severity" validate:"omitempty"`
 	PainLevel   *int32  `json:"pain_level" validate:"omitempty"`
@@ -33,16 +33,16 @@ type KamkAddInjuryInput struct {
 }
 
 type KamkMarkRecoveredInput struct {
-	UserID   string `json:"user_id" validate:"required,numeric"`
-	InjuryID int32  `json:"injury_id" validate:"required"`
+	UserID   int32 `json:"user_id" validate:"required,gt=0"`
+	InjuryID int32 `json:"injury_id" validate:"required"`
 }
 
 type KamkGetInjuriesParams struct {
-	UserID string `form:"user_id" validate:"required,numeric"`
+	UserID int32 `form:"user_id" validate:"required,gt=0"`
 }
 
 type KamkGetMaxIDParams struct {
-	UserID string `form:"user_id" validate:"required,numeric"`
+	UserID int32 `form:"user_id" validate:"required,gt=0"`
 }
 
 // AddInjury godoc
@@ -77,13 +77,7 @@ func (h *InjuriesHandler) AddInjury(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sid, err := utils.ParseSporttiID(input.UserID)
-	if err != nil {
-		utils.BadRequestResponse(w, r, err)
-		return
-	}
-
-	err = h.store.AddInjury(r.Context(), sid, kamk.InjuryInput{
+	err := h.store.AddInjury(r.Context(), input.UserID, kamk.InjuryInput{
 		InjuryType:  input.InjuryType,
 		Severity:    input.Severity,
 		PainLevel:   input.PainLevel,
@@ -96,7 +90,7 @@ func (h *InjuriesHandler) AddInjury(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	invalidateKamkInjuries(r.Context(), h.cache, sid)
+	invalidateKamkInjuries(r.Context(), h.cache, input.UserID)
 
 	w.WriteHeader(http.StatusCreated)
 }
@@ -133,18 +127,12 @@ func (h *InjuriesHandler) MarkRecovered(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	sid, err := utils.ParseSporttiID(input.UserID)
-	if err != nil {
-		utils.BadRequestResponse(w, r, err)
-		return
-	}
-
-	if _, err := h.store.MarkInjuryRecovered(r.Context(), sid, input.InjuryID); err != nil {
+	if _, err := h.store.MarkInjuryRecovered(r.Context(), input.UserID, input.InjuryID); err != nil {
 		utils.HandleDatabaseError(w, r, err)
 		return
 	}
 
-	invalidateKamkInjuries(r.Context(), h.cache, sid)
+	invalidateKamkInjuries(r.Context(), h.cache, input.UserID)
 
 	w.WriteHeader(http.StatusOK)
 }
@@ -156,7 +144,7 @@ func (h *InjuriesHandler) MarkRecovered(w http.ResponseWriter, r *http.Request) 
 //	@Tags			KAMK - Injuries
 //	@Accept			json
 //	@Produce		json
-//	@Param			user_id	query		string	true	"Competitor sportti_id"
+//	@Param			user_id	query		integer	true	"Competitor sportti_id"
 //	@Success		200		{object}	swagger.KamkInjuriesListResponse
 //	@Success		204		"No Content: no injuries"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
@@ -177,21 +165,22 @@ func (h *InjuriesHandler) GetActive(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	uidStr := r.URL.Query().Get("user_id")
+	uid, err := utils.ParsePositiveInt32(uidStr)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
 	params := KamkGetInjuriesParams{
-		UserID: r.URL.Query().Get("user_id"),
+		UserID: uid,
 	}
 	if err := utils.GetValidator().Struct(params); err != nil {
 		utils.BadRequestResponse(w, r, err)
 		return
 	}
 
-	sid, err := utils.ParseSporttiID(params.UserID)
-	if err != nil {
-		utils.BadRequestResponse(w, r, err)
-		return
-	}
-
-	cacheKey := fmt.Sprintf("kamk:injury:list:%s", sid)
+	cacheKey := fmt.Sprintf("kamk:injury:list:%d", uid)
 	if h.cache != nil {
 		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
 			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
@@ -199,7 +188,7 @@ func (h *InjuriesHandler) GetActive(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	items, err := h.store.GetActiveInjuries(r.Context(), sid)
+	items, err := h.store.GetActiveInjuries(r.Context(), uid)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
 		return
@@ -222,7 +211,7 @@ func (h *InjuriesHandler) GetActive(w http.ResponseWriter, r *http.Request) {
 //	@Tags			KAMK - Injuries
 //	@Accept			json
 //	@Produce		json
-//	@Param			user_id	query		string	true	"Competitor sportti_id"
+//	@Param			user_id	query		integer	true	"Competitor sportti_id"
 //	@Success		200		{object}	swagger.KamkMaxInjuryIDResponse
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
 //	@Failure		401		{object}	swagger.UnauthorizedResponse
@@ -242,21 +231,22 @@ func (h *InjuriesHandler) GetMaxID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	uidStr := r.URL.Query().Get("user_id")
+	uid, err := utils.ParsePositiveInt32(uidStr)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
 	params := KamkGetMaxIDParams{
-		UserID: r.URL.Query().Get("user_id"),
+		UserID: uid,
 	}
 	if err := utils.GetValidator().Struct(params); err != nil {
 		utils.BadRequestResponse(w, r, err)
 		return
 	}
 
-	sid, err := utils.ParseSporttiID(params.UserID)
-	if err != nil {
-		utils.BadRequestResponse(w, r, err)
-		return
-	}
-
-	id, err := h.store.GetMaxInjuryID(r.Context(), sid)
+	id, err := h.store.GetMaxInjuryID(r.Context(), uid)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
 		return

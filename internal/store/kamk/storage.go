@@ -7,17 +7,17 @@ import (
 )
 
 type Injuries interface {
-	AddInjury(ctx context.Context, userID string, in InjuryInput) error
-	MarkInjuryRecovered(ctx context.Context, userID string, injuryID int32) (int64, error)
-	GetActiveInjuries(ctx context.Context, userID string) ([]Injury, error)
-	GetMaxInjuryID(ctx context.Context, userID string) (int32, error)
+	AddInjury(ctx context.Context, userID int32, in InjuryInput) error
+	MarkInjuryRecovered(ctx context.Context, userID int32, injuryID int32) (int64, error)
+	GetActiveInjuries(ctx context.Context, userID int32) ([]Injury, error)
+	GetMaxInjuryID(ctx context.Context, userID int32) (int32, error)
 }
 
 type Queries interface {
-	AddQuestionnaire(ctx context.Context, userID string, in QuestionnaireInput) error
-	GetQuestionnaires(ctx context.Context, userID string) ([]Questionnaire, error)
-	IsQuizDoneToday(ctx context.Context, userID string, queryType int32) ([]Questionnaire, error)
-	UpdateQuestionnaireByTimestamp(ctx context.Context, userID string, ts time.Time, answers string, comment *string) error
+	AddQuestionnaire(ctx context.Context, userID int32, in QuestionnaireInput) error
+	GetQuestionnaires(ctx context.Context, userID int32) ([]Questionnaire, error)
+	IsQuizDoneToday(ctx context.Context, userID int32, queryType int32) ([]Questionnaire, error)
+	UpdateQuestionnaireByTimestamp(ctx context.Context, userID int32, ts time.Time, answers string, comment *string) error
 }
 
 // KAMKStorage

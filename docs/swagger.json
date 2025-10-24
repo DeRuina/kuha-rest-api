@@ -722,7 +722,7 @@
                 "summary": "List active injuries",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "Competitor sportti_id",
                         "name": "user_id",
                         "in": "query",
@@ -856,7 +856,7 @@
                 "summary": "Get next injury id helper",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "Competitor sportti_id",
                         "name": "user_id",
                         "in": "query",
@@ -989,7 +989,7 @@
                 "summary": "Check if certain quiz is due for the user. Used for daily quizzes.",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "sportti_id",
                         "name": "user_id",
                         "in": "query",
@@ -1066,7 +1066,7 @@
                 "summary": "List questionnaires",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "sportti_id",
                         "name": "user_id",
                         "in": "query",

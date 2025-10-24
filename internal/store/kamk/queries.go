@@ -29,22 +29,13 @@ type QuestionnaireInput struct {
 	Meta      *string
 }
 
-func (s *QueriesStore) AddQuestionnaire(ctx context.Context, userID string, in QuestionnaireInput) error {
+func (s *QueriesStore) AddQuestionnaire(ctx context.Context, userID int32, in QuestionnaireInput) error {
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
-	sportti, err := utils.ParseSporttiID(userID)
-	if err != nil {
-		return err
-	}
-	competitorID, err := utils.ParsePositiveInt32(sportti)
-	if err != nil {
-		return err
-	}
-
 	q := kamksqlc.New(s.db)
 	arg := kamksqlc.InsertQuestionnaireParams{
-		CompetitorID: competitorID,
+		CompetitorID: userID,
 		QueryType:    utils.NullInt32Ptr(in.QueryType),
 		Answers:      utils.NullStringPtr(in.Answers),
 		Comment:      utils.NullStringPtr(in.Comment),
@@ -53,21 +44,12 @@ func (s *QueriesStore) AddQuestionnaire(ctx context.Context, userID string, in Q
 	return q.InsertQuestionnaire(ctx, arg)
 }
 
-func (s *QueriesStore) GetQuestionnaires(ctx context.Context, userID string) ([]Questionnaire, error) {
+func (s *QueriesStore) GetQuestionnaires(ctx context.Context, userID int32) ([]Questionnaire, error) {
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
-	sportti, err := utils.ParseSporttiID(userID)
-	if err != nil {
-		return nil, err
-	}
-	competitorID, err := utils.ParsePositiveInt32(sportti)
-	if err != nil {
-		return nil, err
-	}
-
 	q := kamksqlc.New(s.db)
-	rows, err := q.GetQuestionnairesByUser(ctx, competitorID)
+	rows, err := q.GetQuestionnairesByUser(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -86,18 +68,9 @@ func (s *QueriesStore) GetQuestionnaires(ctx context.Context, userID string) ([]
 	return out, nil
 }
 
-func (s *QueriesStore) IsQuizDoneToday(ctx context.Context, userID string, queryType int32) ([]Questionnaire, error) {
+func (s *QueriesStore) IsQuizDoneToday(ctx context.Context, userID int32, queryType int32) ([]Questionnaire, error) {
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
-
-	sportti, err := utils.ParseSporttiID(userID)
-	if err != nil {
-		return nil, err
-	}
-	competitorID, err := utils.ParsePositiveInt32(sportti)
-	if err != nil {
-		return nil, err
-	}
 
 	now := time.Now().UTC()
 	start := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC)
@@ -105,7 +78,7 @@ func (s *QueriesStore) IsQuizDoneToday(ctx context.Context, userID string, query
 
 	q := kamksqlc.New(s.db)
 	rows, err := q.IsQuizDoneToday(ctx, kamksqlc.IsQuizDoneTodayParams{
-		CompetitorID: competitorID,
+		CompetitorID: userID,
 		QueryType:    utils.NullInt32(queryType),
 		Timestamp:    start,
 		Timestamp_2:  end,
@@ -128,22 +101,13 @@ func (s *QueriesStore) IsQuizDoneToday(ctx context.Context, userID string, query
 	return out, nil
 }
 
-func (s *QueriesStore) UpdateQuestionnaireByTimestamp(ctx context.Context, userID string, ts time.Time, answers string, comment *string) error {
+func (s *QueriesStore) UpdateQuestionnaireByTimestamp(ctx context.Context, userID int32, ts time.Time, answers string, comment *string) error {
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
-	sportti, err := utils.ParseSporttiID(userID)
-	if err != nil {
-		return err
-	}
-	competitorID, err := utils.ParsePositiveInt32(sportti)
-	if err != nil {
-		return err
-	}
-
 	q := kamksqlc.New(s.db)
 	return q.UpdateQuestionnaireByTimestamp(ctx, kamksqlc.UpdateQuestionnaireByTimestampParams{
-		CompetitorID: competitorID,
+		CompetitorID: userID,
 		Timestamp:    ts,
 		Answers:      utils.NullString(answers),
 		Comment:      utils.NullStringPtr(comment),

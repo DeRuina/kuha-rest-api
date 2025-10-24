@@ -23,7 +23,7 @@ func NewQueriesHandler(store kamk.Queries, cache *cache.Storage) *QueriesHandler
 
 // Validation structs
 type KamkAddQuestionnaireInput struct {
-	UserID    string  `json:"user_id" validate:"required,numeric"`
+	UserID    int32   `json:"user_id" validate:"required,gt=0"`
 	QueryType *int32  `json:"query_type" validate:"omitempty"`
 	Answers   *string `json:"answers" validate:"omitempty"`
 	Comment   *string `json:"comment" validate:"omitempty"`
@@ -31,16 +31,16 @@ type KamkAddQuestionnaireInput struct {
 }
 
 type KamkGetQuestionnairesParams struct {
-	UserID string `form:"user_id" validate:"required,numeric"`
+	UserID int32 `json:"user_id" validate:"required,gt=0"`
 }
 
 type KamkIsQuizDoneParams struct {
-	UserID   string `form:"user_id" validate:"required,numeric"`
-	QuizType int32  `form:"quiz_type" validate:"min=0"`
+	UserID   int32 `json:"user_id" validate:"required,gt=0"`
+	QuizType int32 `form:"quiz_type" validate:"gt=0"`
 }
 
 type KamkUpdateQuestionnaireQuery struct {
-	UserID    string `form:"user_id" validate:"required,numeric"`
+	UserID    int32  `form:"user_id" validate:"required,gt=0"`
 	Timestamp string `form:"timestamp" validate:"required"`
 }
 
@@ -81,13 +81,7 @@ func (h *QueriesHandler) AddQuestionnaire(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	sid, err := utils.ParseSporttiID(input.UserID)
-	if err != nil {
-		utils.BadRequestResponse(w, r, err)
-		return
-	}
-
-	err = h.store.AddQuestionnaire(r.Context(), sid, kamk.QuestionnaireInput{
+	err := h.store.AddQuestionnaire(r.Context(), input.UserID, kamk.QuestionnaireInput{
 		QueryType: input.QueryType,
 		Answers:   input.Answers,
 		Comment:   input.Comment,
@@ -98,7 +92,7 @@ func (h *QueriesHandler) AddQuestionnaire(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	invalidateKamkQueries(r.Context(), h.cache, sid)
+	invalidateKamkQueries(r.Context(), h.cache, input.UserID)
 
 	w.WriteHeader(http.StatusCreated)
 }
@@ -110,7 +104,7 @@ func (h *QueriesHandler) AddQuestionnaire(w http.ResponseWriter, r *http.Request
 //	@Tags			KAMK - Queries
 //	@Accept			json
 //	@Produce		json
-//	@Param			user_id	query		string	true	"sportti_id"
+//	@Param			user_id	query		integer	true	"sportti_id"
 //	@Success		200		{object}	swagger.KamkQuestionnairesListResponse
 //	@Success		204		"No Content: no rows"
 //	@Failure		400		{object}	swagger.ValidationErrorResponse
@@ -131,21 +125,22 @@ func (h *QueriesHandler) GetQuestionnaires(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	uidStr := r.URL.Query().Get("user_id")
+	uid, err := utils.ParsePositiveInt32(uidStr)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
 	params := KamkGetQuestionnairesParams{
-		UserID: r.URL.Query().Get("user_id"),
+		UserID: uid,
 	}
 	if err := utils.GetValidator().Struct(params); err != nil {
 		utils.BadRequestResponse(w, r, err)
 		return
 	}
 
-	sid, err := utils.ParseSporttiID(params.UserID)
-	if err != nil {
-		utils.BadRequestResponse(w, r, err)
-		return
-	}
-
-	cacheKey := fmt.Sprintf("kamk:queries:list:%s", sid)
+	cacheKey := fmt.Sprintf("kamk:queries:list:%d", uid)
 	if h.cache != nil {
 		if cached, err := h.cache.Get(r.Context(), cacheKey); err == nil && cached != "" {
 			utils.WriteJSON(w, http.StatusOK, json.RawMessage(cached))
@@ -153,7 +148,7 @@ func (h *QueriesHandler) GetQuestionnaires(w http.ResponseWriter, r *http.Reques
 		}
 	}
 
-	items, err := h.store.GetQuestionnaires(r.Context(), sid)
+	items, err := h.store.GetQuestionnaires(r.Context(), uid)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
 		return
@@ -176,8 +171,8 @@ func (h *QueriesHandler) GetQuestionnaires(w http.ResponseWriter, r *http.Reques
 //	@Tags			KAMK - Queries
 //	@Accept			json
 //	@Produce		json
-//	@Param			user_id		query		string	true	"sportti_id"
-//	@Param			quiz_type	query		int		true	"Quiz type"
+//	@Param			user_id		query		integer	true	"sportti_id"
+//	@Param			quiz_type	query		integer	true	"Quiz type"
 //	@Success		200			{object}	swagger.KamkQuestionnairesListResponse
 //	@Success		204			"No Content: no rows today"
 //	@Failure		400			{object}	swagger.ValidationErrorResponse
@@ -198,8 +193,15 @@ func (h *QueriesHandler) IsQuizDoneToday(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	uidStr := r.URL.Query().Get("user_id")
+	uid, err := utils.ParsePositiveInt32(uidStr)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
 	params := KamkIsQuizDoneParams{
-		UserID: r.URL.Query().Get("user_id"),
+		UserID: uid,
 	}
 	qtStr := r.URL.Query().Get("quiz_type")
 	qt, err := utils.ParseNonNegativeInt32(qtStr)
@@ -214,13 +216,7 @@ func (h *QueriesHandler) IsQuizDoneToday(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	sid, err := utils.ParseSporttiID(params.UserID)
-	if err != nil {
-		utils.BadRequestResponse(w, r, err)
-		return
-	}
-
-	rows, err := h.store.IsQuizDoneToday(r.Context(), sid, params.QuizType)
+	rows, err := h.store.IsQuizDoneToday(r.Context(), uid, params.QuizType)
 	if err != nil {
 		utils.InternalServerError(w, r, err)
 		return
@@ -264,8 +260,16 @@ func (h *QueriesHandler) UpdateQuestionnaireByTimestamp(w http.ResponseWriter, r
 		utils.BadRequestResponse(w, r, err)
 		return
 	}
+
+	uidStr := r.URL.Query().Get("user_id")
+	uid, err := utils.ParsePositiveInt32(uidStr)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
 	qp := KamkUpdateQuestionnaireQuery{
-		UserID:    r.URL.Query().Get("user_id"),
+		UserID:    uid,
 		Timestamp: r.URL.Query().Get("timestamp"),
 	}
 	if err := utils.GetValidator().Struct(qp); err != nil {
@@ -288,18 +292,12 @@ func (h *QueriesHandler) UpdateQuestionnaireByTimestamp(w http.ResponseWriter, r
 		return
 	}
 
-	sid, err := utils.ParseSporttiID(qp.UserID)
-	if err != nil {
-		utils.BadRequestResponse(w, r, err)
-		return
-	}
-
-	if err := h.store.UpdateQuestionnaireByTimestamp(r.Context(), sid, ts, body.Answers, body.Comment); err != nil {
+	if err := h.store.UpdateQuestionnaireByTimestamp(r.Context(), uid, ts, body.Answers, body.Comment); err != nil {
 		utils.HandleDatabaseError(w, r, err)
 		return
 	}
 
-	invalidateKamkQueries(r.Context(), h.cache, sid)
+	invalidateKamkQueries(r.Context(), h.cache, uid)
 
 	w.WriteHeader(http.StatusOK)
 }

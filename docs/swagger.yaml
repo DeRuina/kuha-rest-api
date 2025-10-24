@@ -3620,7 +3620,7 @@ paths:
         in: query
         name: user_id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -3707,7 +3707,7 @@ paths:
         in: query
         name: user_id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -3792,7 +3792,7 @@ paths:
         in: query
         name: user_id
         required: true
-        type: string
+        type: integer
       - description: Quiz type
         in: query
         name: quiz_type
@@ -3842,7 +3842,7 @@ paths:
         in: query
         name: user_id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:

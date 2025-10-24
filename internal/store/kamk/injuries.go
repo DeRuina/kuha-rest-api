@@ -35,23 +35,14 @@ type InjuryInput struct {
 	Meta        *string
 }
 
-func (s *InjuriesStore) AddInjury(ctx context.Context, userID string, in InjuryInput) error {
+func (s *InjuriesStore) AddInjury(ctx context.Context, userID int32, in InjuryInput) error {
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
-
-	sportti, err := utils.ParseSporttiID(userID)
-	if err != nil {
-		return err
-	}
-	competitorID, err := utils.ParsePositiveInt32(sportti)
-	if err != nil {
-		return err
-	}
 
 	q := kamksqlc.New(s.db)
 
 	arg := kamksqlc.InsertInjuryParams{
-		CompetitorID: competitorID,
+		CompetitorID: userID,
 		InjuryType:   in.InjuryType,
 		Severity:     utils.NullInt32Ptr(in.Severity),
 		PainLevel:    utils.NullInt32Ptr(in.PainLevel),
@@ -63,23 +54,14 @@ func (s *InjuriesStore) AddInjury(ctx context.Context, userID string, in InjuryI
 	return q.InsertInjury(ctx, arg)
 }
 
-func (s *InjuriesStore) MarkInjuryRecovered(ctx context.Context, userID string, injuryID int32) (int64, error) {
+func (s *InjuriesStore) MarkInjuryRecovered(ctx context.Context, userID int32, injuryID int32) (int64, error) {
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
-
-	sportti, err := utils.ParseSporttiID(userID)
-	if err != nil {
-		return 0, err
-	}
-	competitorID, err := utils.ParsePositiveInt32(sportti)
-	if err != nil {
-		return 0, err
-	}
 
 	q := kamksqlc.New(s.db)
 	if err := q.MarkInjuryRecoveredByID(ctx, kamksqlc.MarkInjuryRecoveredByIDParams{
 		InjuryID:     utils.NullInt32(injuryID),
-		CompetitorID: competitorID,
+		CompetitorID: userID,
 	}); err != nil {
 		return 0, err
 	}
@@ -87,21 +69,12 @@ func (s *InjuriesStore) MarkInjuryRecovered(ctx context.Context, userID string, 
 	return 1, nil
 }
 
-func (s *InjuriesStore) GetActiveInjuries(ctx context.Context, userID string) ([]Injury, error) {
+func (s *InjuriesStore) GetActiveInjuries(ctx context.Context, userID int32) ([]Injury, error) {
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
-	sportti, err := utils.ParseSporttiID(userID)
-	if err != nil {
-		return nil, err
-	}
-	competitorID, err := utils.ParsePositiveInt32(sportti)
-	if err != nil {
-		return nil, err
-	}
-
 	q := kamksqlc.New(s.db)
-	rows, err := q.GetActiveInjuriesByUser(ctx, competitorID)
+	rows, err := q.GetActiveInjuriesByUser(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -124,19 +97,10 @@ func (s *InjuriesStore) GetActiveInjuries(ctx context.Context, userID string) ([
 	return out, nil
 }
 
-func (s *InjuriesStore) GetMaxInjuryID(ctx context.Context, userID string) (int32, error) {
+func (s *InjuriesStore) GetMaxInjuryID(ctx context.Context, userID int32) (int32, error) {
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
-	sportti, err := utils.ParseSporttiID(userID)
-	if err != nil {
-		return 0, err
-	}
-	competitorID, err := utils.ParsePositiveInt32(sportti)
-	if err != nil {
-		return 0, err
-	}
-
 	q := kamksqlc.New(s.db)
-	return q.GetMaxInjuryIDForUser(ctx, competitorID)
+	return q.GetMaxInjuryIDForUser(ctx, userID)
 }

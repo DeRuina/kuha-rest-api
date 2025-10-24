@@ -16,16 +16,16 @@ const (
 	kamkQuizDonePrefix    = "kamk:is-done"
 )
 
-func invalidateKamkInjuries(ctx context.Context, c *cache.Storage, sporttiID string) {
+func invalidateKamkInjuries(ctx context.Context, c *cache.Storage, sporttiID int32) {
 	if c == nil {
 		return
 	}
-	_ = c.DeleteByPrefixes(ctx, fmt.Sprintf("%s:%s", kamkInjuryListPrefix, sporttiID))
+	_ = c.DeleteByPrefixes(ctx, fmt.Sprintf("%s:%d", kamkInjuryListPrefix, sporttiID))
 }
 
-func invalidateKamkQueries(ctx context.Context, c *cache.Storage, sporttiID string) {
+func invalidateKamkQueries(ctx context.Context, c *cache.Storage, sporttiID int32) {
 	if c == nil {
 		return
 	}
-	_ = c.DeleteByPrefixes(ctx, fmt.Sprintf("%s:%s", kamkQueriesListPrefix, sporttiID), fmt.Sprintf("%s:%s:", kamkQuizDonePrefix, sporttiID))
+	_ = c.DeleteByPrefixes(ctx, fmt.Sprintf("%s:%d", kamkQueriesListPrefix, sporttiID), fmt.Sprintf("%s:%d:", kamkQuizDonePrefix, sporttiID))
 }

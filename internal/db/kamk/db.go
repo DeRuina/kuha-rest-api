@@ -24,6 +24,12 @@ func New(db DBTX) *Queries {
 func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	q := Queries{db: db}
 	var err error
+	if q.deleteInjuryByIDStmt, err = db.PrepareContext(ctx, deleteInjuryByID); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteInjuryByID: %w", err)
+	}
+	if q.deleteQuestionnaireByTimestampStmt, err = db.PrepareContext(ctx, deleteQuestionnaireByTimestamp); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteQuestionnaireByTimestamp: %w", err)
+	}
 	if q.getActiveInjuriesByUserStmt, err = db.PrepareContext(ctx, getActiveInjuriesByUser); err != nil {
 		return nil, fmt.Errorf("error preparing query GetActiveInjuriesByUser: %w", err)
 	}
@@ -53,6 +59,16 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 
 func (q *Queries) Close() error {
 	var err error
+	if q.deleteInjuryByIDStmt != nil {
+		if cerr := q.deleteInjuryByIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteInjuryByIDStmt: %w", cerr)
+		}
+	}
+	if q.deleteQuestionnaireByTimestampStmt != nil {
+		if cerr := q.deleteQuestionnaireByTimestampStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteQuestionnaireByTimestampStmt: %w", cerr)
+		}
+	}
 	if q.getActiveInjuriesByUserStmt != nil {
 		if cerr := q.getActiveInjuriesByUserStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing getActiveInjuriesByUserStmt: %w", cerr)
@@ -132,6 +148,8 @@ func (q *Queries) queryRow(ctx context.Context, stmt *sql.Stmt, query string, ar
 type Queries struct {
 	db                                 DBTX
 	tx                                 *sql.Tx
+	deleteInjuryByIDStmt               *sql.Stmt
+	deleteQuestionnaireByTimestampStmt *sql.Stmt
 	getActiveInjuriesByUserStmt        *sql.Stmt
 	getMaxInjuryIDForUserStmt          *sql.Stmt
 	getQuestionnairesByUserStmt        *sql.Stmt
@@ -146,6 +164,8 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 	return &Queries{
 		db:                                 tx,
 		tx:                                 tx,
+		deleteInjuryByIDStmt:               q.deleteInjuryByIDStmt,
+		deleteQuestionnaireByTimestampStmt: q.deleteQuestionnaireByTimestampStmt,
 		getActiveInjuriesByUserStmt:        q.getActiveInjuriesByUserStmt,
 		getMaxInjuryIDForUserStmt:          q.getMaxInjuryIDForUserStmt,
 		getQuestionnairesByUserStmt:        q.getQuestionnairesByUserStmt,

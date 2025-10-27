@@ -3610,7 +3610,107 @@ paths:
       summary: Healthcheck
       tags:
       - Health
+  /kamk/delete-quiz:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a single questionnaire row (competitor_id=user_id AND timestamp=ts
+        [minute-window])
+      parameters:
+      - description: sportti_id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: Timestamp (RFC3339)
+        in: query
+        name: timestamp
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'OK: deleted'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a questionnaire by timestamp
+      tags:
+      - KAMK - Queries
   /kamk/injury:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a single injury for a competitor
+      parameters:
+      - description: sportti_id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: Injury ID
+        in: query
+        name: injury_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'OK: deleted'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete an injury by injury_id
+      tags:
+      - KAMK - Injuries
     get:
       consumes:
       - application/json
@@ -3928,7 +4028,7 @@ paths:
         in: query
         name: user_id
         required: true
-        type: string
+        type: integer
       - description: Timestamp (RFC3339)
         in: query
         name: timestamp

@@ -11,6 +11,7 @@ type Injuries interface {
 	MarkInjuryRecovered(ctx context.Context, userID int32, injuryID int32) (int64, error)
 	GetActiveInjuries(ctx context.Context, userID int32) ([]Injury, error)
 	GetMaxInjuryID(ctx context.Context, userID int32) (int32, error)
+	DeleteInjury(ctx context.Context, userID int32, injuryID int32) (int64, error)
 }
 
 type Queries interface {
@@ -18,6 +19,7 @@ type Queries interface {
 	GetQuestionnaires(ctx context.Context, userID int32) ([]Questionnaire, error)
 	IsQuizDoneToday(ctx context.Context, userID int32, queryType int32) ([]Questionnaire, error)
 	UpdateQuestionnaireByTimestamp(ctx context.Context, userID int32, ts time.Time, answers string, comment *string) (int64, error)
+	DeleteQuestionnaireByTimestamp(ctx context.Context, userID int32, ts time.Time) (int64, error)
 }
 
 // KAMKStorage

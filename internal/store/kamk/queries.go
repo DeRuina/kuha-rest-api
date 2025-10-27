@@ -117,3 +117,18 @@ func (s *QueriesStore) UpdateQuestionnaireByTimestamp(ctx context.Context, userI
 	}
 	return n, nil
 }
+
+func (s *QueriesStore) DeleteQuestionnaireByTimestamp(ctx context.Context, userID int32, ts time.Time) (int64, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := kamksqlc.New(s.db)
+	n, err := q.DeleteQuestionnaireByTimestamp(ctx, kamksqlc.DeleteQuestionnaireByTimestampParams{
+		CompetitorID: userID,
+		Timestamp:    ts.UTC(),
+	})
+	if err != nil {
+		return 0, err
+	}
+	return n, nil
+}

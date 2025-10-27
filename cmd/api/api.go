@@ -209,12 +209,14 @@ func (app *api) mount() http.Handler {
 					r.Post("/injury-recovered", injuriesHandler.MarkRecovered)
 					r.Get("/injury", injuriesHandler.GetActive)
 					r.Get("/injury-id", injuriesHandler.GetMaxID)
+					r.Delete("/injury", injuriesHandler.DeleteInjury)
 
 					// questionnaire routes
 					r.Post("/questionnaire", queriesHandler.AddQuestionnaire)
 					r.Get("/questionnaire", queriesHandler.GetQuestionnaires)
 					r.Get("/is-quiz-done", queriesHandler.IsQuizDoneToday)
 					r.Post("/update-quiz", queriesHandler.UpdateQuestionnaireByTimestamp)
+					r.Delete("/delete-quiz", queriesHandler.DeleteQuestionnaire)
 				})
 			} else {
 				logger.Logger.Warn("kamk routes disabled: database not connected")

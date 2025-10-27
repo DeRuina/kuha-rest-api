@@ -45,6 +45,11 @@ type KamkGetMaxIDParams struct {
 	UserID int32 `form:"user_id" validate:"required,gt=0"`
 }
 
+type KamkDeleteInjuryParams struct {
+	UserID   int32 `form:"user_id"   validate:"required,gt=0"`
+	InjuryID int32 `form:"injury_id" validate:"required,gt=0"`
+}
+
 // AddInjury godoc
 //
 //	@Summary		Create injury
@@ -254,4 +259,64 @@ func (h *InjuriesHandler) GetMaxID(w http.ResponseWriter, r *http.Request) {
 
 	resp := map[string]int32{"id": id}
 	utils.WriteJSON(w, http.StatusOK, resp)
+}
+
+// DeleteInjury godoc
+//
+//	@Summary		Delete an injury by injury_id
+//	@Description	Deletes a single injury for a competitor
+//	@Tags			KAMK - Injuries
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id		query	integer	true	"sportti_id"
+//	@Param			injury_id	query	integer	true	"Injury ID"
+//	@Success		200			"OK: deleted"
+//	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		401			{object}	swagger.UnauthorizedResponse
+//	@Failure		403			{object}	swagger.ForbiddenResponse
+//	@Failure		404			{object}	swagger.NotFoundResponse
+//	@Failure		500			{object}	swagger.InternalServerErrorResponse
+//	@Failure		503			{object}	swagger.ServiceUnavailableResponse
+//	@Security		BearerAuth
+//	@Router			/kamk/injury [delete]
+func (h *InjuriesHandler) DeleteInjury(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+	if err := utils.ValidateParams(r, []string{"user_id", "injury_id"}); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	var p KamkDeleteInjuryParams
+	uid, err := utils.ParsePositiveInt32(r.URL.Query().Get("user_id"))
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+	iid, err := utils.ParsePositiveInt32(r.URL.Query().Get("injury_id"))
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+	p.UserID, p.InjuryID = uid, iid
+
+	if err := utils.GetValidator().Struct(p); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	n, err := h.store.DeleteInjury(r.Context(), p.UserID, p.InjuryID)
+	if err != nil {
+		utils.InternalServerError(w, r, err)
+		return
+	}
+	if n == 0 {
+		utils.NotFoundResponse(w, r, fmt.Errorf("injury not found"))
+		return
+	}
+
+	invalidateKamkInjuries(r.Context(), h.cache, p.UserID)
+	w.WriteHeader(http.StatusOK)
 }

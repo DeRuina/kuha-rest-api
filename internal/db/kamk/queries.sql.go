@@ -11,6 +11,45 @@ import (
 	"time"
 )
 
+const deleteInjuryByID = `-- name: DeleteInjuryByID :execrows
+DELETE FROM public.injuries
+WHERE competitor_id = $1
+  AND injury_id     = $2
+`
+
+type DeleteInjuryByIDParams struct {
+	CompetitorID int32
+	InjuryID     sql.NullInt32
+}
+
+func (q *Queries) DeleteInjuryByID(ctx context.Context, arg DeleteInjuryByIDParams) (int64, error) {
+	result, err := q.exec(ctx, q.deleteInjuryByIDStmt, deleteInjuryByID, arg.CompetitorID, arg.InjuryID)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected()
+}
+
+const deleteQuestionnaireByTimestamp = `-- name: DeleteQuestionnaireByTimestamp :execrows
+DELETE FROM public.querys
+WHERE competitor_id = $1
+  AND "timestamp" >= date_trunc('minute', $2::timestamptz)
+  AND "timestamp" <  date_trunc('minute', $2::timestamptz) + interval '1 minute'
+`
+
+type DeleteQuestionnaireByTimestampParams struct {
+	CompetitorID int32
+	Timestamp    time.Time
+}
+
+func (q *Queries) DeleteQuestionnaireByTimestamp(ctx context.Context, arg DeleteQuestionnaireByTimestampParams) (int64, error) {
+	result, err := q.exec(ctx, q.deleteQuestionnaireByTimestampStmt, deleteQuestionnaireByTimestamp, arg.CompetitorID, arg.Timestamp)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected()
+}
+
 const getActiveInjuriesByUser = `-- name: GetActiveInjuriesByUser :many
 SELECT
   competitor_id,

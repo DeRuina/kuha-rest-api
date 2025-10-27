@@ -238,7 +238,7 @@ func (h *QueriesHandler) IsQuizDoneToday(w http.ResponseWriter, r *http.Request)
 //	@Tags			KAMK - Queries
 //	@Accept			json
 //	@Produce		json
-//	@Param			user_id		query	string								true	"sportti_id"
+//	@Param			user_id		query	integer								true	"sportti_id"
 //	@Param			timestamp	query	string								true	"Timestamp (RFC3339)"
 //	@Param			body		body	swagger.KamkUpdateQuestionnaireBody	true	"Update payload"
 //	@Success		200			"OK: updated"
@@ -305,5 +305,68 @@ func (h *QueriesHandler) UpdateQuestionnaireByTimestamp(w http.ResponseWriter, r
 
 	invalidateKamkQueries(r.Context(), h.cache, uid)
 
+	w.WriteHeader(http.StatusOK)
+}
+
+// DeleteQuestionnaire godoc
+//
+//	@Summary		Delete a questionnaire by timestamp
+//	@Description	Deletes a single questionnaire row (competitor_id=user_id AND timestamp=ts [minute-window])
+//	@Tags			KAMK - Queries
+//	@Accept			json
+//	@Produce		json
+//	@Param			user_id		query	integer	true	"sportti_id"
+//	@Param			timestamp	query	string	true	"Timestamp (RFC3339)"
+//	@Success		200			"OK: deleted"
+//	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		401			{object}	swagger.UnauthorizedResponse
+//	@Failure		403			{object}	swagger.ForbiddenResponse
+//	@Failure		404			{object}	swagger.NotFoundResponse
+//	@Failure		500			{object}	swagger.InternalServerErrorResponse
+//	@Failure		503			{object}	swagger.ServiceUnavailableResponse
+//	@Security		BearerAuth
+//	@Router			/kamk/delete-quiz [delete]
+func (h *QueriesHandler) DeleteQuestionnaire(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+	if err := utils.ValidateParams(r, []string{"user_id", "timestamp"}); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	q := KamkUpdateQuestionnaireQuery{
+		Timestamp: r.URL.Query().Get("timestamp"),
+	}
+	uid, err := utils.ParsePositiveInt32(r.URL.Query().Get("user_id"))
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+	q.UserID = uid
+
+	if err := utils.GetValidator().Struct(q); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	ts, err := utils.ParseRFC3339MinuteOrSecond(q.Timestamp)
+	if err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	n, err := h.store.DeleteQuestionnaireByTimestamp(r.Context(), q.UserID, ts)
+	if err != nil {
+		utils.InternalServerError(w, r, err)
+		return
+	}
+	if n == 0 {
+		utils.NotFoundResponse(w, r, fmt.Errorf("no questionnaire found for that minute"))
+		return
+	}
+
+	invalidateKamkQueries(r.Context(), h.cache, q.UserID)
 	w.WriteHeader(http.StatusOK)
 }

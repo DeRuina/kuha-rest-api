@@ -71,3 +71,13 @@ WHERE competitor_id = $1
   AND "timestamp" >= date_trunc('minute', $2::timestamptz)
   AND "timestamp" <  date_trunc('minute', $2::timestamptz) + interval '1 minute';
 
+-- name: DeleteInjuryByID :execrows
+DELETE FROM public.injuries
+WHERE competitor_id = $1
+  AND injury_id     = $2;
+
+-- name: DeleteQuestionnaireByTimestamp :execrows
+DELETE FROM public.querys
+WHERE competitor_id = $1
+  AND "timestamp" >= date_trunc('minute', $2::timestamptz)
+  AND "timestamp" <  date_trunc('minute', $2::timestamptz) + interval '1 minute';

@@ -104,3 +104,18 @@ func (s *InjuriesStore) GetMaxInjuryID(ctx context.Context, userID int32) (int32
 	q := kamksqlc.New(s.db)
 	return q.GetMaxInjuryIDForUser(ctx, userID)
 }
+
+func (s *InjuriesStore) DeleteInjury(ctx context.Context, userID int32, injuryID int32) (int64, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := kamksqlc.New(s.db)
+	n, err := q.DeleteInjuryByID(ctx, kamksqlc.DeleteInjuryByIDParams{
+		CompetitorID: userID,
+		InjuryID:     utils.NullInt32(injuryID),
+	})
+	if err != nil {
+		return 0, err
+	}
+	return n, nil
+}

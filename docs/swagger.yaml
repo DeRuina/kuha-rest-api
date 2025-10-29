@@ -183,25 +183,6 @@ definitions:
         example: 208e2ffb-ac68-4980-a8b6-b7e0136e4172
         type: string
     type: object
-  swagger.Athlete:
-    properties:
-      first_name:
-        example: John
-        type: string
-      fis_code:
-        example: 123456
-        type: integer
-      last_name:
-        example: Doe
-        type: string
-    type: object
-  swagger.AthleteListResponse:
-    properties:
-      athletes:
-        items:
-          $ref: '#/definitions/swagger.Athlete'
-        type: array
-    type: object
   swagger.CoachtechData:
     properties:
       example:
@@ -326,6 +307,271 @@ definitions:
         $ref: '#/definitions/swagger.DeviceInfoNotConnectedNoData'
       suunto:
         $ref: '#/definitions/swagger.DeviceInfoConnectedWithData'
+    type: object
+  swagger.FISAthleteItem:
+    properties:
+      firstname:
+        example: Iivo
+        type: string
+      fiscode:
+        example: 342001
+        type: integer
+      lastname:
+        example: Niskanen
+        type: string
+    type: object
+  swagger.FISAthletesResponse:
+    properties:
+      athletes:
+        items:
+          $ref: '#/definitions/swagger.FISAthleteItem'
+        type: array
+    type: object
+  swagger.FISCompetitor:
+    properties:
+      association:
+        example: FIN
+        type: string
+      birthdate:
+        example: "1992-01-12"
+        type: string
+      competitorid:
+        example: 123456
+        type: integer
+      dateofcreation:
+        example: "2025-10-20"
+        type: string
+      firstname:
+        example: Iivo
+        type: string
+      fiscode:
+        example: 342001
+        type: integer
+      gender:
+        example: M
+        type: string
+      ipcid:
+        example: 0
+        type: integer
+      lastname:
+        example: Niskanen
+        type: string
+      lastupdate:
+        example: "2025-10-27T08:30:00Z"
+        type: string
+      nationalcode:
+        example: "246"
+        type: string
+      nationcode:
+        example: FIN
+        type: string
+      personid:
+        example: 98765
+        type: integer
+      sectorcode:
+        example: CC
+        type: string
+      skiclub:
+        example: Ounasvaara Hiihtoseura
+        type: string
+      status:
+        example: ACTIVE
+        type: string
+      status_date:
+        example: "2025-10-27T08:30:00Z"
+        type: string
+      type:
+        example: ATHLETE
+        type: string
+    type: object
+  swagger.FISInsertCompetitorExample:
+    properties:
+      alternatenamecheck:
+        example: OK
+        type: string
+      association:
+        example: FIN
+        type: string
+      birthdate:
+        description: YYYY-MM-DD
+        example: "1992-01-12"
+        type: string
+      carving:
+        example: 0
+        type: integer
+      categorycode:
+        example: SEN
+        type: string
+      classcode:
+        example: A
+        type: string
+      classname:
+        example: Senior
+        type: string
+      competitorid:
+        example: 123456
+        type: integer
+      compidmssql:
+        example: 0
+        type: integer
+      createdby:
+        example: admin@fis.int
+        type: string
+      data:
+        example: '{}'
+        type: string
+      dateofcreation:
+        description: YYYY-MM-DD
+        example: "2025-10-20"
+        type: string
+      deletedat:
+        example: ""
+        type: string
+      disciplines:
+        example: DISTANCE,SPRINT
+        type: string
+      doped:
+        example: "NO"
+        type: string
+      fee:
+        example: "10.00000"
+        type: string
+      firstname:
+        example: Iivo
+        type: string
+      fiscode:
+        example: 342001
+        type: integer
+      gender:
+        example: M
+        type: string
+      injury:
+        example: 0
+        type: integer
+      ipcid:
+        example: 0
+        type: integer
+      lastname:
+        example: Niskanen
+        type: string
+      lastupdate:
+        description: RFC3339
+        example: "2025-10-27T08:30:00Z"
+        type: string
+      lastupdateby:
+        example: system
+        type: string
+      nationalcode:
+        example: "246"
+        type: string
+      nationcode:
+        example: FIN
+        type: string
+      natteam:
+        example: FIN-A
+        type: string
+      notallowed:
+        example: 0
+        type: integer
+      personid:
+        example: 98765
+        type: integer
+      photo:
+        example: 0
+        type: integer
+      photo_big:
+        example: 0
+        type: integer
+      published:
+        example: 1
+        type: integer
+      sectorcode:
+        description: JP/NK/CC
+        example: CC
+        type: string
+      skiclub:
+        example: Ounasvaara Hiihtoseura
+        type: string
+      status:
+        example: ACTIVE
+        type: string
+      status_by:
+        example: FIS
+        type: string
+      status_date:
+        description: RFC3339
+        example: "2025-10-27T08:30:00Z"
+        type: string
+      status_old:
+        example: ""
+        type: string
+      statusnextlist:
+        example: A
+        type: string
+      team:
+        example: 0
+        type: integer
+      tragroup:
+        example: A
+        type: string
+      type:
+        example: ATHLETE
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  swagger.FISLastCompetitorResponse:
+    properties:
+      competitor:
+        $ref: '#/definitions/swagger.FISCompetitor'
+    type: object
+  swagger.FISNationsBySectorResponse:
+    properties:
+      nations:
+        example:
+        - FIN
+        - NOR
+        - SWE
+        items:
+          type: string
+        type: array
+    type: object
+  swagger.FISUpdateCompetitorExample:
+    properties:
+      birthdate:
+        example: "1992-01-12"
+        type: string
+      competitorid:
+        example: 123456
+        type: integer
+      firstname:
+        example: Iivo
+        type: string
+      fiscode:
+        example: 342001
+        type: integer
+      gender:
+        example: M
+        type: string
+      lastname:
+        example: Niskanen
+        type: string
+      lastupdate:
+        example: "2025-10-28T09:45:00Z"
+        type: string
+      nationcode:
+        example: FIN
+        type: string
+      sectorcode:
+        example: CC
+        type: string
+      status:
+        example: ACTIVE
+        type: string
+      status_date:
+        example: "2025-10-28T09:45:00Z"
+        type: string
     type: object
   swagger.ForbiddenError:
     properties:
@@ -1959,17 +2205,6 @@ definitions:
         example: garmin
         type: string
     type: object
-  swagger.NationsResponse:
-    properties:
-      nations:
-        example:
-        - USA
-        - NOR
-        - GER
-        items:
-          type: string
-        type: array
-    type: object
   swagger.NotFoundResponse:
     properties:
       error:
@@ -3511,20 +3746,19 @@ paths:
     get:
       consumes:
       - application/json
-      description: Returns a list of athletes for a given sector
       parameters:
-      - description: Sector Code (JP, NK, CC)
+      - description: Sector code (JP, NK, CC)
         in: query
-        name: sector
+        name: sectorcode
         required: true
         type: string
       produces:
       - application/json
       responses:
         "200":
-          description: List of athletes
+          description: OK
           schema:
-            $ref: '#/definitions/swagger.AthleteListResponse'
+            $ref: '#/definitions/swagger.FISAthletesResponse'
         "400":
           description: Bad Request
           schema:
@@ -3547,27 +3781,198 @@ paths:
             $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
-      summary: Get athletes by sector
+      summary: Get all athletes for a given sector
       tags:
-      - FIS
+      - FIS - Athlete
+  /fis/competitor:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a competitor by ID
+      parameters:
+      - description: Competitor ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete competitor
+      tags:
+      - FIS - Competitor Management
+    post:
+      consumes:
+      - application/json
+      description: Inserts a new competitor
+      parameters:
+      - description: Competitor payload
+        in: body
+        name: competitor
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.FISInsertCompetitorExample'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/swagger.ConflictResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Add new competitor
+      tags:
+      - FIS - Competitor Management
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing competitor
+      parameters:
+      - description: Competitor payload
+        in: body
+        name: competitor
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.FISUpdateCompetitorExample'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Update competitor by ID
+      tags:
+      - FIS - Competitor Management
+  /fis/lastrow/competitor:
+    get:
+      consumes:
+      - application/json
+      description: Returns the last row in the competitor table
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.FISLastCompetitorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Get last competitor record
+      tags:
+      - FIS - Competitor Management
   /fis/nation:
     get:
       consumes:
       - application/json
-      description: Returns a list of nations for a given sector
       parameters:
-      - description: Sector Code (JP, NK, CC)
+      - description: Sector code (JP, NK, CC)
         in: query
-        name: sector
+        name: sectorcode
         required: true
         type: string
       produces:
       - application/json
       responses:
         "200":
-          description: List of nations
+          description: OK
           schema:
-            $ref: '#/definitions/swagger.NationsResponse'
+            $ref: '#/definitions/swagger.FISNationsBySectorResponse'
         "400":
           description: Bad Request
           schema:
@@ -3590,9 +3995,9 @@ paths:
             $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
-      summary: Get nations by sector
+      summary: Get distinct nation codes for a given sector
       tags:
-      - FIS
+      - FIS - Athlete
   /health:
     get:
       description: Healthcheck endpoint

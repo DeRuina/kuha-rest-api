@@ -281,11 +281,15 @@ func (app *api) mount() http.Handler {
 			if app.store.FIS != nil {
 				r.Route("/fis", func(r chi.Router) {
 					// Register handlers
-					competitorsHandler := fisapi.NewCompetitorsHandler(app.store.FIS.Competitors(), app.cacheStorage)
+					competitorHandler := fisapi.NewCompetitorHandler(app.store.FIS.Competitors(), app.cacheStorage)
 
 					// competitor routes
-					r.Get("/athlete", competitorsHandler.GetAthletesBySector)
-					r.Get("/nation", competitorsHandler.GetNationsBySector)
+					r.Get("/athlete", competitorHandler.GetAthletesBySector)
+					r.Get("/nation", competitorHandler.GetNationsBySector)
+					r.Post("/competitor", competitorHandler.InsertCompetitor)
+					r.Put("/competitor", competitorHandler.UpdateCompetitor)
+					r.Delete("/competitor", competitorHandler.DeleteCompetitor)
+					r.Get("/lastrow/competitor", competitorHandler.GetLastRowCompetitor)
 				})
 			} else {
 				logger.Logger.Warn("fis routes disabled: database not reachable")

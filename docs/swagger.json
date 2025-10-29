@@ -549,7 +549,6 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Returns a list of athletes for a given sector",
                 "consumes": [
                     "application/json"
                 ],
@@ -557,23 +556,23 @@
                     "application/json"
                 ],
                 "tags": [
-                    "FIS"
+                    "FIS - Athlete"
                 ],
-                "summary": "Get athletes by sector",
+                "summary": "Get all athletes for a given sector",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Sector Code (JP, NK, CC)",
-                        "name": "sector",
+                        "description": "Sector code (JP, NK, CC)",
+                        "name": "sectorcode",
                         "in": "query",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of athletes",
+                        "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/swagger.AthleteListResponse"
+                            "$ref": "#/definitions/swagger.FISAthletesResponse"
                         }
                     },
                     "400": {
@@ -609,14 +608,14 @@
                 }
             }
         },
-        "/fis/nation": {
-            "get": {
+        "/fis/competitor": {
+            "put": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Returns a list of nations for a given sector",
+                "description": "Updates an existing competitor",
                 "consumes": [
                     "application/json"
                 ],
@@ -624,23 +623,290 @@
                     "application/json"
                 ],
                 "tags": [
-                    "FIS"
+                    "FIS - Competitor Management"
                 ],
-                "summary": "Get nations by sector",
+                "summary": "Update competitor by ID",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Sector Code (JP, NK, CC)",
-                        "name": "sector",
+                        "description": "Competitor payload",
+                        "name": "competitor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/swagger.FISUpdateCompetitorExample"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.NotFoundResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Inserts a new competitor",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS - Competitor Management"
+                ],
+                "summary": "Add new competitor",
+                "parameters": [
+                    {
+                        "description": "Competitor payload",
+                        "name": "competitor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/swagger.FISInsertCompetitorExample"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ConflictResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes a competitor by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS - Competitor Management"
+                ],
+                "summary": "Delete competitor",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Competitor ID",
+                        "name": "id",
                         "in": "query",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of nations",
+                        "description": "Deleted"
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/swagger.NationsResponse"
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.NotFoundResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/fis/lastrow/competitor": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns the last row in the competitor table",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS - Competitor Management"
+                ],
+                "summary": "Get last competitor record",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.FISLastCompetitorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.NotFoundResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/fis/nation": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS - Athlete"
+                ],
+                "summary": "Get distinct nation codes for a given sector",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sector code (JP, NK, CC)",
+                        "name": "sectorcode",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.FISNationsBySectorResponse"
                         }
                     },
                     "400": {
@@ -6986,34 +7252,6 @@
                 }
             }
         },
-        "swagger.Athlete": {
-            "type": "object",
-            "properties": {
-                "first_name": {
-                    "type": "string",
-                    "example": "John"
-                },
-                "fis_code": {
-                    "type": "integer",
-                    "example": 123456
-                },
-                "last_name": {
-                    "type": "string",
-                    "example": "Doe"
-                }
-            }
-        },
-        "swagger.AthleteListResponse": {
-            "type": "object",
-            "properties": {
-                "athletes": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/swagger.Athlete"
-                    }
-                }
-            }
-        },
         "swagger.CoachtechData": {
             "type": "object",
             "properties": {
@@ -7193,6 +7431,366 @@
                 },
                 "suunto": {
                     "$ref": "#/definitions/swagger.DeviceInfoConnectedWithData"
+                }
+            }
+        },
+        "swagger.FISAthleteItem": {
+            "type": "object",
+            "properties": {
+                "firstname": {
+                    "type": "string",
+                    "example": "Iivo"
+                },
+                "fiscode": {
+                    "type": "integer",
+                    "example": 342001
+                },
+                "lastname": {
+                    "type": "string",
+                    "example": "Niskanen"
+                }
+            }
+        },
+        "swagger.FISAthletesResponse": {
+            "type": "object",
+            "properties": {
+                "athletes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.FISAthleteItem"
+                    }
+                }
+            }
+        },
+        "swagger.FISCompetitor": {
+            "type": "object",
+            "properties": {
+                "association": {
+                    "type": "string",
+                    "example": "FIN"
+                },
+                "birthdate": {
+                    "type": "string",
+                    "example": "1992-01-12"
+                },
+                "competitorid": {
+                    "type": "integer",
+                    "example": 123456
+                },
+                "dateofcreation": {
+                    "type": "string",
+                    "example": "2025-10-20"
+                },
+                "firstname": {
+                    "type": "string",
+                    "example": "Iivo"
+                },
+                "fiscode": {
+                    "type": "integer",
+                    "example": 342001
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "M"
+                },
+                "ipcid": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "lastname": {
+                    "type": "string",
+                    "example": "Niskanen"
+                },
+                "lastupdate": {
+                    "type": "string",
+                    "example": "2025-10-27T08:30:00Z"
+                },
+                "nationalcode": {
+                    "type": "string",
+                    "example": "246"
+                },
+                "nationcode": {
+                    "type": "string",
+                    "example": "FIN"
+                },
+                "personid": {
+                    "type": "integer",
+                    "example": 98765
+                },
+                "sectorcode": {
+                    "type": "string",
+                    "example": "CC"
+                },
+                "skiclub": {
+                    "type": "string",
+                    "example": "Ounasvaara Hiihtoseura"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "ACTIVE"
+                },
+                "status_date": {
+                    "type": "string",
+                    "example": "2025-10-27T08:30:00Z"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "ATHLETE"
+                }
+            }
+        },
+        "swagger.FISInsertCompetitorExample": {
+            "type": "object",
+            "properties": {
+                "alternatenamecheck": {
+                    "type": "string",
+                    "example": "OK"
+                },
+                "association": {
+                    "type": "string",
+                    "example": "FIN"
+                },
+                "birthdate": {
+                    "description": "YYYY-MM-DD",
+                    "type": "string",
+                    "example": "1992-01-12"
+                },
+                "carving": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "categorycode": {
+                    "type": "string",
+                    "example": "SEN"
+                },
+                "classcode": {
+                    "type": "string",
+                    "example": "A"
+                },
+                "classname": {
+                    "type": "string",
+                    "example": "Senior"
+                },
+                "competitorid": {
+                    "type": "integer",
+                    "example": 123456
+                },
+                "compidmssql": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "createdby": {
+                    "type": "string",
+                    "example": "admin@fis.int"
+                },
+                "data": {
+                    "type": "string",
+                    "example": "{}"
+                },
+                "dateofcreation": {
+                    "description": "YYYY-MM-DD",
+                    "type": "string",
+                    "example": "2025-10-20"
+                },
+                "deletedat": {
+                    "type": "string",
+                    "example": ""
+                },
+                "disciplines": {
+                    "type": "string",
+                    "example": "DISTANCE,SPRINT"
+                },
+                "doped": {
+                    "type": "string",
+                    "example": "NO"
+                },
+                "fee": {
+                    "type": "string",
+                    "example": "10.00000"
+                },
+                "firstname": {
+                    "type": "string",
+                    "example": "Iivo"
+                },
+                "fiscode": {
+                    "type": "integer",
+                    "example": 342001
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "M"
+                },
+                "injury": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "ipcid": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "lastname": {
+                    "type": "string",
+                    "example": "Niskanen"
+                },
+                "lastupdate": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2025-10-27T08:30:00Z"
+                },
+                "lastupdateby": {
+                    "type": "string",
+                    "example": "system"
+                },
+                "nationalcode": {
+                    "type": "string",
+                    "example": "246"
+                },
+                "nationcode": {
+                    "type": "string",
+                    "example": "FIN"
+                },
+                "natteam": {
+                    "type": "string",
+                    "example": "FIN-A"
+                },
+                "notallowed": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "personid": {
+                    "type": "integer",
+                    "example": 98765
+                },
+                "photo": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "photo_big": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "published": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "sectorcode": {
+                    "description": "JP/NK/CC",
+                    "type": "string",
+                    "example": "CC"
+                },
+                "skiclub": {
+                    "type": "string",
+                    "example": "Ounasvaara Hiihtoseura"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "ACTIVE"
+                },
+                "status_by": {
+                    "type": "string",
+                    "example": "FIS"
+                },
+                "status_date": {
+                    "description": "RFC3339",
+                    "type": "string",
+                    "example": "2025-10-27T08:30:00Z"
+                },
+                "status_old": {
+                    "type": "string",
+                    "example": ""
+                },
+                "statusnextlist": {
+                    "type": "string",
+                    "example": "A"
+                },
+                "team": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "tragroup": {
+                    "type": "string",
+                    "example": "A"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "ATHLETE"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "swagger.FISLastCompetitorResponse": {
+            "type": "object",
+            "properties": {
+                "competitor": {
+                    "$ref": "#/definitions/swagger.FISCompetitor"
+                }
+            }
+        },
+        "swagger.FISNationsBySectorResponse": {
+            "type": "object",
+            "properties": {
+                "nations": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "FIN",
+                        "NOR",
+                        "SWE"
+                    ]
+                }
+            }
+        },
+        "swagger.FISUpdateCompetitorExample": {
+            "type": "object",
+            "properties": {
+                "birthdate": {
+                    "type": "string",
+                    "example": "1992-01-12"
+                },
+                "competitorid": {
+                    "type": "integer",
+                    "example": 123456
+                },
+                "firstname": {
+                    "type": "string",
+                    "example": "Iivo"
+                },
+                "fiscode": {
+                    "type": "integer",
+                    "example": 342001
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "M"
+                },
+                "lastname": {
+                    "type": "string",
+                    "example": "Niskanen"
+                },
+                "lastupdate": {
+                    "type": "string",
+                    "example": "2025-10-28T09:45:00Z"
+                },
+                "nationcode": {
+                    "type": "string",
+                    "example": "FIN"
+                },
+                "sectorcode": {
+                    "type": "string",
+                    "example": "CC"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "ACTIVE"
+                },
+                "status_date": {
+                    "type": "string",
+                    "example": "2025-10-28T09:45:00Z"
                 }
             }
         },
@@ -9425,22 +10023,6 @@
                 "device": {
                     "type": "string",
                     "example": "garmin"
-                }
-            }
-        },
-        "swagger.NationsResponse": {
-            "type": "object",
-            "properties": {
-                "nations": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "example": [
-                        "USA",
-                        "NOR",
-                        "GER"
-                    ]
                 }
             }
         },

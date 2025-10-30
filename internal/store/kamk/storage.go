@@ -3,7 +3,6 @@ package kamk
 import (
 	"context"
 	"database/sql"
-	"time"
 )
 
 type Injuries interface {
@@ -15,11 +14,11 @@ type Injuries interface {
 }
 
 type Queries interface {
-	AddQuestionnaire(ctx context.Context, userID int32, in QuestionnaireInput) error
+	AddQuestionnaire(ctx context.Context, userID int32, in QuestionnaireInput) (int64, error)
 	GetQuestionnaires(ctx context.Context, userID int32) ([]Questionnaire, error)
 	IsQuizDoneToday(ctx context.Context, userID int32, queryType int32) ([]Questionnaire, error)
-	UpdateQuestionnaireByTimestamp(ctx context.Context, userID int32, ts time.Time, answers string, comment *string) (int64, error)
-	DeleteQuestionnaireByTimestamp(ctx context.Context, userID int32, ts time.Time) (int64, error)
+	UpdateQuestionnaireByID(ctx context.Context, userID int32, id int64, answers string, comment *string) (int64, error)
+	DeleteQuestionnaireByID(ctx context.Context, userID int32, id int64) (int64, error)
 }
 
 // KAMKStorage

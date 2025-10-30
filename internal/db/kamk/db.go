@@ -27,8 +27,8 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.deleteInjuryByIDStmt, err = db.PrepareContext(ctx, deleteInjuryByID); err != nil {
 		return nil, fmt.Errorf("error preparing query DeleteInjuryByID: %w", err)
 	}
-	if q.deleteQuestionnaireByTimestampStmt, err = db.PrepareContext(ctx, deleteQuestionnaireByTimestamp); err != nil {
-		return nil, fmt.Errorf("error preparing query DeleteQuestionnaireByTimestamp: %w", err)
+	if q.deleteQuestionnaireByIDStmt, err = db.PrepareContext(ctx, deleteQuestionnaireByID); err != nil {
+		return nil, fmt.Errorf("error preparing query DeleteQuestionnaireByID: %w", err)
 	}
 	if q.getActiveInjuriesByUserStmt, err = db.PrepareContext(ctx, getActiveInjuriesByUser); err != nil {
 		return nil, fmt.Errorf("error preparing query GetActiveInjuriesByUser: %w", err)
@@ -51,8 +51,8 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.markInjuryRecoveredByIDStmt, err = db.PrepareContext(ctx, markInjuryRecoveredByID); err != nil {
 		return nil, fmt.Errorf("error preparing query MarkInjuryRecoveredByID: %w", err)
 	}
-	if q.updateQuestionnaireByTimestampStmt, err = db.PrepareContext(ctx, updateQuestionnaireByTimestamp); err != nil {
-		return nil, fmt.Errorf("error preparing query UpdateQuestionnaireByTimestamp: %w", err)
+	if q.updateQuestionnaireByIDStmt, err = db.PrepareContext(ctx, updateQuestionnaireByID); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateQuestionnaireByID: %w", err)
 	}
 	return &q, nil
 }
@@ -64,9 +64,9 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing deleteInjuryByIDStmt: %w", cerr)
 		}
 	}
-	if q.deleteQuestionnaireByTimestampStmt != nil {
-		if cerr := q.deleteQuestionnaireByTimestampStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing deleteQuestionnaireByTimestampStmt: %w", cerr)
+	if q.deleteQuestionnaireByIDStmt != nil {
+		if cerr := q.deleteQuestionnaireByIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing deleteQuestionnaireByIDStmt: %w", cerr)
 		}
 	}
 	if q.getActiveInjuriesByUserStmt != nil {
@@ -104,9 +104,9 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing markInjuryRecoveredByIDStmt: %w", cerr)
 		}
 	}
-	if q.updateQuestionnaireByTimestampStmt != nil {
-		if cerr := q.updateQuestionnaireByTimestampStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing updateQuestionnaireByTimestampStmt: %w", cerr)
+	if q.updateQuestionnaireByIDStmt != nil {
+		if cerr := q.updateQuestionnaireByIDStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateQuestionnaireByIDStmt: %w", cerr)
 		}
 	}
 	return err
@@ -146,33 +146,33 @@ func (q *Queries) queryRow(ctx context.Context, stmt *sql.Stmt, query string, ar
 }
 
 type Queries struct {
-	db                                 DBTX
-	tx                                 *sql.Tx
-	deleteInjuryByIDStmt               *sql.Stmt
-	deleteQuestionnaireByTimestampStmt *sql.Stmt
-	getActiveInjuriesByUserStmt        *sql.Stmt
-	getMaxInjuryIDForUserStmt          *sql.Stmt
-	getQuestionnairesByUserStmt        *sql.Stmt
-	insertInjuryStmt                   *sql.Stmt
-	insertQuestionnaireStmt            *sql.Stmt
-	isQuizDoneTodayStmt                *sql.Stmt
-	markInjuryRecoveredByIDStmt        *sql.Stmt
-	updateQuestionnaireByTimestampStmt *sql.Stmt
+	db                          DBTX
+	tx                          *sql.Tx
+	deleteInjuryByIDStmt        *sql.Stmt
+	deleteQuestionnaireByIDStmt *sql.Stmt
+	getActiveInjuriesByUserStmt *sql.Stmt
+	getMaxInjuryIDForUserStmt   *sql.Stmt
+	getQuestionnairesByUserStmt *sql.Stmt
+	insertInjuryStmt            *sql.Stmt
+	insertQuestionnaireStmt     *sql.Stmt
+	isQuizDoneTodayStmt         *sql.Stmt
+	markInjuryRecoveredByIDStmt *sql.Stmt
+	updateQuestionnaireByIDStmt *sql.Stmt
 }
 
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 	return &Queries{
-		db:                                 tx,
-		tx:                                 tx,
-		deleteInjuryByIDStmt:               q.deleteInjuryByIDStmt,
-		deleteQuestionnaireByTimestampStmt: q.deleteQuestionnaireByTimestampStmt,
-		getActiveInjuriesByUserStmt:        q.getActiveInjuriesByUserStmt,
-		getMaxInjuryIDForUserStmt:          q.getMaxInjuryIDForUserStmt,
-		getQuestionnairesByUserStmt:        q.getQuestionnairesByUserStmt,
-		insertInjuryStmt:                   q.insertInjuryStmt,
-		insertQuestionnaireStmt:            q.insertQuestionnaireStmt,
-		isQuizDoneTodayStmt:                q.isQuizDoneTodayStmt,
-		markInjuryRecoveredByIDStmt:        q.markInjuryRecoveredByIDStmt,
-		updateQuestionnaireByTimestampStmt: q.updateQuestionnaireByTimestampStmt,
+		db:                          tx,
+		tx:                          tx,
+		deleteInjuryByIDStmt:        q.deleteInjuryByIDStmt,
+		deleteQuestionnaireByIDStmt: q.deleteQuestionnaireByIDStmt,
+		getActiveInjuriesByUserStmt: q.getActiveInjuriesByUserStmt,
+		getMaxInjuryIDForUserStmt:   q.getMaxInjuryIDForUserStmt,
+		getQuestionnairesByUserStmt: q.getQuestionnairesByUserStmt,
+		insertInjuryStmt:            q.insertInjuryStmt,
+		insertQuestionnaireStmt:     q.insertQuestionnaireStmt,
+		isQuizDoneTodayStmt:         q.isQuizDoneTodayStmt,
+		markInjuryRecoveredByIDStmt: q.markInjuryRecoveredByIDStmt,
+		updateQuestionnaireByIDStmt: q.updateQuestionnaireByIDStmt,
 	}
 }

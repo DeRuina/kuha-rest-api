@@ -5,6 +5,7 @@ INSERT INTO public.injuries (
   $1, $2, $3, $4, $5, NOW(), 0, $6, $7
 );
 
+
 -- name: MarkInjuryRecoveredByID :exec
 UPDATE public.injuries
 SET status = 1,
@@ -35,15 +36,17 @@ FROM public.injuries
 WHERE competitor_id = $1;
 
 
--- name: InsertQuestionnaire :exec
+-- name: InsertQuestionnaire :one
 INSERT INTO public.querys (
   competitor_id, query_type, answers, comment, "timestamp", meta
 ) VALUES (
   $1, $2, $3, $4, NOW(), $5
-);
+)
+RETURNING id;
 
 -- name: GetQuestionnairesByUser :many
 SELECT
+  id,
   competitor_id,
   query_type,
   answers,
@@ -56,28 +59,33 @@ ORDER BY "timestamp" DESC;
 
 -- name: IsQuizDoneToday :many
 SELECT
-  competitor_id, query_type, answers, comment, "timestamp", meta
+  id,
+  competitor_id,
+  query_type,
+  answers,
+  comment,
+  "timestamp",
+  meta
 FROM public.querys
 WHERE competitor_id = $1
   AND query_type    = $2
   AND "timestamp"  >= $3
-  AND "timestamp"  <  $4;
+  AND "timestamp"  <  $4
+ORDER BY "timestamp" DESC;
 
--- name: UpdateQuestionnaireByTimestamp :execrows
+-- name: UpdateQuestionnaireByID :execrows
 UPDATE public.querys
 SET answers = $3,
     comment = $4
 WHERE competitor_id = $1
-  AND "timestamp" >= date_trunc('minute', $2::timestamptz)
-  AND "timestamp" <  date_trunc('minute', $2::timestamptz) + interval '1 minute';
+  AND id           = $2;
 
 -- name: DeleteInjuryByID :execrows
 DELETE FROM public.injuries
 WHERE competitor_id = $1
   AND injury_id     = $2;
 
--- name: DeleteQuestionnaireByTimestamp :execrows
+-- name: DeleteQuestionnaireByID :execrows
 DELETE FROM public.querys
 WHERE competitor_id = $1
-  AND "timestamp" >= date_trunc('minute', $2::timestamptz)
-  AND "timestamp" <  date_trunc('minute', $2::timestamptz) + interval '1 minute';
+  AND id           = $2;

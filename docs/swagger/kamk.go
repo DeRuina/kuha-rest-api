@@ -1,7 +1,7 @@
 package swagger
 
 type KamkAddInjuryRequest struct {
-	UserID      string  `json:"user_id" example:"27353728"`
+	UserID      int32   `json:"user_id" example:"27353728"`
 	InjuryType  int32   `json:"injury_type" example:"1"`
 	Severity    *int32  `json:"severity,omitempty" example:"3"`
 	PainLevel   *int32  `json:"pain_level,omitempty" example:"7"`
@@ -11,8 +11,8 @@ type KamkAddInjuryRequest struct {
 }
 
 type KamkMarkRecoveredRequest struct {
-	UserID   string `json:"user_id" example:"27353728"`
-	InjuryID int32  `json:"injury_id" example:"2"`
+	UserID   int32 `json:"user_id" example:"27353728"`
+	InjuryID int32 `json:"injury_id" example:"2"`
 }
 
 type KamkInjuryItem struct {
@@ -37,14 +37,19 @@ type KamkMaxInjuryIDResponse struct {
 }
 
 type KamkAddQuestionnaireRequest struct {
-	UserID    string  `json:"user_id" example:"27353728"`
+	UserID    int32   `json:"user_id" example:"27353728"`
 	QueryType *int32  `json:"query_type,omitempty" example:"1"`
 	Answers   *string `json:"answers,omitempty" example:"{\"mood\":7,\"sleep\":8}"`
 	Comment   *string `json:"comment,omitempty" example:"Felt good this morning"`
 	Meta      *string `json:"meta,omitempty" example:"build=ios,v=2.3.1"`
 }
 
+type KamkCreateQuestionnaireResponse struct {
+	ID int64 `json:"id" example:"123"`
+}
+
 type KamkQuestionnaireItem struct {
+	ID           int64   `json:"id" example:"123"`
 	CompetitorID int32   `json:"competitor_id" example:"27353728"`
 	QueryType    *int32  `json:"query_type,omitempty" example:"1"`
 	Answers      *string `json:"answers,omitempty" example:"{\"mood\":7,\"sleep\":8}"`

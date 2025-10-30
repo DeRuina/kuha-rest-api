@@ -29,6 +29,7 @@ type Query struct {
 	Comment      sql.NullString
 	Timestamp    time.Time
 	Meta         sql.NullString
+	ID           int64
 }
 
 type User struct {

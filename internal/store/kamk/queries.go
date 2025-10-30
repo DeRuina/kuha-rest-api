@@ -14,6 +14,7 @@ type QueriesStore struct {
 }
 
 type Questionnaire struct {
+	ID           int64     `json:"id"`
 	CompetitorID int32     `json:"competitor_id"`
 	QueryType    *int32    `json:"query_type,omitempty"`
 	Answers      *string   `json:"answers,omitempty"`
@@ -29,7 +30,7 @@ type QuestionnaireInput struct {
 	Meta      *string
 }
 
-func (s *QueriesStore) AddQuestionnaire(ctx context.Context, userID int32, in QuestionnaireInput) error {
+func (s *QueriesStore) AddQuestionnaire(ctx context.Context, userID int32, in QuestionnaireInput) (int64, error) {
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
@@ -57,6 +58,7 @@ func (s *QueriesStore) GetQuestionnaires(ctx context.Context, userID int32) ([]Q
 	out := make([]Questionnaire, 0, len(rows))
 	for _, r := range rows {
 		out = append(out, Questionnaire{
+			ID:           r.ID,
 			CompetitorID: r.CompetitorID,
 			QueryType:    utils.Int32PtrOrNil(r.QueryType),
 			Answers:      utils.StringPtrOrNil(r.Answers),
@@ -90,6 +92,7 @@ func (s *QueriesStore) IsQuizDoneToday(ctx context.Context, userID int32, queryT
 	out := make([]Questionnaire, 0, len(rows))
 	for _, r := range rows {
 		out = append(out, Questionnaire{
+			ID:           r.ID,
 			CompetitorID: r.CompetitorID,
 			QueryType:    utils.Int32PtrOrNil(r.QueryType),
 			Answers:      utils.StringPtrOrNil(r.Answers),
@@ -101,14 +104,14 @@ func (s *QueriesStore) IsQuizDoneToday(ctx context.Context, userID int32, queryT
 	return out, nil
 }
 
-func (s *QueriesStore) UpdateQuestionnaireByTimestamp(ctx context.Context, userID int32, ts time.Time, answers string, comment *string) (int64, error) {
+func (s *QueriesStore) UpdateQuestionnaireByID(ctx context.Context, userID int32, id int64, answers string, comment *string) (int64, error) {
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
 	q := kamksqlc.New(s.db)
-	n, err := q.UpdateQuestionnaireByTimestamp(ctx, kamksqlc.UpdateQuestionnaireByTimestampParams{
+	n, err := q.UpdateQuestionnaireByID(ctx, kamksqlc.UpdateQuestionnaireByIDParams{
 		CompetitorID: userID,
-		Timestamp:    ts.UTC(),
+		ID:           id,
 		Answers:      utils.NullString(answers),
 		Comment:      utils.NullStringPtr(comment),
 	})
@@ -118,14 +121,14 @@ func (s *QueriesStore) UpdateQuestionnaireByTimestamp(ctx context.Context, userI
 	return n, nil
 }
 
-func (s *QueriesStore) DeleteQuestionnaireByTimestamp(ctx context.Context, userID int32, ts time.Time) (int64, error) {
+func (s *QueriesStore) DeleteQuestionnaireByID(ctx context.Context, userID int32, id int64) (int64, error) {
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
 	q := kamksqlc.New(s.db)
-	n, err := q.DeleteQuestionnaireByTimestamp(ctx, kamksqlc.DeleteQuestionnaireByTimestampParams{
+	n, err := q.DeleteQuestionnaireByID(ctx, kamksqlc.DeleteQuestionnaireByIDParams{
 		CompetitorID: userID,
-		Timestamp:    ts.UTC(),
+		ID:           id,
 	})
 	if err != nil {
 		return 0, err

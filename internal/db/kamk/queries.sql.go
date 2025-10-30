@@ -30,20 +30,19 @@ func (q *Queries) DeleteInjuryByID(ctx context.Context, arg DeleteInjuryByIDPara
 	return result.RowsAffected()
 }
 
-const deleteQuestionnaireByTimestamp = `-- name: DeleteQuestionnaireByTimestamp :execrows
+const deleteQuestionnaireByID = `-- name: DeleteQuestionnaireByID :execrows
 DELETE FROM public.querys
 WHERE competitor_id = $1
-  AND "timestamp" >= date_trunc('minute', $2::timestamptz)
-  AND "timestamp" <  date_trunc('minute', $2::timestamptz) + interval '1 minute'
+  AND id           = $2
 `
 
-type DeleteQuestionnaireByTimestampParams struct {
+type DeleteQuestionnaireByIDParams struct {
 	CompetitorID int32
-	Timestamp    time.Time
+	ID           int64
 }
 
-func (q *Queries) DeleteQuestionnaireByTimestamp(ctx context.Context, arg DeleteQuestionnaireByTimestampParams) (int64, error) {
-	result, err := q.exec(ctx, q.deleteQuestionnaireByTimestampStmt, deleteQuestionnaireByTimestamp, arg.CompetitorID, arg.Timestamp)
+func (q *Queries) DeleteQuestionnaireByID(ctx context.Context, arg DeleteQuestionnaireByIDParams) (int64, error) {
+	result, err := q.exec(ctx, q.deleteQuestionnaireByIDStmt, deleteQuestionnaireByID, arg.CompetitorID, arg.ID)
 	if err != nil {
 		return 0, err
 	}
@@ -117,6 +116,7 @@ func (q *Queries) GetMaxInjuryIDForUser(ctx context.Context, competitorID int32)
 
 const getQuestionnairesByUser = `-- name: GetQuestionnairesByUser :many
 SELECT
+  id,
   competitor_id,
   query_type,
   answers,
@@ -128,16 +128,27 @@ WHERE competitor_id = $1
 ORDER BY "timestamp" DESC
 `
 
-func (q *Queries) GetQuestionnairesByUser(ctx context.Context, competitorID int32) ([]Query, error) {
+type GetQuestionnairesByUserRow struct {
+	ID           int64
+	CompetitorID int32
+	QueryType    sql.NullInt32
+	Answers      sql.NullString
+	Comment      sql.NullString
+	Timestamp    time.Time
+	Meta         sql.NullString
+}
+
+func (q *Queries) GetQuestionnairesByUser(ctx context.Context, competitorID int32) ([]GetQuestionnairesByUserRow, error) {
 	rows, err := q.query(ctx, q.getQuestionnairesByUserStmt, getQuestionnairesByUser, competitorID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Query
+	var items []GetQuestionnairesByUserRow
 	for rows.Next() {
-		var i Query
+		var i GetQuestionnairesByUserRow
 		if err := rows.Scan(
+			&i.ID,
 			&i.CompetitorID,
 			&i.QueryType,
 			&i.Answers,
@@ -189,12 +200,13 @@ func (q *Queries) InsertInjury(ctx context.Context, arg InsertInjuryParams) erro
 	return err
 }
 
-const insertQuestionnaire = `-- name: InsertQuestionnaire :exec
+const insertQuestionnaire = `-- name: InsertQuestionnaire :one
 INSERT INTO public.querys (
   competitor_id, query_type, answers, comment, "timestamp", meta
 ) VALUES (
   $1, $2, $3, $4, NOW(), $5
 )
+RETURNING id
 `
 
 type InsertQuestionnaireParams struct {
@@ -205,25 +217,34 @@ type InsertQuestionnaireParams struct {
 	Meta         sql.NullString
 }
 
-func (q *Queries) InsertQuestionnaire(ctx context.Context, arg InsertQuestionnaireParams) error {
-	_, err := q.exec(ctx, q.insertQuestionnaireStmt, insertQuestionnaire,
+func (q *Queries) InsertQuestionnaire(ctx context.Context, arg InsertQuestionnaireParams) (int64, error) {
+	row := q.queryRow(ctx, q.insertQuestionnaireStmt, insertQuestionnaire,
 		arg.CompetitorID,
 		arg.QueryType,
 		arg.Answers,
 		arg.Comment,
 		arg.Meta,
 	)
-	return err
+	var id int64
+	err := row.Scan(&id)
+	return id, err
 }
 
 const isQuizDoneToday = `-- name: IsQuizDoneToday :many
 SELECT
-  competitor_id, query_type, answers, comment, "timestamp", meta
+  id,
+  competitor_id,
+  query_type,
+  answers,
+  comment,
+  "timestamp",
+  meta
 FROM public.querys
 WHERE competitor_id = $1
   AND query_type    = $2
   AND "timestamp"  >= $3
   AND "timestamp"  <  $4
+ORDER BY "timestamp" DESC
 `
 
 type IsQuizDoneTodayParams struct {
@@ -233,7 +254,17 @@ type IsQuizDoneTodayParams struct {
 	Timestamp_2  time.Time
 }
 
-func (q *Queries) IsQuizDoneToday(ctx context.Context, arg IsQuizDoneTodayParams) ([]Query, error) {
+type IsQuizDoneTodayRow struct {
+	ID           int64
+	CompetitorID int32
+	QueryType    sql.NullInt32
+	Answers      sql.NullString
+	Comment      sql.NullString
+	Timestamp    time.Time
+	Meta         sql.NullString
+}
+
+func (q *Queries) IsQuizDoneToday(ctx context.Context, arg IsQuizDoneTodayParams) ([]IsQuizDoneTodayRow, error) {
 	rows, err := q.query(ctx, q.isQuizDoneTodayStmt, isQuizDoneToday,
 		arg.CompetitorID,
 		arg.QueryType,
@@ -244,10 +275,11 @@ func (q *Queries) IsQuizDoneToday(ctx context.Context, arg IsQuizDoneTodayParams
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Query
+	var items []IsQuizDoneTodayRow
 	for rows.Next() {
-		var i Query
+		var i IsQuizDoneTodayRow
 		if err := rows.Scan(
+			&i.ID,
 			&i.CompetitorID,
 			&i.QueryType,
 			&i.Answers,
@@ -286,26 +318,25 @@ func (q *Queries) MarkInjuryRecoveredByID(ctx context.Context, arg MarkInjuryRec
 	return err
 }
 
-const updateQuestionnaireByTimestamp = `-- name: UpdateQuestionnaireByTimestamp :execrows
+const updateQuestionnaireByID = `-- name: UpdateQuestionnaireByID :execrows
 UPDATE public.querys
 SET answers = $3,
     comment = $4
 WHERE competitor_id = $1
-  AND "timestamp" >= date_trunc('minute', $2::timestamptz)
-  AND "timestamp" <  date_trunc('minute', $2::timestamptz) + interval '1 minute'
+  AND id           = $2
 `
 
-type UpdateQuestionnaireByTimestampParams struct {
+type UpdateQuestionnaireByIDParams struct {
 	CompetitorID int32
-	Timestamp    time.Time
+	ID           int64
 	Answers      sql.NullString
 	Comment      sql.NullString
 }
 
-func (q *Queries) UpdateQuestionnaireByTimestamp(ctx context.Context, arg UpdateQuestionnaireByTimestampParams) (int64, error) {
-	result, err := q.exec(ctx, q.updateQuestionnaireByTimestampStmt, updateQuestionnaireByTimestamp,
+func (q *Queries) UpdateQuestionnaireByID(ctx context.Context, arg UpdateQuestionnaireByIDParams) (int64, error) {
+	result, err := q.exec(ctx, q.updateQuestionnaireByIDStmt, updateQuestionnaireByID,
 		arg.CompetitorID,
-		arg.Timestamp,
+		arg.ID,
 		arg.Answers,
 		arg.Comment,
 	)

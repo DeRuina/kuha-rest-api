@@ -384,143 +384,6 @@ definitions:
         example: ATHLETE
         type: string
     type: object
-  swagger.FISInsertCompetitorExample:
-    properties:
-      alternatenamecheck:
-        example: OK
-        type: string
-      association:
-        example: FIN
-        type: string
-      birthdate:
-        description: YYYY-MM-DD
-        example: "1992-01-12"
-        type: string
-      carving:
-        example: 0
-        type: integer
-      categorycode:
-        example: SEN
-        type: string
-      classcode:
-        example: A
-        type: string
-      classname:
-        example: Senior
-        type: string
-      competitorid:
-        example: 123456
-        type: integer
-      compidmssql:
-        example: 0
-        type: integer
-      createdby:
-        example: admin@fis.int
-        type: string
-      data:
-        example: '{}'
-        type: string
-      dateofcreation:
-        description: YYYY-MM-DD
-        example: "2025-10-20"
-        type: string
-      deletedat:
-        example: ""
-        type: string
-      disciplines:
-        example: DISTANCE,SPRINT
-        type: string
-      doped:
-        example: "NO"
-        type: string
-      fee:
-        example: "10.00000"
-        type: string
-      firstname:
-        example: Iivo
-        type: string
-      fiscode:
-        example: 342001
-        type: integer
-      gender:
-        example: M
-        type: string
-      injury:
-        example: 0
-        type: integer
-      ipcid:
-        example: 0
-        type: integer
-      lastname:
-        example: Niskanen
-        type: string
-      lastupdate:
-        description: RFC3339
-        example: "2025-10-27T08:30:00Z"
-        type: string
-      lastupdateby:
-        example: system
-        type: string
-      nationalcode:
-        example: "246"
-        type: string
-      nationcode:
-        example: FIN
-        type: string
-      natteam:
-        example: FIN-A
-        type: string
-      notallowed:
-        example: 0
-        type: integer
-      personid:
-        example: 98765
-        type: integer
-      photo:
-        example: 0
-        type: integer
-      photo_big:
-        example: 0
-        type: integer
-      published:
-        example: 1
-        type: integer
-      sectorcode:
-        description: JP/NK/CC
-        example: CC
-        type: string
-      skiclub:
-        example: Ounasvaara Hiihtoseura
-        type: string
-      status:
-        example: ACTIVE
-        type: string
-      status_by:
-        example: FIS
-        type: string
-      status_date:
-        description: RFC3339
-        example: "2025-10-27T08:30:00Z"
-        type: string
-      status_old:
-        example: ""
-        type: string
-      statusnextlist:
-        example: A
-        type: string
-      team:
-        example: 0
-        type: integer
-      tragroup:
-        example: A
-        type: string
-      type:
-        example: ATHLETE
-        type: string
-      version:
-        example: 1
-        type: integer
-    type: object
   swagger.FISLastCompetitorResponse:
     properties:
       competitor:
@@ -536,42 +399,6 @@ definitions:
         items:
           type: string
         type: array
-    type: object
-  swagger.FISUpdateCompetitorExample:
-    properties:
-      birthdate:
-        example: "1992-01-12"
-        type: string
-      competitorid:
-        example: 123456
-        type: integer
-      firstname:
-        example: Iivo
-        type: string
-      fiscode:
-        example: 342001
-        type: integer
-      gender:
-        example: M
-        type: string
-      lastname:
-        example: Niskanen
-        type: string
-      lastupdate:
-        example: "2025-10-28T09:45:00Z"
-        type: string
-      nationcode:
-        example: FIN
-        type: string
-      sectorcode:
-        example: CC
-        type: string
-      status:
-        example: ACTIVE
-        type: string
-      status_date:
-        example: "2025-10-28T09:45:00Z"
-        type: string
     type: object
   swagger.ForbiddenError:
     properties:
@@ -900,8 +727,8 @@ definitions:
         example: 3
         type: integer
       user_id:
-        example: "27353728"
-        type: string
+        example: 27353728
+        type: integer
     type: object
   swagger.KamkAddQuestionnaireRequest:
     properties:
@@ -918,8 +745,14 @@ definitions:
         example: 1
         type: integer
       user_id:
-        example: "27353728"
-        type: string
+        example: 27353728
+        type: integer
+    type: object
+  swagger.KamkCreateQuestionnaireResponse:
+    properties:
+      id:
+        example: 123
+        type: integer
     type: object
   swagger.KamkInjuriesListResponse:
     properties:
@@ -967,8 +800,8 @@ definitions:
         example: 2
         type: integer
       user_id:
-        example: "27353728"
-        type: string
+        example: 27353728
+        type: integer
     type: object
   swagger.KamkMaxInjuryIDResponse:
     properties:
@@ -986,6 +819,9 @@ definitions:
         type: string
       competitor_id:
         example: 27353728
+        type: integer
+      id:
+        example: 123
         type: integer
       meta:
         example: build=ios,v=2.3.1
@@ -3784,141 +3620,6 @@ paths:
       summary: Get all athletes for a given sector
       tags:
       - FIS - Athlete
-  /fis/competitor:
-    delete:
-      consumes:
-      - application/json
-      description: Deletes a competitor by ID
-      parameters:
-      - description: Competitor ID
-        in: query
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Deleted
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/swagger.ValidationErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/swagger.UnauthorizedResponse'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/swagger.ForbiddenResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/swagger.NotFoundResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/swagger.InternalServerErrorResponse'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
-      security:
-      - BearerAuth: []
-      summary: Delete competitor
-      tags:
-      - FIS - Competitor Management
-    post:
-      consumes:
-      - application/json
-      description: Inserts a new competitor
-      parameters:
-      - description: Competitor payload
-        in: body
-        name: competitor
-        required: true
-        schema:
-          $ref: '#/definitions/swagger.FISInsertCompetitorExample'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/swagger.ValidationErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/swagger.UnauthorizedResponse'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/swagger.ForbiddenResponse'
-        "409":
-          description: Conflict
-          schema:
-            $ref: '#/definitions/swagger.ConflictResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/swagger.InternalServerErrorResponse'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
-      security:
-      - BearerAuth: []
-      summary: Add new competitor
-      tags:
-      - FIS - Competitor Management
-    put:
-      consumes:
-      - application/json
-      description: Updates an existing competitor
-      parameters:
-      - description: Competitor payload
-        in: body
-        name: competitor
-        required: true
-        schema:
-          $ref: '#/definitions/swagger.FISUpdateCompetitorExample'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Updated
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/swagger.ValidationErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/swagger.UnauthorizedResponse'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/swagger.ForbiddenResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/swagger.NotFoundResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/swagger.InternalServerErrorResponse'
-        "503":
-          description: Service Unavailable
-          schema:
-            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
-      security:
-      - BearerAuth: []
-      summary: Update competitor by ID
-      tags:
-      - FIS - Competitor Management
   /fis/lastrow/competitor:
     get:
       consumes:
@@ -4019,19 +3720,18 @@ paths:
     delete:
       consumes:
       - application/json
-      description: Deletes a single questionnaire row (competitor_id=user_id AND timestamp=ts
-        [minute-window])
+      description: Deletes a questionnaire row (competitor_id=user_id AND id=id)
       parameters:
       - description: sportti_id
         in: query
         name: user_id
         required: true
         type: integer
-      - description: Timestamp (RFC3339)
+      - description: Questionnaire ID
         in: query
-        name: timestamp
+        name: id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
@@ -4063,7 +3763,7 @@ paths:
             $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
-      summary: Delete a questionnaire by timestamp
+      summary: Delete a questionnaire by id
       tags:
       - KAMK - Queries
   /kamk/injury:
@@ -4397,7 +4097,9 @@ paths:
       - application/json
       responses:
         "201":
-          description: "Created: \tQuery stored (no content)"
+          description: Created
+          schema:
+            $ref: '#/definitions/swagger.KamkCreateQuestionnaireResponse'
         "400":
           description: Bad Request
           schema:
@@ -4427,18 +4129,18 @@ paths:
     post:
       consumes:
       - application/json
-      description: Updates answers/comment for the exact timestamp row for a competitor
+      description: Updates the questionnaire row identified by id (and user_id)
       parameters:
       - description: sportti_id
         in: query
         name: user_id
         required: true
         type: integer
-      - description: Timestamp (RFC3339)
+      - description: Questionnaire ID
         in: query
-        name: timestamp
+        name: id
         required: true
-        type: string
+        type: integer
       - description: Update payload
         in: body
         name: body
@@ -4476,7 +4178,7 @@ paths:
             $ref: '#/definitions/swagger.ServiceUnavailableResponse'
       security:
       - BearerAuth: []
-      summary: Update questionnaire by timestamp
+      summary: Update questionnaire by id
       tags:
       - KAMK - Queries
   /klab/data:

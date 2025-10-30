@@ -616,216 +616,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/fis/competitor": {
-            "put": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Updates an existing competitor",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "FIS - Competitor Management"
-                ],
-                "summary": "Update competitor by ID",
-                "parameters": [
-                    {
-                        "description": "Competitor payload",
-                        "name": "competitor",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/swagger.FISUpdateCompetitorExample"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Updated"
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.ForbiddenResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.NotFoundResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Inserts a new competitor",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "FIS - Competitor Management"
-                ],
-                "summary": "Add new competitor",
-                "parameters": [
-                    {
-                        "description": "Competitor payload",
-                        "name": "competitor",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/swagger.FISInsertCompetitorExample"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created"
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.ForbiddenResponse"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.ConflictResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Deletes a competitor by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "FIS - Competitor Management"
-                ],
-                "summary": "Delete competitor",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Competitor ID",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Deleted"
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.ForbiddenResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.NotFoundResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
-                        }
-                    },
-                    "503": {
-                        "description": "Service Unavailable",
-                        "schema": {
-                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/fis/lastrow/competitor": {
             "get": {
                 "security": [
@@ -983,7 +773,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Deletes a single questionnaire row (competitor_id=user_id AND timestamp=ts [minute-window])",
+                "description": "Deletes a questionnaire row (competitor_id=user_id AND id=id)",
                 "consumes": [
                     "application/json"
                 ],
@@ -993,7 +783,7 @@ const docTemplate = `{
                 "tags": [
                     "KAMK - Queries"
                 ],
-                "summary": "Delete a questionnaire by timestamp",
+                "summary": "Delete a questionnaire by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1003,9 +793,9 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "Timestamp (RFC3339)",
-                        "name": "timestamp",
+                        "type": "integer",
+                        "description": "Questionnaire ID",
+                        "name": "id",
                         "in": "query",
                         "required": true
                     }
@@ -1571,7 +1361,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "Created: \tQuery stored (no content)"
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.KamkCreateQuestionnaireResponse"
+                        }
                     },
                     "400": {
                         "description": "Bad Request",
@@ -1613,7 +1406,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Updates answers/comment for the exact timestamp row for a competitor",
+                "description": "Updates the questionnaire row identified by id (and user_id)",
                 "consumes": [
                     "application/json"
                 ],
@@ -1623,7 +1416,7 @@ const docTemplate = `{
                 "tags": [
                     "KAMK - Queries"
                 ],
-                "summary": "Update questionnaire by timestamp",
+                "summary": "Update questionnaire by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1633,9 +1426,9 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "Timestamp (RFC3339)",
-                        "name": "timestamp",
+                        "type": "integer",
+                        "description": "Questionnaire ID",
+                        "name": "id",
                         "in": "query",
                         "required": true
                     },
@@ -7547,188 +7340,6 @@ const docTemplate = `{
                 }
             }
         },
-        "swagger.FISInsertCompetitorExample": {
-            "type": "object",
-            "properties": {
-                "alternatenamecheck": {
-                    "type": "string",
-                    "example": "OK"
-                },
-                "association": {
-                    "type": "string",
-                    "example": "FIN"
-                },
-                "birthdate": {
-                    "description": "YYYY-MM-DD",
-                    "type": "string",
-                    "example": "1992-01-12"
-                },
-                "carving": {
-                    "type": "integer",
-                    "example": 0
-                },
-                "categorycode": {
-                    "type": "string",
-                    "example": "SEN"
-                },
-                "classcode": {
-                    "type": "string",
-                    "example": "A"
-                },
-                "classname": {
-                    "type": "string",
-                    "example": "Senior"
-                },
-                "competitorid": {
-                    "type": "integer",
-                    "example": 123456
-                },
-                "compidmssql": {
-                    "type": "integer",
-                    "example": 0
-                },
-                "createdby": {
-                    "type": "string",
-                    "example": "admin@fis.int"
-                },
-                "data": {
-                    "type": "string",
-                    "example": "{}"
-                },
-                "dateofcreation": {
-                    "description": "YYYY-MM-DD",
-                    "type": "string",
-                    "example": "2025-10-20"
-                },
-                "deletedat": {
-                    "type": "string",
-                    "example": ""
-                },
-                "disciplines": {
-                    "type": "string",
-                    "example": "DISTANCE,SPRINT"
-                },
-                "doped": {
-                    "type": "string",
-                    "example": "NO"
-                },
-                "fee": {
-                    "type": "string",
-                    "example": "10.00000"
-                },
-                "firstname": {
-                    "type": "string",
-                    "example": "Iivo"
-                },
-                "fiscode": {
-                    "type": "integer",
-                    "example": 342001
-                },
-                "gender": {
-                    "type": "string",
-                    "example": "M"
-                },
-                "injury": {
-                    "type": "integer",
-                    "example": 0
-                },
-                "ipcid": {
-                    "type": "integer",
-                    "example": 0
-                },
-                "lastname": {
-                    "type": "string",
-                    "example": "Niskanen"
-                },
-                "lastupdate": {
-                    "description": "RFC3339",
-                    "type": "string",
-                    "example": "2025-10-27T08:30:00Z"
-                },
-                "lastupdateby": {
-                    "type": "string",
-                    "example": "system"
-                },
-                "nationalcode": {
-                    "type": "string",
-                    "example": "246"
-                },
-                "nationcode": {
-                    "type": "string",
-                    "example": "FIN"
-                },
-                "natteam": {
-                    "type": "string",
-                    "example": "FIN-A"
-                },
-                "notallowed": {
-                    "type": "integer",
-                    "example": 0
-                },
-                "personid": {
-                    "type": "integer",
-                    "example": 98765
-                },
-                "photo": {
-                    "type": "integer",
-                    "example": 0
-                },
-                "photo_big": {
-                    "type": "integer",
-                    "example": 0
-                },
-                "published": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "sectorcode": {
-                    "description": "JP/NK/CC",
-                    "type": "string",
-                    "example": "CC"
-                },
-                "skiclub": {
-                    "type": "string",
-                    "example": "Ounasvaara Hiihtoseura"
-                },
-                "status": {
-                    "type": "string",
-                    "example": "ACTIVE"
-                },
-                "status_by": {
-                    "type": "string",
-                    "example": "FIS"
-                },
-                "status_date": {
-                    "description": "RFC3339",
-                    "type": "string",
-                    "example": "2025-10-27T08:30:00Z"
-                },
-                "status_old": {
-                    "type": "string",
-                    "example": ""
-                },
-                "statusnextlist": {
-                    "type": "string",
-                    "example": "A"
-                },
-                "team": {
-                    "type": "integer",
-                    "example": 0
-                },
-                "tragroup": {
-                    "type": "string",
-                    "example": "A"
-                },
-                "type": {
-                    "type": "string",
-                    "example": "ATHLETE"
-                },
-                "version": {
-                    "type": "integer",
-                    "example": 1
-                }
-            }
-        },
         "swagger.FISLastCompetitorResponse": {
             "type": "object",
             "properties": {
@@ -7750,55 +7361,6 @@ const docTemplate = `{
                         "NOR",
                         "SWE"
                     ]
-                }
-            }
-        },
-        "swagger.FISUpdateCompetitorExample": {
-            "type": "object",
-            "properties": {
-                "birthdate": {
-                    "type": "string",
-                    "example": "1992-01-12"
-                },
-                "competitorid": {
-                    "type": "integer",
-                    "example": 123456
-                },
-                "firstname": {
-                    "type": "string",
-                    "example": "Iivo"
-                },
-                "fiscode": {
-                    "type": "integer",
-                    "example": 342001
-                },
-                "gender": {
-                    "type": "string",
-                    "example": "M"
-                },
-                "lastname": {
-                    "type": "string",
-                    "example": "Niskanen"
-                },
-                "lastupdate": {
-                    "type": "string",
-                    "example": "2025-10-28T09:45:00Z"
-                },
-                "nationcode": {
-                    "type": "string",
-                    "example": "FIN"
-                },
-                "sectorcode": {
-                    "type": "string",
-                    "example": "CC"
-                },
-                "status": {
-                    "type": "string",
-                    "example": "ACTIVE"
-                },
-                "status_date": {
-                    "type": "string",
-                    "example": "2025-10-28T09:45:00Z"
                 }
             }
         },
@@ -8266,8 +7828,8 @@ const docTemplate = `{
                     "example": 3
                 },
                 "user_id": {
-                    "type": "string",
-                    "example": "27353728"
+                    "type": "integer",
+                    "example": 27353728
                 }
             }
         },
@@ -8291,8 +7853,17 @@ const docTemplate = `{
                     "example": 1
                 },
                 "user_id": {
-                    "type": "string",
-                    "example": "27353728"
+                    "type": "integer",
+                    "example": 27353728
+                }
+            }
+        },
+        "swagger.KamkCreateQuestionnaireResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 123
                 }
             }
         },
@@ -8360,8 +7931,8 @@ const docTemplate = `{
                     "example": 2
                 },
                 "user_id": {
-                    "type": "string",
-                    "example": "27353728"
+                    "type": "integer",
+                    "example": 27353728
                 }
             }
         },
@@ -8388,6 +7959,10 @@ const docTemplate = `{
                 "competitor_id": {
                     "type": "integer",
                     "example": 27353728
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 123
                 },
                 "meta": {
                     "type": "string",

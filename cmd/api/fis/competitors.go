@@ -191,6 +191,7 @@ func (h *CompetitorHandler) GetLastRowCompetitor(w http.ResponseWriter, r *http.
 //	@Failure		503			{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/fis/competitor [post]
+
 func (h *CompetitorHandler) InsertCompetitor(w http.ResponseWriter, r *http.Request) {
 	if !authz.Authorize(r) {
 		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
@@ -245,6 +246,7 @@ func (h *CompetitorHandler) InsertCompetitor(w http.ResponseWriter, r *http.Requ
 //	@Failure		503			{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/fis/competitor [put]
+
 func (h *CompetitorHandler) UpdateCompetitor(w http.ResponseWriter, r *http.Request) {
 	if !authz.Authorize(r) {
 		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
@@ -295,6 +297,7 @@ func (h *CompetitorHandler) UpdateCompetitor(w http.ResponseWriter, r *http.Requ
 //	@Failure		503	{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/fis/competitor [delete]
+
 func (h *CompetitorHandler) DeleteCompetitor(w http.ResponseWriter, r *http.Request) {
 	if !authz.Authorize(r) {
 		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))

@@ -467,3 +467,11 @@ func ParseRFC3339MinuteOrSecond(s string) (time.Time, error) {
 	}
 	return time.Time{}, ErrInvalidTimeStamp
 }
+
+func ParsePositiveInt64(s string) (int64, error) {
+	v, err := strconv.ParseInt(s, 10, 64)
+	if err != nil || v <= 0 {
+		return 0, ErrInvalidParameter
+	}
+	return v, nil
+}

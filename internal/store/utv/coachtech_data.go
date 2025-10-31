@@ -24,7 +24,7 @@ func (s *CoachtechDataStore) GetStatus(ctx context.Context, userID uuid.UUID) (b
 }
 
 func (s *CoachtechDataStore) GetData(ctx context.Context, userID uuid.UUID, after, before *time.Time) ([]json.RawMessage, error) {
-	ctx, cancel := context.WithTimeout(ctx, DataTimeout)
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
 	arg := utvsqlc.GetCoachtechDataParams{
@@ -55,7 +55,7 @@ func (s *CoachtechDataStore) InsertCoachtechID(ctx context.Context, userID uuid.
 }
 
 func (s *CoachtechDataStore) InsertCoachtechData(ctx context.Context, coachtechID int32, summaryDate time.Time, testID string, data json.RawMessage) error {
-	ctx, cancel := context.WithTimeout(ctx, DataTimeout)
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
 	queries := utvsqlc.New(s.db)

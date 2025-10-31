@@ -72,7 +72,7 @@ func (s *GarminTokenStore) GetTokensForUpdate(ctx context.Context, cutoff time.T
 }
 
 func (s *GarminTokenStore) GetDataForUpdate(ctx context.Context, cutoff time.Time) ([]utvsqlc.GarminToken, error) {
-	ctx, cancel := context.WithTimeout(ctx, DataTimeout)
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
 	queries := utvsqlc.New(s.db)

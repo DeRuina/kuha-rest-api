@@ -67,7 +67,7 @@ func (s *PolarTokenStore) GetTokensForUpdate(ctx context.Context, cutoff time.Ti
 }
 
 func (s *PolarTokenStore) GetDataForUpdate(ctx context.Context, cutoff time.Time) ([]utvsqlc.PolarToken, error) {
-	ctx, cancel := context.WithTimeout(ctx, DataTimeout)
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
 	queries := utvsqlc.New(s.db)

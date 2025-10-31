@@ -3,12 +3,9 @@ package klab
 import (
 	"context"
 	"database/sql"
-	"time"
 
 	klabsqlc "github.com/DeRuina/KUHA-REST-API/internal/db/klab"
 )
-
-const DataTimeout = 30 * time.Second
 
 // Interfaces
 type Users interface {

@@ -3,12 +3,9 @@ package archinisis
 import (
 	"context"
 	"database/sql"
-	"time"
 
 	archsqlc "github.com/DeRuina/KUHA-REST-API/internal/db/archinisis"
 )
-
-const DataTimeout = 30 * time.Second
 
 // Interfaces
 type Users interface {

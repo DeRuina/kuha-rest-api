@@ -3,13 +3,10 @@ package tietoevry
 import (
 	"context"
 	"database/sql"
-	"time"
 
 	tietoevrysqlc "github.com/DeRuina/KUHA-REST-API/internal/db/tietoevry"
 	"github.com/google/uuid"
 )
-
-const DataTimeout = 30 * time.Second
 
 // Interfaces
 type Users interface {

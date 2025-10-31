@@ -67,7 +67,7 @@ func (s *OuraTokenStore) GetTokensForUpdate(ctx context.Context, cutoff time.Tim
 }
 
 func (s *OuraTokenStore) GetDataForUpdate(ctx context.Context, cutoff time.Time) ([]utvsqlc.OuraToken, error) {
-	ctx, cancel := context.WithTimeout(ctx, DataTimeout)
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
 	queries := utvsqlc.New(s.db)

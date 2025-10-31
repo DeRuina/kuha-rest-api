@@ -67,7 +67,7 @@ func (s *SuuntoTokenStore) GetTokensForUpdate(ctx context.Context, cutoff time.T
 }
 
 func (s *SuuntoTokenStore) GetDataForUpdate(ctx context.Context, cutoff time.Time) ([]utvsqlc.SuuntoToken, error) {
-	ctx, cancel := context.WithTimeout(ctx, DataTimeout)
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
 	queries := utvsqlc.New(s.db)

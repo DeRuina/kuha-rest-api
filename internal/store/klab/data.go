@@ -33,7 +33,7 @@ type KlabDataNoCustomer struct {
 }
 
 func (s *DataStore) InsertKlabDataBulk(ctx context.Context, payloads []KlabDataPayload) error {
-	ctx, cancel := context.WithTimeout(ctx, DataTimeout)
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
 	tx, err := s.db.BeginTx(ctx, nil)
@@ -99,7 +99,7 @@ func (s *DataStore) GetCustomerByID(ctx context.Context, idcustomer int32) (klab
 }
 
 func (s *DataStore) GetDataByCustomerIDNoCustomer(ctx context.Context, idcustomer int32) (*KlabDataNoCustomerResponse, error) {
-	ctx, cancel := context.WithTimeout(ctx, DataTimeout)
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
 	// Check if customer exists first

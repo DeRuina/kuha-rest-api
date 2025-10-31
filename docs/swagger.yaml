@@ -763,9 +763,6 @@ definitions:
     type: object
   swagger.KamkInjuryItem:
     properties:
-      competitor_id:
-        example: 27353728
-        type: integer
       date_end:
         example: "2025-01-17T12:00:00Z"
         type: string
@@ -793,6 +790,9 @@ definitions:
       status:
         example: 0
         type: integer
+      user_id:
+        example: 27353728
+        type: integer
     type: object
   swagger.KamkMarkRecoveredRequest:
     properties:
@@ -817,9 +817,6 @@ definitions:
       comment:
         example: Felt good this morning
         type: string
-      competitor_id:
-        example: 27353728
-        type: integer
       id:
         example: 123
         type: integer
@@ -832,6 +829,9 @@ definitions:
       timestamp:
         example: "2025-10-20T09:30:00Z"
         type: string
+      user_id:
+        example: 27353728
+        type: integer
     type: object
   swagger.KamkQuestionnairesListResponse:
     properties:

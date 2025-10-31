@@ -23,13 +23,13 @@ func NewInjuriesHandler(store kamk.Injuries, cache *cache.Storage) *InjuriesHand
 
 // Validation structs
 type KamkAddInjuryInput struct {
-	UserID      int32   `json:"user_id" validate:"required,gt=0"`
-	InjuryType  int32   `json:"injury_type" validate:"required"`
-	Severity    *int32  `json:"severity" validate:"omitempty"`
-	PainLevel   *int32  `json:"pain_level" validate:"omitempty"`
-	Description *string `json:"description" validate:"omitempty"`
-	InjuryID    int32   `json:"injury_id" validate:"required"`
-	Meta        *string `json:"meta" validate:"omitempty"`
+	UserID      int32  `json:"user_id" validate:"required,gt=0"`
+	InjuryType  int32  `json:"injury_type" validate:"required"`
+	Severity    int32  `json:"severity" validate:"required"`
+	PainLevel   int32  `json:"pain_level" validate:"required"`
+	Description string `json:"description" validate:"required"`
+	InjuryID    int32  `json:"injury_id" validate:"required"`
+	Meta        string `json:"meta" validate:"required"`
 }
 
 type KamkMarkRecoveredInput struct {

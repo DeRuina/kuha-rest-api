@@ -26,16 +26,16 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.injuries (
-    competitor_id integer NOT NULL,
-    injury_type integer NOT NULL,
-    severity integer,
-    pain_level integer,
-    description character varying(255),
-    date_start timestamp without time zone NOT NULL DEFAULT NOW(),
-    status integer NOT NULL DEFAULT 0,
+    user_id integer DEFAULT 0 NOT NULL,
+    injury_type integer DEFAULT 0 NOT NULL,
+    severity integer DEFAULT 0 NOT NULL,
+    pain_level integer DEFAULT 0 NOT NULL,
+    description character varying(255) NOT NULL,
+    date_start timestamp without time zone DEFAULT now() NOT NULL,
+    status integer DEFAULT 0 NOT NULL,
     date_end timestamp without time zone,
-    injury_id integer,
-    meta character varying(255)
+    injury_id integer DEFAULT 0 NOT NULL,
+    meta character varying(255) NOT NULL
 );
 
 
@@ -44,12 +44,12 @@ CREATE TABLE public.injuries (
 --
 
 CREATE TABLE public.querys (
-    competitor_id integer NOT NULL,
-    query_type integer,
-    answers character varying(255),
-    comment character varying(255),
-    "timestamp" timestamp without time zone NOT NULL,
-    meta character varying(255),
+    user_id integer DEFAULT 0 NOT NULL,
+    query_type integer DEFAULT 0 NOT NULL,
+    answers character varying(255) NOT NULL,
+    comment character varying(255) NOT NULL,
+    "timestamp" timestamp without time zone DEFAULT now() NOT NULL,
+    meta character varying(255) NOT NULL,
     id bigint NOT NULL
 );
 
@@ -96,4 +96,3 @@ GRANT ALL ON SCHEMA public TO kamkadmin;
 --
 -- PostgreSQL database dump complete
 --
-

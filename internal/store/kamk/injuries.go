@@ -14,25 +14,25 @@ type InjuriesStore struct {
 }
 
 type Injury struct {
-	CompetitorID int32      `json:"competitor_id"`
-	InjuryType   int32      `json:"injury_type"`
-	Severity     *int32     `json:"severity,omitempty"`
-	PainLevel    *int32     `json:"pain_level,omitempty"`
-	Description  *string    `json:"description,omitempty"`
-	DateStart    time.Time  `json:"date_start"`
-	Status       int32      `json:"status"`
-	DateEnd      *time.Time `json:"date_end,omitempty"`
-	InjuryID     *int32     `json:"injury_id,omitempty"`
-	Meta         *string    `json:"meta,omitempty"`
+	UserID      int32      `json:"user_id"`
+	InjuryType  int32      `json:"injury_type"`
+	Severity    int32      `json:"severity"`
+	PainLevel   int32      `json:"pain_level"`
+	Description string     `json:"description"`
+	DateStart   time.Time  `json:"date_start"`
+	Status      int32      `json:"status"`
+	DateEnd     *time.Time `json:"date_end,omitempty"`
+	InjuryID    int32      `json:"injury_id"`
+	Meta        string     `json:"meta"`
 }
 
 type InjuryInput struct {
 	InjuryType  int32
-	Severity    *int32
-	PainLevel   *int32
-	Description *string
+	Severity    int32
+	PainLevel   int32
+	Description string
 	InjuryID    int32
-	Meta        *string
+	Meta        string
 }
 
 func (s *InjuriesStore) AddInjury(ctx context.Context, userID int32, in InjuryInput) error {
@@ -42,13 +42,13 @@ func (s *InjuriesStore) AddInjury(ctx context.Context, userID int32, in InjuryIn
 	q := kamksqlc.New(s.db)
 
 	arg := kamksqlc.InsertInjuryParams{
-		CompetitorID: userID,
-		InjuryType:   in.InjuryType,
-		Severity:     utils.NullInt32Ptr(in.Severity),
-		PainLevel:    utils.NullInt32Ptr(in.PainLevel),
-		Description:  utils.NullStringPtr(in.Description),
-		InjuryID:     utils.NullInt32(in.InjuryID),
-		Meta:         utils.NullStringPtr(in.Meta),
+		UserID:      userID,
+		InjuryType:  in.InjuryType,
+		Severity:    in.Severity,
+		PainLevel:   in.PainLevel,
+		Description: in.Description,
+		InjuryID:    in.InjuryID,
+		Meta:        in.Meta,
 	}
 
 	return q.InsertInjury(ctx, arg)
@@ -60,8 +60,8 @@ func (s *InjuriesStore) MarkInjuryRecovered(ctx context.Context, userID int32, i
 
 	q := kamksqlc.New(s.db)
 	if err := q.MarkInjuryRecoveredByID(ctx, kamksqlc.MarkInjuryRecoveredByIDParams{
-		InjuryID:     utils.NullInt32(injuryID),
-		CompetitorID: userID,
+		InjuryID: injuryID,
+		UserID:   userID,
 	}); err != nil {
 		return 0, err
 	}
@@ -82,16 +82,16 @@ func (s *InjuriesStore) GetActiveInjuries(ctx context.Context, userID int32) ([]
 	out := make([]Injury, 0, len(rows))
 	for _, r := range rows {
 		out = append(out, Injury{
-			CompetitorID: r.CompetitorID,
-			InjuryType:   r.InjuryType,
-			Severity:     utils.Int32PtrOrNil(r.Severity),
-			PainLevel:    utils.Int32PtrOrNil(r.PainLevel),
-			Description:  utils.StringPtrOrNil(r.Description),
-			DateStart:    r.DateStart,
-			Status:       r.Status,
-			DateEnd:      utils.TimePtrOrNil(r.DateEnd),
-			InjuryID:     utils.Int32PtrOrNil(r.InjuryID),
-			Meta:         utils.StringPtrOrNil(r.Meta),
+			UserID:      r.UserID,
+			InjuryType:  r.InjuryType,
+			Severity:    r.Severity,
+			PainLevel:   r.PainLevel,
+			Description: r.Description,
+			DateStart:   r.DateStart,
+			Status:      r.Status,
+			DateEnd:     utils.TimePtrOrNil(r.DateEnd),
+			InjuryID:    r.InjuryID,
+			Meta:        r.Meta,
 		})
 	}
 	return out, nil
@@ -111,8 +111,8 @@ func (s *InjuriesStore) DeleteInjury(ctx context.Context, userID int32, injuryID
 
 	q := kamksqlc.New(s.db)
 	n, err := q.DeleteInjuryByID(ctx, kamksqlc.DeleteInjuryByIDParams{
-		CompetitorID: userID,
-		InjuryID:     utils.NullInt32(injuryID),
+		UserID:   userID,
+		InjuryID: injuryID,
 	})
 	if err != nil {
 		return 0, err

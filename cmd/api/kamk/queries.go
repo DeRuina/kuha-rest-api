@@ -23,11 +23,11 @@ func NewQueriesHandler(store kamk.Queries, cache *cache.Storage) *QueriesHandler
 
 // Validation structs
 type KamkAddQuestionnaireInput struct {
-	UserID    int32   `json:"user_id" validate:"required,gt=0"`
-	QueryType *int32  `json:"query_type" validate:"omitempty"`
-	Answers   *string `json:"answers" validate:"omitempty"`
-	Comment   *string `json:"comment" validate:"omitempty"`
-	Meta      *string `json:"meta" validate:"omitempty"`
+	UserID    int32  `json:"user_id" validate:"required,gt=0"`
+	QueryType int32  `json:"query_type" validate:"gte=0"`
+	Answers   string `json:"answers" validate:"required"`
+	Comment   string `json:"comment" validate:"required"`
+	Meta      string `json:"meta" validate:"required"`
 }
 
 type KamkGetQuestionnairesParams struct {
@@ -45,8 +45,8 @@ type KamkUpdateQuestionnaireQuery struct {
 }
 
 type KamkUpdateQuestionnaireBody struct {
-	Answers string  `json:"answers" validate:"required"`
-	Comment *string `json:"comment" validate:"omitempty"`
+	Answers string `json:"answers" validate:"required"`
+	Comment string `json:"comment" validate:"required"`
 }
 
 // AddQuestionnaire godoc
@@ -249,7 +249,7 @@ func (h *QueriesHandler) IsQuizDoneToday(w http.ResponseWriter, r *http.Request)
 //	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/kamk/update-quiz [post]
-func (h *QueriesHandler) UpdateQuestionnaireByTimestamp(w http.ResponseWriter, r *http.Request) {
+func (h *QueriesHandler) UpdateQuestionnaireByID(w http.ResponseWriter, r *http.Request) {
 	if !authz.Authorize(r) {
 		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
 		return

@@ -7881,10 +7881,6 @@ const docTemplate = `{
         "swagger.KamkInjuryItem": {
             "type": "object",
             "properties": {
-                "competitor_id": {
-                    "type": "integer",
-                    "example": 27353728
-                },
                 "date_end": {
                     "type": "string",
                     "example": "2025-01-17T12:00:00Z"
@@ -7920,6 +7916,10 @@ const docTemplate = `{
                 "status": {
                     "type": "integer",
                     "example": 0
+                },
+                "user_id": {
+                    "type": "integer",
+                    "example": 27353728
                 }
             }
         },
@@ -7956,10 +7956,6 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Felt good this morning"
                 },
-                "competitor_id": {
-                    "type": "integer",
-                    "example": 27353728
-                },
                 "id": {
                     "type": "integer",
                     "example": 123
@@ -7975,6 +7971,10 @@ const docTemplate = `{
                 "timestamp": {
                     "type": "string",
                     "example": "2025-10-20T09:30:00Z"
+                },
+                "user_id": {
+                    "type": "integer",
+                    "example": 27353728
                 }
             }
         },

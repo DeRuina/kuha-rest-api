@@ -215,7 +215,7 @@ func (app *api) mount() http.Handler {
 					r.Post("/questionnaire", queriesHandler.AddQuestionnaire)
 					r.Get("/questionnaire", queriesHandler.GetQuestionnaires)
 					r.Get("/is-quiz-done", queriesHandler.IsQuizDoneToday)
-					r.Post("/update-quiz", queriesHandler.UpdateQuestionnaireByTimestamp)
+					r.Post("/update-quiz", queriesHandler.UpdateQuestionnaireByID)
 					r.Delete("/delete-quiz", queriesHandler.DeleteQuestionnaire)
 				})
 			} else {

@@ -10,26 +10,26 @@ import (
 )
 
 type Injury struct {
-	CompetitorID int32
-	InjuryType   int32
-	Severity     sql.NullInt32
-	PainLevel    sql.NullInt32
-	Description  sql.NullString
-	DateStart    time.Time
-	Status       int32
-	DateEnd      sql.NullTime
-	InjuryID     sql.NullInt32
-	Meta         sql.NullString
+	UserID      int32
+	InjuryType  int32
+	Severity    int32
+	PainLevel   int32
+	Description string
+	DateStart   time.Time
+	Status      int32
+	DateEnd     sql.NullTime
+	InjuryID    int32
+	Meta        string
 }
 
 type Query struct {
-	CompetitorID int32
-	QueryType    sql.NullInt32
-	Answers      sql.NullString
-	Comment      sql.NullString
-	Timestamp    time.Time
-	Meta         sql.NullString
-	ID           int64
+	UserID    int32
+	QueryType int32
+	Answers   string
+	Comment   string
+	Timestamp time.Time
+	Meta      string
+	ID        int64
 }
 
 type User struct {

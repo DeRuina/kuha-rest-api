@@ -268,49 +268,49 @@ func mapUpdateInput(in UpdateCompetitorInput) (fis.UpdateCompetitorClean, error)
 }
 
 type FISCompetitorResponse struct {
-	Competitorid       int32   `json:"competitorid,omitempty"`
-	Personid           *int32  `json:"personid,omitempty"`
-	Ipcid              *int32  `json:"ipcid,omitempty"`
-	Type               *string `json:"type,omitempty"`
-	Sectorcode         *string `json:"sectorcode,omitempty"`
-	Fiscode            *int32  `json:"fiscode,omitempty"`
-	Lastname           *string `json:"lastname,omitempty"`
-	Firstname          *string `json:"firstname,omitempty"`
-	Gender             *string `json:"gender,omitempty"`
-	Birthdate          *string `json:"birthdate,omitempty"`      // YYYY-MM-DD
-	StatusDate         *string `json:"status_date,omitempty"`    // RFC3339
-	Dateofcreation     *string `json:"dateofcreation,omitempty"` // YYYY-MM-DD
-	Lastupdate         *string `json:"lastupdate,omitempty"`     // RFC3339
-	Nationcode         *string `json:"nationcode,omitempty"`
-	Nationalcode       *string `json:"nationalcode,omitempty"`
-	Skiclub            *string `json:"skiclub,omitempty"`
-	Association        *string `json:"association,omitempty"`
-	Status             *string `json:"status,omitempty"`
-	StatusOld          *string `json:"status_old,omitempty"`
-	StatusBy           *string `json:"status_by,omitempty"`
-	Statusnextlist     *string `json:"statusnextlist,omitempty"`
-	Alternatenamecheck *string `json:"alternatenamecheck,omitempty"`
-	Fee                *string `json:"fee,omitempty"`
-	Createdby          *string `json:"createdby,omitempty"`
-	Injury             *int32  `json:"injury,omitempty"`
-	Version            *int32  `json:"version,omitempty"`
-	Compidmssql        *int32  `json:"compidmssql,omitempty"`
-	Carving            *int32  `json:"carving,omitempty"`
-	Photo              *int32  `json:"photo,omitempty"`
-	Notallowed         *int32  `json:"notallowed,omitempty"`
-	Natteam            *string `json:"natteam,omitempty"`
-	Tragroup           *string `json:"tragroup,omitempty"`
-	Published          *int32  `json:"published,omitempty"`
-	Doped              *string `json:"doped,omitempty"`
-	Team               *int32  `json:"team,omitempty"`
-	PhotoBig           *int32  `json:"photo_big,omitempty"`
-	Data               *string `json:"data,omitempty"`
-	Lastupdateby       *string `json:"lastupdateby,omitempty"`
-	Disciplines        *string `json:"disciplines,omitempty"`
-	Deletedat          *string `json:"deletedat,omitempty"`
-	Categorycode       *string `json:"categorycode,omitempty"`
-	Classname          *string `json:"classname,omitempty"`
-	Classcode          *string `json:"classcode,omitempty"`
+	Competitorid       int32   `json:"competitorid"`
+	Personid           *int32  `json:"personid"`
+	Ipcid              *int32  `json:"ipcid"`
+	Type               *string `json:"type"`
+	Sectorcode         *string `json:"sectorcode"`
+	Fiscode            *int32  `json:"fiscode"`
+	Lastname           *string `json:"lastname"`
+	Firstname          *string `json:"firstname"`
+	Gender             *string `json:"gender"`
+	Birthdate          *string `json:"birthdate"`      // YYYY-MM-DD
+	StatusDate         *string `json:"status_date"`    // RFC3339
+	Dateofcreation     *string `json:"dateofcreation"` // YYYY-MM-DD
+	Lastupdate         *string `json:"lastupdate"`     // RFC3339
+	Nationcode         *string `json:"nationcode"`
+	Nationalcode       *string `json:"nationalcode"`
+	Skiclub            *string `json:"skiclub"`
+	Association        *string `json:"association"`
+	Status             *string `json:"status"`
+	StatusOld          *string `json:"status_old"`
+	StatusBy           *string `json:"status_by"`
+	Statusnextlist     *string `json:"statusnextlist"`
+	Alternatenamecheck *string `json:"alternatenamecheck"`
+	Fee                *string `json:"fee"`
+	Createdby          *string `json:"createdby"`
+	Injury             *int32  `json:"injury"`
+	Version            *int32  `json:"version"`
+	Compidmssql        *int32  `json:"compidmssql"`
+	Carving            *int32  `json:"carving"`
+	Photo              *int32  `json:"photo"`
+	Notallowed         *int32  `json:"notallowed"`
+	Natteam            *string `json:"natteam"`
+	Tragroup           *string `json:"tragroup"`
+	Published          *int32  `json:"published"`
+	Doped              *string `json:"doped"`
+	Team               *int32  `json:"team"`
+	PhotoBig           *int32  `json:"photo_big"`
+	Data               *string `json:"data"`
+	Lastupdateby       *string `json:"lastupdateby"`
+	Disciplines        *string `json:"disciplines"`
+	Deletedat          *string `json:"deletedat"`
+	Categorycode       *string `json:"categorycode"`
+	Classname          *string `json:"classname"`
+	Classcode          *string `json:"classcode"`
 }
 
 func FISCompetitorFullFromSqlc(row fissqlc.ACompetitor) FISCompetitorResponse {

@@ -327,6 +327,17 @@ definitions:
           $ref: '#/definitions/swagger.FISAthleteItem'
         type: array
     type: object
+  swagger.FISCategoriesCCResponse:
+    properties:
+      categories:
+        example:
+        - WC
+        - WSC
+        - COC
+        items:
+          type: string
+        type: array
+    type: object
   swagger.FISCompetitor:
     properties:
       association:
@@ -383,6 +394,17 @@ definitions:
       type:
         example: ATHLETE
         type: string
+    type: object
+  swagger.FISDisciplinesCCResponse:
+    properties:
+      disciplines:
+        example:
+        - SP
+        - DI
+        - PU
+        items:
+          type: string
+        type: array
     type: object
   swagger.FISInsertCompetitorExample:
     properties:
@@ -521,10 +543,217 @@ definitions:
         example: 1
         type: integer
     type: object
+  swagger.FISInsertRaceCCExample:
+    properties:
+      appliedpenalty:
+        type: string
+      appliedscala:
+        type: string
+      bottombanner:
+        type: string
+      bottomlogo:
+        type: string
+      calculatedpenalty:
+        type: string
+      calstatuscode:
+        type: string
+      catcode:
+        example: WC
+        type: string
+      catcode2:
+        type: string
+      catcode3:
+        type: string
+      catcode4:
+        type: string
+      columncount:
+        type: integer
+      description:
+        example: World Cup Sprint
+        type: string
+      discforlistcode:
+        type: string
+      disciplinecode:
+        example: SP
+        type: string
+      disciplineid:
+        example: DIST
+        type: string
+      displaystatus:
+        type: string
+      distance:
+        type: string
+      eventid:
+        example: 7890
+        type: integer
+      finale:
+        type: string
+      fisinterncomment:
+        type: string
+      gallery:
+        type: string
+      gender:
+        example: M
+        type: string
+      hcet1:
+        type: string
+      hcet2:
+        type: string
+      hcet3:
+        type: string
+      hill:
+        type: string
+      hloc1:
+        type: string
+      hloc2:
+        type: string
+      hloc3:
+        type: string
+      homol:
+        type: string
+      indi:
+        type: integer
+      lastupdate:
+        example: "2025-02-14T18:30:00Z"
+        format: date-time
+        type: string
+      level:
+        type: string
+      live:
+        type: integer
+      liveinfo1:
+        type: string
+      liveinfo2:
+        type: string
+      liveinfo3:
+        type: string
+      livestatus1:
+        type: string
+      livestatus2:
+        type: string
+      livestatus3:
+        type: string
+      masse:
+        type: string
+      msql7evid:
+        type: integer
+      mssql7id:
+        type: integer
+      nationcode:
+        example: FIN
+        type: string
+      nationraceid:
+        type: integer
+      noepr:
+        type: integer
+      passwd:
+        type: string
+      pdf:
+        type: integer
+      penscafixed:
+        type: string
+      place:
+        example: Lahti
+        type: string
+      procstatuscode:
+        type: string
+      provraceid:
+        type: integer
+      published:
+        example: 1
+        type: integer
+      pursuit:
+        type: string
+      qualif:
+        type: string
+      racecodex:
+        example: 1001
+        type: integer
+      racedate:
+        example: "2025-02-14"
+        format: date
+        type: string
+      raceid:
+        example: 123456
+        type: integer
+      receiveddate:
+        format: date-time
+        type: string
+      relay:
+        type: string
+      results:
+        type: integer
+      seasoncode:
+        example: 2025
+        type: integer
+      skip_wcsl:
+        type: integer
+      special_cup_points:
+        type: integer
+      starteventdate:
+        example: "2025-02-13"
+        format: date
+        type: string
+      style:
+        type: string
+      tabcount:
+        type: integer
+      td1code:
+        type: integer
+      td1id:
+        type: integer
+      td1name:
+        type: string
+      td1nation:
+        type: string
+      td2code:
+        type: integer
+      td2id:
+        type: integer
+      td2name:
+        type: string
+      td2nation:
+        type: string
+      tddoc:
+        type: integer
+      team:
+        type: integer
+      timinglogo:
+        type: string
+      timingreport:
+        type: integer
+      tolist:
+        type: string
+      topbanner:
+        type: string
+      toplogo:
+        type: string
+      usedfislist:
+        type: string
+      validdate:
+        format: date-time
+        type: string
+      validforfispoints:
+        example: 1
+        type: integer
+      validforowg:
+        type: integer
+      version:
+        type: integer
+      webcomment:
+        type: string
+    required:
+    - raceid
+    type: object
   swagger.FISLastCompetitorResponse:
     properties:
       competitor:
         $ref: '#/definitions/swagger.FISCompetitor'
+    type: object
+  swagger.FISLastRaceCCResponse:
+    properties:
+      race:
+        $ref: '#/definitions/swagger.FISRaceCC'
     type: object
   swagger.FISNationsBySectorResponse:
     properties:
@@ -535,6 +764,224 @@ definitions:
         - SWE
         items:
           type: string
+        type: array
+    type: object
+  swagger.FISRaceCC:
+    properties:
+      appliedpenalty:
+        type: string
+      appliedscala:
+        type: string
+      bottombanner:
+        type: string
+      bottomlogo:
+        type: string
+      calculatedpenalty:
+        type: string
+      calstatuscode:
+        type: string
+      catcode:
+        example: WC
+        type: string
+      catcode2:
+        type: string
+      catcode3:
+        type: string
+      catcode4:
+        type: string
+      columncount:
+        type: integer
+      description:
+        example: World Cup Sprint
+        type: string
+      discforlistcode:
+        type: string
+      disciplinecode:
+        example: SP
+        type: string
+      disciplineid:
+        example: DIST
+        type: string
+      displaystatus:
+        type: string
+      distance:
+        type: string
+      eventid:
+        example: 7890
+        type: integer
+      finale:
+        type: string
+      fisinterncomment:
+        type: string
+      gallery:
+        type: string
+      gender:
+        example: M
+        type: string
+      hcet1:
+        type: string
+      hcet2:
+        type: string
+      hcet3:
+        type: string
+      hill:
+        type: string
+      hloc1:
+        type: string
+      hloc2:
+        type: string
+      hloc3:
+        type: string
+      homol:
+        type: string
+      indi:
+        type: integer
+      lastupdate:
+        example: "2025-02-14T18:30:00Z"
+        format: date-time
+        type: string
+      level:
+        type: string
+      live:
+        type: integer
+      liveinfo1:
+        type: string
+      liveinfo2:
+        type: string
+      liveinfo3:
+        type: string
+      livestatus1:
+        type: string
+      livestatus2:
+        type: string
+      livestatus3:
+        type: string
+      masse:
+        type: string
+      msql7evid:
+        type: integer
+      mssql7id:
+        type: integer
+      nationcode:
+        example: FIN
+        type: string
+      nationraceid:
+        type: integer
+      noepr:
+        type: integer
+      passwd:
+        type: string
+      pdf:
+        type: integer
+      penscafixed:
+        type: string
+      place:
+        example: Lahti
+        type: string
+      procstatuscode:
+        type: string
+      provraceid:
+        type: integer
+      published:
+        example: 1
+        type: integer
+      pursuit:
+        type: string
+      qualif:
+        type: string
+      racecodex:
+        example: 1001
+        type: integer
+      racedate:
+        example: "2025-02-14"
+        format: date
+        type: string
+      raceid:
+        example: 123456
+        type: integer
+      receiveddate:
+        format: date-time
+        type: string
+      relay:
+        type: string
+      results:
+        type: integer
+      seasoncode:
+        example: 2025
+        type: integer
+      skip_wcsl:
+        type: integer
+      special_cup_points:
+        type: integer
+      starteventdate:
+        example: "2025-02-13"
+        format: date
+        type: string
+      style:
+        type: string
+      tabcount:
+        type: integer
+      td1code:
+        type: integer
+      td1id:
+        type: integer
+      td1name:
+        type: string
+      td1nation:
+        type: string
+      td2code:
+        type: integer
+      td2id:
+        type: integer
+      td2name:
+        type: string
+      td2nation:
+        type: string
+      tddoc:
+        type: integer
+      team:
+        type: integer
+      timinglogo:
+        type: string
+      timingreport:
+        type: integer
+      tolist:
+        type: string
+      topbanner:
+        type: string
+      toplogo:
+        type: string
+      usedfislist:
+        type: string
+      validdate:
+        format: date-time
+        type: string
+      validforfispoints:
+        example: 1
+        type: integer
+      validforowg:
+        type: integer
+      version:
+        type: integer
+      webcomment:
+        type: string
+    type: object
+  swagger.FISRacesCCResponse:
+    properties:
+      races:
+        items:
+          $ref: '#/definitions/swagger.FISRaceCC'
+        type: array
+    type: object
+  swagger.FISSeasonsCCResponse:
+    properties:
+      seasons:
+        example:
+        - 2026
+        - 2025
+        - 2024
+        items:
+          type: integer
         type: array
     type: object
   swagger.FISUpdateCompetitorExample:
@@ -673,6 +1120,208 @@ definitions:
       version:
         example: 1
         type: integer
+    type: object
+  swagger.FISUpdateRaceCCExample:
+    properties:
+      appliedpenalty:
+        type: string
+      appliedscala:
+        type: string
+      bottombanner:
+        type: string
+      bottomlogo:
+        type: string
+      calculatedpenalty:
+        type: string
+      calstatuscode:
+        type: string
+      catcode:
+        example: WC
+        type: string
+      catcode2:
+        type: string
+      catcode3:
+        type: string
+      catcode4:
+        type: string
+      columncount:
+        type: integer
+      description:
+        example: World Cup Sprint (updated)
+        type: string
+      discforlistcode:
+        type: string
+      disciplinecode:
+        example: SP
+        type: string
+      disciplineid:
+        example: DDD
+        type: string
+      displaystatus:
+        type: string
+      distance:
+        type: string
+      eventid:
+        example: 7890
+        type: integer
+      finale:
+        type: string
+      fisinterncomment:
+        type: string
+      gallery:
+        type: string
+      gender:
+        example: M
+        type: string
+      hcet1:
+        type: string
+      hcet2:
+        type: string
+      hcet3:
+        type: string
+      hill:
+        type: string
+      hloc1:
+        type: string
+      hloc2:
+        type: string
+      hloc3:
+        type: string
+      homol:
+        type: string
+      indi:
+        type: integer
+      lastupdate:
+        example: "2025-02-15T08:00:00Z"
+        format: date-time
+        type: string
+      level:
+        type: string
+      live:
+        type: integer
+      liveinfo1:
+        type: string
+      liveinfo2:
+        type: string
+      liveinfo3:
+        type: string
+      livestatus1:
+        type: string
+      livestatus2:
+        type: string
+      livestatus3:
+        type: string
+      masse:
+        type: string
+      msql7evid:
+        type: integer
+      mssql7id:
+        type: integer
+      nationcode:
+        example: FIN
+        type: string
+      nationraceid:
+        type: integer
+      noepr:
+        type: integer
+      passwd:
+        type: string
+      pdf:
+        type: integer
+      penscafixed:
+        type: string
+      place:
+        example: Lahti
+        type: string
+      procstatuscode:
+        type: string
+      provraceid:
+        type: integer
+      published:
+        example: 1
+        type: integer
+      pursuit:
+        type: string
+      qualif:
+        type: string
+      racecodex:
+        example: 1001
+        type: integer
+      racedate:
+        example: "2025-02-14"
+        format: date
+        type: string
+      raceid:
+        example: 123456
+        type: integer
+      receiveddate:
+        format: date-time
+        type: string
+      relay:
+        type: string
+      results:
+        type: integer
+      seasoncode:
+        example: 2025
+        type: integer
+      skip_wcsl:
+        type: integer
+      special_cup_points:
+        type: integer
+      starteventdate:
+        example: "2025-02-13"
+        format: date
+        type: string
+      style:
+        type: string
+      tabcount:
+        type: integer
+      td1code:
+        type: integer
+      td1id:
+        type: integer
+      td1name:
+        type: string
+      td1nation:
+        type: string
+      td2code:
+        type: integer
+      td2id:
+        type: integer
+      td2name:
+        type: string
+      td2nation:
+        type: string
+      tddoc:
+        type: integer
+      team:
+        type: integer
+      timinglogo:
+        type: string
+      timingreport:
+        type: integer
+      tolist:
+        type: string
+      topbanner:
+        type: string
+      toplogo:
+        type: string
+      usedfislist:
+        type: string
+      validdate:
+        format: date-time
+        type: string
+      validforfispoints:
+        example: 1
+        type: integer
+      validforowg:
+        type: integer
+      version:
+        type: integer
+      webcomment:
+        type: string
+    required:
+    - raceid
     type: object
   swagger.ForbiddenError:
     properties:
@@ -3894,6 +4543,42 @@ paths:
       summary: Get all athletes for a given sector
       tags:
       - FIS - Athlete
+  /fis/catcodeCC:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.FISCategoriesCCResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Cross-Country category codes
+      tags:
+      - FIS - Season Discipline & Category Codes
   /fis/competitor:
     delete:
       consumes:
@@ -4029,6 +4714,42 @@ paths:
       summary: Update competitor by ID
       tags:
       - FIS - Competitor Management
+  /fis/disciplinecodeCC:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.FISDisciplinesCCResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Cross-Country discipline codes
+      tags:
+      - FIS - Season Discipline & Category Codes
   /fis/lastrow/competitor:
     get:
       consumes:
@@ -4066,6 +4787,47 @@ paths:
       summary: Get last competitor record
       tags:
       - FIS - Competitor Management
+  /fis/lastrow/racecc:
+    get:
+      consumes:
+      - application/json
+      description: Returns the last row in a_racecc (by RaceID DESC)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.FISLastRaceCCResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Get last Cross-Country race record
+      tags:
+      - FIS - Race Management – Cross-Country
   /fis/nation:
     get:
       consumes:
@@ -4108,6 +4870,234 @@ paths:
       summary: Get distinct nation codes for a given sector
       tags:
       - FIS - Athlete
+  /fis/racecc:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a race by RaceID
+      parameters:
+      - description: Race ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete Cross-Country race
+      tags:
+      - FIS - Race Management – Cross-Country
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - collectionFormat: csv
+        description: Season code (repeat or comma-separated)
+        in: query
+        items:
+          type: integer
+        name: seasoncode
+        type: array
+      - collectionFormat: csv
+        description: Discipline code (repeat or comma-separated)
+        in: query
+        items:
+          type: string
+        name: disciplinecode
+        type: array
+      - collectionFormat: csv
+        description: Category code (repeat or comma-separated)
+        in: query
+        items:
+          type: string
+        name: catcode
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.FISRacesCCResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Get list of Cross-Country races
+      tags:
+      - FIS - Race Data
+    post:
+      consumes:
+      - application/json
+      description: Inserts a new a_racecc row
+      parameters:
+      - description: Race payload
+        in: body
+        name: racecc
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.FISInsertRaceCCExample'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/swagger.ConflictResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Add new Cross-Country race
+      tags:
+      - FIS - Race Management – Cross-Country
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing a_racecc row
+      parameters:
+      - description: Race payload
+        in: body
+        name: racecc
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.FISUpdateRaceCCExample'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Update Cross-Country race by ID
+      tags:
+      - FIS - Race Management – Cross-Country
+  /fis/seasoncodeCC:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.FISSeasonsCCResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Cross-Country season codes
+      tags:
+      - FIS - Season Discipline & Category Codes
   /health:
     get:
       description: Healthcheck endpoint

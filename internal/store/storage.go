@@ -18,6 +18,7 @@ import (
 type FIS interface {
 	Ping(ctx context.Context) error
 	Competitors() fis.Competitors
+	RaceCC() fis.Racecc
 }
 
 type UTV interface {

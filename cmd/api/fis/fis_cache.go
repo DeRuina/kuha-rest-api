@@ -15,6 +15,10 @@ const (
 	fisLastRowPrefix    = "fis:lastrow"
 	fisCompetitorPrefix = "fis:competitor"
 	fisNationsPrefix    = "fis:nations"
+
+	fisRaceCCLastRowPrefix = "fis:lastrow:racecc"
+	fisRaceCCCodesPrefix   = "fis:racecc:codes"
+	fisRaceCCListPrefix    = "fis:racecc:list"
 )
 
 func invalidateCompetitor(ctx context.Context, c *cache.Storage, competitorID int32) {
@@ -48,4 +52,11 @@ func invalidateNationsSector(ctx context.Context, c *cache.Storage, sector strin
 func invalidateSector(ctx context.Context, c *cache.Storage, sector string) {
 	invalidateAthletesSector(ctx, c, sector)
 	invalidateNationsSector(ctx, c, sector)
+}
+
+func invalidateRaceCC(ctx context.Context, c *cache.Storage, raceID int32) {
+	if c == nil {
+		return
+	}
+	_ = c.DeleteByPrefixes(ctx, fisRaceCCLastRowPrefix, fisRaceCCListPrefix)
 }

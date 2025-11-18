@@ -7,6 +7,18 @@ import (
 	fissqlc "github.com/DeRuina/KUHA-REST-API/internal/db/fis"
 )
 
+// Racecc interface
+type Racecc interface {
+	GetCrossCountrySeasons(ctx context.Context) ([]int32, error)
+	GetCrossCountryDisciplines(ctx context.Context) ([]string, error)
+	GetCrossCountryCategories(ctx context.Context) ([]string, error)
+	GetRacesCC(ctx context.Context, seasons []int32, disciplines, cats []string) ([]fissqlc.ARacecc, error)
+	GetLastRowRaceCC(ctx context.Context) (fissqlc.ARacecc, error)
+	InsertRaceCC(ctx context.Context, in InsertRaceCCClean) error
+	UpdateRaceCCByID(ctx context.Context, in UpdateRaceCCClean) error
+	DeleteRaceCCByID(ctx context.Context, raceID int32) error
+}
+
 // Competitors interface
 type Competitors interface {
 	GetAthletesBySector(ctx context.Context, sector string) ([]AthleteRow, error)
@@ -26,6 +38,7 @@ type Competitors interface {
 type FISStorage struct {
 	db          *sql.DB
 	competitors Competitors
+	racecc      Racecc
 }
 
 // Ping method
@@ -38,10 +51,15 @@ func (s *FISStorage) Competitors() Competitors {
 	return s.competitors
 }
 
+func (s *FISStorage) RaceCC() Racecc {
+	return s.racecc
+}
+
 // Storage for FIS database tables
 func NewFISStorage(db *sql.DB) *FISStorage {
 	return &FISStorage{
 		db:          db,
 		competitors: &CompetitorsStore{db: db},
+		racecc:      &RaceCCStore{db: db},
 	}
 }

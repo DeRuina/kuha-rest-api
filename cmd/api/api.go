@@ -282,6 +282,7 @@ func (app *api) mount() http.Handler {
 				r.Route("/fis", func(r chi.Router) {
 					// Register handlers
 					competitorHandler := fisapi.NewCompetitorHandler(app.store.FIS.Competitors(), app.cacheStorage)
+					raceCCHandler := fisapi.NewRaceCCHandler(app.store.FIS.RaceCC(), app.cacheStorage)
 
 					// competitor routes
 					r.Get("/athlete", competitorHandler.GetAthletesBySector)
@@ -290,6 +291,17 @@ func (app *api) mount() http.Handler {
 					r.Put("/competitor", competitorHandler.UpdateCompetitor)
 					r.Delete("/competitor", competitorHandler.DeleteCompetitor)
 					r.Get("/lastrow/competitor", competitorHandler.GetLastRowCompetitor)
+
+					// racecc routes
+					r.Get("/seasoncodeCC", raceCCHandler.GetSeasonCodesCC)
+					r.Get("/disciplinecodeCC", raceCCHandler.GetDisciplineCodesCC)
+					r.Get("/catcodeCC", raceCCHandler.GetCategoryCodesCC)
+					r.Get("/racecc", raceCCHandler.GetRacesCC)
+					r.Get("/lastrow/racecc", raceCCHandler.GetLastRowRaceCC)
+					r.Post("/racecc", raceCCHandler.InsertRaceCC)
+					r.Put("/racecc", raceCCHandler.UpdateRaceCC)
+					r.Delete("/racecc", raceCCHandler.DeleteRaceCC)
+
 				})
 			} else {
 				logger.Logger.Warn("fis routes disabled: database not reachable")

@@ -353,11 +353,90 @@ definitions:
         example: "26:30.2"
         type: string
     type: object
+  swagger.FISAthleteResultJP:
+    properties:
+      catcode:
+        example: WC
+        type: string
+      disciplinecode:
+        example: LH
+        type: string
+      distr1:
+        example: "138.0"
+        type: string
+      distr2:
+        example: "137.0"
+        type: string
+      gater1:
+        example: "8"
+        type: string
+      gater2:
+        example: "8"
+        type: string
+      judptsr1:
+        example: "57.0"
+        type: string
+      judptsr2:
+        example: "56.5"
+        type: string
+      place:
+        example: Planica
+        type: string
+      position:
+        example: 1
+        type: integer
+      posr1:
+        example: "1"
+        type: string
+      posr2:
+        example: "1"
+        type: string
+      racedate:
+        example: "2025-01-25"
+        type: string
+      raceid:
+        example: 234567
+        type: integer
+      seasoncode:
+        example: 2025
+        type: integer
+      speedr1:
+        example: "88.5"
+        type: string
+      speedr2:
+        example: "88.0"
+        type: string
+      totrun1:
+        example: "135.5"
+        type: string
+      totrun2:
+        example: "134.4"
+        type: string
+      windptsr1:
+        example: "1.2"
+        type: string
+      windptsr2:
+        example: "0.8"
+        type: string
+      windr1:
+        example: "-0.5"
+        type: string
+      windr2:
+        example: "-0.3"
+        type: string
+    type: object
   swagger.FISAthleteResultsCCResponse:
     properties:
       results:
         items:
           $ref: '#/definitions/swagger.FISAthleteResultCC'
+        type: array
+    type: object
+  swagger.FISAthleteResultsJPResponse:
+    properties:
+      results:
+        items:
+          $ref: '#/definitions/swagger.FISAthleteResultJP'
         type: array
     type: object
   swagger.FISAthletesResponse:
@@ -1394,6 +1473,229 @@ definitions:
         example: "1"
         type: string
     type: object
+  swagger.FISInsertResultJPExample:
+    properties:
+      bib:
+        example: 15
+        type: integer
+      competitorid:
+        example: 345678
+        type: integer
+      competitorname:
+        example: KOBAYASHI Ryoyu
+        type: string
+      cuppoints:
+        example: "100"
+        type: string
+      disptsr1:
+        example: "78.5"
+        type: string
+      disptsr2:
+        example: "77.9"
+        type: string
+      disptsr3:
+        type: string
+      disptsr4:
+        type: string
+      distr1:
+        example: "138.0"
+        type: string
+      distr2:
+        example: "137.0"
+        type: string
+      distr3:
+        type: string
+      distr4:
+        type: string
+      fiscode:
+        example: 1234567
+        type: integer
+      gateptsr1:
+        example: "0.0"
+        type: string
+      gateptsr2:
+        example: "0.0"
+        type: string
+      gateptsr3:
+        type: string
+      gateptsr4:
+        type: string
+      gater1:
+        example: "8"
+        type: string
+      gater2:
+        example: "8"
+        type: string
+      gater3:
+        type: string
+      gater4:
+        type: string
+      heat:
+        example: "1"
+        type: string
+      j1r1:
+        example: "19.0"
+        type: string
+      j1r2:
+        example: "18.5"
+        type: string
+      j1r3:
+        type: string
+      j1r4:
+        type: string
+      j2r1:
+        example: "19.0"
+        type: string
+      j2r2:
+        example: "18.5"
+        type: string
+      j2r3:
+        type: string
+      j2r4:
+        type: string
+      j3r1:
+        example: "19.0"
+        type: string
+      j3r2:
+        example: "18.5"
+        type: string
+      j3r3:
+        type: string
+      j3r4:
+        type: string
+      j4r1:
+        example: "19.0"
+        type: string
+      j4r2:
+        example: "18.5"
+        type: string
+      j4r3:
+        type: string
+      j4r4:
+        type: string
+      j5r1:
+        example: "19.0"
+        type: string
+      j5r2:
+        example: "18.5"
+        type: string
+      j5r3:
+        type: string
+      j5r4:
+        type: string
+      judptsr1:
+        example: "57.0"
+        type: string
+      judptsr2:
+        example: "56.5"
+        type: string
+      judptsr3:
+        type: string
+      judptsr4:
+        type: string
+      lastupdate:
+        example: "2025-01-25T18:30:00Z"
+        type: string
+      level:
+        example: WC
+        type: string
+      nationcode:
+        example: JPN
+        type: string
+      position:
+        example: 1
+        type: integer
+      posr1:
+        example: "1"
+        type: string
+      posr2:
+        example: "1"
+        type: string
+      posr3:
+        type: string
+      posr4:
+        type: string
+      raceid:
+        example: 234567
+        type: integer
+      racepoints:
+        example: "0.0"
+        type: string
+      reason:
+        example: ""
+        type: string
+      recid:
+        example: 50001
+        type: integer
+      speedr1:
+        example: "88.5"
+        type: string
+      speedr2:
+        example: "88.0"
+        type: string
+      speedr3:
+        type: string
+      speedr4:
+        type: string
+      stage:
+        example: F
+        type: string
+      status:
+        example: OK
+        type: string
+      status2:
+        example: ""
+        type: string
+      statusr1:
+        example: OK
+        type: string
+      statusr2:
+        example: OK
+        type: string
+      statusr3:
+        type: string
+      statusr4:
+        type: string
+      tot:
+        example: "269.9"
+        type: string
+      totrun1:
+        example: "135.5"
+        type: string
+      totrun2:
+        example: "134.4"
+        type: string
+      totrun3:
+        type: string
+      totrun4:
+        type: string
+      valid:
+        example: 1
+        type: integer
+      version:
+        example: "1"
+        type: string
+      windptsr1:
+        example: "1.2"
+        type: string
+      windptsr2:
+        example: "0.8"
+        type: string
+      windptsr3:
+        type: string
+      windptsr4:
+        type: string
+      windr1:
+        example: "-0.5"
+        type: string
+      windr2:
+        example: "-0.3"
+        type: string
+      windr3:
+        type: string
+      windr4:
+        type: string
+    type: object
   swagger.FISLastCompetitorResponse:
     properties:
       competitor:
@@ -1418,6 +1720,11 @@ definitions:
     properties:
       result:
         $ref: '#/definitions/swagger.FISResultCC'
+    type: object
+  swagger.FISLastResultJPResponse:
+    properties:
+      result:
+        $ref: '#/definitions/swagger.FISResultJP'
     type: object
   swagger.FISNationsBySectorResponse:
     properties:
@@ -2102,6 +2409,13 @@ definitions:
           $ref: '#/definitions/swagger.FISResultCC'
         type: array
     type: object
+  swagger.FISRaceResultsJPResponse:
+    properties:
+      results:
+        items:
+          $ref: '#/definitions/swagger.FISResultJP'
+        type: array
+    type: object
   swagger.FISRacesCCResponse:
     properties:
       races:
@@ -2211,6 +2525,219 @@ definitions:
         type: string
       version:
         example: "1"
+        type: string
+    type: object
+  swagger.FISResultJP:
+    properties:
+      bib:
+        example: 15
+        type: integer
+      competitorid:
+        example: 345678
+        type: integer
+      competitorname:
+        example: KOBAYASHI Ryoyu
+        type: string
+      cuppoints:
+        example: "100"
+        type: string
+      disptsr1:
+        example: "78.5"
+        type: string
+      disptsr2:
+        example: "77.9"
+        type: string
+      disptsr3:
+        type: string
+      disptsr4:
+        type: string
+      distr1:
+        example: "138.0"
+        type: string
+      distr2:
+        example: "137.0"
+        type: string
+      distr3:
+        type: string
+      distr4:
+        type: string
+      fiscode:
+        example: 1234567
+        type: integer
+      gateptsr1:
+        example: "0.0"
+        type: string
+      gateptsr2:
+        example: "0.0"
+        type: string
+      gateptsr3:
+        type: string
+      gateptsr4:
+        type: string
+      gater1:
+        example: "8"
+        type: string
+      gater2:
+        example: "8"
+        type: string
+      gater3:
+        type: string
+      gater4:
+        type: string
+      heat:
+        example: "1"
+        type: string
+      j1r1:
+        type: string
+      j1r2:
+        type: string
+      j1r3:
+        type: string
+      j1r4:
+        type: string
+      j2r1:
+        type: string
+      j2r2:
+        type: string
+      j2r3:
+        type: string
+      j2r4:
+        type: string
+      j3r1:
+        type: string
+      j3r2:
+        type: string
+      j3r3:
+        type: string
+      j3r4:
+        type: string
+      j4r1:
+        type: string
+      j4r2:
+        type: string
+      j4r3:
+        type: string
+      j4r4:
+        type: string
+      j5r1:
+        type: string
+      j5r2:
+        type: string
+      j5r3:
+        type: string
+      j5r4:
+        type: string
+      judptsr1:
+        example: "57.0"
+        type: string
+      judptsr2:
+        example: "56.5"
+        type: string
+      judptsr3:
+        type: string
+      judptsr4:
+        type: string
+      lastupdate:
+        example: "2025-01-25T18:30:00Z"
+        type: string
+      level:
+        example: WC
+        type: string
+      nationcode:
+        example: JPN
+        type: string
+      position:
+        example: 1
+        type: integer
+      posr1:
+        example: "1"
+        type: string
+      posr2:
+        example: "1"
+        type: string
+      posr3:
+        type: string
+      posr4:
+        type: string
+      raceid:
+        example: 234567
+        type: integer
+      racepoints:
+        example: "0.0"
+        type: string
+      reason:
+        example: ""
+        type: string
+      recid:
+        example: 50001
+        type: integer
+      speedr1:
+        example: "88.5"
+        type: string
+      speedr2:
+        example: "88.0"
+        type: string
+      speedr3:
+        type: string
+      speedr4:
+        type: string
+      stage:
+        example: F
+        type: string
+      status:
+        example: OK
+        type: string
+      status2:
+        example: ""
+        type: string
+      statusr1:
+        example: OK
+        type: string
+      statusr2:
+        example: OK
+        type: string
+      statusr3:
+        type: string
+      statusr4:
+        type: string
+      tot:
+        example: "269.9"
+        type: string
+      totrun1:
+        example: "135.5"
+        type: string
+      totrun2:
+        example: "134.4"
+        type: string
+      totrun3:
+        type: string
+      totrun4:
+        type: string
+      valid:
+        example: 1
+        type: integer
+      version:
+        example: "1"
+        type: string
+      windptsr1:
+        example: "1.2"
+        type: string
+      windptsr2:
+        example: "0.8"
+        type: string
+      windptsr3:
+        type: string
+      windptsr4:
+        type: string
+      windr1:
+        example: "-0.5"
+        type: string
+      windr2:
+        example: "-0.3"
+        type: string
+      windr3:
+        type: string
+      windr4:
         type: string
     type: object
   swagger.FISSeasonsCCResponse:
@@ -3127,6 +3654,229 @@ definitions:
         type: string
       version:
         example: "1"
+        type: string
+    type: object
+  swagger.FISUpdateResultJPExample:
+    properties:
+      bib:
+        example: 15
+        type: integer
+      competitorid:
+        example: 345678
+        type: integer
+      competitorname:
+        example: KOBAYASHI Ryoyu
+        type: string
+      cuppoints:
+        example: "100"
+        type: string
+      disptsr1:
+        example: "78.5"
+        type: string
+      disptsr2:
+        example: "77.9"
+        type: string
+      disptsr3:
+        type: string
+      disptsr4:
+        type: string
+      distr1:
+        example: "138.0"
+        type: string
+      distr2:
+        example: "137.0"
+        type: string
+      distr3:
+        type: string
+      distr4:
+        type: string
+      fiscode:
+        example: 1234567
+        type: integer
+      gateptsr1:
+        example: "0.0"
+        type: string
+      gateptsr2:
+        example: "0.0"
+        type: string
+      gateptsr3:
+        type: string
+      gateptsr4:
+        type: string
+      gater1:
+        example: "8"
+        type: string
+      gater2:
+        example: "8"
+        type: string
+      gater3:
+        type: string
+      gater4:
+        type: string
+      heat:
+        example: "1"
+        type: string
+      j1r1:
+        example: "19.0"
+        type: string
+      j1r2:
+        example: "18.5"
+        type: string
+      j1r3:
+        type: string
+      j1r4:
+        type: string
+      j2r1:
+        example: "19.0"
+        type: string
+      j2r2:
+        example: "18.5"
+        type: string
+      j2r3:
+        type: string
+      j2r4:
+        type: string
+      j3r1:
+        example: "19.0"
+        type: string
+      j3r2:
+        example: "18.5"
+        type: string
+      j3r3:
+        type: string
+      j3r4:
+        type: string
+      j4r1:
+        example: "19.0"
+        type: string
+      j4r2:
+        example: "18.5"
+        type: string
+      j4r3:
+        type: string
+      j4r4:
+        type: string
+      j5r1:
+        example: "19.0"
+        type: string
+      j5r2:
+        example: "18.5"
+        type: string
+      j5r3:
+        type: string
+      j5r4:
+        type: string
+      judptsr1:
+        example: "57.0"
+        type: string
+      judptsr2:
+        example: "56.5"
+        type: string
+      judptsr3:
+        type: string
+      judptsr4:
+        type: string
+      lastupdate:
+        example: "2025-01-25T18:30:00Z"
+        type: string
+      level:
+        example: WC
+        type: string
+      nationcode:
+        example: JPN
+        type: string
+      position:
+        example: 1
+        type: integer
+      posr1:
+        example: "1"
+        type: string
+      posr2:
+        example: "1"
+        type: string
+      posr3:
+        type: string
+      posr4:
+        type: string
+      raceid:
+        example: 234567
+        type: integer
+      racepoints:
+        example: "0.0"
+        type: string
+      reason:
+        example: ""
+        type: string
+      recid:
+        example: 50001
+        type: integer
+      speedr1:
+        example: "88.5"
+        type: string
+      speedr2:
+        example: "88.0"
+        type: string
+      speedr3:
+        type: string
+      speedr4:
+        type: string
+      stage:
+        example: F
+        type: string
+      status:
+        example: OK
+        type: string
+      status2:
+        example: ""
+        type: string
+      statusr1:
+        example: OK
+        type: string
+      statusr2:
+        example: OK
+        type: string
+      statusr3:
+        type: string
+      statusr4:
+        type: string
+      tot:
+        example: "269.9"
+        type: string
+      totrun1:
+        example: "135.5"
+        type: string
+      totrun2:
+        example: "134.4"
+        type: string
+      totrun3:
+        type: string
+      totrun4:
+        type: string
+      valid:
+        example: 1
+        type: integer
+      version:
+        example: "1"
+        type: string
+      windptsr1:
+        example: "1.2"
+        type: string
+      windptsr2:
+        example: "0.8"
+        type: string
+      windptsr3:
+        type: string
+      windptsr4:
+        type: string
+      windr1:
+        example: "-0.5"
+        type: string
+      windr2:
+        example: "-0.3"
+        type: string
+      windr3:
+        type: string
+      windr4:
         type: string
     type: object
   swagger.ForbiddenError:
@@ -6901,6 +7651,47 @@ paths:
       summary: Get last Cross-Country result record
       tags:
       - FIS - Result Management – Cross-Country
+  /fis/lastrow/resultjp:
+    get:
+      consumes:
+      - application/json
+      description: Returns the last row in a_resultjp (by RecID DESC)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.FISLastResultJPResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Get last Ski Jumping result record
+      tags:
+      - FIS - Result Management – Ski Jumping
   /fis/nation:
     get:
       consumes:
@@ -7586,6 +8377,73 @@ paths:
       summary: Get Cross-Country results for an athlete
       tags:
       - FIS - Athlete
+  /fis/resultathletejp:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: FIS Code
+        in: query
+        name: fiscode
+        required: true
+        type: integer
+      - collectionFormat: csv
+        description: Season code (repeat or comma-separated)
+        in: query
+        items:
+          type: integer
+        name: seasoncode
+        type: array
+      - collectionFormat: csv
+        description: Discipline code (repeat or comma-separated)
+        in: query
+        items:
+          type: string
+        name: disciplinecode
+        type: array
+      - collectionFormat: csv
+        description: Category code (repeat or comma-separated)
+        in: query
+        items:
+          type: string
+        name: catcode
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.FISAthleteResultsJPResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Ski Jumping results for an athlete
+      tags:
+      - FIS - Athlete
   /fis/resultcc:
     delete:
       consumes:
@@ -7762,6 +8620,182 @@ paths:
       summary: Update Cross-Country result by RecID
       tags:
       - FIS - Result Management – Cross-Country
+  /fis/resultjp:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a result by RecID
+      parameters:
+      - description: Result RecID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete Ski Jumping result
+      tags:
+      - FIS - Result Management – Ski Jumping
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Race ID
+        in: query
+        name: raceid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.FISRaceResultsJPResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Get results for a Ski Jumping race
+      tags:
+      - FIS - Race Results
+    post:
+      consumes:
+      - application/json
+      description: Inserts a new a_resultjp row
+      parameters:
+      - description: Result payload
+        in: body
+        name: resultjp
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.FISInsertResultJPExample'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/swagger.ConflictResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Add new Ski Jumping result
+      tags:
+      - FIS - Result Management – Ski Jumping
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing a_resultjp row
+      parameters:
+      - description: Result payload
+        in: body
+        name: resultjp
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.FISUpdateResultJPExample'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Update Ski Jumping result by RecID
+      tags:
+      - FIS - Result Management – Ski Jumping
   /fis/seasoncodeCC:
     get:
       consumes:

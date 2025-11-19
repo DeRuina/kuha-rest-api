@@ -31,6 +31,10 @@ const (
 	fisResultCCLastRowPrefix = "fis:lastrow:resultcc"
 	fisResultCCRacePrefix    = "fis:resultcc:race"
 	fisResultCCAthletePrefix = "fis:resultcc:athlete"
+
+	fisResultJPLastRowPrefix = "fis:lastrow:resultjp"
+	fisResultJPRacePrefix    = "fis:resultjp:race"
+	fisResultJPAthletePrefix = "fis:resultjp:athlete"
 )
 
 func invalidateCompetitor(ctx context.Context, c *cache.Storage, competitorID int32) {
@@ -96,5 +100,17 @@ func invalidateResultCC(ctx context.Context, c *cache.Storage, recid int32) {
 		fisResultCCLastRowPrefix,
 		fisResultCCRacePrefix,
 		fisResultCCAthletePrefix,
+	)
+}
+
+func invalidateResultJP(ctx context.Context, c *cache.Storage, recid int32) {
+	if c == nil {
+		return
+	}
+	_ = c.DeleteByPrefixes(
+		ctx,
+		fisResultJPLastRowPrefix,
+		fisResultJPRacePrefix,
+		fisResultJPAthletePrefix,
 	)
 }

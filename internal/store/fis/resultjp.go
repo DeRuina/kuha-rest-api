@@ -1,0 +1,74 @@
+package fis
+
+import (
+	"context"
+	"database/sql"
+
+	fissqlc "github.com/DeRuina/KUHA-REST-API/internal/db/fis"
+	"github.com/DeRuina/KUHA-REST-API/internal/utils"
+)
+
+type ResultJPStore struct {
+	db *sql.DB
+}
+
+func (s *ResultJPStore) GetLastRowResultJP(ctx context.Context) (fissqlc.AResultjp, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := fissqlc.New(s.db)
+	return q.GetLastRowResultJP(ctx)
+}
+
+func (s *ResultJPStore) InsertResultJP(ctx context.Context, in InsertResultJPClean) error {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := fissqlc.New(s.db)
+	return q.InsertResultJP(ctx, mapInsertResultJPToParams(in))
+}
+
+func (s *ResultJPStore) UpdateResultJPByRecID(ctx context.Context, in UpdateResultJPClean) error {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := fissqlc.New(s.db)
+	_, err := q.UpdateResultJPByRecID(ctx, mapUpdateResultJPToParams(in))
+	return err
+}
+
+func (s *ResultJPStore) DeleteResultJPByRecID(ctx context.Context, recid int32) error {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := fissqlc.New(s.db)
+	_, err := q.DeleteResultJPByRecID(ctx, recid)
+	return err
+}
+
+func (s *ResultJPStore) GetRaceResultsJPByRaceID(ctx context.Context, raceID int32) ([]fissqlc.AResultjp, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := fissqlc.New(s.db)
+	return q.GetRaceResultsJPByRaceID(ctx, sql.NullInt32{Int32: raceID, Valid: true})
+}
+
+func (s *ResultJPStore) GetAthleteResultsJP(
+	ctx context.Context,
+	competitorID int32,
+	seasons []int32,
+	disciplines, cats []string,
+) ([]fissqlc.GetAthleteResultsJPRow, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := fissqlc.New(s.db)
+	params := fissqlc.GetAthleteResultsJPParams{
+		Competitorid: sql.NullInt32{Int32: competitorID, Valid: true},
+		Column2:      seasons,
+		Column3:      disciplines,
+		Column4:      cats,
+	}
+	return q.GetAthleteResultsJP(ctx, params)
+}

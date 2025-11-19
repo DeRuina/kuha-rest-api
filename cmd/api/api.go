@@ -286,6 +286,7 @@ func (app *api) mount() http.Handler {
 					raceJPhandler := fisapi.NewRaceJPHandler(app.store.FIS.RaceJP(), app.cacheStorage)
 					raceNKhandler := fisapi.NewRaceNKHandler(app.store.FIS.RaceNK(), app.cacheStorage)
 					resultCCHandler := fisapi.NewResultCCHandler(app.store.FIS.ResultCC(), app.store.FIS.Competitors(), app.cacheStorage)
+					resultJPHandler := fisapi.NewResultJPHandler(app.store.FIS.ResultJP(), app.store.FIS.Competitors(), app.cacheStorage)
 
 					// competitor routes
 					r.Get("/athlete", competitorHandler.GetAthletesBySector)
@@ -332,6 +333,14 @@ func (app *api) mount() http.Handler {
 					r.Post("/resultcc", resultCCHandler.InsertResultCC)
 					r.Put("/resultcc", resultCCHandler.UpdateResultCC)
 					r.Delete("/resultcc", resultCCHandler.DeleteResultCC)
+
+					// resultjp routes
+					r.Get("/resultjp", resultJPHandler.GetRaceResultsJP)
+					r.Get("/resultathletejp", resultJPHandler.GetAthleteResultsJP)
+					r.Get("/lastrow/resultjp", resultJPHandler.GetLastRowResultJP)
+					r.Post("/resultjp", resultJPHandler.InsertResultJP)
+					r.Put("/resultjp", resultJPHandler.UpdateResultJP)
+					r.Delete("/resultjp", resultJPHandler.DeleteResultJP)
 
 				})
 			} else {

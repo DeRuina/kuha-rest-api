@@ -1482,6 +1482,70 @@ const docTemplate = `{
                 }
             }
         },
+        "/fis/lastrow/resultjp": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns the last row in a_resultjp (by RecID DESC)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS - Result Management – Ski Jumping"
+                ],
+                "summary": "Get last Ski Jumping result record",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.FISLastResultJPResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.NotFoundResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/fis/nation": {
             "get": {
                 "security": [
@@ -2541,6 +2605,108 @@ const docTemplate = `{
                 }
             }
         },
+        "/fis/resultathletejp": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS - Athlete"
+                ],
+                "summary": "Get Ski Jumping results for an athlete",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "FIS Code",
+                        "name": "fiscode",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Season code (repeat or comma-separated)",
+                        "name": "seasoncode",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Discipline code (repeat or comma-separated)",
+                        "name": "disciplinecode",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Category code (repeat or comma-separated)",
+                        "name": "catcode",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.FISAthleteResultsJPResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.NotFoundResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/fis/resultcc": {
             "get": {
                 "security": [
@@ -2763,6 +2929,280 @@ const docTemplate = `{
                     "FIS - Result Management – Cross-Country"
                 ],
                 "summary": "Delete Cross-Country result",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Result RecID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.NotFoundResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/fis/resultjp": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS - Race Results"
+                ],
+                "summary": "Get results for a Ski Jumping race",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Race ID",
+                        "name": "raceid",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.FISRaceResultsJPResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Updates an existing a_resultjp row",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS - Result Management – Ski Jumping"
+                ],
+                "summary": "Update Ski Jumping result by RecID",
+                "parameters": [
+                    {
+                        "description": "Result payload",
+                        "name": "resultjp",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/swagger.FISUpdateResultJPExample"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.NotFoundResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Inserts a new a_resultjp row",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS - Result Management – Ski Jumping"
+                ],
+                "summary": "Add new Ski Jumping result",
+                "parameters": [
+                    {
+                        "description": "Result payload",
+                        "name": "resultjp",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/swagger.FISInsertResultJPExample"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ConflictResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes a result by RecID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS - Result Management – Ski Jumping"
+                ],
+                "summary": "Delete Ski Jumping result",
                 "parameters": [
                     {
                         "type": "integer",
@@ -9543,6 +9983,103 @@ const docTemplate = `{
                 }
             }
         },
+        "swagger.FISAthleteResultJP": {
+            "type": "object",
+            "properties": {
+                "catcode": {
+                    "type": "string",
+                    "example": "WC"
+                },
+                "disciplinecode": {
+                    "type": "string",
+                    "example": "LH"
+                },
+                "distr1": {
+                    "type": "string",
+                    "example": "138.0"
+                },
+                "distr2": {
+                    "type": "string",
+                    "example": "137.0"
+                },
+                "gater1": {
+                    "type": "string",
+                    "example": "8"
+                },
+                "gater2": {
+                    "type": "string",
+                    "example": "8"
+                },
+                "judptsr1": {
+                    "type": "string",
+                    "example": "57.0"
+                },
+                "judptsr2": {
+                    "type": "string",
+                    "example": "56.5"
+                },
+                "place": {
+                    "type": "string",
+                    "example": "Planica"
+                },
+                "position": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "posr1": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "posr2": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "racedate": {
+                    "type": "string",
+                    "example": "2025-01-25"
+                },
+                "raceid": {
+                    "type": "integer",
+                    "example": 234567
+                },
+                "seasoncode": {
+                    "type": "integer",
+                    "example": 2025
+                },
+                "speedr1": {
+                    "type": "string",
+                    "example": "88.5"
+                },
+                "speedr2": {
+                    "type": "string",
+                    "example": "88.0"
+                },
+                "totrun1": {
+                    "type": "string",
+                    "example": "135.5"
+                },
+                "totrun2": {
+                    "type": "string",
+                    "example": "134.4"
+                },
+                "windptsr1": {
+                    "type": "string",
+                    "example": "1.2"
+                },
+                "windptsr2": {
+                    "type": "string",
+                    "example": "0.8"
+                },
+                "windr1": {
+                    "type": "string",
+                    "example": "-0.5"
+                },
+                "windr2": {
+                    "type": "string",
+                    "example": "-0.3"
+                }
+            }
+        },
         "swagger.FISAthleteResultsCCResponse": {
             "type": "object",
             "properties": {
@@ -9550,6 +10087,17 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/swagger.FISAthleteResultCC"
+                    }
+                }
+            }
+        },
+        "swagger.FISAthleteResultsJPResponse": {
+            "type": "object",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.FISAthleteResultJP"
                     }
                 }
             }
@@ -10987,6 +11535,315 @@ const docTemplate = `{
                 }
             }
         },
+        "swagger.FISInsertResultJPExample": {
+            "type": "object",
+            "properties": {
+                "bib": {
+                    "type": "integer",
+                    "example": 15
+                },
+                "competitorid": {
+                    "type": "integer",
+                    "example": 345678
+                },
+                "competitorname": {
+                    "type": "string",
+                    "example": "KOBAYASHI Ryoyu"
+                },
+                "cuppoints": {
+                    "type": "string",
+                    "example": "100"
+                },
+                "disptsr1": {
+                    "type": "string",
+                    "example": "78.5"
+                },
+                "disptsr2": {
+                    "type": "string",
+                    "example": "77.9"
+                },
+                "disptsr3": {
+                    "type": "string"
+                },
+                "disptsr4": {
+                    "type": "string"
+                },
+                "distr1": {
+                    "type": "string",
+                    "example": "138.0"
+                },
+                "distr2": {
+                    "type": "string",
+                    "example": "137.0"
+                },
+                "distr3": {
+                    "type": "string"
+                },
+                "distr4": {
+                    "type": "string"
+                },
+                "fiscode": {
+                    "type": "integer",
+                    "example": 1234567
+                },
+                "gateptsr1": {
+                    "type": "string",
+                    "example": "0.0"
+                },
+                "gateptsr2": {
+                    "type": "string",
+                    "example": "0.0"
+                },
+                "gateptsr3": {
+                    "type": "string"
+                },
+                "gateptsr4": {
+                    "type": "string"
+                },
+                "gater1": {
+                    "type": "string",
+                    "example": "8"
+                },
+                "gater2": {
+                    "type": "string",
+                    "example": "8"
+                },
+                "gater3": {
+                    "type": "string"
+                },
+                "gater4": {
+                    "type": "string"
+                },
+                "heat": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "j1r1": {
+                    "type": "string",
+                    "example": "19.0"
+                },
+                "j1r2": {
+                    "type": "string",
+                    "example": "18.5"
+                },
+                "j1r3": {
+                    "type": "string"
+                },
+                "j1r4": {
+                    "type": "string"
+                },
+                "j2r1": {
+                    "type": "string",
+                    "example": "19.0"
+                },
+                "j2r2": {
+                    "type": "string",
+                    "example": "18.5"
+                },
+                "j2r3": {
+                    "type": "string"
+                },
+                "j2r4": {
+                    "type": "string"
+                },
+                "j3r1": {
+                    "type": "string",
+                    "example": "19.0"
+                },
+                "j3r2": {
+                    "type": "string",
+                    "example": "18.5"
+                },
+                "j3r3": {
+                    "type": "string"
+                },
+                "j3r4": {
+                    "type": "string"
+                },
+                "j4r1": {
+                    "type": "string",
+                    "example": "19.0"
+                },
+                "j4r2": {
+                    "type": "string",
+                    "example": "18.5"
+                },
+                "j4r3": {
+                    "type": "string"
+                },
+                "j4r4": {
+                    "type": "string"
+                },
+                "j5r1": {
+                    "type": "string",
+                    "example": "19.0"
+                },
+                "j5r2": {
+                    "type": "string",
+                    "example": "18.5"
+                },
+                "j5r3": {
+                    "type": "string"
+                },
+                "j5r4": {
+                    "type": "string"
+                },
+                "judptsr1": {
+                    "type": "string",
+                    "example": "57.0"
+                },
+                "judptsr2": {
+                    "type": "string",
+                    "example": "56.5"
+                },
+                "judptsr3": {
+                    "type": "string"
+                },
+                "judptsr4": {
+                    "type": "string"
+                },
+                "lastupdate": {
+                    "type": "string",
+                    "example": "2025-01-25T18:30:00Z"
+                },
+                "level": {
+                    "type": "string",
+                    "example": "WC"
+                },
+                "nationcode": {
+                    "type": "string",
+                    "example": "JPN"
+                },
+                "position": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "posr1": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "posr2": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "posr3": {
+                    "type": "string"
+                },
+                "posr4": {
+                    "type": "string"
+                },
+                "raceid": {
+                    "type": "integer",
+                    "example": 234567
+                },
+                "racepoints": {
+                    "type": "string",
+                    "example": "0.0"
+                },
+                "reason": {
+                    "type": "string",
+                    "example": ""
+                },
+                "recid": {
+                    "type": "integer",
+                    "example": 50001
+                },
+                "speedr1": {
+                    "type": "string",
+                    "example": "88.5"
+                },
+                "speedr2": {
+                    "type": "string",
+                    "example": "88.0"
+                },
+                "speedr3": {
+                    "type": "string"
+                },
+                "speedr4": {
+                    "type": "string"
+                },
+                "stage": {
+                    "type": "string",
+                    "example": "F"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "OK"
+                },
+                "status2": {
+                    "type": "string",
+                    "example": ""
+                },
+                "statusr1": {
+                    "type": "string",
+                    "example": "OK"
+                },
+                "statusr2": {
+                    "type": "string",
+                    "example": "OK"
+                },
+                "statusr3": {
+                    "type": "string"
+                },
+                "statusr4": {
+                    "type": "string"
+                },
+                "tot": {
+                    "type": "string",
+                    "example": "269.9"
+                },
+                "totrun1": {
+                    "type": "string",
+                    "example": "135.5"
+                },
+                "totrun2": {
+                    "type": "string",
+                    "example": "134.4"
+                },
+                "totrun3": {
+                    "type": "string"
+                },
+                "totrun4": {
+                    "type": "string"
+                },
+                "valid": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "version": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "windptsr1": {
+                    "type": "string",
+                    "example": "1.2"
+                },
+                "windptsr2": {
+                    "type": "string",
+                    "example": "0.8"
+                },
+                "windptsr3": {
+                    "type": "string"
+                },
+                "windptsr4": {
+                    "type": "string"
+                },
+                "windr1": {
+                    "type": "string",
+                    "example": "-0.5"
+                },
+                "windr2": {
+                    "type": "string",
+                    "example": "-0.3"
+                },
+                "windr3": {
+                    "type": "string"
+                },
+                "windr4": {
+                    "type": "string"
+                }
+            }
+        },
         "swagger.FISLastCompetitorResponse": {
             "type": "object",
             "properties": {
@@ -11024,6 +11881,14 @@ const docTemplate = `{
             "properties": {
                 "result": {
                     "$ref": "#/definitions/swagger.FISResultCC"
+                }
+            }
+        },
+        "swagger.FISLastResultJPResponse": {
+            "type": "object",
+            "properties": {
+                "result": {
+                    "$ref": "#/definitions/swagger.FISResultJP"
                 }
             }
         },
@@ -11989,6 +12854,17 @@ const docTemplate = `{
                 }
             }
         },
+        "swagger.FISRaceResultsJPResponse": {
+            "type": "object",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.FISResultJP"
+                    }
+                }
+            }
+        },
         "swagger.FISRacesCCResponse": {
             "type": "object",
             "properties": {
@@ -12140,6 +13016,305 @@ const docTemplate = `{
                 "version": {
                     "type": "string",
                     "example": "1"
+                }
+            }
+        },
+        "swagger.FISResultJP": {
+            "type": "object",
+            "properties": {
+                "bib": {
+                    "type": "integer",
+                    "example": 15
+                },
+                "competitorid": {
+                    "type": "integer",
+                    "example": 345678
+                },
+                "competitorname": {
+                    "type": "string",
+                    "example": "KOBAYASHI Ryoyu"
+                },
+                "cuppoints": {
+                    "type": "string",
+                    "example": "100"
+                },
+                "disptsr1": {
+                    "type": "string",
+                    "example": "78.5"
+                },
+                "disptsr2": {
+                    "type": "string",
+                    "example": "77.9"
+                },
+                "disptsr3": {
+                    "type": "string"
+                },
+                "disptsr4": {
+                    "type": "string"
+                },
+                "distr1": {
+                    "type": "string",
+                    "example": "138.0"
+                },
+                "distr2": {
+                    "type": "string",
+                    "example": "137.0"
+                },
+                "distr3": {
+                    "type": "string"
+                },
+                "distr4": {
+                    "type": "string"
+                },
+                "fiscode": {
+                    "type": "integer",
+                    "example": 1234567
+                },
+                "gateptsr1": {
+                    "type": "string",
+                    "example": "0.0"
+                },
+                "gateptsr2": {
+                    "type": "string",
+                    "example": "0.0"
+                },
+                "gateptsr3": {
+                    "type": "string"
+                },
+                "gateptsr4": {
+                    "type": "string"
+                },
+                "gater1": {
+                    "type": "string",
+                    "example": "8"
+                },
+                "gater2": {
+                    "type": "string",
+                    "example": "8"
+                },
+                "gater3": {
+                    "type": "string"
+                },
+                "gater4": {
+                    "type": "string"
+                },
+                "heat": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "j1r1": {
+                    "type": "string"
+                },
+                "j1r2": {
+                    "type": "string"
+                },
+                "j1r3": {
+                    "type": "string"
+                },
+                "j1r4": {
+                    "type": "string"
+                },
+                "j2r1": {
+                    "type": "string"
+                },
+                "j2r2": {
+                    "type": "string"
+                },
+                "j2r3": {
+                    "type": "string"
+                },
+                "j2r4": {
+                    "type": "string"
+                },
+                "j3r1": {
+                    "type": "string"
+                },
+                "j3r2": {
+                    "type": "string"
+                },
+                "j3r3": {
+                    "type": "string"
+                },
+                "j3r4": {
+                    "type": "string"
+                },
+                "j4r1": {
+                    "type": "string"
+                },
+                "j4r2": {
+                    "type": "string"
+                },
+                "j4r3": {
+                    "type": "string"
+                },
+                "j4r4": {
+                    "type": "string"
+                },
+                "j5r1": {
+                    "type": "string"
+                },
+                "j5r2": {
+                    "type": "string"
+                },
+                "j5r3": {
+                    "type": "string"
+                },
+                "j5r4": {
+                    "type": "string"
+                },
+                "judptsr1": {
+                    "type": "string",
+                    "example": "57.0"
+                },
+                "judptsr2": {
+                    "type": "string",
+                    "example": "56.5"
+                },
+                "judptsr3": {
+                    "type": "string"
+                },
+                "judptsr4": {
+                    "type": "string"
+                },
+                "lastupdate": {
+                    "type": "string",
+                    "example": "2025-01-25T18:30:00Z"
+                },
+                "level": {
+                    "type": "string",
+                    "example": "WC"
+                },
+                "nationcode": {
+                    "type": "string",
+                    "example": "JPN"
+                },
+                "position": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "posr1": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "posr2": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "posr3": {
+                    "type": "string"
+                },
+                "posr4": {
+                    "type": "string"
+                },
+                "raceid": {
+                    "type": "integer",
+                    "example": 234567
+                },
+                "racepoints": {
+                    "type": "string",
+                    "example": "0.0"
+                },
+                "reason": {
+                    "type": "string",
+                    "example": ""
+                },
+                "recid": {
+                    "type": "integer",
+                    "example": 50001
+                },
+                "speedr1": {
+                    "type": "string",
+                    "example": "88.5"
+                },
+                "speedr2": {
+                    "type": "string",
+                    "example": "88.0"
+                },
+                "speedr3": {
+                    "type": "string"
+                },
+                "speedr4": {
+                    "type": "string"
+                },
+                "stage": {
+                    "type": "string",
+                    "example": "F"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "OK"
+                },
+                "status2": {
+                    "type": "string",
+                    "example": ""
+                },
+                "statusr1": {
+                    "type": "string",
+                    "example": "OK"
+                },
+                "statusr2": {
+                    "type": "string",
+                    "example": "OK"
+                },
+                "statusr3": {
+                    "type": "string"
+                },
+                "statusr4": {
+                    "type": "string"
+                },
+                "tot": {
+                    "type": "string",
+                    "example": "269.9"
+                },
+                "totrun1": {
+                    "type": "string",
+                    "example": "135.5"
+                },
+                "totrun2": {
+                    "type": "string",
+                    "example": "134.4"
+                },
+                "totrun3": {
+                    "type": "string"
+                },
+                "totrun4": {
+                    "type": "string"
+                },
+                "valid": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "version": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "windptsr1": {
+                    "type": "string",
+                    "example": "1.2"
+                },
+                "windptsr2": {
+                    "type": "string",
+                    "example": "0.8"
+                },
+                "windptsr3": {
+                    "type": "string"
+                },
+                "windptsr4": {
+                    "type": "string"
+                },
+                "windr1": {
+                    "type": "string",
+                    "example": "-0.5"
+                },
+                "windr2": {
+                    "type": "string",
+                    "example": "-0.3"
+                },
+                "windr3": {
+                    "type": "string"
+                },
+                "windr4": {
+                    "type": "string"
                 }
             }
         },
@@ -13415,6 +14590,315 @@ const docTemplate = `{
                 "version": {
                     "type": "string",
                     "example": "1"
+                }
+            }
+        },
+        "swagger.FISUpdateResultJPExample": {
+            "type": "object",
+            "properties": {
+                "bib": {
+                    "type": "integer",
+                    "example": 15
+                },
+                "competitorid": {
+                    "type": "integer",
+                    "example": 345678
+                },
+                "competitorname": {
+                    "type": "string",
+                    "example": "KOBAYASHI Ryoyu"
+                },
+                "cuppoints": {
+                    "type": "string",
+                    "example": "100"
+                },
+                "disptsr1": {
+                    "type": "string",
+                    "example": "78.5"
+                },
+                "disptsr2": {
+                    "type": "string",
+                    "example": "77.9"
+                },
+                "disptsr3": {
+                    "type": "string"
+                },
+                "disptsr4": {
+                    "type": "string"
+                },
+                "distr1": {
+                    "type": "string",
+                    "example": "138.0"
+                },
+                "distr2": {
+                    "type": "string",
+                    "example": "137.0"
+                },
+                "distr3": {
+                    "type": "string"
+                },
+                "distr4": {
+                    "type": "string"
+                },
+                "fiscode": {
+                    "type": "integer",
+                    "example": 1234567
+                },
+                "gateptsr1": {
+                    "type": "string",
+                    "example": "0.0"
+                },
+                "gateptsr2": {
+                    "type": "string",
+                    "example": "0.0"
+                },
+                "gateptsr3": {
+                    "type": "string"
+                },
+                "gateptsr4": {
+                    "type": "string"
+                },
+                "gater1": {
+                    "type": "string",
+                    "example": "8"
+                },
+                "gater2": {
+                    "type": "string",
+                    "example": "8"
+                },
+                "gater3": {
+                    "type": "string"
+                },
+                "gater4": {
+                    "type": "string"
+                },
+                "heat": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "j1r1": {
+                    "type": "string",
+                    "example": "19.0"
+                },
+                "j1r2": {
+                    "type": "string",
+                    "example": "18.5"
+                },
+                "j1r3": {
+                    "type": "string"
+                },
+                "j1r4": {
+                    "type": "string"
+                },
+                "j2r1": {
+                    "type": "string",
+                    "example": "19.0"
+                },
+                "j2r2": {
+                    "type": "string",
+                    "example": "18.5"
+                },
+                "j2r3": {
+                    "type": "string"
+                },
+                "j2r4": {
+                    "type": "string"
+                },
+                "j3r1": {
+                    "type": "string",
+                    "example": "19.0"
+                },
+                "j3r2": {
+                    "type": "string",
+                    "example": "18.5"
+                },
+                "j3r3": {
+                    "type": "string"
+                },
+                "j3r4": {
+                    "type": "string"
+                },
+                "j4r1": {
+                    "type": "string",
+                    "example": "19.0"
+                },
+                "j4r2": {
+                    "type": "string",
+                    "example": "18.5"
+                },
+                "j4r3": {
+                    "type": "string"
+                },
+                "j4r4": {
+                    "type": "string"
+                },
+                "j5r1": {
+                    "type": "string",
+                    "example": "19.0"
+                },
+                "j5r2": {
+                    "type": "string",
+                    "example": "18.5"
+                },
+                "j5r3": {
+                    "type": "string"
+                },
+                "j5r4": {
+                    "type": "string"
+                },
+                "judptsr1": {
+                    "type": "string",
+                    "example": "57.0"
+                },
+                "judptsr2": {
+                    "type": "string",
+                    "example": "56.5"
+                },
+                "judptsr3": {
+                    "type": "string"
+                },
+                "judptsr4": {
+                    "type": "string"
+                },
+                "lastupdate": {
+                    "type": "string",
+                    "example": "2025-01-25T18:30:00Z"
+                },
+                "level": {
+                    "type": "string",
+                    "example": "WC"
+                },
+                "nationcode": {
+                    "type": "string",
+                    "example": "JPN"
+                },
+                "position": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "posr1": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "posr2": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "posr3": {
+                    "type": "string"
+                },
+                "posr4": {
+                    "type": "string"
+                },
+                "raceid": {
+                    "type": "integer",
+                    "example": 234567
+                },
+                "racepoints": {
+                    "type": "string",
+                    "example": "0.0"
+                },
+                "reason": {
+                    "type": "string",
+                    "example": ""
+                },
+                "recid": {
+                    "type": "integer",
+                    "example": 50001
+                },
+                "speedr1": {
+                    "type": "string",
+                    "example": "88.5"
+                },
+                "speedr2": {
+                    "type": "string",
+                    "example": "88.0"
+                },
+                "speedr3": {
+                    "type": "string"
+                },
+                "speedr4": {
+                    "type": "string"
+                },
+                "stage": {
+                    "type": "string",
+                    "example": "F"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "OK"
+                },
+                "status2": {
+                    "type": "string",
+                    "example": ""
+                },
+                "statusr1": {
+                    "type": "string",
+                    "example": "OK"
+                },
+                "statusr2": {
+                    "type": "string",
+                    "example": "OK"
+                },
+                "statusr3": {
+                    "type": "string"
+                },
+                "statusr4": {
+                    "type": "string"
+                },
+                "tot": {
+                    "type": "string",
+                    "example": "269.9"
+                },
+                "totrun1": {
+                    "type": "string",
+                    "example": "135.5"
+                },
+                "totrun2": {
+                    "type": "string",
+                    "example": "134.4"
+                },
+                "totrun3": {
+                    "type": "string"
+                },
+                "totrun4": {
+                    "type": "string"
+                },
+                "valid": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "version": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "windptsr1": {
+                    "type": "string",
+                    "example": "1.2"
+                },
+                "windptsr2": {
+                    "type": "string",
+                    "example": "0.8"
+                },
+                "windptsr3": {
+                    "type": "string"
+                },
+                "windptsr4": {
+                    "type": "string"
+                },
+                "windr1": {
+                    "type": "string",
+                    "example": "-0.5"
+                },
+                "windr2": {
+                    "type": "string",
+                    "example": "-0.3"
+                },
+                "windr3": {
+                    "type": "string"
+                },
+                "windr4": {
+                    "type": "string"
                 }
             }
         },

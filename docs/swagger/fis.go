@@ -1127,3 +1127,242 @@ type FISInsertResultCCExample struct {
 }
 
 type FISUpdateResultCCExample = FISInsertResultCCExample
+
+type FISResultJP struct {
+	Recid          int32   `json:"recid" example:"50001"`
+	Raceid         *int32  `json:"raceid,omitempty" example:"234567"`
+	Competitorid   *int32  `json:"competitorid,omitempty" example:"345678"`
+	Status         *string `json:"status,omitempty" example:"OK"`
+	Status2        *string `json:"status2,omitempty" example:""`
+	Position       *int32  `json:"position,omitempty" example:"1"`
+	Bib            *int32  `json:"bib,omitempty" example:"15"`
+	Fiscode        *int32  `json:"fiscode,omitempty" example:"1234567"`
+	Competitorname *string `json:"competitorname,omitempty" example:"KOBAYASHI Ryoyu"`
+	Nationcode     *string `json:"nationcode,omitempty" example:"JPN"`
+	Level          *string `json:"level,omitempty" example:"WC"`
+	Heat           *string `json:"heat,omitempty" example:"1"`
+	Stage          *string `json:"stage,omitempty" example:"F"`
+
+	J1r1 *string `json:"j1r1,omitempty"`
+	J2r1 *string `json:"j2r1,omitempty"`
+	J3r1 *string `json:"j3r1,omitempty"`
+	J4r1 *string `json:"j4r1,omitempty"`
+	J5r1 *string `json:"j5r1,omitempty"`
+
+	Speedr1  *string `json:"speedr1,omitempty" example:"88.5"`
+	Distr1   *string `json:"distr1,omitempty" example:"138.0"`
+	Disptsr1 *string `json:"disptsr1,omitempty" example:"78.5"`
+	Judptsr1 *string `json:"judptsr1,omitempty" example:"57.0"`
+	Totrun1  *string `json:"totrun1,omitempty" example:"135.5"`
+	Posr1    *string `json:"posr1,omitempty" example:"1"`
+	Statusr1 *string `json:"statusr1,omitempty" example:"OK"`
+
+	J1r2 *string `json:"j1r2,omitempty"`
+	J2r2 *string `json:"j2r2,omitempty"`
+	J3r2 *string `json:"j3r2,omitempty"`
+	J4r2 *string `json:"j4r2,omitempty"`
+	J5r2 *string `json:"j5r2,omitempty"`
+
+	Speedr2  *string `json:"speedr2,omitempty" example:"88.0"`
+	Distr2   *string `json:"distr2,omitempty" example:"137.0"`
+	Disptsr2 *string `json:"disptsr2,omitempty" example:"77.9"`
+	Judptsr2 *string `json:"judptsr2,omitempty" example:"56.5"`
+	Totrun2  *string `json:"totrun2,omitempty" example:"134.4"`
+	Posr2    *string `json:"posr2,omitempty" example:"1"`
+	Statusr2 *string `json:"statusr2,omitempty" example:"OK"`
+
+	J1r3 *string `json:"j1r3,omitempty"`
+	J2r3 *string `json:"j2r3,omitempty"`
+	J3r3 *string `json:"j3r3,omitempty"`
+	J4r3 *string `json:"j4r3,omitempty"`
+	J5r3 *string `json:"j5r3,omitempty"`
+
+	Speedr3  *string `json:"speedr3,omitempty"`
+	Distr3   *string `json:"distr3,omitempty"`
+	Disptsr3 *string `json:"disptsr3,omitempty"`
+	Judptsr3 *string `json:"judptsr3,omitempty"`
+	Totrun3  *string `json:"totrun3,omitempty"`
+	Posr3    *string `json:"posr3,omitempty"`
+	Statusr3 *string `json:"statusr3,omitempty"`
+
+	J1r4 *string `json:"j1r4,omitempty"`
+	J2r4 *string `json:"j2r4,omitempty"`
+	J3r4 *string `json:"j3r4,omitempty"`
+	J4r4 *string `json:"j4r4,omitempty"`
+	J5r4 *string `json:"j5r4,omitempty"`
+
+	Speedr4  *string `json:"speedr4,omitempty"`
+	Distr4   *string `json:"distr4,omitempty"`
+	Disptsr4 *string `json:"disptsr4,omitempty"`
+	Judptsr4 *string `json:"judptsr4,omitempty"`
+
+	Gater1    *string `json:"gater1,omitempty" example:"8"`
+	Gater2    *string `json:"gater2,omitempty" example:"8"`
+	Gater3    *string `json:"gater3,omitempty"`
+	Gater4    *string `json:"gater4,omitempty"`
+	Gateptsr1 *string `json:"gateptsr1,omitempty" example:"0.0"`
+	Gateptsr2 *string `json:"gateptsr2,omitempty" example:"0.0"`
+	Gateptsr3 *string `json:"gateptsr3,omitempty"`
+	Gateptsr4 *string `json:"gateptsr4,omitempty"`
+
+	Windr1    *string `json:"windr1,omitempty" example:"-0.5"`
+	Windr2    *string `json:"windr2,omitempty" example:"-0.3"`
+	Windr3    *string `json:"windr3,omitempty"`
+	Windr4    *string `json:"windr4,omitempty"`
+	Windptsr1 *string `json:"windptsr1,omitempty" example:"1.2"`
+	Windptsr2 *string `json:"windptsr2,omitempty" example:"0.8"`
+	Windptsr3 *string `json:"windptsr3,omitempty"`
+	Windptsr4 *string `json:"windptsr4,omitempty"`
+
+	Reason     *string `json:"reason,omitempty" example:""`
+	Totrun4    *string `json:"totrun4,omitempty"`
+	Tot        *string `json:"tot,omitempty" example:"269.9"`
+	Valid      *int32  `json:"valid,omitempty" example:"1"`
+	Racepoints *string `json:"racepoints,omitempty" example:"0.0"`
+	Cuppoints  *string `json:"cuppoints,omitempty" example:"100"`
+	Version    *string `json:"version,omitempty" example:"1"`
+	Lastupdate *string `json:"lastupdate,omitempty" example:"2025-01-25T18:30:00Z"`
+	Posr4      *string `json:"posr4,omitempty"`
+	Statusr4   *string `json:"statusr4,omitempty"`
+}
+
+type FISAthleteResultJP struct {
+	Raceid         *int32  `json:"raceid,omitempty" example:"234567"`
+	Position       *int32  `json:"position,omitempty" example:"1"`
+	Racedate       *string `json:"racedate,omitempty" example:"2025-01-25"`
+	Seasoncode     *int32  `json:"seasoncode,omitempty" example:"2025"`
+	Disciplinecode *string `json:"disciplinecode,omitempty" example:"LH"`
+	Catcode        *string `json:"catcode,omitempty" example:"WC"`
+	Place          *string `json:"place,omitempty" example:"Planica"`
+
+	Posr1     *string `json:"posr1,omitempty" example:"1"`
+	Speedr1   *string `json:"speedr1,omitempty" example:"88.5"`
+	Distr1    *string `json:"distr1,omitempty" example:"138.0"`
+	Judptsr1  *string `json:"judptsr1,omitempty" example:"57.0"`
+	Windr1    *string `json:"windr1,omitempty" example:"-0.5"`
+	Windptsr1 *string `json:"windptsr1,omitempty" example:"1.2"`
+	Gater1    *string `json:"gater1,omitempty" example:"8"`
+
+	Posr2     *string `json:"posr2,omitempty" example:"1"`
+	Speedr2   *string `json:"speedr2,omitempty" example:"88.0"`
+	Distr2    *string `json:"distr2,omitempty" example:"137.0"`
+	Judptsr2  *string `json:"judptsr2,omitempty" example:"56.5"`
+	Windr2    *string `json:"windr2,omitempty" example:"-0.3"`
+	Windptsr2 *string `json:"windptsr2,omitempty" example:"0.8"`
+	Gater2    *string `json:"gater2,omitempty" example:"8"`
+
+	Totrun1 *string `json:"totrun1,omitempty" example:"135.5"`
+	Totrun2 *string `json:"totrun2,omitempty" example:"134.4"`
+}
+
+type FISLastResultJPResponse struct {
+	Result FISResultJP `json:"result"`
+}
+
+type FISRaceResultsJPResponse struct {
+	Results []FISResultJP `json:"results"`
+}
+
+type FISAthleteResultsJPResponse struct {
+	Results []FISAthleteResultJP `json:"results"`
+}
+
+type FISInsertResultJPExample struct {
+	Recid          int32   `json:"recid" example:"50001"`
+	Raceid         *int32  `json:"raceid" example:"234567"`
+	Competitorid   *int32  `json:"competitorid" example:"345678"`
+	Status         *string `json:"status" example:"OK"`
+	Status2        *string `json:"status2" example:""`
+	Position       *int32  `json:"position" example:"1"`
+	Bib            *int32  `json:"bib" example:"15"`
+	Fiscode        *int32  `json:"fiscode" example:"1234567"`
+	Competitorname *string `json:"competitorname" example:"KOBAYASHI Ryoyu"`
+	Nationcode     *string `json:"nationcode" example:"JPN"`
+	Level          *string `json:"level" example:"WC"`
+	Heat           *string `json:"heat" example:"1"`
+	Stage          *string `json:"stage" example:"F"`
+
+	J1r1 *string `json:"j1r1,omitempty" example:"19.0"`
+	J2r1 *string `json:"j2r1,omitempty" example:"19.0"`
+	J3r1 *string `json:"j3r1,omitempty" example:"19.0"`
+	J4r1 *string `json:"j4r1,omitempty" example:"19.0"`
+	J5r1 *string `json:"j5r1,omitempty" example:"19.0"`
+
+	Speedr1  *string `json:"speedr1" example:"88.5"`
+	Distr1   *string `json:"distr1" example:"138.0"`
+	Disptsr1 *string `json:"disptsr1" example:"78.5"`
+	Judptsr1 *string `json:"judptsr1" example:"57.0"`
+	Totrun1  *string `json:"totrun1" example:"135.5"`
+	Posr1    *string `json:"posr1" example:"1"`
+	Statusr1 *string `json:"statusr1" example:"OK"`
+
+	J1r2 *string `json:"j1r2,omitempty" example:"18.5"`
+	J2r2 *string `json:"j2r2,omitempty" example:"18.5"`
+	J3r2 *string `json:"j3r2,omitempty" example:"18.5"`
+	J4r2 *string `json:"j4r2,omitempty" example:"18.5"`
+	J5r2 *string `json:"j5r2,omitempty" example:"18.5"`
+
+	Speedr2  *string `json:"speedr2" example:"88.0"`
+	Distr2   *string `json:"distr2" example:"137.0"`
+	Disptsr2 *string `json:"disptsr2" example:"77.9"`
+	Judptsr2 *string `json:"judptsr2" example:"56.5"`
+	Totrun2  *string `json:"totrun2" example:"134.4"`
+	Posr2    *string `json:"posr2" example:"1"`
+	Statusr2 *string `json:"statusr2" example:"OK"`
+
+	J1r3 *string `json:"j1r3,omitempty"`
+	J2r3 *string `json:"j2r3,omitempty"`
+	J3r3 *string `json:"j3r3,omitempty"`
+	J4r3 *string `json:"j4r3,omitempty"`
+	J5r3 *string `json:"j5r3,omitempty"`
+
+	Speedr3  *string `json:"speedr3,omitempty"`
+	Distr3   *string `json:"distr3,omitempty"`
+	Disptsr3 *string `json:"disptsr3,omitempty"`
+	Judptsr3 *string `json:"judptsr3,omitempty"`
+	Totrun3  *string `json:"totrun3,omitempty"`
+	Posr3    *string `json:"posr3,omitempty"`
+	Statusr3 *string `json:"statusr3,omitempty"`
+
+	J1r4 *string `json:"j1r4,omitempty"`
+	J2r4 *string `json:"j2r4,omitempty"`
+	J3r4 *string `json:"j3r4,omitempty"`
+	J4r4 *string `json:"j4r4,omitempty"`
+	J5r4 *string `json:"j5r4,omitempty"`
+
+	Speedr4  *string `json:"speedr4,omitempty"`
+	Distr4   *string `json:"distr4,omitempty"`
+	Disptsr4 *string `json:"disptsr4,omitempty"`
+	Judptsr4 *string `json:"judptsr4,omitempty"`
+
+	Gater1    *string `json:"gater1,omitempty" example:"8"`
+	Gater2    *string `json:"gater2,omitempty" example:"8"`
+	Gater3    *string `json:"gater3,omitempty"`
+	Gater4    *string `json:"gater4,omitempty"`
+	Gateptsr1 *string `json:"gateptsr1,omitempty" example:"0.0"`
+	Gateptsr2 *string `json:"gateptsr2,omitempty" example:"0.0"`
+	Gateptsr3 *string `json:"gateptsr3,omitempty"`
+	Gateptsr4 *string `json:"gateptsr4,omitempty"`
+
+	Windr1    *string `json:"windr1,omitempty" example:"-0.5"`
+	Windr2    *string `json:"windr2,omitempty" example:"-0.3"`
+	Windr3    *string `json:"windr3,omitempty"`
+	Windr4    *string `json:"windr4,omitempty"`
+	Windptsr1 *string `json:"windptsr1,omitempty" example:"1.2"`
+	Windptsr2 *string `json:"windptsr2,omitempty" example:"0.8"`
+	Windptsr3 *string `json:"windptsr3,omitempty"`
+	Windptsr4 *string `json:"windptsr4,omitempty"`
+
+	Reason     *string `json:"reason,omitempty" example:""`
+	Totrun4    *string `json:"totrun4,omitempty"`
+	Tot        *string `json:"tot" example:"269.9"`
+	Valid      *int32  `json:"valid" example:"1"`
+	Racepoints *string `json:"racepoints" example:"0.0"`
+	Cuppoints  *string `json:"cuppoints" example:"100"`
+	Version    *string `json:"version" example:"1"`
+	Lastupdate *string `json:"lastupdate" example:"2025-01-25T18:30:00Z"`
+	Posr4      *string `json:"posr4,omitempty"`
+	Statusr4   *string `json:"statusr4,omitempty"`
+}
+
+type FISUpdateResultJPExample = FISInsertResultJPExample

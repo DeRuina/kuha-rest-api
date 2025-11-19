@@ -17,6 +17,16 @@ type Resultcc interface {
 	GetAthleteResultsCC(ctx context.Context, competitorID int32, seasons []int32, disciplines, cats []string) ([]fissqlc.GetAthleteResultsCCRow, error)
 }
 
+// Resultjp interface
+type Resultjp interface {
+	GetLastRowResultJP(ctx context.Context) (fissqlc.AResultjp, error)
+	InsertResultJP(ctx context.Context, in InsertResultJPClean) error
+	UpdateResultJPByRecID(ctx context.Context, in UpdateResultJPClean) error
+	DeleteResultJPByRecID(ctx context.Context, recid int32) error
+	GetRaceResultsJPByRaceID(ctx context.Context, raceID int32) ([]fissqlc.AResultjp, error)
+	GetAthleteResultsJP(ctx context.Context, competitorID int32, seasons []int32, disciplines, cats []string) ([]fissqlc.GetAthleteResultsJPRow, error)
+}
+
 // Racecc interface
 type Racecc interface {
 	GetCrossCountrySeasons(ctx context.Context) ([]int32, error)
@@ -76,6 +86,7 @@ type FISStorage struct {
 	racejp      Racejp
 	racenk      Racenk
 	resultcc    Resultcc
+	resultjp    Resultjp
 }
 
 // Ping method
@@ -104,6 +115,10 @@ func (s *FISStorage) ResultCC() Resultcc {
 	return s.resultcc
 }
 
+func (s *FISStorage) ResultJP() Resultjp {
+	return s.resultjp
+}
+
 // Storage for FIS database tables
 func NewFISStorage(db *sql.DB) *FISStorage {
 	return &FISStorage{
@@ -113,5 +128,6 @@ func NewFISStorage(db *sql.DB) *FISStorage {
 		racejp:      &RaceJPStore{db: db},
 		racenk:      &RaceNKStore{db: db},
 		resultcc:    &ResultCCStore{db: db},
+		resultjp:    &ResultJPStore{db: db},
 	}
 }

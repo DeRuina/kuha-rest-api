@@ -645,6 +645,21 @@ definitions:
           type: string
         type: array
     type: object
+  swagger.FISInsertAthleteExample:
+    properties:
+      firstname:
+        example: Iivo
+        type: string
+      fiscode:
+        example: 342001
+        type: integer
+      lastname:
+        example: Niskanen
+        type: string
+      sporttiid:
+        example: 123456
+        type: integer
+    type: object
   swagger.FISInsertCompetitorExample:
     properties:
       alternatenamecheck:
@@ -3255,6 +3270,21 @@ definitions:
         items:
           type: integer
         type: array
+    type: object
+  swagger.FISUpdateAthleteExample:
+    properties:
+      firstname:
+        example: Iivo
+        type: string
+      fiscode:
+        example: 342001
+        type: integer
+      lastname:
+        example: Niskanen
+        type: string
+      sporttiid:
+        example: 123456
+        type: integer
     type: object
   swagger.FISUpdateCompetitorExample:
     properties:
@@ -7736,6 +7766,50 @@ paths:
       tags:
       - Auth
   /fis/athlete:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an athlete by FIS code
+      parameters:
+      - description: FIS code
+        in: query
+        name: fiscode
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete athlete
+      tags:
+      - FIS - Athlete Management
     get:
       consumes:
       - application/json
@@ -7777,6 +7851,96 @@ paths:
       summary: Get all athletes for a given sector
       tags:
       - FIS - Athlete
+    post:
+      consumes:
+      - application/json
+      description: Inserts a new athlete into athlete table
+      parameters:
+      - description: Athlete payload
+        in: body
+        name: athlete
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.FISInsertAthleteExample'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/swagger.ConflictResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Add new athlete
+      tags:
+      - FIS - Athlete Management
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing athlete in athlete table
+      parameters:
+      - description: Athlete payload
+        in: body
+        name: athlete
+        required: true
+        schema:
+          $ref: '#/definitions/swagger.FISUpdateAthleteExample'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Update athlete by fiscode
+      tags:
+      - FIS - Athlete Management
   /fis/catcodeCC:
     get:
       consumes:
@@ -8128,6 +8292,52 @@ paths:
       summary: Get Nordic Combined discipline codes
       tags:
       - FIS - Season Discipline & Category Codes
+  /fis/fiscode:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: SporttiID
+        in: query
+        name: sporttiid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.FISAthletesResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/swagger.NotFoundResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all athletes for a given SporttiID
+      tags:
+      - FIS - Athlete
   /fis/lastrow/competitor:
     get:
       consumes:

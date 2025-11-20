@@ -288,6 +288,13 @@ func (app *api) mount() http.Handler {
 					resultCCHandler := fisapi.NewResultCCHandler(app.store.FIS.ResultCC(), app.store.FIS.Competitors(), app.cacheStorage)
 					resultJPHandler := fisapi.NewResultJPHandler(app.store.FIS.ResultJP(), app.store.FIS.Competitors(), app.cacheStorage)
 					resultNKHandler := fisapi.NewResultNKHandler(app.store.FIS.ResultNK(), app.store.FIS.Competitors(), app.cacheStorage)
+					athleteHandler := fisapi.NewAthleteHandler(app.store.FIS.Athlete(), app.cacheStorage)
+
+					// athlete routes
+					r.Get("/fiscode", athleteHandler.GetAthletesBySporttiID)
+					r.Post("/athlete", athleteHandler.InsertAthlete)
+					r.Put("/athlete", athleteHandler.UpdateAthlete)
+					r.Delete("/athlete", athleteHandler.DeleteAthlete)
 
 					// competitor routes
 					r.Get("/athlete", competitorHandler.GetAthletesBySector)

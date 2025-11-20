@@ -1555,3 +1555,24 @@ type FISInsertResultNKExample struct {
 }
 
 type FISUpdateResultNKExample = FISInsertResultNKExample
+
+type FISAthlete struct {
+	Fiscode   *int32  `json:"fiscode,omitempty" example:"342001"`
+	Sporttiid *int32  `json:"sporttiid,omitempty" example:"123456"`
+	Firstname *string `json:"firstname,omitempty" example:"Iivo"`
+	Lastname  *string `json:"lastname,omitempty" example:"Niskanen"`
+}
+
+type FISInsertAthleteExample struct {
+	Fiscode   int32   `json:"fiscode" example:"342001"`
+	Sporttiid *int32  `json:"sporttiid,omitempty" example:"123456"`
+	Firstname *string `json:"firstname,omitempty" example:"Iivo"`
+	Lastname  *string `json:"lastname,omitempty" example:"Niskanen"`
+}
+
+type FISUpdateAthleteExample struct {
+	Fiscode   int32   `json:"fiscode" example:"342001"`
+	Sporttiid *int32  `json:"sporttiid,omitempty" example:"123456"`
+	Firstname *string `json:"firstname,omitempty" example:"Iivo"`
+	Lastname  *string `json:"lastname,omitempty" example:"Niskanen"`
+}

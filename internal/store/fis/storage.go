@@ -88,6 +88,14 @@ type Competitors interface {
 	GetCompetitorIDByFiscodeNK(ctx context.Context, fiscode int32) (int32, error)
 }
 
+// Athlete interface
+type Athlete interface {
+	GetAthletesBySporttiID(ctx context.Context, sporttiid int32) ([]AthleteRow, error)
+	InsertAthlete(ctx context.Context, in InsertAthleteClean) error
+	UpdateAthleteByFiscode(ctx context.Context, in UpdateAthleteClean) error
+	DeleteAthleteByFiscode(ctx context.Context, fiscode int32) error
+}
+
 // FISStorage struct to hold table-specific storage
 type FISStorage struct {
 	db          *sql.DB
@@ -98,6 +106,7 @@ type FISStorage struct {
 	resultcc    Resultcc
 	resultjp    Resultjp
 	resultnk    Resultnk
+	athlete     Athlete
 }
 
 // Ping method
@@ -134,6 +143,10 @@ func (s *FISStorage) ResultNK() Resultnk {
 	return s.resultnk
 }
 
+func (s *FISStorage) Athlete() Athlete {
+	return s.athlete
+}
+
 // Storage for FIS database tables
 func NewFISStorage(db *sql.DB) *FISStorage {
 	return &FISStorage{
@@ -145,5 +158,6 @@ func NewFISStorage(db *sql.DB) *FISStorage {
 		resultcc:    &ResultCCStore{db: db},
 		resultjp:    &ResultJPStore{db: db},
 		resultnk:    &ResultNKStore{db: db},
+		athlete:     &AthleteStore{db: db},
 	}
 }

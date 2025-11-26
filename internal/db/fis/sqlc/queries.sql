@@ -995,91 +995,97 @@ ORDER BY racedate;
 
 -- name: GetLatestResultsCC :many
 SELECT
-    rCC.RecID,
-    rCC.RaceID,
-    rCC.Position,
-    rCC.TimeTot,
-    rCC.CompetitorID,
-    aCC.RaceDate,
-    aCC.SeasonCode,
-    aCC.DisciplineCode,
-    aCC.CatCode,
-    aCC.Place,
-    aCC.NationCode
-FROM A_resultCC rCC
-JOIN A_raceCC   aCC ON rCC.RaceID = aCC.RaceID
-WHERE rCC.CompetitorID = $1
-  AND ($2::int    IS NULL OR aCC.SeasonCode     = $2)
-  AND ($3::text[] IS NULL OR aCC.CatCode        = ANY($3))
-ORDER BY aCC.RaceDate DESC
-LIMIT $4;
+  rcc.recid,
+  rcc.raceid,
+  rcc.position,
+  rcc.timetot,
+  rcc.competitorid,
+  acc.racedate,
+  acc.seasoncode,
+  acc.disciplinecode,
+  acc.catcode,
+  acc.place,
+  acc.nationcode
+FROM a_resultcc AS rcc
+JOIN a_racecc   AS acc
+  ON rcc.raceid = acc.raceid
+WHERE rcc.competitorid = $1::int4
+  AND ($2::int4 = 0 OR acc.seasoncode = $2::int4)
+  AND ($3::text[] IS NULL OR acc.catcode = ANY($3::text[]))
+ORDER BY acc.racedate DESC
+LIMIT $4::int4;
+
 
 -- name: GetLatestResultsJP :many
 SELECT 
-    rJP.RaceID,
-    rJP.Position,
-    aJP.RaceDate,
-    aJP.SeasonCode,
-    aJP.DisciplineCode,
-    aJP.CatCode,
-    aJP.Place,
-    aJP.NationCode,
-    rJP.PosR1,
-    rJP.SpeedR1,
-    rJP.DistR1,
-    rJP.JudPtsR1,
-    rJP.WindR1,
-    rJP.WindPtsR1,
-    rJP.GateR1,
-    rJP.PosR2,
-    rJP.SpeedR2,
-    rJP.DistR2,
-    rJP.JudPtsR2,
-    rJP.WindR2,
-    rJP.WindPtsR2,
-    rJP.GateR2,
-    rJP.TotRun1,
-    rJP.TotRun2
-FROM A_resultJP rJP
-JOIN A_raceJP   aJP ON rJP.RaceID = aJP.RaceID
-WHERE rJP.CompetitorID = $1
-  AND ($2::int    IS NULL OR aJP.SeasonCode     = $2)
-  AND ($3::text[] IS NULL OR aJP.CatCode        = ANY($3))
-ORDER BY aJP.RaceDate DESC
-LIMIT $4;
+  rjp.raceid,
+  rjp.position,
+  ajp.racedate,
+  ajp.seasoncode,
+  ajp.disciplinecode,
+  ajp.catcode,
+  ajp.place,
+  ajp.nationcode,
+  rjp.posr1,
+  rjp.speedr1,
+  rjp.distr1,
+  rjp.judptsr1,
+  rjp.windr1,
+  rjp.windptsr1,
+  rjp.gater1,
+  rjp.posr2,
+  rjp.speedr2,
+  rjp.distr2,
+  rjp.judptsr2,
+  rjp.windr2,
+  rjp.windptsr2,
+  rjp.gater2,
+  rjp.totrun1,
+  rjp.totrun2
+FROM a_resultjp AS rjp
+JOIN a_racejp   AS ajp
+  ON rjp.raceid = ajp.raceid
+WHERE rjp.competitorid = $1::int4
+  AND ($2::int4 = 0 OR ajp.seasoncode = $2::int4)
+  AND ($3::text[] IS NULL OR ajp.catcode = ANY($3::text[]))
+ORDER BY ajp.racedate DESC
+LIMIT $4::int4;
+
 
 -- name: GetLatestResultsNK :many
 SELECT 
-    rNK.RecID,
-    rNK.RaceID,
-    rNK.Position,
-    aNK.RaceDate,
-    aNK.SeasonCode,
-    aNK.Distance,
-    aNK.Hill,
-    aNK.DisciplineCode,
-    aNK.CatCode,
-    aNK.Place,
-    aNK.NationCode,
-    rNK.PosR1,
-    rNK.SpeedR1,
-    rNK.DistR1,
-    rNK.JudPtsR1,
-    rNK.WindR1,
-    rNK.WindPtsR1,
-    rNK.GateR1,
-    rNK.TotRun1,
-    rNK.PosCC,
-    rNK.TimeTot,
-    rNK.TimeTotInt,
-    rNK.PointsJump
-FROM A_resultNK rNK
-JOIN A_raceNK   aNK ON rNK.RaceID = aNK.RaceID
-WHERE rNK.CompetitorID = $1
-  AND ($2::int    IS NULL OR aNK.SeasonCode     = $2)
-  AND ($3::text[] IS NULL OR aNK.CatCode        = ANY($3))
-ORDER BY aNK.RaceDate DESC
-LIMIT $4;
+  rnk.recid,
+  rnk.raceid,
+  rnk.position,
+  ank.racedate,
+  ank.seasoncode,
+  ank.distance,
+  ank.hill,
+  ank.disciplinecode,
+  ank.catcode,
+  ank.place,
+  ank.nationcode,
+  rnk.posr1,
+  rnk.speedr1,
+  rnk.distr1,
+  rnk.judptsr1,
+  rnk.windr1,
+  rnk.windptsr1,
+  rnk.gater1,
+  rnk.totrun1,
+  rnk.poscc,
+  rnk.timetot,
+  rnk.timetotint,
+  rnk.pointsjump
+FROM a_resultnk AS rnk
+JOIN a_racenk   AS ank
+  ON rnk.raceid = ank.raceid
+WHERE rnk.competitorid = $1::int4
+  AND ($2::int4 = 0 OR ank.seasoncode = $2::int4)
+  AND ($3::text[] IS NULL OR ank.catcode = ANY($3::text[]))
+ORDER BY ank.racedate DESC
+LIMIT $4::int4;
+
 
 -- name: SearchCompetitors :many
 SELECT *

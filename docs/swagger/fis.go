@@ -1749,3 +1749,38 @@ type FISCompetitorSeasonsCatcodesResponse struct {
 	Sector       string                           `json:"sector" example:"CC"`
 	Items        []FISCompetitorSeasonCatcodeItem `json:"items"`
 }
+
+type FISLatestResultItem struct {
+	Raceid         *int32  `json:"raceid,omitempty" example:"123456"`
+	Racedate       *string `json:"racedate,omitempty" example:"2025-02-15"`
+	Seasoncode     *int32  `json:"seasoncode,omitempty" example:"2025"`
+	Disciplinecode *string `json:"disciplinecode,omitempty" example:"DSPR"`
+	Catcode        *string `json:"catcode,omitempty" example:"WC"`
+	Place          *string `json:"place,omitempty" example:"Lahti"`
+	Nationcode     *string `json:"nationcode,omitempty" example:"FIN"`
+	Position       *string `json:"position,omitempty" example:"1"`
+	Timetot        *string `json:"timetot,omitempty" example:"25:32.4"`
+
+	// Sector-specific examples (all optional)
+	Distance   *string `json:"distance,omitempty" example:"10km"`
+	Hill       *int32  `json:"hill,omitempty" example:"140"`
+	Posr1      *string `json:"posr1,omitempty" example:"1"`
+	Speedr1    *string `json:"speedr1,omitempty" example:"93.5"`
+	Distr1     *string `json:"distr1,omitempty" example:"137.0"`
+	Judptsr1   *string `json:"judptsr1,omitempty" example:"57.5"`
+	Windr1     *string `json:"windr1,omitempty" example:"0.6"`
+	Windptsr1  *string `json:"windptsr1,omitempty" example:"-3.0"`
+	Gater1     *string `json:"gater1,omitempty" example:"11"`
+	Poscc      *string `json:"poscc,omitempty" example:"3"`
+	Timetotint *int32  `json:"timetotint,omitempty" example:"1534"`
+	Pointsjump *string `json:"pointsjump,omitempty" example:"135.5"`
+}
+
+type FISLatestResultsResponse struct {
+	Competitorid int32                 `json:"competitorid" example:"123456"`
+	Sector       string                `json:"sector" example:"CC"`
+	Seasoncode   *int32                `json:"seasoncode,omitempty" example:"2025"`
+	Catcodes     []string              `json:"catcodes,omitempty" example:"WC,COC"`
+	Limit        int32                 `json:"limit" example:"50"`
+	Results      []FISLatestResultItem `json:"results"`
+}

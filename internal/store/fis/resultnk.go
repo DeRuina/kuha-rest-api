@@ -83,3 +83,37 @@ func (s *ResultNKStore) GetSeasonsCatcodesNKByCompetitor(
 	q := fissqlc.New(s.db)
 	return q.GetSeasonsCatcodesNKByCompetitor(ctx, competitorID)
 }
+
+func (s *ResultNKStore) GetLatestResultsNK(
+	ctx context.Context,
+	competitorID int32,
+	seasoncode *int32,
+	catcodes []string,
+	limit *int32,
+) ([]fissqlc.GetLatestResultsNKRow, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := fissqlc.New(s.db)
+
+	params := fissqlc.GetLatestResultsNKParams{
+		Column1: competitorID,
+		Column2: 0,
+		Column3: nil,
+		Column4: 50,
+	}
+
+	if seasoncode != nil {
+		params.Column2 = *seasoncode
+	}
+
+	if len(catcodes) > 0 {
+		params.Column3 = catcodes
+	}
+
+	if limit != nil && *limit > 0 {
+		params.Column4 = *limit
+	}
+
+	return q.GetLatestResultsNK(ctx, params)
+}

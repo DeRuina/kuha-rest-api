@@ -83,3 +83,37 @@ func (s *ResultJPStore) GetSeasonsCatcodesJPByCompetitor(
 	q := fissqlc.New(s.db)
 	return q.GetSeasonsCatcodesJPByCompetitor(ctx, competitorID)
 }
+
+func (s *ResultJPStore) GetLatestResultsJP(
+	ctx context.Context,
+	competitorID int32,
+	seasoncode *int32,
+	catcodes []string,
+	limit *int32,
+) ([]fissqlc.GetLatestResultsJPRow, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := fissqlc.New(s.db)
+
+	params := fissqlc.GetLatestResultsJPParams{
+		Column1: competitorID,
+		Column2: 0,   // no season filter
+		Column3: nil, // no cat filter
+		Column4: 50,  // default limit
+	}
+
+	if seasoncode != nil {
+		params.Column2 = *seasoncode
+	}
+
+	if len(catcodes) > 0 {
+		params.Column3 = catcodes
+	}
+
+	if limit != nil && *limit > 0 {
+		params.Column4 = *limit
+	}
+
+	return q.GetLatestResultsJP(ctx, params)
+}

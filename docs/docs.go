@@ -1205,6 +1205,102 @@ const docTemplate = `{
                 }
             }
         },
+        "/fis/competitor/latest-results": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Gets an athlete's latest race results filtered by sector and optional season and catcodes. Results are ordered by Racedate DESC.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS - KAMK"
+                ],
+                "summary": "Get competitor latest race results",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Competitor ID",
+                        "name": "competitorid",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sector code (CC,JP,NK)",
+                        "name": "sector",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Season code filter",
+                        "name": "seasoncode",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Category code(s) – repeat or comma-separated (e.g. catcode=WC\u0026catcode=COC or catcode=WC,COC)",
+                        "name": "catcode",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Maximum number of results to return (default 50)",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.FISLatestResultsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/fis/competitor/seasons-catcodes": {
             "get": {
                 "security": [
@@ -13551,6 +13647,133 @@ const docTemplate = `{
             "properties": {
                 "result": {
                     "$ref": "#/definitions/swagger.FISResultNK"
+                }
+            }
+        },
+        "swagger.FISLatestResultItem": {
+            "type": "object",
+            "properties": {
+                "catcode": {
+                    "type": "string",
+                    "example": "WC"
+                },
+                "disciplinecode": {
+                    "type": "string",
+                    "example": "DSPR"
+                },
+                "distance": {
+                    "description": "Sector-specific examples (all optional)",
+                    "type": "string",
+                    "example": "10km"
+                },
+                "distr1": {
+                    "type": "string",
+                    "example": "137.0"
+                },
+                "gater1": {
+                    "type": "string",
+                    "example": "11"
+                },
+                "hill": {
+                    "type": "integer",
+                    "example": 140
+                },
+                "judptsr1": {
+                    "type": "string",
+                    "example": "57.5"
+                },
+                "nationcode": {
+                    "type": "string",
+                    "example": "FIN"
+                },
+                "place": {
+                    "type": "string",
+                    "example": "Lahti"
+                },
+                "pointsjump": {
+                    "type": "string",
+                    "example": "135.5"
+                },
+                "poscc": {
+                    "type": "string",
+                    "example": "3"
+                },
+                "position": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "posr1": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "racedate": {
+                    "type": "string",
+                    "example": "2025-02-15"
+                },
+                "raceid": {
+                    "type": "integer",
+                    "example": 123456
+                },
+                "seasoncode": {
+                    "type": "integer",
+                    "example": 2025
+                },
+                "speedr1": {
+                    "type": "string",
+                    "example": "93.5"
+                },
+                "timetot": {
+                    "type": "string",
+                    "example": "25:32.4"
+                },
+                "timetotint": {
+                    "type": "integer",
+                    "example": 1534
+                },
+                "windptsr1": {
+                    "type": "string",
+                    "example": "-3.0"
+                },
+                "windr1": {
+                    "type": "string",
+                    "example": "0.6"
+                }
+            }
+        },
+        "swagger.FISLatestResultsResponse": {
+            "type": "object",
+            "properties": {
+                "catcodes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "WC",
+                        "COC"
+                    ]
+                },
+                "competitorid": {
+                    "type": "integer",
+                    "example": 123456
+                },
+                "limit": {
+                    "type": "integer",
+                    "example": 50
+                },
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.FISLatestResultItem"
+                    }
+                },
+                "seasoncode": {
+                    "type": "integer",
+                    "example": 2025
+                },
+                "sector": {
+                    "type": "string",
+                    "example": "CC"
                 }
             }
         },

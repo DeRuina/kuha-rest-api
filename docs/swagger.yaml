@@ -2039,6 +2039,99 @@ definitions:
       result:
         $ref: '#/definitions/swagger.FISResultNK'
     type: object
+  swagger.FISLatestResultItem:
+    properties:
+      catcode:
+        example: WC
+        type: string
+      disciplinecode:
+        example: DSPR
+        type: string
+      distance:
+        description: Sector-specific examples (all optional)
+        example: 10km
+        type: string
+      distr1:
+        example: "137.0"
+        type: string
+      gater1:
+        example: "11"
+        type: string
+      hill:
+        example: 140
+        type: integer
+      judptsr1:
+        example: "57.5"
+        type: string
+      nationcode:
+        example: FIN
+        type: string
+      place:
+        example: Lahti
+        type: string
+      pointsjump:
+        example: "135.5"
+        type: string
+      poscc:
+        example: "3"
+        type: string
+      position:
+        example: "1"
+        type: string
+      posr1:
+        example: "1"
+        type: string
+      racedate:
+        example: "2025-02-15"
+        type: string
+      raceid:
+        example: 123456
+        type: integer
+      seasoncode:
+        example: 2025
+        type: integer
+      speedr1:
+        example: "93.5"
+        type: string
+      timetot:
+        example: "25:32.4"
+        type: string
+      timetotint:
+        example: 1534
+        type: integer
+      windptsr1:
+        example: "-3.0"
+        type: string
+      windr1:
+        example: "0.6"
+        type: string
+    type: object
+  swagger.FISLatestResultsResponse:
+    properties:
+      catcodes:
+        example:
+        - WC
+        - COC
+        items:
+          type: string
+        type: array
+      competitorid:
+        example: 123456
+        type: integer
+      limit:
+        example: 50
+        type: integer
+      results:
+        items:
+          $ref: '#/definitions/swagger.FISLatestResultItem'
+        type: array
+      seasoncode:
+        example: 2025
+        type: integer
+      sector:
+        example: CC
+        type: string
+    type: object
   swagger.FISNationsBySectorResponse:
     properties:
       nations:
@@ -8560,6 +8653,71 @@ paths:
       summary: Update competitor by ID
       tags:
       - FIS - Competitor Management
+  /fis/competitor/latest-results:
+    get:
+      consumes:
+      - application/json
+      description: Gets an athlete's latest race results filtered by sector and optional
+        season and catcodes. Results are ordered by Racedate DESC.
+      parameters:
+      - description: Competitor ID
+        in: query
+        name: competitorid
+        required: true
+        type: integer
+      - description: Sector code (CC,JP,NK)
+        in: query
+        name: sector
+        required: true
+        type: string
+      - description: Season code filter
+        in: query
+        name: seasoncode
+        type: integer
+      - collectionFormat: csv
+        description: Category code(s) – repeat or comma-separated (e.g. catcode=WC&catcode=COC
+          or catcode=WC,COC)
+        in: query
+        items:
+          type: string
+        name: catcode
+        type: array
+      - description: Maximum number of results to return (default 50)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.FISLatestResultsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Get competitor latest race results
+      tags:
+      - FIS - KAMK
   /fis/competitor/seasons-catcodes:
     get:
       consumes:

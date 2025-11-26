@@ -1704,3 +1704,16 @@ type FISRacesByIDsResponse struct {
 	Sector string              `json:"sector" example:"CC"`
 	Races  []FISRaceDetailItem `json:"races"`
 }
+
+type FISRacesCategoryCountItem struct {
+	Catcode *string `json:"catcode,omitempty" example:"WC"`
+	Total   int64   `json:"total" example:"42"`
+}
+
+type FISRacesCategoryCountsResponse struct {
+	Seasoncode int32                       `json:"seasoncode" example:"2025"`
+	Sectors    []string                    `json:"sectors" example:"CC,JP"`
+	Nationcode *string                     `json:"nationcode,omitempty" example:"FIN"`
+	Gender     *string                     `json:"gender,omitempty" example:"M"`
+	Categories []FISRacesCategoryCountItem `json:"categories"`
+}

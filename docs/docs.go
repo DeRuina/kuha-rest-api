@@ -2925,6 +2925,96 @@ const docTemplate = `{
                 }
             }
         },
+        "/fis/races/count-by-category": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Gets counts of races grouped by category code (Catcode) for a given season and selected sector(s). Optional filters: Nationcode, Gender.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS - KAMK"
+                ],
+                "summary": "Get race counts by category",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Season code",
+                        "name": "seasoncode",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Sector code(s) (CC,JP,NK – repeat or comma-separated, e.g. sector=CC\u0026sector=JP or sector=CC,JP)",
+                        "name": "sector",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Nation code filter (e.g. FIN)",
+                        "name": "nationcode",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Gender filter (e.g. M/W)",
+                        "name": "gender",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.FISRacesCategoryCountsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/fis/races/search": {
             "get": {
                 "security": [
@@ -14497,6 +14587,52 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/swagger.FISRaceCC"
                     }
+                }
+            }
+        },
+        "swagger.FISRacesCategoryCountItem": {
+            "type": "object",
+            "properties": {
+                "catcode": {
+                    "type": "string",
+                    "example": "WC"
+                },
+                "total": {
+                    "type": "integer",
+                    "example": 42
+                }
+            }
+        },
+        "swagger.FISRacesCategoryCountsResponse": {
+            "type": "object",
+            "properties": {
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.FISRacesCategoryCountItem"
+                    }
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "M"
+                },
+                "nationcode": {
+                    "type": "string",
+                    "example": "FIN"
+                },
+                "seasoncode": {
+                    "type": "integer",
+                    "example": 2025
+                },
+                "sectors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "CC",
+                        "JP"
+                    ]
                 }
             }
         },

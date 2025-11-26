@@ -1141,32 +1141,34 @@ ORDER BY aNK.SeasonCode DESC, aNK.CatCode ASC;
 SELECT
   catcode,
   COUNT(*) AS total
-FROM A_raceCC
-WHERE seasoncode = $1
-  AND ($2::text IS NULL OR nationcode = $2)
-  AND ($3::text IS NULL OR gender     = $3)
+FROM a_racecc
+WHERE seasoncode = $1::int4
+  AND ($2::text = '' OR nationcode = $2::text)
+  AND ($3::text = '' OR gender     = $3::text)
 GROUP BY catcode
 ORDER BY total DESC;
+
 
 -- name: GetRaceCountsByCategoryJP :many
 SELECT
   catcode,
   COUNT(*) AS total
-FROM A_raceJP
-WHERE seasoncode = $1
-  AND ($2::text IS NULL OR nationcode = $2)
-  AND ($3::text IS NULL OR gender     = $3)
+FROM a_racejp
+WHERE seasoncode = $1::int4
+  AND ($2::text = '' OR nationcode = $2::text)
+  AND ($3::text = '' OR gender     = $3::text)
 GROUP BY catcode
 ORDER BY total DESC;
+
 
 -- name: GetRaceCountsByCategoryNK :many
 SELECT
   catcode,
   COUNT(*) AS total
-FROM A_raceNK
-WHERE seasoncode = $1
-  AND ($2::text IS NULL OR nationcode = $2)
-  AND ($3::text IS NULL OR gender     = $3)
+FROM a_racenk
+WHERE seasoncode = $1::int4
+  AND ($2::text = '' OR nationcode = $2::text)
+  AND ($3::text = '' OR gender     = $3::text)
 GROUP BY catcode
 ORDER BY total DESC;
 

@@ -49,6 +49,7 @@ type Racecc interface {
 	DeleteRaceCCByID(ctx context.Context, raceID int32) error
 	SearchRacesCC(ctx context.Context, seasoncode *int32, nationcode, gender, catcode *string) ([]fissqlc.SearchRacesCCRow, error)
 	GetRacesByIDsCC(ctx context.Context, raceIDs []int32) ([]fissqlc.ARacecc, error)
+	GetRaceCountsByCategoryCC(ctx context.Context, seasoncode int32, nationcode, gender *string) ([]fissqlc.GetRaceCountsByCategoryCCRow, error)
 }
 
 // Racejp interface
@@ -63,6 +64,7 @@ type Racejp interface {
 	DeleteRaceJPByID(ctx context.Context, raceID int32) error
 	SearchRacesJP(ctx context.Context, seasoncode *int32, nationcode, gender, catcode *string) ([]fissqlc.SearchRacesJPRow, error)
 	GetRacesByIDsJP(ctx context.Context, raceIDs []int32) ([]fissqlc.ARacejp, error)
+	GetRaceCountsByCategoryJP(ctx context.Context, seasoncode int32, nationcode, gender *string) ([]fissqlc.GetRaceCountsByCategoryJPRow, error)
 }
 
 // Racenk interface
@@ -77,6 +79,7 @@ type Racenk interface {
 	DeleteRaceNKByID(ctx context.Context, raceID int32) error
 	SearchRacesNK(ctx context.Context, seasoncode *int32, nationcode, gender, catcode *string) ([]fissqlc.SearchRacesNKRow, error)
 	GetRacesByIDsNK(ctx context.Context, raceIDs []int32) ([]fissqlc.ARacenk, error)
+	GetRaceCountsByCategoryNK(ctx context.Context, seasoncode int32, nationcode, gender *string) ([]fissqlc.GetRaceCountsByCategoryNKRow, error)
 }
 
 // Competitors interface

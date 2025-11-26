@@ -3,6 +3,7 @@ package fisapi
 import (
 	"fmt"
 	"net/http"
+	"sort"
 	"strings"
 
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
@@ -347,6 +348,218 @@ func (h *RaceSearchHandler) GetRacesByIDs(w http.ResponseWriter, r *http.Request
 	body := map[string]any{
 		"sector": sector,
 		"races":  races,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, body)
+}
+
+// GetRaceCategoryCounts godoc
+//
+//	@Summary		Get race counts by category
+//	@Description	Gets counts of races grouped by category code (Catcode) for a given season and selected sector(s). Optional filters: Nationcode, Gender.
+//	@Tags			FIS - KAMK
+//	@Accept			json
+//	@Produce		json
+//	@Param			seasoncode	query		int32		true	"Season code"
+//	@Param			sector		query		[]string	true	"Sector code(s) (CC,JP,NK – repeat or comma-separated, e.g. sector=CC&sector=JP or sector=CC,JP)"
+//	@Param			nationcode	query		string		false	"Nation code filter (e.g. FIN)"
+//	@Param			gender		query		string		false	"Gender filter (e.g. M/W)"
+//	@Success		200			{object}	swagger.FISRacesCategoryCountsResponse
+//	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		401			{object}	swagger.UnauthorizedResponse
+//	@Failure		403			{object}	swagger.ForbiddenResponse
+//	@Failure		500			{object}	swagger.InternalServerErrorResponse
+//	@Failure		503			{object}	swagger.ServiceUnavailableResponse
+//	@Security		BearerAuth
+//	@Router			/fis/races/count-by-category [get]
+func (h *RaceSearchHandler) GetRaceCategoryCounts(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	if err := utils.ValidateParams(r, []string{
+		"seasoncode", "sector", "nationcode", "gender",
+	}); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	rawSeason := strings.TrimSpace(r.URL.Query().Get("seasoncode"))
+	if rawSeason == "" {
+		utils.BadRequestResponse(w, r, fmt.Errorf("missing required query param: seasoncode"))
+		return
+	}
+	season, err := utils.ParsePositiveInt32(rawSeason)
+	if err != nil {
+		utils.BadRequestResponse(w, r, fmt.Errorf("invalid seasoncode: %s", rawSeason))
+		return
+	}
+
+	parseList := func(key string) []string {
+		vals := r.URL.Query()[key]
+		if len(vals) == 1 && strings.Contains(vals[0], ",") {
+			return strings.Split(vals[0], ",")
+		}
+		return vals
+	}
+
+	sectorsRaw := parseList("sector")
+	if len(sectorsRaw) == 0 {
+		utils.BadRequestResponse(w, r, fmt.Errorf("missing required query param: sector"))
+		return
+	}
+
+	sectorSet := make(map[string]struct{})
+	for _, s := range sectorsRaw {
+		s = strings.TrimSpace(strings.ToUpper(s))
+		if s == "" {
+			continue
+		}
+		switch s {
+		case "CC", "JP", "NK":
+			sectorSet[s] = struct{}{}
+		default:
+			utils.BadRequestResponse(w, r, fmt.Errorf("invalid sector: %s", s))
+			return
+		}
+	}
+	if len(sectorSet) == 0 {
+		utils.BadRequestResponse(w, r, fmt.Errorf("no valid sector values provided"))
+		return
+	}
+
+	sectors := make([]string, 0, len(sectorSet))
+	for _, s := range []string{"CC", "JP", "NK"} {
+		if _, ok := sectorSet[s]; ok {
+			sectors = append(sectors, s)
+		}
+	}
+
+	var nationPtr *string
+	if nv := strings.TrimSpace(r.URL.Query().Get("nationcode")); nv != "" {
+		nv = strings.ToUpper(nv)
+		nationPtr = &nv
+	}
+
+	var genderPtr *string
+	if gv := strings.TrimSpace(r.URL.Query().Get("gender")); gv != "" {
+		gv = strings.ToUpper(gv)
+		genderPtr = &gv
+	}
+
+	type aggItem struct {
+		Catcode *string `json:"catcode,omitempty"`
+		Total   int64   `json:"total"`
+	}
+
+	totals := make(map[string]int64)
+	var nullTotal int64
+	var hasNull bool
+
+	for _, sector := range sectors {
+		switch sector {
+		case "CC":
+			if h.raceCC == nil {
+				utils.InternalServerError(w, r, fmt.Errorf("raceCC store not configured"))
+				return
+			}
+			rows, err := h.raceCC.GetRaceCountsByCategoryCC(r.Context(), season, nationPtr, genderPtr)
+			if err != nil {
+				utils.InternalServerError(w, r, err)
+				return
+			}
+			for _, row := range rows {
+				if !row.Catcode.Valid {
+					hasNull = true
+					nullTotal += row.Total
+					continue
+				}
+				key := strings.TrimSpace(row.Catcode.String)
+				totals[key] += row.Total
+			}
+
+		case "JP":
+			if h.raceJP == nil {
+				utils.InternalServerError(w, r, fmt.Errorf("raceJP store not configured"))
+				return
+			}
+			rows, err := h.raceJP.GetRaceCountsByCategoryJP(r.Context(), season, nationPtr, genderPtr)
+			if err != nil {
+				utils.InternalServerError(w, r, err)
+				return
+			}
+			for _, row := range rows {
+				if !row.Catcode.Valid {
+					hasNull = true
+					nullTotal += row.Total
+					continue
+				}
+				key := strings.TrimSpace(row.Catcode.String)
+				totals[key] += row.Total
+			}
+
+		case "NK":
+			if h.raceNK == nil {
+				utils.InternalServerError(w, r, fmt.Errorf("raceNK store not configured"))
+				return
+			}
+			rows, err := h.raceNK.GetRaceCountsByCategoryNK(r.Context(), season, nationPtr, genderPtr)
+			if err != nil {
+				utils.InternalServerError(w, r, err)
+				return
+			}
+			for _, row := range rows {
+				if !row.Catcode.Valid {
+					hasNull = true
+					nullTotal += row.Total
+					continue
+				}
+				key := strings.TrimSpace(row.Catcode.String)
+				totals[key] += row.Total
+			}
+		}
+	}
+
+	var items []aggItem
+
+	for cat, total := range totals {
+		c := cat
+		items = append(items, aggItem{
+			Catcode: &c,
+			Total:   total,
+		})
+	}
+
+	if hasNull && nullTotal > 0 {
+		items = append(items, aggItem{
+			Catcode: nil,
+			Total:   nullTotal,
+		})
+	}
+
+	sort.Slice(items, func(i, j int) bool {
+		if items[i].Total != items[j].Total {
+			return items[i].Total > items[j].Total
+		}
+		if items[i].Catcode == nil && items[j].Catcode == nil {
+			return false
+		}
+		if items[i].Catcode == nil {
+			return false
+		}
+		if items[j].Catcode == nil {
+			return true
+		}
+		return *items[i].Catcode < *items[j].Catcode
+	})
+
+	body := map[string]any{
+		"seasoncode": season,
+		"sectors":    sectors,
+		"nationcode": nationPtr,
+		"gender":     genderPtr,
+		"categories": items,
 	}
 
 	utils.WriteJSON(w, http.StatusOK, body)

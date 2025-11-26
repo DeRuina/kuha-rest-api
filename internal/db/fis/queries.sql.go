@@ -1712,18 +1712,18 @@ const getRaceCountsByCategoryCC = `-- name: GetRaceCountsByCategoryCC :many
 SELECT
   catcode,
   COUNT(*) AS total
-FROM A_raceCC
-WHERE seasoncode = $1
-  AND ($2::text IS NULL OR nationcode = $2)
-  AND ($3::text IS NULL OR gender     = $3)
+FROM a_racecc
+WHERE seasoncode = $1::int4
+  AND ($2::text = '' OR nationcode = $2::text)
+  AND ($3::text = '' OR gender     = $3::text)
 GROUP BY catcode
 ORDER BY total DESC
 `
 
 type GetRaceCountsByCategoryCCParams struct {
-	Seasoncode sql.NullInt32
-	Column2    string
-	Column3    string
+	Column1 int32
+	Column2 string
+	Column3 string
 }
 
 type GetRaceCountsByCategoryCCRow struct {
@@ -1732,7 +1732,7 @@ type GetRaceCountsByCategoryCCRow struct {
 }
 
 func (q *Queries) GetRaceCountsByCategoryCC(ctx context.Context, arg GetRaceCountsByCategoryCCParams) ([]GetRaceCountsByCategoryCCRow, error) {
-	rows, err := q.query(ctx, q.getRaceCountsByCategoryCCStmt, getRaceCountsByCategoryCC, arg.Seasoncode, arg.Column2, arg.Column3)
+	rows, err := q.query(ctx, q.getRaceCountsByCategoryCCStmt, getRaceCountsByCategoryCC, arg.Column1, arg.Column2, arg.Column3)
 	if err != nil {
 		return nil, err
 	}
@@ -1758,18 +1758,18 @@ const getRaceCountsByCategoryJP = `-- name: GetRaceCountsByCategoryJP :many
 SELECT
   catcode,
   COUNT(*) AS total
-FROM A_raceJP
-WHERE seasoncode = $1
-  AND ($2::text IS NULL OR nationcode = $2)
-  AND ($3::text IS NULL OR gender     = $3)
+FROM a_racejp
+WHERE seasoncode = $1::int4
+  AND ($2::text = '' OR nationcode = $2::text)
+  AND ($3::text = '' OR gender     = $3::text)
 GROUP BY catcode
 ORDER BY total DESC
 `
 
 type GetRaceCountsByCategoryJPParams struct {
-	Seasoncode sql.NullInt32
-	Column2    string
-	Column3    string
+	Column1 int32
+	Column2 string
+	Column3 string
 }
 
 type GetRaceCountsByCategoryJPRow struct {
@@ -1778,7 +1778,7 @@ type GetRaceCountsByCategoryJPRow struct {
 }
 
 func (q *Queries) GetRaceCountsByCategoryJP(ctx context.Context, arg GetRaceCountsByCategoryJPParams) ([]GetRaceCountsByCategoryJPRow, error) {
-	rows, err := q.query(ctx, q.getRaceCountsByCategoryJPStmt, getRaceCountsByCategoryJP, arg.Seasoncode, arg.Column2, arg.Column3)
+	rows, err := q.query(ctx, q.getRaceCountsByCategoryJPStmt, getRaceCountsByCategoryJP, arg.Column1, arg.Column2, arg.Column3)
 	if err != nil {
 		return nil, err
 	}
@@ -1804,18 +1804,18 @@ const getRaceCountsByCategoryNK = `-- name: GetRaceCountsByCategoryNK :many
 SELECT
   catcode,
   COUNT(*) AS total
-FROM A_raceNK
-WHERE seasoncode = $1
-  AND ($2::text IS NULL OR nationcode = $2)
-  AND ($3::text IS NULL OR gender     = $3)
+FROM a_racenk
+WHERE seasoncode = $1::int4
+  AND ($2::text = '' OR nationcode = $2::text)
+  AND ($3::text = '' OR gender     = $3::text)
 GROUP BY catcode
 ORDER BY total DESC
 `
 
 type GetRaceCountsByCategoryNKParams struct {
-	Seasoncode sql.NullInt32
-	Column2    string
-	Column3    string
+	Column1 int32
+	Column2 string
+	Column3 string
 }
 
 type GetRaceCountsByCategoryNKRow struct {
@@ -1824,7 +1824,7 @@ type GetRaceCountsByCategoryNKRow struct {
 }
 
 func (q *Queries) GetRaceCountsByCategoryNK(ctx context.Context, arg GetRaceCountsByCategoryNKParams) ([]GetRaceCountsByCategoryNKRow, error) {
-	rows, err := q.query(ctx, q.getRaceCountsByCategoryNKStmt, getRaceCountsByCategoryNK, arg.Seasoncode, arg.Column2, arg.Column3)
+	rows, err := q.query(ctx, q.getRaceCountsByCategoryNKStmt, getRaceCountsByCategoryNK, arg.Column1, arg.Column2, arg.Column3)
 	if err != nil {
 		return nil, err
 	}

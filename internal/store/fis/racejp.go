@@ -148,3 +148,18 @@ func (s *RaceJPStore) SearchRacesJP(
 
 	return q.SearchRacesJP(ctx, params)
 }
+
+func (s *RaceJPStore) GetRacesByIDsJP(
+	ctx context.Context,
+	raceIDs []int32,
+) ([]fissqlc.ARacejp, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	if len(raceIDs) == 0 {
+		return []fissqlc.ARacejp{}, nil
+	}
+
+	q := fissqlc.New(s.db)
+	return q.GetRacesByIDsJP(ctx, raceIDs)
+}

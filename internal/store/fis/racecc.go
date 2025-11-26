@@ -148,3 +148,18 @@ func (s *RaceCCStore) SearchRacesCC(
 
 	return q.SearchRacesCC(ctx, params)
 }
+
+func (s *RaceCCStore) GetRacesByIDsCC(
+	ctx context.Context,
+	raceIDs []int32,
+) ([]fissqlc.ARacecc, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	if len(raceIDs) == 0 {
+		return []fissqlc.ARacecc{}, nil
+	}
+
+	q := fissqlc.New(s.db)
+	return q.GetRacesByIDsCC(ctx, raceIDs)
+}

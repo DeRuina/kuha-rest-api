@@ -89,7 +89,6 @@ func (h *RaceSearchHandler) SearchRaces(w http.ResponseWriter, r *http.Request) 
 
 	sectorSet := make(map[string]struct{})
 
-	// If sector is provided, validate and collect it
 	for _, s := range sectorsRaw {
 		s = strings.TrimSpace(strings.ToUpper(s))
 		if s == "" {
@@ -110,7 +109,6 @@ func (h *RaceSearchHandler) SearchRaces(w http.ResponseWriter, r *http.Request) 
 		sectorSet["NK"] = struct{}{}
 	}
 
-	// Stable ordered slice: CC, JP, NK
 	sectors := make([]string, 0, len(sectorSet))
 	for _, s := range []string{"CC", "JP", "NK"} {
 		if _, ok := sectorSet[s]; ok {
@@ -220,6 +218,135 @@ func (h *RaceSearchHandler) SearchRaces(w http.ResponseWriter, r *http.Request) 
 
 	body := map[string]any{
 		"races": results,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, body)
+}
+
+// GetRacesByIDs godoc
+//
+//	@Summary		Get races by IDs
+//	@Description	Gets race(s) for a given sector and one or more race IDs.
+//	@Tags			FIS - KAMK
+//	@Accept			json
+//	@Produce		json
+//	@Param			sector	query		string	true	"Sector code (CC,JP,NK)"
+//	@Param			raceid	query		[]int32	true	"Race ID(s) – repeat or comma-separated (e.g. raceid=123&raceid=456 or raceid=123,456)"
+//	@Success		200		{object}	swagger.FISRacesByIDsResponse
+//	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
+//	@Failure		403		{object}	swagger.ForbiddenResponse
+//	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
+//	@Security		BearerAuth
+//	@Router			/fis/races/by-ids [get]
+func (h *RaceSearchHandler) GetRacesByIDs(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	if err := utils.ValidateParams(r, []string{
+		"sector", "raceid",
+	}); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	sector := strings.TrimSpace(strings.ToUpper(r.URL.Query().Get("sector")))
+	switch sector {
+	case "CC", "JP", "NK":
+	default:
+		if sector == "" {
+			utils.BadRequestResponse(w, r, fmt.Errorf("missing required query param: sector"))
+		} else {
+			utils.BadRequestResponse(w, r, fmt.Errorf("invalid sector: %s", sector))
+		}
+		return
+	}
+
+	parseList := func(key string) []string {
+		vals := r.URL.Query()[key]
+		if len(vals) == 1 && strings.Contains(vals[0], ",") {
+			return strings.Split(vals[0], ",")
+		}
+		return vals
+	}
+
+	raceIDStrs := parseList("raceid")
+	if len(raceIDStrs) == 0 {
+		utils.BadRequestResponse(w, r, fmt.Errorf("missing required query param: raceid"))
+		return
+	}
+
+	var raceIDs []int32
+	for _, raw := range raceIDStrs {
+		raw = strings.TrimSpace(raw)
+		if raw == "" {
+			continue
+		}
+		id, err := utils.ParsePositiveInt32(raw)
+		if err != nil {
+			utils.BadRequestResponse(w, r, fmt.Errorf("invalid raceid: %s", raw))
+			return
+		}
+		raceIDs = append(raceIDs, id)
+	}
+
+	if len(raceIDs) == 0 {
+		utils.BadRequestResponse(w, r, fmt.Errorf("no valid raceid values provided"))
+		return
+	}
+
+	var races []any
+
+	switch sector {
+	case "CC":
+		if h.raceCC == nil {
+			utils.InternalServerError(w, r, fmt.Errorf("raceCC store not configured"))
+			return
+		}
+		rows, err := h.raceCC.GetRacesByIDsCC(r.Context(), raceIDs)
+		if err != nil {
+			utils.InternalServerError(w, r, err)
+			return
+		}
+		for _, row := range rows {
+			races = append(races, FISRaceCCFullFromSqlc(row))
+		}
+
+	case "JP":
+		if h.raceJP == nil {
+			utils.InternalServerError(w, r, fmt.Errorf("raceJP store not configured"))
+			return
+		}
+		rows, err := h.raceJP.GetRacesByIDsJP(r.Context(), raceIDs)
+		if err != nil {
+			utils.InternalServerError(w, r, err)
+			return
+		}
+		for _, row := range rows {
+			races = append(races, FISRaceJPFullFromSqlc(row))
+		}
+
+	case "NK":
+		if h.raceNK == nil {
+			utils.InternalServerError(w, r, fmt.Errorf("raceNK store not configured"))
+			return
+		}
+		rows, err := h.raceNK.GetRacesByIDsNK(r.Context(), raceIDs)
+		if err != nil {
+			utils.InternalServerError(w, r, err)
+			return
+		}
+		for _, row := range rows {
+			races = append(races, FISRaceNKFullFromSqlc(row))
+		}
+	}
+
+	body := map[string]any{
+		"sector": sector,
+		"races":  races,
 	}
 
 	utils.WriteJSON(w, http.StatusOK, body)

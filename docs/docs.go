@@ -2847,6 +2847,84 @@ const docTemplate = `{
                 }
             }
         },
+        "/fis/races/by-ids": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Gets race(s) for a given sector and one or more race IDs.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS - KAMK"
+                ],
+                "summary": "Get races by IDs",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sector code (CC,JP,NK)",
+                        "name": "sector",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Race ID(s) – repeat or comma-separated (e.g. raceid=123\u0026raceid=456 or raceid=123,456)",
+                        "name": "raceid",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.FISRacesByIDsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/fis/races/search": {
             "get": {
                 "security": [
@@ -13406,6 +13484,318 @@ const docTemplate = `{
                 }
             }
         },
+        "swagger.FISRaceDetailItem": {
+            "type": "object",
+            "properties": {
+                "appliedpenalty": {
+                    "type": "string"
+                },
+                "appliedscala": {
+                    "type": "string"
+                },
+                "bottombanner": {
+                    "type": "string"
+                },
+                "bottomlogo": {
+                    "type": "string"
+                },
+                "calculatedpenalty": {
+                    "type": "string"
+                },
+                "calstatuscode": {
+                    "type": "string",
+                    "example": "O"
+                },
+                "catcode": {
+                    "type": "string",
+                    "example": "WC"
+                },
+                "catcode2": {
+                    "type": "string"
+                },
+                "catcode3": {
+                    "type": "string"
+                },
+                "catcode4": {
+                    "type": "string"
+                },
+                "columncount": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "World Cup 10 km"
+                },
+                "discforlistcode": {
+                    "type": "string"
+                },
+                "disciplinecode": {
+                    "type": "string",
+                    "example": "DSPR"
+                },
+                "disciplineid": {
+                    "type": "string",
+                    "example": "DSPR"
+                },
+                "displaystatus": {
+                    "type": "string"
+                },
+                "distance": {
+                    "description": "CC: varchar, JP/NK: same column",
+                    "type": "string",
+                    "example": "10 km"
+                },
+                "eventid": {
+                    "type": "integer",
+                    "example": 98765
+                },
+                "finale": {
+                    "type": "string"
+                },
+                "fisinterncomment": {
+                    "type": "string"
+                },
+                "gallery": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "M"
+                },
+                "hcet1": {
+                    "type": "string",
+                    "example": "12:00:00"
+                },
+                "hcet2": {
+                    "type": "string",
+                    "example": "12:30:00"
+                },
+                "hcet3": {
+                    "type": "string",
+                    "example": "13:00:00"
+                },
+                "hill": {
+                    "description": "CC: varchar, JP/NK: integer -\u003e string here",
+                    "type": "string"
+                },
+                "hloc1": {
+                    "type": "string",
+                    "example": "10:00:00"
+                },
+                "hloc2": {
+                    "type": "string",
+                    "example": "10:30:00"
+                },
+                "hloc3": {
+                    "type": "string",
+                    "example": "11:00:00"
+                },
+                "homol": {
+                    "type": "string"
+                },
+                "indi": {
+                    "type": "integer"
+                },
+                "lastupdate": {
+                    "type": "string",
+                    "example": "2025-02-15T12:34:56Z"
+                },
+                "level": {
+                    "type": "string"
+                },
+                "live": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "liveinfo1": {
+                    "type": "string"
+                },
+                "liveinfo2": {
+                    "type": "string"
+                },
+                "liveinfo3": {
+                    "type": "string"
+                },
+                "livestatus1": {
+                    "type": "string"
+                },
+                "livestatus2": {
+                    "type": "string"
+                },
+                "livestatus3": {
+                    "type": "string"
+                },
+                "masse": {
+                    "type": "string"
+                },
+                "msql7evid": {
+                    "type": "integer"
+                },
+                "mssql7id": {
+                    "type": "integer"
+                },
+                "nationcode": {
+                    "type": "string",
+                    "example": "FIN"
+                },
+                "nationraceid": {
+                    "type": "integer"
+                },
+                "noepr": {
+                    "type": "integer"
+                },
+                "passwd": {
+                    "type": "string"
+                },
+                "pdf": {
+                    "type": "integer"
+                },
+                "penscafixed": {
+                    "type": "string"
+                },
+                "place": {
+                    "type": "string",
+                    "example": "Lahti"
+                },
+                "procstatuscode": {
+                    "type": "string"
+                },
+                "provraceid": {
+                    "type": "integer"
+                },
+                "published": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "pursuit": {
+                    "type": "string"
+                },
+                "qualif": {
+                    "type": "string"
+                },
+                "racecodex": {
+                    "type": "integer",
+                    "example": 1001
+                },
+                "racedate": {
+                    "description": "YYYY-MM-DD",
+                    "type": "string",
+                    "example": "2025-02-15"
+                },
+                "raceid": {
+                    "type": "integer",
+                    "example": 123456
+                },
+                "receiveddate": {
+                    "description": "YYYY-MM-DD",
+                    "type": "string",
+                    "example": "2025-01-10"
+                },
+                "relay": {
+                    "type": "string"
+                },
+                "results": {
+                    "type": "integer"
+                },
+                "seasoncode": {
+                    "type": "integer",
+                    "example": 2025
+                },
+                "sectorcode": {
+                    "type": "string",
+                    "example": "CC"
+                },
+                "skip_wcsl": {
+                    "type": "integer"
+                },
+                "special_cup_points": {
+                    "type": "integer"
+                },
+                "starteventdate": {
+                    "description": "YYYY-MM-DD",
+                    "type": "string",
+                    "example": "2025-02-14"
+                },
+                "style": {
+                    "type": "string",
+                    "example": "CL"
+                },
+                "tabcount": {
+                    "type": "integer"
+                },
+                "td1code": {
+                    "type": "integer",
+                    "example": 2222
+                },
+                "td1id": {
+                    "type": "integer",
+                    "example": 1111
+                },
+                "td1name": {
+                    "type": "string",
+                    "example": "TD One"
+                },
+                "td1nation": {
+                    "type": "string",
+                    "example": "NOR"
+                },
+                "td2code": {
+                    "type": "integer"
+                },
+                "td2id": {
+                    "type": "integer"
+                },
+                "td2name": {
+                    "type": "string"
+                },
+                "td2nation": {
+                    "type": "string"
+                },
+                "tddoc": {
+                    "type": "integer"
+                },
+                "team": {
+                    "type": "integer"
+                },
+                "timinglogo": {
+                    "type": "string"
+                },
+                "timingreport": {
+                    "type": "integer"
+                },
+                "tolist": {
+                    "type": "string"
+                },
+                "topbanner": {
+                    "type": "string"
+                },
+                "toplogo": {
+                    "type": "string"
+                },
+                "usedfislist": {
+                    "type": "string"
+                },
+                "validdate": {
+                    "type": "string",
+                    "example": "2025-02-10"
+                },
+                "validforfispoints": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "validforowg": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "webcomment": {
+                    "type": "string"
+                }
+            }
+        },
         "swagger.FISRaceJP": {
             "type": "object",
             "properties": {
@@ -14081,6 +14471,21 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/swagger.FISResultNK"
                     }
+                }
+            }
+        },
+        "swagger.FISRacesByIDsResponse": {
+            "type": "object",
+            "properties": {
+                "races": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/swagger.FISRaceDetailItem"
+                    }
+                },
+                "sector": {
+                    "type": "string",
+                    "example": "CC"
                 }
             }
         },

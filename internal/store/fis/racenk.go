@@ -148,3 +148,18 @@ func (s *RaceNKStore) SearchRacesNK(
 
 	return q.SearchRacesNK(ctx, params)
 }
+
+func (s *RaceNKStore) GetRacesByIDsNK(
+	ctx context.Context,
+	raceIDs []int32,
+) ([]fissqlc.ARacenk, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	if len(raceIDs) == 0 {
+		return []fissqlc.ARacenk{}, nil
+	}
+
+	q := fissqlc.New(s.db)
+	return q.GetRacesByIDsNK(ctx, raceIDs)
+}

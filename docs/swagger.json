@@ -3097,6 +3097,96 @@
                 }
             }
         },
+        "/fis/races/count-total": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Gets total count of races for a given season and one or more sectors (CC, JP, NK). Optional filters: Catcode, Gender.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS - KAMK"
+                ],
+                "summary": "Get total race count",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Season code",
+                        "name": "seasoncode",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Sector code(s) (CC,JP,NK – repeat or comma-separated, e.g. sector=CC\u0026sector=JP or sector=CC,JP)",
+                        "name": "sector",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Category code filter (e.g. WC)",
+                        "name": "catcode",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Gender filter (e.g. M/W)",
+                        "name": "gender",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.FISRacesTotalsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/fis/races/search": {
             "get": {
                 "security": [
@@ -14835,6 +14925,37 @@
                     "items": {
                         "$ref": "#/definitions/swagger.FISRacesSearchItem"
                     }
+                }
+            }
+        },
+        "swagger.FISRacesTotalsResponse": {
+            "type": "object",
+            "properties": {
+                "catcode": {
+                    "type": "string",
+                    "example": "WC"
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "M"
+                },
+                "seasoncode": {
+                    "type": "integer",
+                    "example": 2025
+                },
+                "sectors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "CC",
+                        "JP"
+                    ]
+                },
+                "total": {
+                    "type": "integer",
+                    "example": 123
                 }
             }
         },

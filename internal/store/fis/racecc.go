@@ -215,3 +215,30 @@ func (s *RaceCCStore) GetRaceCountsByNationCC(
 
 	return q.GetRaceCountsByNationCC(ctx, params)
 }
+
+func (s *RaceCCStore) GetRaceTotalCC(
+	ctx context.Context,
+	seasoncode int32,
+	catcode, gender *string,
+) (int64, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := fissqlc.New(s.db)
+
+	params := fissqlc.GetRaceTotalCCParams{
+		Column1: seasoncode,
+		Column2: "",
+		Column3: "",
+	}
+
+	if catcode != nil {
+		params.Column2 = *catcode
+	}
+
+	if gender != nil {
+		params.Column3 = *gender
+	}
+
+	return q.GetRaceTotalCC(ctx, params)
+}

@@ -1174,24 +1174,26 @@ ORDER BY total DESC;
 
 -- name: GetRaceTotalCC :one
 SELECT COUNT(*) AS total
-FROM A_raceCC
-WHERE seasoncode = $1
-  AND ($2::text IS NULL OR catcode = $2)
-  AND ($3::text IS NULL OR gender  = $3);
+FROM a_racecc
+WHERE seasoncode = $1::int4
+  AND ($2::text = '' OR catcode = $2::text)
+  AND ($3::text = '' OR gender  = $3::text);
+
 
 -- name: GetRaceTotalJP :one
 SELECT COUNT(*) AS total
-FROM A_raceJP
-WHERE seasoncode = $1
-  AND ($2::text IS NULL OR catcode = $2)
-  AND ($3::text IS NULL OR gender  = $3);
+FROM a_racejp
+WHERE seasoncode = $1::int4
+  AND ($2::text = '' OR catcode = $2::text)
+  AND ($3::text = '' OR gender  = $3::text);
+
 
 -- name: GetRaceTotalNK :one
 SELECT COUNT(*) AS total
-FROM A_raceNK
-WHERE seasoncode = $1
-  AND ($2::text IS NULL OR catcode = $2)
-  AND ($3::text IS NULL OR gender  = $3);
+FROM a_racenk
+WHERE seasoncode = $1::int4
+  AND ($2::text = '' OR catcode = $2::text)
+  AND ($3::text = '' OR gender  = $3::text);
 
 -- name: GetCompetitorCountsByNation :many
 SELECT

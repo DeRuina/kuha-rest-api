@@ -1730,3 +1730,11 @@ type FISRacesNationCountsResponse struct {
 	Catcode    *string                   `json:"catcode,omitempty" example:"WC"`
 	Nations    []FISRacesNationCountItem `json:"nations"`
 }
+
+type FISRacesTotalsResponse struct {
+	Seasoncode int32    `json:"seasoncode" example:"2025"`
+	Sectors    []string `json:"sectors" example:"CC,JP"`
+	Catcode    *string  `json:"catcode,omitempty" example:"WC"`
+	Gender     *string  `json:"gender,omitempty" example:"M"`
+	Total      int64    `json:"total" example:"123"`
+}

@@ -215,3 +215,30 @@ func (s *RaceNKStore) GetRaceCountsByNationNK(
 
 	return q.GetRaceCountsByNationNK(ctx, params)
 }
+
+func (s *RaceNKStore) GetRaceTotalNK(
+	ctx context.Context,
+	seasoncode int32,
+	catcode, gender *string,
+) (int64, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := fissqlc.New(s.db)
+
+	params := fissqlc.GetRaceTotalNKParams{
+		Column1: seasoncode,
+		Column2: "",
+		Column3: "",
+	}
+
+	if catcode != nil {
+		params.Column2 = *catcode
+	}
+
+	if gender != nil {
+		params.Column3 = *gender
+	}
+
+	return q.GetRaceTotalNK(ctx, params)
+}

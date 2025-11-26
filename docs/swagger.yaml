@@ -3067,6 +3067,28 @@ definitions:
           $ref: '#/definitions/swagger.FISRacesSearchItem'
         type: array
     type: object
+  swagger.FISRacesTotalsResponse:
+    properties:
+      catcode:
+        example: WC
+        type: string
+      gender:
+        example: M
+        type: string
+      seasoncode:
+        example: 2025
+        type: integer
+      sectors:
+        example:
+        - CC
+        - JP
+        items:
+          type: string
+        type: array
+      total:
+        example: 123
+        type: integer
+    type: object
   swagger.FISResultCC:
     properties:
       bib:
@@ -9743,6 +9765,67 @@ paths:
       security:
       - BearerAuth: []
       summary: Get race counts by nation
+      tags:
+      - FIS - KAMK
+  /fis/races/count-total:
+    get:
+      consumes:
+      - application/json
+      description: 'Gets total count of races for a given season and one or more sectors
+        (CC, JP, NK). Optional filters: Catcode, Gender.'
+      parameters:
+      - description: Season code
+        in: query
+        name: seasoncode
+        required: true
+        type: integer
+      - collectionFormat: csv
+        description: Sector code(s) (CC,JP,NK – repeat or comma-separated, e.g. sector=CC&sector=JP
+          or sector=CC,JP)
+        in: query
+        items:
+          type: string
+        name: sector
+        required: true
+        type: array
+      - description: Category code filter (e.g. WC)
+        in: query
+        name: catcode
+        type: string
+      - description: Gender filter (e.g. M/W)
+        in: query
+        name: gender
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.FISRacesTotalsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Get total race count
       tags:
       - FIS - KAMK
   /fis/races/search:

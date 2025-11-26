@@ -2256,20 +2256,20 @@ func (q *Queries) GetRaceResultsNKByRaceID(ctx context.Context, raceid sql.NullI
 
 const getRaceTotalCC = `-- name: GetRaceTotalCC :one
 SELECT COUNT(*) AS total
-FROM A_raceCC
-WHERE seasoncode = $1
-  AND ($2::text IS NULL OR catcode = $2)
-  AND ($3::text IS NULL OR gender  = $3)
+FROM a_racecc
+WHERE seasoncode = $1::int4
+  AND ($2::text = '' OR catcode = $2::text)
+  AND ($3::text = '' OR gender  = $3::text)
 `
 
 type GetRaceTotalCCParams struct {
-	Seasoncode sql.NullInt32
-	Column2    string
-	Column3    string
+	Column1 int32
+	Column2 string
+	Column3 string
 }
 
 func (q *Queries) GetRaceTotalCC(ctx context.Context, arg GetRaceTotalCCParams) (int64, error) {
-	row := q.queryRow(ctx, q.getRaceTotalCCStmt, getRaceTotalCC, arg.Seasoncode, arg.Column2, arg.Column3)
+	row := q.queryRow(ctx, q.getRaceTotalCCStmt, getRaceTotalCC, arg.Column1, arg.Column2, arg.Column3)
 	var total int64
 	err := row.Scan(&total)
 	return total, err
@@ -2277,20 +2277,20 @@ func (q *Queries) GetRaceTotalCC(ctx context.Context, arg GetRaceTotalCCParams) 
 
 const getRaceTotalJP = `-- name: GetRaceTotalJP :one
 SELECT COUNT(*) AS total
-FROM A_raceJP
-WHERE seasoncode = $1
-  AND ($2::text IS NULL OR catcode = $2)
-  AND ($3::text IS NULL OR gender  = $3)
+FROM a_racejp
+WHERE seasoncode = $1::int4
+  AND ($2::text = '' OR catcode = $2::text)
+  AND ($3::text = '' OR gender  = $3::text)
 `
 
 type GetRaceTotalJPParams struct {
-	Seasoncode sql.NullInt32
-	Column2    string
-	Column3    string
+	Column1 int32
+	Column2 string
+	Column3 string
 }
 
 func (q *Queries) GetRaceTotalJP(ctx context.Context, arg GetRaceTotalJPParams) (int64, error) {
-	row := q.queryRow(ctx, q.getRaceTotalJPStmt, getRaceTotalJP, arg.Seasoncode, arg.Column2, arg.Column3)
+	row := q.queryRow(ctx, q.getRaceTotalJPStmt, getRaceTotalJP, arg.Column1, arg.Column2, arg.Column3)
 	var total int64
 	err := row.Scan(&total)
 	return total, err
@@ -2298,20 +2298,20 @@ func (q *Queries) GetRaceTotalJP(ctx context.Context, arg GetRaceTotalJPParams) 
 
 const getRaceTotalNK = `-- name: GetRaceTotalNK :one
 SELECT COUNT(*) AS total
-FROM A_raceNK
-WHERE seasoncode = $1
-  AND ($2::text IS NULL OR catcode = $2)
-  AND ($3::text IS NULL OR gender  = $3)
+FROM a_racenk
+WHERE seasoncode = $1::int4
+  AND ($2::text = '' OR catcode = $2::text)
+  AND ($3::text = '' OR gender  = $3::text)
 `
 
 type GetRaceTotalNKParams struct {
-	Seasoncode sql.NullInt32
-	Column2    string
-	Column3    string
+	Column1 int32
+	Column2 string
+	Column3 string
 }
 
 func (q *Queries) GetRaceTotalNK(ctx context.Context, arg GetRaceTotalNKParams) (int64, error) {
-	row := q.queryRow(ctx, q.getRaceTotalNKStmt, getRaceTotalNK, arg.Seasoncode, arg.Column2, arg.Column3)
+	row := q.queryRow(ctx, q.getRaceTotalNKStmt, getRaceTotalNK, arg.Column1, arg.Column2, arg.Column3)
 	var total int64
 	err := row.Scan(&total)
 	return total, err

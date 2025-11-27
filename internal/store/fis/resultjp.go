@@ -98,9 +98,9 @@ func (s *ResultJPStore) GetLatestResultsJP(
 
 	params := fissqlc.GetLatestResultsJPParams{
 		Column1: competitorID,
-		Column2: 0,   // no season filter
-		Column3: nil, // no cat filter
-		Column4: 50,  // default limit
+		Column2: 0,
+		Column3: nil,
+		Column4: 50,
 	}
 
 	if seasoncode != nil {

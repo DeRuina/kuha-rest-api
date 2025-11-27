@@ -157,10 +157,10 @@ func (s *CompetitorsStore) GetCompetitorCountsByNation(
 	q := fissqlc.New(s.db)
 
 	params := fissqlc.GetCompetitorCountsByNationParams{
-		Column1: "",          // sectorcode
-		Column2: "",          // gender
-		Column3: time.Time{}, // birthdate_min
-		Column4: time.Time{}, // birthdate_max
+		Column1: "",
+		Column2: "",
+		Column3: time.Time{},
+		Column4: time.Time{},
 	}
 
 	if sectorcode != nil {

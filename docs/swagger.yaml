@@ -612,6 +612,126 @@ definitions:
         example: ATHLETE
         type: string
     type: object
+  swagger.FISCompetitorFull:
+    properties:
+      alternatenamecheck:
+        type: string
+      association:
+        example: Finnish Ski Association
+        type: string
+      birthdate:
+        description: YYYY-MM-DD
+        example: "1992-01-12"
+        type: string
+      carving:
+        type: integer
+      categorycode:
+        type: string
+      classcode:
+        type: string
+      classname:
+        type: string
+      competitorid:
+        example: 123456
+        type: integer
+      compidmssql:
+        type: integer
+      createdby:
+        example: admin
+        type: string
+      data:
+        type: string
+      dateofcreation:
+        example: "2010-11-05"
+        type: string
+      deletedat:
+        type: string
+      disciplines:
+        type: string
+      doped:
+        type: string
+      fee:
+        example: 0
+        type: number
+      firstname:
+        example: Iivo
+        type: string
+      fiscode:
+        example: 342001
+        type: integer
+      gender:
+        example: M
+        type: string
+      injury:
+        example: 0
+        type: integer
+      ipcid:
+        example: 0
+        type: integer
+      lastname:
+        example: Niskanen
+        type: string
+      lastupdate:
+        example: "2024-10-01T12:34:56Z"
+        type: string
+      lastupdateby:
+        type: string
+      nationalcode:
+        example: FIN
+        type: string
+      nationcode:
+        example: FIN
+        type: string
+      natteam:
+        example: FIN-A
+        type: string
+      notallowed:
+        type: integer
+      personid:
+        example: 98765
+        type: integer
+      photo:
+        type: integer
+      photo_big:
+        type: integer
+      published:
+        example: 1
+        type: integer
+      sectorcode:
+        example: CC
+        type: string
+      skiclub:
+        example: Lahti Ski Club
+        type: string
+      status:
+        example: ACTIVE
+        type: string
+      status_by:
+        example: FIS
+        type: string
+      status_date:
+        example: "2024-05-01T00:00:00Z"
+        type: string
+      status_old:
+        type: string
+      statusnextlist:
+        type: string
+      team:
+        type: integer
+      tragroup:
+        type: string
+      type:
+        example: ATH
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  swagger.FISCompetitorSearchResponse:
+    properties:
+      competitors:
+        $ref: '#/definitions/swagger.FISCompetitorFull'
+    type: object
   swagger.FISCompetitorSeasonCatcodeItem:
     properties:
       catcode:
@@ -8716,6 +8836,68 @@ paths:
       security:
       - BearerAuth: []
       summary: Get competitor latest race results
+      tags:
+      - FIS - KAMK
+  /fis/competitor/search:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Gets competitors filtered by optional Nationcode, Sectorcode, Gender and age range (in years).
+        Age filters (agemin/agemax) are converted internally to a birthdate range based on today's date.
+      parameters:
+      - description: Nation code filter (e.g. FIN)
+        in: query
+        name: nationcode
+        type: string
+      - description: Sector code filter (CC,JP,NK)
+        in: query
+        name: sectorcode
+        type: string
+      - description: Gender filter (M/W)
+        in: query
+        name: gender
+        type: string
+      - description: Minimum age in years (inclusive). For example, agemin=18 means
+          competitors who are at least 18.
+        in: query
+        name: agemin
+        type: integer
+      - description: Maximum age in years (inclusive). For example, agemax=30 means
+          competitors who are at most 30.
+        in: query
+        name: agemax
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/swagger.FISCompetitorSearchResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/swagger.ValidationErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/swagger.UnauthorizedResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/swagger.ForbiddenResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/swagger.InternalServerErrorResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/swagger.ServiceUnavailableResponse'
+      security:
+      - BearerAuth: []
+      summary: Search competitors
       tags:
       - FIS - KAMK
   /fis/competitor/seasons-catcodes:

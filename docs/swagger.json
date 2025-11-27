@@ -1293,6 +1293,96 @@
                 }
             }
         },
+        "/fis/competitor/search": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Gets competitors filtered by optional Nationcode, Sectorcode, Gender and age range (in years).\nAge filters (agemin/agemax) are converted internally to a birthdate range based on today's date.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FIS - KAMK"
+                ],
+                "summary": "Search competitors",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Nation code filter (e.g. FIN)",
+                        "name": "nationcode",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sector code filter (CC,JP,NK)",
+                        "name": "sectorcode",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Gender filter (M/W)",
+                        "name": "gender",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Minimum age in years (inclusive). For example, agemin=18 means competitors who are at least 18.",
+                        "name": "agemin",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Maximum age in years (inclusive). For example, agemax=30 means competitors who are at most 30.",
+                        "name": "agemax",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.FISCompetitorSearchResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ValidationErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.UnauthorizedResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ForbiddenResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.InternalServerErrorResponse"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/swagger.ServiceUnavailableResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/fis/competitor/seasons-catcodes": {
             "get": {
                 "security": [
@@ -11663,6 +11753,174 @@
                 "type": {
                     "type": "string",
                     "example": "ATHLETE"
+                }
+            }
+        },
+        "swagger.FISCompetitorFull": {
+            "type": "object",
+            "properties": {
+                "alternatenamecheck": {
+                    "type": "string"
+                },
+                "association": {
+                    "type": "string",
+                    "example": "Finnish Ski Association"
+                },
+                "birthdate": {
+                    "description": "YYYY-MM-DD",
+                    "type": "string",
+                    "example": "1992-01-12"
+                },
+                "carving": {
+                    "type": "integer"
+                },
+                "categorycode": {
+                    "type": "string"
+                },
+                "classcode": {
+                    "type": "string"
+                },
+                "classname": {
+                    "type": "string"
+                },
+                "competitorid": {
+                    "type": "integer",
+                    "example": 123456
+                },
+                "compidmssql": {
+                    "type": "integer"
+                },
+                "createdby": {
+                    "type": "string",
+                    "example": "admin"
+                },
+                "data": {
+                    "type": "string"
+                },
+                "dateofcreation": {
+                    "type": "string",
+                    "example": "2010-11-05"
+                },
+                "deletedat": {
+                    "type": "string"
+                },
+                "disciplines": {
+                    "type": "string"
+                },
+                "doped": {
+                    "type": "string"
+                },
+                "fee": {
+                    "type": "number",
+                    "example": 0
+                },
+                "firstname": {
+                    "type": "string",
+                    "example": "Iivo"
+                },
+                "fiscode": {
+                    "type": "integer",
+                    "example": 342001
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "M"
+                },
+                "injury": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "ipcid": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "lastname": {
+                    "type": "string",
+                    "example": "Niskanen"
+                },
+                "lastupdate": {
+                    "type": "string",
+                    "example": "2024-10-01T12:34:56Z"
+                },
+                "lastupdateby": {
+                    "type": "string"
+                },
+                "nationalcode": {
+                    "type": "string",
+                    "example": "FIN"
+                },
+                "nationcode": {
+                    "type": "string",
+                    "example": "FIN"
+                },
+                "natteam": {
+                    "type": "string",
+                    "example": "FIN-A"
+                },
+                "notallowed": {
+                    "type": "integer"
+                },
+                "personid": {
+                    "type": "integer",
+                    "example": 98765
+                },
+                "photo": {
+                    "type": "integer"
+                },
+                "photo_big": {
+                    "type": "integer"
+                },
+                "published": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "sectorcode": {
+                    "type": "string",
+                    "example": "CC"
+                },
+                "skiclub": {
+                    "type": "string",
+                    "example": "Lahti Ski Club"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "ACTIVE"
+                },
+                "status_by": {
+                    "type": "string",
+                    "example": "FIS"
+                },
+                "status_date": {
+                    "type": "string",
+                    "example": "2024-05-01T00:00:00Z"
+                },
+                "status_old": {
+                    "type": "string"
+                },
+                "statusnextlist": {
+                    "type": "string"
+                },
+                "team": {
+                    "type": "integer"
+                },
+                "tragroup": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "ATH"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "swagger.FISCompetitorSearchResponse": {
+            "type": "object",
+            "properties": {
+                "competitors": {
+                    "$ref": "#/definitions/swagger.FISCompetitorFull"
                 }
             }
         },

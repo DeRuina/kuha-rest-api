@@ -4547,14 +4547,13 @@ func (q *Queries) InsertResultNK(ctx context.Context, arg InsertResultNKParams) 
 
 const searchCompetitors = `-- name: SearchCompetitors :many
 SELECT competitorid, personid, ipcid, type, sectorcode, fiscode, lastname, firstname, gender, birthdate, nationcode, nationalcode, skiclub, association, status, status_old, status_by, status_date, statusnextlist, alternatenamecheck, fee, dateofcreation, createdby, injury, version, compidmssql, carving, photo, notallowed, natteam, tragroup, published, doped, team, photo_big, data, lastupdateby, disciplines, lastupdate, deletedat, categorycode, classname, classcode
-FROM A_competitor
-WHERE ($1::text IS NULL OR nationcode = $1)
-  AND ($2::text IS NULL OR sectorcode = $2)
-  AND ($3::text IS NULL OR gender     = $3)
-  AND ($4::date IS NULL OR birthdate >= $4)
-  AND ($5::date IS NULL OR birthdate <= $5)
+FROM a_competitor
+WHERE ($1::text = '' OR nationcode  = $1::text)
+  AND ($2::text = '' OR sectorcode  = $2::text)
+  AND ($3::text = '' OR gender      = $3::text)
+  AND ($4::date = '0001-01-01' OR birthdate >= $4::date)
+  AND ($5::date = '0001-01-01' OR birthdate <= $5::date)
 ORDER BY competitorid
-LIMIT $6 OFFSET $7
 `
 
 type SearchCompetitorsParams struct {
@@ -4563,8 +4562,6 @@ type SearchCompetitorsParams struct {
 	Column3 string
 	Column4 time.Time
 	Column5 time.Time
-	Limit   int32
-	Offset  int32
 }
 
 func (q *Queries) SearchCompetitors(ctx context.Context, arg SearchCompetitorsParams) ([]ACompetitor, error) {
@@ -4574,8 +4571,6 @@ func (q *Queries) SearchCompetitors(ctx context.Context, arg SearchCompetitorsPa
 		arg.Column3,
 		arg.Column4,
 		arg.Column5,
-		arg.Limit,
-		arg.Offset,
 	)
 	if err != nil {
 		return nil, err

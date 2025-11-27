@@ -3,6 +3,7 @@ package fis
 import (
 	"context"
 	"database/sql"
+	"time"
 
 	fissqlc "github.com/DeRuina/KUHA-REST-API/internal/db/fis"
 )
@@ -98,15 +99,14 @@ type Racenk interface {
 type Competitors interface {
 	GetAthletesBySector(ctx context.Context, sector string) ([]AthleteRow, error)
 	GetNationsBySector(ctx context.Context, sector string) ([]string, error)
-
 	GetLastRowCompetitor(ctx context.Context) (fissqlc.ACompetitor, error)
 	InsertCompetitor(ctx context.Context, in InsertCompetitorClean) error
 	UpdateCompetitorByID(ctx context.Context, in UpdateCompetitorClean) error
 	DeleteCompetitorByID(ctx context.Context, competitorID int32) error
-
 	GetCompetitorIDByFiscodeCC(ctx context.Context, fiscode int32) (int32, error)
 	GetCompetitorIDByFiscodeJP(ctx context.Context, fiscode int32) (int32, error)
 	GetCompetitorIDByFiscodeNK(ctx context.Context, fiscode int32) (int32, error)
+	SearchCompetitors(ctx context.Context, nationcode, sectorcode, gender *string, birthdateMin, birthdateMax *time.Time) ([]fissqlc.ACompetitor, error)
 }
 
 // Athlete interface

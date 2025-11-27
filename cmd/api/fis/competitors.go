@@ -6,6 +6,8 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/DeRuina/KUHA-REST-API/internal/auth/authz"
 	"github.com/DeRuina/KUHA-REST-API/internal/store/cache"
@@ -335,4 +337,126 @@ func (h *CompetitorHandler) DeleteCompetitor(w http.ResponseWriter, r *http.Requ
 	invalidateSector(r.Context(), h.cache, "CC")
 
 	w.WriteHeader(http.StatusOK)
+}
+
+// SearchCompetitors godoc
+//
+//	@Summary		Search competitors
+//	@Description	Gets competitors filtered by optional Nationcode, Sectorcode, Gender and age range (in years).
+//	@Description	Age filters (agemin/agemax) are converted internally to a birthdate range based on today's date.
+//	@Tags			FIS - KAMK
+//	@Accept			json
+//	@Produce		json
+//	@Param			nationcode	query		string	false	"Nation code filter (e.g. FIN)"
+//	@Param			sectorcode	query		string	false	"Sector code filter (CC,JP,NK)"
+//	@Param			gender		query		string	false	"Gender filter (M/W)"
+//	@Param			agemin		query		int		false	"Minimum age in years (inclusive). For example, agemin=18 means competitors who are at least 18."
+//	@Param			agemax		query		int		false	"Maximum age in years (inclusive). For example, agemax=30 means competitors who are at most 30."
+//	@Success		200			{object}	swagger.FISCompetitorSearchResponse
+//	@Failure		400			{object}	swagger.ValidationErrorResponse
+//	@Failure		401			{object}	swagger.UnauthorizedResponse
+//	@Failure		403			{object}	swagger.ForbiddenResponse
+//	@Failure		500			{object}	swagger.InternalServerErrorResponse
+//	@Failure		503			{object}	swagger.ServiceUnavailableResponse
+//	@Security		BearerAuth
+//	@Router			/fis/competitor/search [get]
+func (h *CompetitorHandler) SearchCompetitors(w http.ResponseWriter, r *http.Request) {
+	if !authz.Authorize(r) {
+		utils.ForbiddenResponse(w, r, fmt.Errorf("access denied"))
+		return
+	}
+
+	if err := utils.ValidateParams(r, []string{
+		"nationcode",
+		"sectorcode",
+		"gender",
+		"agemin",
+		"agemax",
+	}); err != nil {
+		utils.BadRequestResponse(w, r, err)
+		return
+	}
+
+	q := r.URL.Query()
+
+	var nationPtr *string
+	if nv := strings.TrimSpace(q.Get("nationcode")); nv != "" {
+		nv = strings.ToUpper(nv)
+		nationPtr = &nv
+	}
+
+	var sectorPtr *string
+	if sv := strings.TrimSpace(q.Get("sectorcode")); sv != "" {
+		sv = strings.ToUpper(sv)
+		sectorPtr = &sv
+	}
+
+	var genderPtr *string
+	if gv := strings.TrimSpace(q.Get("gender")); gv != "" {
+		gv = strings.ToUpper(gv)
+		genderPtr = &gv
+	}
+
+	var birthMinPtr, birthMaxPtr *time.Time
+	var ageminPtr, agemaxPtr *int32
+
+	if am := strings.TrimSpace(q.Get("agemin")); am != "" {
+		v, err := utils.ParsePositiveInt32(am)
+		if err != nil {
+			utils.BadRequestResponse(w, r, fmt.Errorf("invalid agemin: %s", am))
+			return
+		}
+		ageminPtr = &v
+	}
+	if ax := strings.TrimSpace(q.Get("agemax")); ax != "" {
+		v, err := utils.ParsePositiveInt32(ax)
+		if err != nil {
+			utils.BadRequestResponse(w, r, fmt.Errorf("invalid agemax: %s", ax))
+			return
+		}
+		agemaxPtr = &v
+	}
+
+	if ageminPtr != nil && agemaxPtr != nil && *ageminPtr > *agemaxPtr {
+		utils.BadRequestResponse(w, r, fmt.Errorf("agemin cannot be greater than agemax"))
+		return
+	}
+
+	if ageminPtr != nil || agemaxPtr != nil {
+		today := time.Now().UTC()
+
+		if agemaxPtr != nil {
+			d := today.AddDate(-int(*agemaxPtr), 0, 0)
+			birthMinPtr = &d
+		}
+
+		if ageminPtr != nil {
+			d := today.AddDate(-int(*ageminPtr), 0, 0)
+			birthMaxPtr = &d
+		}
+	}
+
+	rows, err := h.store.SearchCompetitors(
+		r.Context(),
+		nationPtr,
+		sectorPtr,
+		genderPtr,
+		birthMinPtr,
+		birthMaxPtr,
+	)
+	if err != nil {
+		utils.InternalServerError(w, r, err)
+		return
+	}
+
+	competitors := make([]any, 0, len(rows))
+	for _, c := range rows {
+		competitors = append(competitors, FISCompetitorFullFromSqlc(c))
+	}
+
+	body := map[string]any{
+		"competitors": competitors,
+	}
+
+	utils.WriteJSON(w, http.StatusOK, body)
 }

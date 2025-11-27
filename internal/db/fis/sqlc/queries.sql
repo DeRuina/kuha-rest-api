@@ -1089,14 +1089,14 @@ LIMIT $4::int4;
 
 -- name: SearchCompetitors :many
 SELECT *
-FROM A_competitor
-WHERE ($1::text IS NULL OR nationcode = $1)
-  AND ($2::text IS NULL OR sectorcode = $2)
-  AND ($3::text IS NULL OR gender     = $3)
-  AND ($4::date IS NULL OR birthdate >= $4)
-  AND ($5::date IS NULL OR birthdate <= $5)
-ORDER BY competitorid
-LIMIT $6 OFFSET $7;
+FROM a_competitor
+WHERE ($1::text = '' OR nationcode  = $1::text)
+  AND ($2::text = '' OR sectorcode  = $2::text)
+  AND ($3::text = '' OR gender      = $3::text)
+  AND ($4::date = '0001-01-01' OR birthdate >= $4::date)
+  AND ($5::date = '0001-01-01' OR birthdate <= $5::date)
+ORDER BY competitorid;
+
 
 -- name: GetRacesByIDsCC :many
 SELECT *

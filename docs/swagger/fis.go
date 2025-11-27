@@ -1784,3 +1784,61 @@ type FISLatestResultsResponse struct {
 	Limit        int32                 `json:"limit" example:"50"`
 	Results      []FISLatestResultItem `json:"results"`
 }
+
+// FISCompetitorFull represents a full competitor record as exposed by the API.
+type FISCompetitorFull struct {
+	Competitorid int32   `json:"competitorid" example:"123456"`
+	Personid     *int32  `json:"personid,omitempty" example:"98765"`
+	Ipcid        *int32  `json:"ipcid,omitempty" example:"0"`
+	Type         *string `json:"type,omitempty" example:"ATH"`
+	Sectorcode   *string `json:"sectorcode,omitempty" example:"CC"`
+	Fiscode      *int32  `json:"fiscode,omitempty" example:"342001"`
+	Lastname     *string `json:"lastname,omitempty" example:"Niskanen"`
+	Firstname    *string `json:"firstname,omitempty" example:"Iivo"`
+	Gender       *string `json:"gender,omitempty" example:"M"`
+	Birthdate    *string `json:"birthdate,omitempty" example:"1992-01-12"` // YYYY-MM-DD
+
+	Nationcode   *string `json:"nationcode,omitempty" example:"FIN"`
+	Nationalcode *string `json:"nationalcode,omitempty" example:"FIN"`
+	Skiclub      *string `json:"skiclub,omitempty" example:"Lahti Ski Club"`
+	Association  *string `json:"association,omitempty" example:"Finnish Ski Association"`
+
+	Status             *string `json:"status,omitempty" example:"ACTIVE"`
+	StatusOld          *string `json:"status_old,omitempty"`
+	StatusBy           *string `json:"status_by,omitempty" example:"FIS"`
+	StatusDate         *string `json:"status_date,omitempty" example:"2024-05-01T00:00:00Z"`
+	Statusnextlist     *string `json:"statusnextlist,omitempty"`
+	Alternatenamecheck *string `json:"alternatenamecheck,omitempty"`
+
+	Fee            *float64 `json:"fee,omitempty" example:"0"`
+	Dateofcreation *string  `json:"dateofcreation,omitempty" example:"2010-11-05"`
+	Createdby      *string  `json:"createdby,omitempty" example:"admin"`
+
+	Injury      *int32 `json:"injury,omitempty" example:"0"`
+	Version     *int32 `json:"version,omitempty" example:"1"`
+	Compidmssql *int32 `json:"compidmssql,omitempty"`
+	Carving     *int32 `json:"carving,omitempty"`
+	Photo       *int32 `json:"photo,omitempty"`
+	Notallowed  *int32 `json:"notallowed,omitempty"`
+
+	Natteam   *string `json:"natteam,omitempty" example:"FIN-A"`
+	Tragroup  *string `json:"tragroup,omitempty"`
+	Published *int32  `json:"published,omitempty" example:"1"`
+	Doped     *string `json:"doped,omitempty"`
+	Team      *int32  `json:"team,omitempty"`
+
+	PhotoBig     *int32  `json:"photo_big,omitempty"`
+	Data         *string `json:"data,omitempty"`
+	Lastupdateby *string `json:"lastupdateby,omitempty"`
+	Disciplines  *string `json:"disciplines,omitempty"`
+	Lastupdate   *string `json:"lastupdate,omitempty" example:"2024-10-01T12:34:56Z"`
+	Deletedat    *string `json:"deletedat,omitempty"`
+
+	Categorycode *string `json:"categorycode,omitempty"`
+	Classname    *string `json:"classname,omitempty"`
+	Classcode    *string `json:"classcode,omitempty"`
+}
+
+type FISCompetitorSearchResponse struct {
+	Competitor FISCompetitorFull `json:"competitors"`
+}

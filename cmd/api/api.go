@@ -300,6 +300,7 @@ func (app *api) mount() http.Handler {
 					r.Get("/races/count-total", kamkRacesHandler.GetRaceTotals)
 					r.Get("/competitor/seasons-catcodes", kamkResultsHandler.GetCompetitorSeasonsCatcodes)
 					r.Get("/competitor/latest-results", kamkResultsHandler.GetCompetitorLatestResults)
+					r.Get("/competitor/search", competitorHandler.SearchCompetitors)
 
 					// athlete routes
 					r.Get("/fiscode", athleteHandler.GetAthletesBySporttiID)

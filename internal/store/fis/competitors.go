@@ -3,6 +3,7 @@ package fis
 import (
 	"context"
 	"database/sql"
+	"time"
 
 	fissqlc "github.com/DeRuina/KUHA-REST-API/internal/db/fis"
 	"github.com/DeRuina/KUHA-REST-API/internal/utils"
@@ -106,4 +107,41 @@ func (s *CompetitorsStore) GetCompetitorIDByFiscodeNK(ctx context.Context, fisco
 
 	q := fissqlc.New(s.db)
 	return q.GetCompetitorIDByFiscodeNK(ctx, sql.NullInt32{Int32: fiscode, Valid: true})
+}
+
+func (s *CompetitorsStore) SearchCompetitors(
+	ctx context.Context,
+	nationcode, sectorcode, gender *string,
+	birthdateMin, birthdateMax *time.Time,
+) ([]fissqlc.ACompetitor, error) {
+	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
+	defer cancel()
+
+	q := fissqlc.New(s.db)
+
+	params := fissqlc.SearchCompetitorsParams{
+		Column1: "",
+		Column2: "",
+		Column3: "",
+		Column4: time.Time{},
+		Column5: time.Time{},
+	}
+
+	if nationcode != nil {
+		params.Column1 = *nationcode
+	}
+	if sectorcode != nil {
+		params.Column2 = *sectorcode
+	}
+	if gender != nil {
+		params.Column3 = *gender
+	}
+	if birthdateMin != nil {
+		params.Column4 = *birthdateMin
+	}
+	if birthdateMax != nil {
+		params.Column5 = *birthdateMax
+	}
+
+	return q.SearchCompetitors(ctx, params)
 }

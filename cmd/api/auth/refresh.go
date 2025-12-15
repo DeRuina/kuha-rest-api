@@ -47,7 +47,7 @@ func (h *AuthHandler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 
 	jwt, err := h.store.RefreshToken(r.Context(), req.RefreshToken, ip, userAgent)
 	if err != nil {
-		utils.HandleDatabaseError(w, r, err)
+		utils.UnauthorizedResponse(w, r, err)
 		return
 	}
 

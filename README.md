@@ -1,4 +1,4 @@
-# KUHA REST API
+# KUHA REST API [![Go Reference](https://pkg.go.dev/badge/github.com/DeRuina/kuha-rest-api.svg)](https://pkg.go.dev/github.com/DeRuina/kuha-rest-api) [![Go Report Card](https://goreportcard.com/badge/github.com/DeRuina/kuha-rest-api)](https://goreportcard.com/report/github.com/DeRuina/kuha-rest-api) ![Audit](https://github.com/DeRuina/kuha-rest-api/actions/workflows/audit.yaml/badge.svg) ![Version](https://img.shields.io/github/v/tag/DeRuina/kuha-rest-api?sort=semver)
 
 Centralized API for the [KUHA program](https://cemis.fi/kainuun-urheilun-ja-hyvinvoinnin-data-analytiikan-ohjelma-kuha-3) (sports and wellbeing data ecosystem). The service unifies data from multiple provider databases into a single access point.
 

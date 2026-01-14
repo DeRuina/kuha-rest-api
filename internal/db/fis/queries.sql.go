@@ -3065,7 +3065,7 @@ SELECT DISTINCT
 FROM a_racecc   AS rcc
 JOIN a_resultcc AS res
   ON rcc.raceid = res.raceid
-WHERE res.competitorid = $1::int4
+WHERE res.fiscode = $1::int4
 ORDER BY rcc.seasoncode DESC, rcc.catcode ASC
 `
 
@@ -3104,7 +3104,7 @@ SELECT DISTINCT
 FROM a_racejp   AS rjp
 JOIN a_resultjp AS res
   ON rjp.raceid = res.raceid
-WHERE res.competitorid = $1::int4
+WHERE res.fiscode = $1::int4
 ORDER BY rjp.seasoncode DESC, rjp.catcode ASC
 `
 
@@ -3143,7 +3143,7 @@ SELECT DISTINCT
 FROM a_racenk   AS rnk
 JOIN a_resultnk AS res
   ON rnk.raceid = res.raceid
-WHERE res.competitorid = $1::int4
+WHERE res.fiscode = $1::int4
 ORDER BY rnk.seasoncode DESC, rnk.catcode ASC
 `
 

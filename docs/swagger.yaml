@@ -8992,9 +8992,9 @@ paths:
         a competitor has actually competed in, for a given sector (CC, JP, NK). Uses
         both race and result tables.
       parameters:
-      - description: Competitor ID
+      - description: FIS Code
         in: query
-        name: competitorid
+        name: fiscode
         required: true
         type: integer
       - description: Sector code (CC,JP,NK)

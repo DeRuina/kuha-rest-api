@@ -40,14 +40,14 @@ func NewResultKAMKHandler(
 //	@Tags			FIS - KAMK
 //	@Accept			json
 //	@Produce		json
-//	@Param			competitorid	query		int32	true	"Competitor ID"
-//	@Param			sector			query		string	true	"Sector code (CC,JP,NK)"
-//	@Success		200				{object}	swagger.FISCompetitorSeasonsCatcodesResponse
-//	@Failure		400				{object}	swagger.ValidationErrorResponse
-//	@Failure		401				{object}	swagger.UnauthorizedResponse
-//	@Failure		403				{object}	swagger.ForbiddenResponse
-//	@Failure		500				{object}	swagger.InternalServerErrorResponse
-//	@Failure		503				{object}	swagger.ServiceUnavailableResponse
+//	@Param			fiscode	query		int32	true	"FIS Code"
+//	@Param			sector	query		string	true	"Sector code (CC,JP,NK)"
+//	@Success		200		{object}	swagger.FISCompetitorSeasonsCatcodesResponse
+//	@Failure		400		{object}	swagger.ValidationErrorResponse
+//	@Failure		401		{object}	swagger.UnauthorizedResponse
+//	@Failure		403		{object}	swagger.ForbiddenResponse
+//	@Failure		500		{object}	swagger.InternalServerErrorResponse
+//	@Failure		503		{object}	swagger.ServiceUnavailableResponse
 //	@Security		BearerAuth
 //	@Router			/fis/competitor/seasons-catcodes [get]
 func (h *ResultKAMKHandler) GetCompetitorSeasonsCatcodes(w http.ResponseWriter, r *http.Request) {
@@ -57,20 +57,20 @@ func (h *ResultKAMKHandler) GetCompetitorSeasonsCatcodes(w http.ResponseWriter, 
 	}
 
 	if err := utils.ValidateParams(r, []string{
-		"competitorid", "sector",
+		"fiscode", "sector",
 	}); err != nil {
 		utils.BadRequestResponse(w, r, err)
 		return
 	}
 
-	rawComp := strings.TrimSpace(r.URL.Query().Get("competitorid"))
+	rawComp := strings.TrimSpace(r.URL.Query().Get("fiscode"))
 	if rawComp == "" {
-		utils.BadRequestResponse(w, r, fmt.Errorf("missing required query param: competitorid"))
+		utils.BadRequestResponse(w, r, fmt.Errorf("missing required query param: fiscode"))
 		return
 	}
-	competitorID, err := utils.ParsePositiveInt32(rawComp)
+	fiscode, err := utils.ParsePositiveInt32(rawComp)
 	if err != nil {
-		utils.BadRequestResponse(w, r, fmt.Errorf("invalid competitorid: %s", rawComp))
+		utils.BadRequestResponse(w, r, fmt.Errorf("invalid fiscode: %s", rawComp))
 		return
 	}
 
@@ -99,7 +99,7 @@ func (h *ResultKAMKHandler) GetCompetitorSeasonsCatcodes(w http.ResponseWriter, 
 			utils.InternalServerError(w, r, fmt.Errorf("resultCC store not configured"))
 			return
 		}
-		rows, err := h.resultCC.GetSeasonsCatcodesCCByCompetitor(r.Context(), competitorID)
+		rows, err := h.resultCC.GetSeasonsCatcodesCCByCompetitor(r.Context(), fiscode)
 		if err != nil {
 			utils.InternalServerError(w, r, err)
 			return
@@ -124,7 +124,7 @@ func (h *ResultKAMKHandler) GetCompetitorSeasonsCatcodes(w http.ResponseWriter, 
 			utils.InternalServerError(w, r, fmt.Errorf("resultJP store not configured"))
 			return
 		}
-		rows, err := h.resultJP.GetSeasonsCatcodesJPByCompetitor(r.Context(), competitorID)
+		rows, err := h.resultJP.GetSeasonsCatcodesJPByCompetitor(r.Context(), fiscode)
 		if err != nil {
 			utils.InternalServerError(w, r, err)
 			return
@@ -149,7 +149,7 @@ func (h *ResultKAMKHandler) GetCompetitorSeasonsCatcodes(w http.ResponseWriter, 
 			utils.InternalServerError(w, r, fmt.Errorf("resultNK store not configured"))
 			return
 		}
-		rows, err := h.resultNK.GetSeasonsCatcodesNKByCompetitor(r.Context(), competitorID)
+		rows, err := h.resultNK.GetSeasonsCatcodesNKByCompetitor(r.Context(), fiscode)
 		if err != nil {
 			utils.InternalServerError(w, r, err)
 			return
@@ -171,9 +171,9 @@ func (h *ResultKAMKHandler) GetCompetitorSeasonsCatcodes(w http.ResponseWriter, 
 	}
 
 	body := map[string]any{
-		"competitorid": competitorID,
-		"sector":       sector,
-		"items":        items,
+		"fiscode": fiscode,
+		"sector":  sector,
+		"items":   items,
 	}
 
 	utils.WriteJSON(w, http.StatusOK, body)

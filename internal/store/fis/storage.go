@@ -16,7 +16,7 @@ type Resultcc interface {
 	DeleteResultCCByRecID(ctx context.Context, recid int32) error
 	GetRaceResultsCCByRaceID(ctx context.Context, raceID int32) ([]fissqlc.AResultcc, error)
 	GetAthleteResultsCC(ctx context.Context, competitorID int32, seasons []int32, disciplines, cats []string) ([]fissqlc.GetAthleteResultsCCRow, error)
-	GetSeasonsCatcodesCCByCompetitor(ctx context.Context, competitorID int32) ([]fissqlc.GetSeasonsCatcodesCCByCompetitorRow, error)
+	GetSeasonsCatcodesCCByCompetitor(ctx context.Context, fiscode int32) ([]fissqlc.GetSeasonsCatcodesCCByCompetitorRow, error)
 	GetLatestResultsCC(ctx context.Context, fiscode int32, seasoncode *int32, catcodes []string, limit *int32) ([]fissqlc.GetLatestResultsCCRow, error)
 }
 
@@ -28,7 +28,7 @@ type Resultjp interface {
 	DeleteResultJPByRecID(ctx context.Context, recid int32) error
 	GetRaceResultsJPByRaceID(ctx context.Context, raceID int32) ([]fissqlc.AResultjp, error)
 	GetAthleteResultsJP(ctx context.Context, competitorID int32, seasons []int32, disciplines, cats []string) ([]fissqlc.GetAthleteResultsJPRow, error)
-	GetSeasonsCatcodesJPByCompetitor(ctx context.Context, competitorID int32) ([]fissqlc.GetSeasonsCatcodesJPByCompetitorRow, error)
+	GetSeasonsCatcodesJPByCompetitor(ctx context.Context, fiscode int32) ([]fissqlc.GetSeasonsCatcodesJPByCompetitorRow, error)
 	GetLatestResultsJP(ctx context.Context, fiscode int32, seasoncode *int32, catcodes []string, limit *int32) ([]fissqlc.GetLatestResultsJPRow, error)
 }
 
@@ -40,7 +40,7 @@ type Resultnk interface {
 	DeleteResultNKByRecID(ctx context.Context, recid int32) error
 	GetRaceResultsNKByRaceID(ctx context.Context, raceID int32) ([]fissqlc.AResultnk, error)
 	GetAthleteResultsNK(ctx context.Context, competitorID int32, seasons []int32, disciplines, cats []string) ([]fissqlc.GetAthleteResultsNKRow, error)
-	GetSeasonsCatcodesNKByCompetitor(ctx context.Context, competitorID int32) ([]fissqlc.GetSeasonsCatcodesNKByCompetitorRow, error)
+	GetSeasonsCatcodesNKByCompetitor(ctx context.Context, fiscode int32) ([]fissqlc.GetSeasonsCatcodesNKByCompetitorRow, error)
 	GetLatestResultsNK(ctx context.Context, fiscode int32, seasoncode *int32, catcodes []string, limit *int32) ([]fissqlc.GetLatestResultsNKRow, error)
 }
 

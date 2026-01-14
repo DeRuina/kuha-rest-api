@@ -75,13 +75,13 @@ func (s *ResultNKStore) GetAthleteResultsNK(
 
 func (s *ResultNKStore) GetSeasonsCatcodesNKByCompetitor(
 	ctx context.Context,
-	competitorID int32,
+	fiscode int32,
 ) ([]fissqlc.GetSeasonsCatcodesNKByCompetitorRow, error) {
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
 	q := fissqlc.New(s.db)
-	return q.GetSeasonsCatcodesNKByCompetitor(ctx, competitorID)
+	return q.GetSeasonsCatcodesNKByCompetitor(ctx, fiscode)
 }
 
 func (s *ResultNKStore) GetLatestResultsNK(

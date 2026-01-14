@@ -75,13 +75,13 @@ func (s *ResultJPStore) GetAthleteResultsJP(
 
 func (s *ResultJPStore) GetSeasonsCatcodesJPByCompetitor(
 	ctx context.Context,
-	competitorID int32,
+	fiscode int32,
 ) ([]fissqlc.GetSeasonsCatcodesJPByCompetitorRow, error) {
 	ctx, cancel := context.WithTimeout(ctx, utils.QueryTimeout)
 	defer cancel()
 
 	q := fissqlc.New(s.db)
-	return q.GetSeasonsCatcodesJPByCompetitor(ctx, competitorID)
+	return q.GetSeasonsCatcodesJPByCompetitor(ctx, fiscode)
 }
 
 func (s *ResultJPStore) GetLatestResultsJP(

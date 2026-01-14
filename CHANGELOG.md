@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/CSCfi/kuha-rest-api/compare/v1.3.0...v1.3.1) (2026-01-14)
+
+
+### Bug Fixes
+
+* new endpoint to fetch sectorcodes in fis using discode ([13b7d5b](https://github.com/CSCfi/kuha-rest-api/commit/13b7d5ba0c253fbd142e71149684a2417f5a9377))
+
 ## [1.3.0](https://github.com/DeRuina/kuha-rest-api/compare/v1.2.1...v1.3.0) (2025-12-17)
 
 
